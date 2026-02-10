@@ -3,31 +3,31 @@ import axios from "axios";
 import "./App.css";
 
 function App() {
-  const [jokes, setJokes] = useState(null);
+  const [socialPlatforms, setSocialPlatforms] = useState(null);
 
-  const fetchJokes = async () => {
+  const fetchSocialPlatforms = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/app/jokes", {
-        params: {
-          joke: 1,
-        },
-      });
+      const res = await axios.get(
+        "http://localhost:3000/api/filter/social-platforms",
+      );
 
-      setJokes(res.data);
-      console.log("jokes: ", res.data);
+      const data = res.data?.data;
+
+      setSocialPlatforms(data);
+      console.log("Social Platforms: ", data);
     } catch (error) {
       console.error("Error fetching jokes: ", error);
     }
   };
 
   useEffect(() => {
-    fetchJokes();
+    fetchSocialPlatforms();
   }, []);
 
   return (
     <div>
-      {jokes?.map((joke, idx) => (
-        <div key={idx}>{joke?.joke}</div>
+      {socialPlatforms?.map((platform, idx) => (
+        <div key={idx}>{platform?.label}</div>
       ))}
     </div>
   );

@@ -11,8 +11,8 @@ app.use(
 
 app.use(express.json());
 
-import appRoutes from "./routes/app.routes.js";
+import filterRoutes from "./routes/filter.routes.js";
 
-app.use("/api/app", appRoutes);
+app.use("/api/filter", filterRoutes);
 
 export default app;
