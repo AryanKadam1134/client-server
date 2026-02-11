@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
+import { apiEndpoints } from "../../api";
 
 export default function AdminDashboard() {
   const [socialPlatforms, setSocialPlatforms] = useState(null);
 
   const fetchSocialPlatforms = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3000/api/filter/social-platforms",
-      );
+      const res = await apiEndpoints.getSocialPlatforms();
 
       const data = res.data?.data;
 
       setSocialPlatforms(data);
       console.log("Social Platforms: ", data);
     } catch (error) {
-      console.error("Error fetching jokes: ", error);
+      console.error("Error fetching Social Platforms: ", error);
     }
   };
 
