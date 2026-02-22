@@ -1,8 +1,11 @@
 import { options } from "../constants";
+
 import { User } from "../models/user.model";
-import ApiError from "../utils/ApiError";
+
 import ApiRes from "../utils/ApiRes";
+import ApiError from "../utils/ApiError";
 import asynchandler from "../utils/asynchandler";
+import { uploadToCloudinary } from "../utils/cloudinary";
 
 const generateAccessAndRefreshToken = async (userId) => {
   if (!userId) return;
@@ -21,6 +24,72 @@ const generateAccessAndRefreshToken = async (userId) => {
     throw new apiError(501, "Couldn't generate Refresh token and Access token");
   }
 };
+
+const registerUser = asynchandler(async (req, res) => {
+  const { fullName, username, email, password } = req.body;
+
+  const image = req.files?.image[0]?.path;
+  const resumeOrCv = req.files?.resumeOrCv[0]?.path;
+
+  if (
+    [fullName, username, email, password].some(
+      (field) => typeof field == "string" && field?.trim() == "",
+    )
+  ) {
+    throw new ApiError(400, "all fields are required!");
+  }
+
+  if (!image || !resumeOrCv) {
+    throw new ApiError(400, "image and resumeOrCv are required!");
+  }
+
+  const userExists = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  if (userExists) {
+    throw new ApiError(
+      409,
+      "user already exist with similar username or email!",
+    );
+  }
+
+  const userImage = await uploadToCloudinary(image);
+  const userDocument = await uploadToCloudinary(resumeOrCv);
+
+  if (!userImage) {
+    throw new ApiError(500, "couldn't find userImage!");
+  }
+
+  if (!userDocument) {
+    throw new ApiError(500, "couldn't find userDocument!");
+  }
+
+  const createdUser = await User.create({
+    fullName,
+    username: username?.toLowerCase(),
+    email,
+    password,
+    image: {
+      url: userImage?.secure_url,
+      public_id: userImage?.public_id,
+      resource_type: userImage?.resource_type,
+    },
+    resumeOrCv: {
+      url: userDocument?.secure_url,
+      public_id: userDocument?.public_id,
+      resource_type: userDocument?.resource_type,
+    },
+  }).select("-password -refreshToken");
+
+  if (!createdUser?._id) {
+    throw new ApiError(500, "couldn't create an user!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, createdUser, "user created successfully!"));
+});
 
 const loginUser = asynchandler(async (req, res) => {
   const { username, password } = req.body;
@@ -69,4 +138,4 @@ const loginUser = asynchandler(async (req, res) => {
     );
 });
 
-export { loginUser };
+export { registerUser, loginUser };
