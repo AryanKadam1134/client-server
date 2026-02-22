@@ -12,6 +12,11 @@ const SKILL_LEVEL = [
   { label: "Advance", value: "advance" },
 ];
 
+const options = {
+  httpOnly: true,
+  secure: true,
+};
+
 const DB_NAME = "portfolio_backend";
 
-export { SOCIAL_PLATFORMS, SKILL_LEVEL, DB_NAME };
+export { SOCIAL_PLATFORMS, SKILL_LEVEL, DB_NAME, options };
