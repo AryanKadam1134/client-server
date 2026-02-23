@@ -13,7 +13,10 @@ app.use(
 app.use(express.json());
 
 import filterRoutes from "./routes/filter.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 app.use("/api/filter", filterRoutes);
+
+app.use("/api/user", userRouter);
 
 export default app;
