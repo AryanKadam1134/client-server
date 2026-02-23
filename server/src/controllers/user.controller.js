@@ -14,6 +14,8 @@ const generateAccessAndRefreshToken = async (userId) => {
     const user = await User.findById(userId);
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
+    // console.log("accessToken: ", accessToken);
+    // console.log("refreshToken: ", refreshToken);
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -115,9 +117,6 @@ const loginUser = asynchandler(async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     userExist?._id,
   );
-
-  console.log("accessToken: ", accessToken);
-  console.log("refreshToken: ", refreshToken);
 
   if (!accessToken || !refreshToken) {
     throw new ApiError(503, "couldn't generate access or refresh token!");
