@@ -1,11 +1,11 @@
-import { options } from "../constants";
+import { options } from "../constants.js";
 
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 
-import ApiRes from "../utils/ApiRes";
-import ApiError from "../utils/ApiError";
-import asynchandler from "../utils/asynchandler";
-import { uploadToCloudinary } from "../utils/cloudinary";
+import ApiRes from "../utils/ApiRes.js";
+import ApiError from "../utils/ApiError.js";
+import asynchandler from "../utils/asynchandler.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   if (!userId) return;
