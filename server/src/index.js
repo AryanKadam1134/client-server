@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import app from "./app.js";
-import connectDB from "../../../youtube_clone/server/src/db/connect.js";
+import { connectDB } from "./db/connectDB.js";
 
 dotenv.config({ path: "./env" });
 

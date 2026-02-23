@@ -3,7 +3,7 @@ const asynchandler = (func) => {
     Promise.resolve(func(req, res, next)).catch((error) => {
       res.status(error.statusCode || 500).json({
         success: error.success,
-        status: error.statusCode,
+        status: error.statusCode || 500,
         message: error.message,
       });
 

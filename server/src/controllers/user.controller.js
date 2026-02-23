@@ -43,6 +43,8 @@ const registerUser = asynchandler(async (req, res) => {
     throw new ApiError(400, "image and resumeOrCv are required!");
   }
 
+  console.log("username: ", username);
+
   const userExists = await User.findOne({
     $or: [{ username }, { email }],
   });
@@ -80,7 +82,7 @@ const registerUser = asynchandler(async (req, res) => {
       public_id: userDocument?.public_id,
       resource_type: userDocument?.resource_type,
     },
-  }).select("-password -refreshToken");
+  });
 
   if (!createdUser?._id) {
     throw new ApiError(500, "couldn't create an user!");
@@ -138,6 +140,16 @@ const loginUser = asynchandler(async (req, res) => {
     );
 });
 
-const logoutUser = asynchandler(async (req, res) => {});
+const logoutUser = asynchandler(async (req, res) => {
+  await User.findByIdAndUpdate(req.user?._id, {
+    $set: { refreshToken: undefined },
+  });
 
-export { registerUser, loginUser };
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiRes(200, "user logged out successfully!"));
+});
+
+export { registerUser, loginUser, logoutUser };
