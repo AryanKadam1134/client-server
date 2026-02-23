@@ -21,7 +21,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     return { accessToken, refreshToken };
   } catch (error) {
     console.error("Error Generating Access or Refresh Token: ", error);
-    throw new apiError(501, "Couldn't generate Refresh token and Access token");
+    throw new ApiError(501, "Couldn't generate Refresh token and Access token");
   }
 };
 
@@ -42,8 +42,6 @@ const registerUser = asynchandler(async (req, res) => {
   if (!image || !resumeOrCv) {
     throw new ApiError(400, "image and resumeOrCv are required!");
   }
-
-  console.log("username: ", username);
 
   const userExists = await User.findOne({
     $or: [{ username }, { email }],
@@ -103,21 +101,23 @@ const loginUser = asynchandler(async (req, res) => {
   const userExist = await User.findOne({
     username,
   });
-  const userId = userExist?._id;
 
   if (!userExist) {
     throw new ApiError(404, "user does not exists!");
   }
 
-  const isPasswordCorrect = userExist.isPasswordCorrect(password);
+  const isPasswordCorrect = await userExist.isPasswordCorrect(password);
 
   if (!isPasswordCorrect) {
     throw new ApiError(401, "invalid password!");
   }
 
-  const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     userExist?._id,
   );
+
+  console.log("accessToken: ", accessToken);
+  console.log("refreshToken: ", refreshToken);
 
   if (!accessToken || !refreshToken) {
     throw new ApiError(503, "couldn't generate access or refresh token!");
@@ -126,6 +126,10 @@ const loginUser = asynchandler(async (req, res) => {
   const loggedUser = await User.findById(userExist?._id).select(
     "-password -refreshToken",
   );
+
+  if (!loggedUser) {
+    throw new ApiError(500, "error logging in user!");
+  }
 
   return res
     .status(200)
