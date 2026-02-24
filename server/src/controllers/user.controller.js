@@ -155,4 +155,35 @@ const logoutUser = asynchandler(async (req, res) => {
     .json(new ApiRes(200, "user logged out successfully!"));
 });
 
-export { registerUser, loginUser, logoutUser };
+const changePassword = asynchandler(async (req, res) => {
+  const { old_password, new_password } = req.body;
+
+  console.log("old_password: ", old_password);
+  console.log("new_password: ", new_password);
+
+  if (!old_password || !new_password) {
+    throw new ApiError(400, "all fields are required!");
+  }
+
+  const loggedUser = await User.findById(req.user?._id);
+
+  const isPasswordCorrect = await loggedUser.isPasswordCorrect(old_password);
+
+  if (!isPasswordCorrect) {
+    throw new ApiError(409, "invalid password!");
+  }
+
+  if (new_password === old_password) {
+    throw new ApiError(409, "new password connot be same as old password!");
+  }
+
+  loggedUser.password = new_password;
+
+  await loggedUser.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, {}, "password changed successfully!"));
+});
+
+export { registerUser, loginUser, logoutUser, changePassword };
