@@ -5,6 +5,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  updateUserDetails,
 } from "../controllers/user.controller.js";
 
 import { upload } from "../middlewares/multer.middleware.js";
@@ -31,5 +32,7 @@ userRouter.route("/login").post(loginUser);
 userRouter.route("/logout").post(verifyJWT, logoutUser);
 
 userRouter.route("/change-password").post(verifyJWT, changePassword);
+
+userRouter.route("/update").post(verifyJWT, updateUserDetails);
 
 export default userRouter;

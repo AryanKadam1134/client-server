@@ -1,6 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { GENDERS } from "../constants.js";
 
 const userSchema = new Schema(
   {
@@ -21,6 +22,11 @@ const userSchema = new Schema(
       lowercase: true,
       index: true,
     },
+    password: {
+      type: String,
+      required: [true, "password is required!"],
+      trim: true,
+    },
     email: {
       type: String,
       required: [true, "email is required!"],
@@ -28,10 +34,13 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true,
     },
-    password: {
+    mobileNo: {
+      type: Number,
+      unique: true,
+    },
+    gender: {
       type: String,
-      required: [true, "password is required!"],
-      trim: true,
+      enum: GENDERS.map((g) => g.value),
     },
     image: {
       // Couldinary

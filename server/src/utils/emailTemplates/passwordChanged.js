@@ -1,10 +1,9 @@
-export const passwordChangedTemplate = (user) => {
-  return (
-    <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+const passwordChangedTemplate = (user) => {
+  return `<div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
       <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px;">
         <h2 style="color: #1f2937;">Password Updated Successfully</h2>
 
-        <p style="color: #4b5563; font-size: 15px;">Hi {user.fullName},</p>
+        <p style="color: #4b5563; font-size: 15px;">Hi ${user.fullName},</p>
 
         <p style="color: #4b5563; font-size: 15px;">
           This is a confirmation that your account password was successfully
@@ -25,9 +24,10 @@ export const passwordChangedTemplate = (user) => {
         <hr style="margin: 30px 0;" />
 
         <p style="font-size: 12px; color: #9ca3af;">
-          © {new Date().getFullYear()} Portfolio SaaS. All rights reserved.
+          © ${new Date().getFullYear()} Portfolio SaaS. All rights reserved.
         </p>
       </div>
-    </div>
-  );
+    </div>`;
 };
+
+export default passwordChangedTemplate;

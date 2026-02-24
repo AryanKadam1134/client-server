@@ -7,7 +7,7 @@ import ApiError from "../utils/ApiError.js";
 import asynchandler from "../utils/asynchandler.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
 import sendEmail from "../utils/mailShooter.js";
-import { passwordChanged } from "../utils/emailTemplates/passwordChanged.js";
+import passwordChangedTemplate from "../utils/emailTemplates/passwordChanged.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   if (!userId) return;
@@ -194,6 +194,63 @@ const changePassword = asynchandler(async (req, res) => {
     .json(new ApiRes(200, {}, "password changed successfully!"));
 });
 
+const updateUserDetails = asynchandler(async (req, res) => {
+  const { fullName, username, email, mobileNo, gender } = req.body;
 
+  const userExists = await User.findOne({
+    $or: [{ username }, { email }],
+  });
 
-export { registerUser, loginUser, logoutUser, changePassword };
+  if (userExists) {
+    throw new ApiError(
+      409,
+      "user already exists with similar username or email",
+    );
+  }
+
+  const updatedDetails = {};
+
+  if (fullName) updatedDetails.fullName = fullName;
+  if (username) updatedDetails.username = username;
+  if (email) updatedDetails.email = email;
+  if (mobileNo) updatedDetails.mobileNo = mobileNo;
+  if (gender) updatedDetails.gender = gender;
+
+  if (Object.keys(updatedDetails).length === 0) {
+    throw new ApiError(400, "no fields provided to update!");
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: updatedDetails,
+    },
+    { new: true },
+  ).select("-password -refreshToken");
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, updatedUser, "user details updated successfully!"));
+});
+
+const forgotPassword = asynchandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new ApiError(400, "email is required!");
+  }
+
+  const userExists = User.findOne({ email });
+
+  if (!userExists) {
+    throw new ApiError(404, "user does not exists!");
+  }
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  changePassword,
+  updateUserDetails,
+};
