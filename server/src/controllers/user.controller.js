@@ -6,6 +6,8 @@ import ApiRes from "../utils/ApiRes.js";
 import ApiError from "../utils/ApiError.js";
 import asynchandler from "../utils/asynchandler.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
+import sendEmail from "../utils/mailShooter.js";
+import { passwordChanged } from "../utils/emailTemplates/passwordChanged.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   if (!userId) return;
@@ -181,9 +183,17 @@ const changePassword = asynchandler(async (req, res) => {
 
   await loggedUser.save({ validateBeforeSave: false });
 
+  await sendEmail({
+    to: loggedUser.email,
+    subject: "Your Password Was Changed Successfully 🔐",
+    html: passwordChangedTemplate(loggedUser),
+  });
+
   return res
     .status(200)
     .json(new ApiRes(200, {}, "password changed successfully!"));
 });
+
+
 
 export { registerUser, loginUser, logoutUser, changePassword };
