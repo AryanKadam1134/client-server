@@ -30,4 +30,6 @@ const socialAccountSchema = new Schema(
   { timestamps: true },
 );
 
+socialAccountSchema.index({ owner: 1, name: 1 }, { unique: true });
+
 export const SocialAccount = model("SocialAccount", socialAccountSchema);
