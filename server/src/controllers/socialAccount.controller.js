@@ -1,7 +1,7 @@
-import { SocialAccount } from "../models/socialAccount.model";
-import ApiError from "../utils/ApiError";
-import ApiRes from "../utils/ApiRes";
-import asynchandler from "../utils/asynchandler";
+import { SocialAccount } from "../models/socialAccount.model.js";
+import ApiError from "../utils/ApiError.js";
+import ApiRes from "../utils/ApiRes.js";
+import asynchandler from "../utils/asynchandler.js";
 
 const addSocialPlatforms = asynchandler(async (req, res) => {
   const { platforms } = req.body;
@@ -23,4 +23,15 @@ const addSocialPlatforms = asynchandler(async (req, res) => {
     .json(new ApiRes(200, createdPlatforms, "Platforms added successfully!"));
 });
 
-export { addSocialPlatforms };
+const getUserSocialAccounts = asynchandler(async (req, res) => {
+  const platforms = await SocialAccount.find({
+    owner: req.user?._id,
+    visibility: true,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, platforms, "Platforms fetched successfully!"));
+});
+
+export { addSocialPlatforms, getUserSocialAccounts };

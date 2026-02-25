@@ -17,9 +17,12 @@ app.use(cookieParser());
 
 import filterRoutes from "./routes/filter.routes.js";
 import userRouter from "./routes/user.routes.js";
+import socialAccountRouter from "./routes/socialAccount.routes.js";
 
 app.use("/api/filter", filterRoutes);
 
 app.use("/api/user", userRouter);
+
+app.use("/api/social", socialAccountRouter);
 
 export default app;
