@@ -10,11 +10,22 @@ const addSocialPlatforms = asynchandler(async (req, res) => {
     throw new ApiError(400, "invalid platforms data!");
   }
 
-  const createdPlatforms = await SocialAccount.insertMany(
-    platforms?.map((platform, index) => ({
-      owner: req.user?._id,
-      ...platform,
-      sortOrder: platform?.sortOrder ?? index,
+  const createdPlatforms = await SocialAccount.bulkWrite(
+    platforms.map((platform, index) => ({
+      updateOne: {
+        filter: {
+          owner: req.user._id,
+          name: platform.name,
+        },
+        update: {
+          $set: {
+            link: platform.link,
+            visibility: platform.visibility,
+            sortOrder: platform.sortOrder ?? index,
+          },
+        },
+        upsert: true,
+      },
     })),
   );
 
