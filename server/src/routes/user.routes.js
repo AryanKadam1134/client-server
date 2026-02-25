@@ -4,6 +4,7 @@ import {
   changePassword,
   loginUser,
   logoutUser,
+  refreshAccessToken,
   registerUser,
   updateUserDetails,
 } from "../controllers/user.controller.js";
@@ -34,5 +35,7 @@ userRouter.route("/logout").post(verifyJWT, logoutUser);
 userRouter.route("/change-password").post(verifyJWT, changePassword);
 
 userRouter.route("/update").post(verifyJWT, updateUserDetails);
+
+userRouter.route("/restoreSession").post(verifyJWT, refreshAccessToken);
 
 export default userRouter;

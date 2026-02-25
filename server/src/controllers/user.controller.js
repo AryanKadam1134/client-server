@@ -1,12 +1,14 @@
+import jwt from "jsonwebtoken";
+
 import { options } from "../constants.js";
 
 import { User } from "../models/user.model.js";
 
 import ApiRes from "../utils/ApiRes.js";
 import ApiError from "../utils/ApiError.js";
+import sendEmail from "../utils/mailShooter.js";
 import asynchandler from "../utils/asynchandler.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
-import sendEmail from "../utils/mailShooter.js";
 import passwordChangedTemplate from "../utils/emailTemplates/passwordChanged.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
@@ -28,6 +30,48 @@ const generateAccessAndRefreshToken = async (userId) => {
     throw new ApiError(501, "Couldn't generate Refresh token and Access token");
   }
 };
+
+const refreshAccessToken = asynchandler(async (req, res) => {
+  const cookieRefreshToken = req.cookies?.refreshToken;
+
+  const decodedToken = jwt.verify(
+    cookieRefreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+  );
+
+  const loggedUser = await User.findById(decodedToken?._id);
+
+  if (!loggedUser) {
+    throw new ApiError(404, "user not found!");
+  }
+
+  // console.log("storedToken: ", loggedUser?.refreshToken);
+  // console.log("cookieRefreshToken: ", cookieRefreshToken);
+
+  if (loggedUser?.refreshToken !== cookieRefreshToken) {
+    throw new ApiError(419, "session expired!");
+  }
+
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    loggedUser?._id,
+  );
+
+  if (!accessToken || !refreshToken) {
+    throw new ApiError(503, "couldn't generate access or refresh token!");
+  }
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiRes(
+        200,
+        { accessToken, refreshToken },
+        "session revived successfully!",
+      ),
+    );
+});
 
 const registerUser = asynchandler(async (req, res) => {
   const { fullName, username, email, password } = req.body;
@@ -253,4 +297,5 @@ export {
   logoutUser,
   changePassword,
   updateUserDetails,
+  refreshAccessToken,
 };
