@@ -15,14 +15,17 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-import filterRoutes from "./routes/filter.routes.js";
-import userRouter from "./routes/user.routes.js";
-import socialAccountRouter from "./routes/socialAccount.routes.js";
+import privateFilterRoutes from "./routes/private/filter.routes.js";
+import privateUserRouter from "./routes/private/user.routes.js";
+import privateSocialAccountRouter from "./routes/private/socialAccount.routes.js";
+import publicUserRouter from "./routes/public/user.routes.js";
 
-app.use("/api/filter", filterRoutes);
+app.use("/api/admin/filter", privateFilterRoutes);
 
-app.use("/api/user", userRouter);
+app.use("/api/admin/user", privateUserRouter);
 
-app.use("/api/social", socialAccountRouter);
+app.use("/api/admin/social", privateSocialAccountRouter);
+
+app.use("/api/portfolio/user", publicUserRouter);
 
 export default app;
