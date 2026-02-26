@@ -18,7 +18,7 @@ app.use(cookieParser());
 import privateFilterRoutes from "./routes/private/filter.routes.js";
 import privateUserRouter from "./routes/private/user.routes.js";
 import privateSocialAccountRouter from "./routes/private/socialAccount.routes.js";
-import publicUserRouter from "./routes/public/user.routes.js";
+import portfolioRouter from "./routes/public/portfolio.routes.js";
 
 app.use("/api/admin/filter", privateFilterRoutes);
 
@@ -26,6 +26,6 @@ app.use("/api/admin/user", privateUserRouter);
 
 app.use("/api/admin/social", privateSocialAccountRouter);
 
-app.use("/api/portfolio/user", publicUserRouter);
+app.use("/api/portfolio", portfolioRouter);
 
 export default app;
