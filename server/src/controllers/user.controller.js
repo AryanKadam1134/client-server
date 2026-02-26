@@ -8,7 +8,10 @@ import ApiRes from "../utils/ApiRes.js";
 import ApiError from "../utils/ApiError.js";
 import sendEmail from "../utils/mailShooter.js";
 import asynchandler from "../utils/asynchandler.js";
-import { uploadToCloudinary } from "../utils/cloudinary.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../utils/cloudinary.js";
 import passwordChangedTemplate from "../utils/emailTemplates/passwordChanged.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
@@ -31,6 +34,7 @@ const generateAccessAndRefreshToken = async (userId) => {
   }
 };
 
+// Private Routes
 const refreshAccessToken = asynchandler(async (req, res) => {
   const cookieRefreshToken = req.cookies?.refreshToken;
 
@@ -103,7 +107,7 @@ const registerUser = asynchandler(async (req, res) => {
   }
 
   const userImage = await uploadToCloudinary(image);
-  const userDocument = await uploadToCloudinary(resumeOrCv);
+  const userDocument = await uploadToCloudinary(resumeOrCv, "raw");
 
   if (!userImage) {
     throw new ApiError(500, "couldn't find userImage!");
@@ -277,6 +281,45 @@ const updateUserDetails = asynchandler(async (req, res) => {
     .json(new ApiRes(200, updatedUser, "user details updated successfully!"));
 });
 
+const updateUserResume = asynchandler(async (req, res) => {
+  const loggedUserId = req.user?._id;
+
+  const loggedUser = await User.findById(loggedUserId);
+
+  const userResumeLocalPath = req.file?.path;
+
+  if (!userResumeLocalPath) {
+    throw new ApiError(400, "missing resumeOrCv file path!");
+  }
+
+  const updatedResume = await uploadToCloudinary(userResumeLocalPath);
+
+  if (!updatedResume?.secure_url) {
+    throw new ApiError(500, "error while updating resumeOrCv on cloudinary!");
+  }
+
+  if (loggedUser?.resumeOrCv?.public_id)
+    deleteFromCloudinary(loggedUser?.resumeOrCv);
+
+  const user = await User.findByIdAndUpdate(
+    loggedUserId,
+    {
+      $set: {
+        resumeOrCv: {
+          url: updatedResume?.secure_url,
+          public_id: updatedResume?.public_id,
+          resource_type: updatedResume?.resource_type,
+        },
+      },
+    },
+    { new: true },
+  ).select("-password -refreshToken");
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, user, "user resume updated successfully!"));
+});
+
 const forgotPassword = asynchandler(async (req, res) => {
   const { email } = req.body;
 
@@ -297,5 +340,6 @@ export {
   logoutUser,
   changePassword,
   updateUserDetails,
+  updateUserResume,
   refreshAccessToken,
 };

@@ -7,6 +7,7 @@ import {
   refreshAccessToken,
   registerUser,
   updateUserDetails,
+  updateUserResume,
 } from "../controllers/user.controller.js";
 
 import { upload } from "../middlewares/multer.middleware.js";
@@ -35,6 +36,10 @@ userRouter.route("/logout").post(verifyJWT, logoutUser);
 userRouter.route("/change-password").post(verifyJWT, changePassword);
 
 userRouter.route("/update").post(verifyJWT, updateUserDetails);
+
+userRouter
+  .route("/update-resume")
+  .post(verifyJWT, upload.single("resumeOrCv"), updateUserResume);
 
 userRouter.route("/restoreSession").post(verifyJWT, refreshAccessToken);
 
