@@ -107,7 +107,7 @@ const registerUser = asynchandler(async (req, res) => {
   }
 
   const userImage = await uploadToCloudinary(image);
-  const userDocument = await uploadToCloudinary(resumeOrCv, "raw");
+  const userDocument = await uploadToCloudinary(resumeOrCv);
 
   if (!userImage) {
     throw new ApiError(500, "couldn't find userImage!");
@@ -281,6 +281,44 @@ const updateUserDetails = asynchandler(async (req, res) => {
     .json(new ApiRes(200, updatedUser, "user details updated successfully!"));
 });
 
+const updateUserImage = asynchandler(async (req, res) => {
+  const loggedUserId = req.user?._id;
+
+  const loggedUser = await User.findById(loggedUserId);
+
+  const userImageLocalPath = req.file?.path;
+
+  if (!userImageLocalPath) {
+    throw new ApiError(400, "missing image file path!");
+  }
+
+  const updatedImage = await uploadToCloudinary(userImageLocalPath);
+
+  if (!updatedImage?.secure_url) {
+    throw new ApiError(500, "error while updating image on cloudinary!");
+  }
+
+  if (loggedUser?.image?.public_id) deleteFromCloudinary(loggedUser?.image);
+
+  const user = await User.findByIdAndUpdate(
+    loggedUserId,
+    {
+      $set: {
+        image: {
+          url: updatedImage?.secure_url,
+          public_id: updatedImage?.public_id,
+          resource_type: updatedImage?.resource_type,
+        },
+      },
+    },
+    { new: true },
+  ).select("-password -refreshToken");
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, user, "user resume updated successfully!"));
+});
+
 const updateUserResume = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
 
@@ -340,6 +378,7 @@ export {
   logoutUser,
   changePassword,
   updateUserDetails,
+  updateUserImage,
   updateUserResume,
   refreshAccessToken,
 };
