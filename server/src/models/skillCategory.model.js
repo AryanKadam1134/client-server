@@ -11,6 +11,10 @@ const skillCategorySchema = new Schema(
       type: String,
       required: true,
     },
+    visibility: {
+      type: Boolean,
+      default: true,
+    },
     sortOrder: {
       type: Number,
       default: 0,

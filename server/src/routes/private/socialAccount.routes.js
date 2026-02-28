@@ -3,7 +3,7 @@ import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import {
   manageSocialPlatforms,
   getAllUserSocialPlatforms,
-} from "../../controllers/socialAccount.controller.js";
+} from "../../controllers/private/socialAccount.controller.js";
 
 const socialAccountRouter = Router();
 

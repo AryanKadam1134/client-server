@@ -1,18 +1,18 @@
 import jwt from "jsonwebtoken";
 
-import { options } from "../constants.js";
+import { options } from "../../constants.js";
 
-import { User } from "../models/user.model.js";
+import { User } from "../../models/user.model.js";
 
-import ApiRes from "../utils/ApiRes.js";
-import ApiError from "../utils/ApiError.js";
-import sendEmail from "../utils/mailShooter.js";
-import asynchandler from "../utils/asynchandler.js";
+import ApiRes from "../../utils/ApiRes.js";
+import ApiError from "../../utils/ApiError.js";
+import sendEmail from "../../utils/mailShooter.js";
+import asynchandler from "../../utils/asynchandler.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
-} from "../utils/cloudinary.js";
-import passwordChangedTemplate from "../utils/emailTemplates/passwordChanged.js";
+} from "../../utils/cloudinary.js";
+import passwordChangedTemplate from "../../utils/emailTemplates/passwordChanged.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   if (!userId) return;
@@ -34,7 +34,6 @@ const generateAccessAndRefreshToken = async (userId) => {
   }
 };
 
-// Private Controllers
 const refreshAccessToken = asynchandler(async (req, res) => {
   const cookieRefreshToken = req.cookies?.refreshToken;
 
@@ -372,12 +371,7 @@ const forgotPassword = asynchandler(async (req, res) => {
   }
 });
 
-// Public Controllers
-const getUserByUsername = asynchandler(async (req, res) => {
-  return res
-    .status(200)
-    .json(new ApiRes(200, req.user, "user data fetched successfully!"));
-});
+
 
 export {
   registerUser,
@@ -388,5 +382,4 @@ export {
   updateUserImage,
   updateUserResume,
   refreshAccessToken,
-  getUserByUsername,
 };

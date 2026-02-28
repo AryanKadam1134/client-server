@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   getSkillLevel,
   getSocialPlatforms,
-} from "../../controllers/filter.controller.js";
+} from "../../controllers/private/filter.controller.js";
 
 const filterRoutes = Router();
 
