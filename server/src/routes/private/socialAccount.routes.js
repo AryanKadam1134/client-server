@@ -1,18 +1,14 @@
 import { Router } from "express";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import {
-  addSocialPlatforms,
-  getUserSocialAccounts,
+  manageSocialPlatforms,
+  getAllUserSocialPlatforms,
 } from "../../controllers/socialAccount.controller.js";
 
-const privateSocialAccountRouter = Router();
+const socialAccountRouter = Router();
 
-privateSocialAccountRouter
-  .route("/addSocialAccounts")
-  .post(verifyJWT, addSocialPlatforms);
+socialAccountRouter.route("/manage").post(verifyJWT, manageSocialPlatforms);
 
-privateSocialAccountRouter
-  .route("/userSocialAccounts")
-  .post(verifyJWT, getUserSocialAccounts);
+socialAccountRouter.route("/all").get(verifyJWT, getAllUserSocialPlatforms);
 
-export default privateSocialAccountRouter;
+export default socialAccountRouter;

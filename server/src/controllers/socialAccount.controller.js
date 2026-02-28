@@ -3,7 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiRes from "../utils/ApiRes.js";
 import asynchandler from "../utils/asynchandler.js";
 
-const addSocialPlatforms = asynchandler(async (req, res) => {
+const manageSocialPlatforms = asynchandler(async (req, res) => {
   const { platforms } = req.body;
 
   if (!Array.isArray(platforms) || platforms?.length == 0) {
@@ -34,6 +34,17 @@ const addSocialPlatforms = asynchandler(async (req, res) => {
     .json(new ApiRes(200, createdPlatforms, "Platforms added successfully!"));
 });
 
+const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
+  const platforms = await SocialAccount.find({
+    owner: req.user?._id,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, platforms, "Platforms fetched successfully!"));
+});
+
+// Public Routes
 const getUserSocialAccounts = asynchandler(async (req, res) => {
   const platforms = await SocialAccount.find({
     owner: req.user?._id,
@@ -45,4 +56,8 @@ const getUserSocialAccounts = asynchandler(async (req, res) => {
     .json(new ApiRes(200, platforms, "Platforms fetched successfully!"));
 });
 
-export { addSocialPlatforms, getUserSocialAccounts };
+export {
+  manageSocialPlatforms,
+  getAllUserSocialPlatforms,
+  getUserSocialAccounts,
+};

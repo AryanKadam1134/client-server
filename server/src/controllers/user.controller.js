@@ -374,17 +374,9 @@ const forgotPassword = asynchandler(async (req, res) => {
 
 // Public Controllers
 const getUserByUsername = asynchandler(async (req, res) => {
-  const user = await User.findOne({
-    username: req.params?.username,
-  }).select("-password -refreshToken");
-
-  if (!user) {
-    throw new ApiError(404, "user not found!");
-  }
-
   return res
     .status(200)
-    .json(new ApiRes(200, user, "user data fetched successfully!"));
+    .json(new ApiRes(200, req.user, "user data fetched successfully!"));
 });
 
 export {

@@ -4,10 +4,10 @@ import {
   getSocialPlatforms,
 } from "../../controllers/filter.controller.js";
 
-const privateFilterRoutes = Router();
+const filterRoutes = Router();
 
-privateFilterRoutes.route("/social-platforms").get(getSocialPlatforms);
+filterRoutes.route("/social-platforms").get(getSocialPlatforms);
 
-privateFilterRoutes.route("/skill-levels").get(getSkillLevel);
+filterRoutes.route("/skill-levels").get(getSkillLevel);
 
-export default privateFilterRoutes;
+export default filterRoutes;
