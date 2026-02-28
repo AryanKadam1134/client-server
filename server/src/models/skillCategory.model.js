@@ -10,6 +10,7 @@ const skillCategorySchema = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     visibility: {
       type: Boolean,

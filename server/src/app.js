@@ -19,12 +19,15 @@ app.use(cookieParser());
 import filterRoutes from "./routes/private/filter.routes.js";
 import userRouter from "./routes/private/user.routes.js";
 import socialAccountRouter from "./routes/private/socialAccount.routes.js";
+import skillCategoryRouter from "./routes/private/skillCategory.routes.js";
 
 app.use("/api/admin/filter", filterRoutes);
 
 app.use("/api/admin/user", userRouter);
 
 app.use("/api/admin/social", socialAccountRouter);
+
+app.use("/api/admin/skillCategory", skillCategoryRouter);
 
 // Public
 import portfolioRouter from "./routes/public/portfolio.routes.js";
