@@ -54,4 +54,71 @@ const addSkill = asynchandler(async (req, res) => {
     .json(new ApiRes(200, newSkill, "skill added successfully!"));
 });
 
-export { addSkill };
+const updateSkill = asynchandler(async (req, res) => {
+  const { name, description, categoryId, level, visibility, sortOrder } =
+    req.body;
+
+  const skillId = req.params?.skillId;
+
+  if (!skillId) {
+    throw new ApiError(400, "skillId is required!");
+  }
+
+  const skillExists = await Skill.findById(skillId);
+
+  if (!skillExists) {
+    throw new ApiError(404, "skill not found!");
+  }
+
+  const fields = {};
+
+  if (categoryId) {
+    await SkillCategory.findById(categoryId)
+      .then(() => (fields.categoryId = categoryId))
+      .catch((error) => {
+        throw new ApiError(404, "category doesn't exists!", error);
+      });
+  }
+
+  if (name) fields.name = name;
+  if (description) fields.description = description;
+  if (level) fields.level = level;
+  if (typeof visibility == "boolean") fields.visibility = visibility;
+  if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
+
+  const updatedSkill = await Skill.findByIdAndUpdate(
+    skillId,
+    {
+      $set: fields,
+    },
+    { new: true },
+  );
+
+  if (!updatedSkill) {
+    throw new ApiError(500, "couldn't update skill!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, updatedSkill, "skill updated succesfully!"));
+});
+
+const deleteSkill = asynchandler(async (req, res) => {
+  const skillId = req.params?.skillId;
+
+  if (!skillId) {
+    throw new ApiError(400, "skillId is required!");
+  }
+
+  const deletedSkill = await Skill.findByIdAndDelete(skillId);
+
+  if (!deletedSkill) {
+    throw new ApiError(500, "couldn't delete skill!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, null, "skill deleted succesfully!"));
+});
+
+export { addSkill, updateSkill, deleteSkill };
