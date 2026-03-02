@@ -4,6 +4,7 @@ import { SocialAccount } from "../../models/socialAccount.model.js";
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
 import ApiError from "../../utils/ApiError.js";
+import { SkillCategory } from "../../models/skillCategory.model.js";
 
 const getUserByUsername = asynchandler(async (req, res) => {
   return res
@@ -58,4 +59,43 @@ const getSkillWithCategory = asynchandler(async (req, res) => {
     .json(new ApiRes(200, skills, "skills fetched successfully!"));
 });
 
-export { getUserByUsername, getUserSocialAccounts, getSkillWithCategory };
+const getCategoryWiseSkills = asynchandler(async (req, res) => {
+  const categories = await SkillCategory.aggregate([
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+        visibility: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "skills",
+        localField: "_id",
+        foreignField: "categoryId",
+        as: "skills",
+        pipeline: [
+          {
+            $match: {
+              visibility: true,
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
+  if (!categories) {
+    throw new ApiError(500, "couldn't get categories!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, categories, "categories fetched successfully!"));
+});
+
+export {
+  getUserByUsername,
+  getUserSocialAccounts,
+  getSkillWithCategory,
+  getCategoryWiseSkills,
+};
