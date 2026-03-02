@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Skill } from "../../models/skill.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import ApiError from "../../utils/ApiError.js";
@@ -121,4 +122,37 @@ const deleteSkill = asynchandler(async (req, res) => {
     .json(new ApiRes(200, null, "skill deleted succesfully!"));
 });
 
-export { addSkill, updateSkill, deleteSkill };
+const getAllSkillWithCategory = asynchandler(async (req, res) => {
+  const skills = await Skill.aggregate([
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $lookup: {
+        from: "skillcategories",
+        localField: "categoryId",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $addFields: {
+        category: {
+          $first: "$category",
+        },
+      },
+    },
+  ]);
+
+  if (!skills) {
+    throw new ApiError(500, "couldn't get all skills!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, skills, "skills fetched successfully!"));
+});
+
+export { addSkill, updateSkill, deleteSkill, getAllSkillWithCategory };
