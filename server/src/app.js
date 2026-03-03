@@ -21,6 +21,7 @@ import userRouter from "./routes/private/user.routes.js";
 import socialAccountRouter from "./routes/private/socialAccount.routes.js";
 import skillCategoryRouter from "./routes/private/skillCategory.routes.js";
 import skillRouter from "./routes/private/skill.routes.js";
+import projectRouter from "./routes/private/project.routes.js";
 
 app.use("/api/admin/filter", filterRoutes);
 
@@ -31,6 +32,8 @@ app.use("/api/admin/social", socialAccountRouter);
 app.use("/api/admin/skillCategory", skillCategoryRouter);
 
 app.use("/api/admin/skill", skillRouter);
+
+app.use("/api/admin/project", projectRouter);
 
 // Public
 import portfolioRouter from "./routes/public/portfolio.routes.js";

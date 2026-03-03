@@ -371,8 +371,6 @@ const forgotPassword = asynchandler(async (req, res) => {
   }
 });
 
-
-
 export {
   registerUser,
   loginUser,

@@ -72,6 +72,9 @@ const userSchema = new Schema(
         default: "pdf",
       },
     },
+    documentUrl: {
+      type: String,
+    },
     refreshToken: {
       type: String,
     },

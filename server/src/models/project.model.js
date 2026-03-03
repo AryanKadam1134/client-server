@@ -16,7 +16,6 @@ const projectSchema = new Schema(
     },
     startDate: {
       type: Date,
-      required: true,
     },
     endDate: {
       type: Date,
@@ -36,11 +35,9 @@ const projectSchema = new Schema(
       // Couldinary
       url: {
         type: String,
-        required: true,
       },
       public_id: {
         type: String,
-        required: true,
       },
       resource_type: {
         type: String,
