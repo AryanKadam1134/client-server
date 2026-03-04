@@ -46,11 +46,9 @@ const userSchema = new Schema(
       // Couldinary
       url: {
         type: String,
-        required: true,
       },
       public_id: {
         type: String,
-        required: true,
       },
       resource_type: {
         type: String,
@@ -61,15 +59,13 @@ const userSchema = new Schema(
       // Couldinary
       url: {
         type: String,
-        required: true,
       },
       public_id: {
         type: String,
-        required: true,
       },
       resource_type: {
         type: String,
-        default: "pdf",
+        default: "image",
       },
     },
     documentUrl: {

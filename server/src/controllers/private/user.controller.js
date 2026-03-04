@@ -108,29 +108,11 @@ const registerUser = asynchandler(async (req, res) => {
   const userImage = await uploadToCloudinary(image);
   const userDocument = await uploadToCloudinary(resumeOrCv);
 
-  if (!userImage) {
-    throw new ApiError(500, "couldn't find userImage!");
-  }
-
-  if (!userDocument) {
-    throw new ApiError(500, "couldn't find userDocument!");
-  }
-
   const createdUser = await User.create({
     fullName,
     username: username?.toLowerCase(),
     email,
     password,
-    image: {
-      url: userImage?.secure_url,
-      public_id: userImage?.public_id,
-      resource_type: userImage?.resource_type,
-    },
-    resumeOrCv: {
-      url: userDocument?.secure_url,
-      public_id: userDocument?.public_id,
-      resource_type: userDocument?.resource_type,
-    },
   });
 
   if (!createdUser?._id) {

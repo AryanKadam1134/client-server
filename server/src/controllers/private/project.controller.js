@@ -2,6 +2,7 @@ import { Project } from "../../models/project.model.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { uploadToCloudinary } from "../../utils/cloudinary.js";
 
 const addProject = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -46,6 +47,30 @@ const addProject = asynchandler(async (req, res) => {
 
   if (projectExists) {
     throw new ApiError(409, "project name already exists!");
+  }
+
+  const coverImage = req.files?.coverImage[0]?.path;
+  const projectImages = req.files?.projectImages;
+
+  const uploadedCoverImage = await uploadToCloudinary(coverImage);
+  const uploadedProjectImages = await Promise.all(
+    projectImages?.map((image) => uploadToCloudinary(image?.path)),
+  );
+
+  if (uploadedCoverImage?.secure_url) {
+    fields.coverImage = {
+      url: uploadedCoverImage?.secure_url,
+      public_id: uploadedCoverImage?.public_id,
+      resource_type: uploadedCoverImage?.resource_type,
+    };
+  }
+
+  if (uploadedProjectImages?.length > 0) {
+    fields.projectImages = uploadedProjectImages?.map((image) => ({
+      url: image?.secure_url,
+      public_id: image?.public_id,
+      resource_type: image?.resource_type,
+    }));
   }
 
   const newProject = await Project.create({ owner: loggedUserId, ...fields });
