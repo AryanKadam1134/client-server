@@ -59,7 +59,7 @@ const updateSkill = asynchandler(async (req, res) => {
   const { name, description, categoryId, level, visibility, sortOrder } =
     req.body;
 
-  const skillId = req.params?.skillId;
+  const { skillId } = req.params;
 
   if (!skillId) {
     throw new ApiError(400, "skillId is required!");
@@ -105,7 +105,7 @@ const updateSkill = asynchandler(async (req, res) => {
 });
 
 const deleteSkill = asynchandler(async (req, res) => {
-  const skillId = req.params?.skillId;
+  const { skillId } = req.params;
 
   if (!skillId) {
     throw new ApiError(400, "skillId is required!");

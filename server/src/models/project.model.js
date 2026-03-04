@@ -19,17 +19,20 @@ const projectSchema = new Schema(
     },
     endDate: {
       type: Date,
-      validate: {
-        validator: function (value) {
-          if (this.present) return value == null;
-          return true;
-        },
-        message: "endDate must be null if present is true",
-      },
     },
     present: {
       type: Boolean,
       default: false,
+      validate: {
+        validator: function (value) {
+          // If endDate exists, present must be false
+          if (this.endDate && value === true) {
+            return false;
+          }
+          return true;
+        },
+        message: "present must be false if endDate is provided",
+      },
     },
     coverImage: {
       // Couldinary

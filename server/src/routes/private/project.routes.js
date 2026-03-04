@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { addProject } from "../../controllers/private/project.controller.js";
+import {
+  addProject,
+  updateProjectCoverImage,
+  updateProjectDetails,
+} from "../../controllers/private/project.controller.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 
 const projectRouter = Router();
@@ -14,7 +18,17 @@ projectRouter.route("/add").post(
   addProject,
 );
 
-projectRouter.route("/:projectId/update").patch(verifyJWT, addProject);
+projectRouter
+  .route("/:projectId/update-details")
+  .patch(verifyJWT, updateProjectDetails);
+
+projectRouter
+  .route("/:projectId/update-coverImage")
+  .patch(verifyJWT, upload.single("coverImage"), updateProjectCoverImage);
+
+projectRouter
+  .route("/:projectId/update-projectImages")
+  .patch(verifyJWT, upload.array("projectImages", 5), updateProjectCoverImage);
 
 projectRouter.route("/:projectId/delete").delete(verifyJWT, addProject);
 

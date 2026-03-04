@@ -44,10 +44,4 @@ const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
     .json(new ApiRes(200, platforms, "Platforms fetched successfully!"));
 });
 
-
-
-export {
-  manageSocialPlatforms,
-  getAllUserSocialPlatforms,
-
-};
+export { manageSocialPlatforms, getAllUserSocialPlatforms };

@@ -41,7 +41,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
 });
 
 const updateSkillCategory = asynchandler(async (req, res) => {
-  const categoryId = req.params?.categoryId;
+  const { categoryId } = req.params;
 
   const { name, visibility, sortOrder } = req.body;
 
@@ -79,7 +79,7 @@ const updateSkillCategory = asynchandler(async (req, res) => {
 });
 
 const deleteSkillCategory = asynchandler(async (req, res) => {
-  const categoryId = req.params?.categoryId;
+  const { categoryId } = req.params;
 
   if (!categoryId) {
     throw new ApiError(404, "categoryId is required!");
