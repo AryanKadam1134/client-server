@@ -254,4 +254,9 @@ const updateProjectImages = asynchandler(async (req, res) => {
     );
 });
 
-export { addProject, updateProjectDetails, updateProjectCoverImage };
+export {
+  addProject,
+  updateProjectDetails,
+  updateProjectCoverImage,
+  updateProjectImages,
+};
