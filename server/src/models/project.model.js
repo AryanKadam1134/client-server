@@ -44,7 +44,6 @@ const projectSchema = new Schema(
       },
       resource_type: {
         type: String,
-        default: "image",
       },
     },
     projectImages: [

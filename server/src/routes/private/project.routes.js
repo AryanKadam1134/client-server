@@ -42,6 +42,6 @@ projectRouter
 
 projectRouter
   .route("/:projectId/delete-projectImages/:imagePublicId")
-  .patch(verifyJWT, deleteProjectImages);
+  .delete(verifyJWT, deleteProjectImages);
 
 export default projectRouter;

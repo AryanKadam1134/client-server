@@ -137,8 +137,8 @@ const updateProjectDetails = asynchandler(async (req, res) => {
       ? techStack
       : JSON.parse(techStack);
 
-  if (present !== undefined) fields.present = present === "true";
-  if (visibility !== undefined) fields.visibility = visibility === "true";
+  if (present !== undefined) fields.present = present;
+  if (visibility !== undefined) fields.visibility = visibility;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   const updatedProject = await Project.findByIdAndUpdate(
@@ -155,7 +155,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(200, updatedProject, "project updated successfully!");
+    .json(new ApiRes(200, updatedProject, "project updated successfully!"));
 });
 
 const updateProjectCoverImage = asynchandler(async (req, res) => {
@@ -240,7 +240,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
     resource_type: image?.resource_type,
   }));
 
-  const updatedProject = await findByIdAndUpdate(
+  const updatedProject = await Project.findByIdAndUpdate(
     projectId,
     {
       $push: {
@@ -260,11 +260,27 @@ const updateProjectImages = asynchandler(async (req, res) => {
 });
 
 const deleteProject = asynchandler(async (req, res) => {
-  const deletedProject = await Project.findByIdAndDelete(req.params?.projectId);
+  const { projectId } = req.params;
 
-  if (!deletedProject) {
-    throw new ApiError(500, "couldn't delete project!");
+  if (!projectId) {
+    throw new ApiError(400, "projectId is required!");
   }
+
+  const projectExists = await Project.findById(projectId);
+
+  if (!projectExists) {
+    throw new ApiError(404, "project not found!");
+  }
+
+  if (projectExists?.coverImage?.public_id)
+    await deleteFromCloudinary(projectExists?.coverImage);
+
+  if (projectExists?.projectImages?.length > 0)
+    await Promise.all(
+      projectExists?.projectImages?.map((image) => deleteFromCloudinary(image)),
+    );
+
+  await Project.findByIdAndDelete(projectId);
 
   return res
     .status(200)
@@ -317,23 +333,31 @@ const deleteProjectImages = asynchandler(async (req, res) => {
     throw new ApiError(404, "project not found!");
   }
 
-  const updatedProject = await Project.findByIdAndUpdate(projectId, {
-    $pull: {
-      projectImages: {
-        public_id: imagePublicId,
+  const projectImage = projectExists?.projectImages?.find(
+    (image) => image?.public_id == imagePublicId,
+  );
+
+  if (!projectImage?.public_id) {
+    throw new ApiError(404, "project image doesn't exists!");
+  }
+
+  const updatedProject = await Project.findByIdAndUpdate(
+    projectId,
+    {
+      $pull: {
+        projectImages: {
+          public_id: imagePublicId,
+        },
       },
     },
-  });
+    { new: true },
+  );
 
   if (!updatedProject) {
     throw new ApiError(500, "couldn't delete project image!");
   }
 
-  const projectImage = projectExists?.projectImages?.find(
-    (image) => image?.public_id == imagePublicId,
-  );
-
-  if (projectImage?.public_id) deleteFromCloudinary(projectImage);
+  deleteFromCloudinary(projectImage);
 
   return res
     .status(200)
