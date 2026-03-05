@@ -82,7 +82,7 @@ const updateSkill = asynchandler(async (req, res) => {
   }
 
   if (name) fields.name = name;
-  if (description) fields.description = description;
+  if (description !== undefined) fields.description = description;
   if (level) fields.level = level;
   if (typeof visibility == "boolean") fields.visibility = visibility;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;

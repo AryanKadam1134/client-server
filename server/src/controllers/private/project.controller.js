@@ -2,7 +2,10 @@ import { Project } from "../../models/project.model.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
-import { uploadToCloudinary } from "../../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadToCloudinary,
+} from "../../utils/cloudinary.js";
 
 const addProject = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -119,15 +122,17 @@ const updateProjectDetails = asynchandler(async (req, res) => {
     sortOrder,
   } = req.body;
 
-  if (title) fields.title = title;
-  if (description) fields.description = description;
-  if (startDate) fields.startDate = startDate;
-  if (endDate) fields.endDate = endDate;
-  if (githubLink) fields.githubLink = githubLink;
-  if (liveLink) fields.liveLink = liveLink;
-  if (category) fields.category = category;
+  const fields = {};
 
-  if (techStack?.length > 0)
+  if (title) fields.title = title;
+  if (description !== undefined) fields.description = description;
+  if (startDate !== undefined) fields.startDate = startDate;
+  if (endDate !== undefined) fields.endDate = endDate;
+  if (githubLink !== undefined) fields.githubLink = githubLink;
+  if (liveLink !== undefined) fields.liveLink = liveLink;
+  if (category !== undefined) fields.category = category;
+
+  if (techStack !== undefined && techStack?.length > 0)
     fields.techStack = Array.isArray(techStack)
       ? techStack
       : JSON.parse(techStack);
@@ -238,7 +243,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
   const updatedProject = await findByIdAndUpdate(
     projectId,
     {
-      $set: {
+      $push: {
         projectImages: {
           $each: formattedImages,
         },
@@ -254,9 +259,95 @@ const updateProjectImages = asynchandler(async (req, res) => {
     );
 });
 
+const deleteProject = asynchandler(async (req, res) => {
+  const deletedProject = await Project.findByIdAndDelete(req.params?.projectId);
+
+  if (!deletedProject) {
+    throw new ApiError(500, "couldn't delete project!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, null, "project deleted successfully!"));
+});
+
+const deleteProjectCoverImage = asynchandler(async (req, res) => {
+  const { projectId } = req.params;
+
+  if (!projectId) {
+    throw new ApiError(400, "projectId is required!");
+  }
+
+  const projectExists = await Project.findById(projectId);
+
+  if (!projectExists) {
+    throw new ApiError(404, "project not found!");
+  }
+
+  const updatedProject = await Project.findByIdAndUpdate(
+    projectId,
+    {
+      $unset: { coverImage: "" },
+    },
+    { new: true },
+  );
+
+  if (!updatedProject) {
+    throw new ApiError(500, "couldn't delete coverImage!");
+  }
+
+  if (projectExists?.coverImage?.public_id)
+    deleteFromCloudinary(projectExists?.coverImage);
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, updatedProject, "coverImage deleted successfully!"));
+});
+
+const deleteProjectImages = asynchandler(async (req, res) => {
+  const { projectId, imagePublicId } = req.params;
+
+  if (!projectId) {
+    throw new ApiError(400, "projectId is required!");
+  }
+
+  const projectExists = await Project.findById(projectId);
+
+  if (!projectExists) {
+    throw new ApiError(404, "project not found!");
+  }
+
+  const updatedProject = await Project.findByIdAndUpdate(projectId, {
+    $pull: {
+      projectImages: {
+        public_id: imagePublicId,
+      },
+    },
+  });
+
+  if (!updatedProject) {
+    throw new ApiError(500, "couldn't delete project image!");
+  }
+
+  const projectImage = projectExists?.projectImages?.find(
+    (image) => image?.public_id == imagePublicId,
+  );
+
+  if (projectImage?.public_id) deleteFromCloudinary(projectImage);
+
+  return res
+    .status(200)
+    .json(
+      new ApiRes(200, updatedProject, "project image deleted successfully!"),
+    );
+});
+
 export {
   addProject,
   updateProjectDetails,
   updateProjectCoverImage,
   updateProjectImages,
+  deleteProject,
+  deleteProjectCoverImage,
+  deleteProjectImages,
 };

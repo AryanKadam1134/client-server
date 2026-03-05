@@ -242,7 +242,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
   if (fullName) updatedDetails.fullName = fullName;
   if (username) updatedDetails.username = username;
   if (email) updatedDetails.email = email;
-  if (mobileNo) updatedDetails.mobileNo = mobileNo;
+  if (mobileNo !== undefined) updatedDetails.mobileNo = mobileNo;
   if (gender) updatedDetails.gender = gender;
 
   if (Object.keys(updatedDetails).length === 0) {
