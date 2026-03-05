@@ -2,6 +2,9 @@ import { Router } from "express";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import {
   addProject,
+  deleteProject,
+  deleteProjectCoverImage,
+  deleteProjectImages,
   updateProjectCoverImage,
   updateProjectDetails,
   updateProjectImages,
@@ -31,6 +34,14 @@ projectRouter
   .route("/:projectId/update-projectImages")
   .patch(verifyJWT, upload.array("projectImages", 5), updateProjectImages);
 
-projectRouter.route("/:projectId/delete").delete(verifyJWT, addProject);
+projectRouter.route("/:projectId/delete").delete(verifyJWT, deleteProject);
+
+projectRouter
+  .route("/:projectId/delete-coverImage")
+  .delete(verifyJWT, deleteProjectCoverImage);
+
+projectRouter
+  .route("/:projectId/delete-projectImages/:imagePublicId")
+  .patch(verifyJWT, deleteProjectImages);
 
 export default projectRouter;
