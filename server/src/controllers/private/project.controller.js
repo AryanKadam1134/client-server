@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Project } from "../../models/project.model.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiRes from "../../utils/ApiRes.js";
@@ -61,12 +62,14 @@ const addProject = asynchandler(async (req, res) => {
   const projectImages = req.files?.projectImages;
 
   let uploadedCoverImage;
+  let uploadedProjectImages;
 
   if (coverImage) uploadedCoverImage = await uploadToCloudinary(coverImage);
 
-  const uploadedProjectImages = await Promise.all(
-    projectImages?.map((image) => uploadToCloudinary(image?.path)),
-  );
+  if (projectImages?.length > 0)
+    uploadedProjectImages = await Promise.all(
+      projectImages?.map((image) => uploadToCloudinary(image?.path)),
+    );
 
   if (uploadedCoverImage?.secure_url) {
     fields.coverImage = {
@@ -366,6 +369,32 @@ const deleteProjectImages = asynchandler(async (req, res) => {
     );
 });
 
+const getAllProjects = asynchandler(async (req, res) => {
+  const projects = await Project.aggregate([
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $lookup: {
+        from: "skills",
+        localField: "techStack",
+        foreignField: "_id",
+        as: "techStack",
+      },
+    },
+  ]);
+
+  if (!projects) {
+    throw new ApiError(500, "couldn't get projects!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, projects, "projects fetched successfully!"));
+});
+
 export {
   addProject,
   updateProjectDetails,
@@ -374,4 +403,5 @@ export {
   deleteProject,
   deleteProjectCoverImage,
   deleteProjectImages,
+  getAllProjects,
 };

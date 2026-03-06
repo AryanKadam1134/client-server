@@ -5,6 +5,7 @@ import {
   deleteProject,
   deleteProjectCoverImage,
   deleteProjectImages,
+  getAllProjects,
   updateProjectCoverImage,
   updateProjectDetails,
   updateProjectImages,
@@ -43,5 +44,7 @@ projectRouter
 projectRouter
   .route("/:projectId/delete-projectImages/:imagePublicId")
   .delete(verifyJWT, deleteProjectImages);
+
+projectRouter.route("/all").get(verifyJWT, getAllProjects);
 
 export default projectRouter;
