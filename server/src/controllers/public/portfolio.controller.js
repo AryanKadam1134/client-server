@@ -5,6 +5,7 @@ import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
+import { Project } from "../../models/project.model.js";
 
 const getUserByUsername = asynchandler(async (req, res) => {
   return res
@@ -48,6 +49,11 @@ const getSkillWithCategory = asynchandler(async (req, res) => {
         },
       },
     },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
   ]);
 
   if (!skills) {
@@ -82,6 +88,11 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
         ],
       },
     },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
   ]);
 
   if (!categories) {
@@ -93,9 +104,42 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
     .json(new ApiRes(200, categories, "categories fetched successfully!"));
 });
 
+const getProjects = asynchandler(async (req, res) => {
+  const projects = await Project.aggregate([
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+        visibility: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "skills",
+        localField: "techStack",
+        foreignField: "_id",
+        as: "techStack",
+      },
+    },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
+  ]);
+
+  if (!projects) {
+    throw new ApiError(500, "couldn't get projects!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, projects, "projects fetched successfully!"));
+});
+
 export {
   getUserByUsername,
   getUserSocialAccounts,
   getSkillWithCategory,
   getCategoryWiseSkills,
+  getProjects,
 };
