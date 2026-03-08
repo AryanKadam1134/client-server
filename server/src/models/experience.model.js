@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+import { EMPLOYMENT_TYPE } from "../constants.js";
 
 const experienceSchema = new Schema(
   {
@@ -6,15 +7,37 @@ const experienceSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
-    companyName: {
+    organization: {
       type: String,
       required: true,
+    },
+    description: {
+      type: String,
     },
     role: {
       type: String,
       required: true,
     },
+    employmentType: {
+      type: String,
+      enum: EMPLOYMENT_TYPE?.map((type) => type.value),
+    },
+    organizationSize: {
+      type: String,
+    },
+    organizationWebsite: {
+      type: String,
+      match: [/^https?:\/\/.+/, "Invalid URL"],
+    },
+    highLights: [String],
+    techStack: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Skill",
+      },
+    ],
     location: {
       type: String,
     },
@@ -36,14 +59,7 @@ const experienceSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    visibility: {
-      type: Boolean,
-      default: true,
-    },
-    experience: {
-      type: String,
-    },
-    companyImage: {
+    organizationImage: {
       // Couldinary
       url: {
         type: String,
@@ -53,15 +69,12 @@ const experienceSchema = new Schema(
       },
       resource_type: {
         type: String,
-        default: "image",
       },
     },
-    techStack: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Skill",
-      },
-    ],
+    visibility: {
+      type: Boolean,
+      default: true,
+    },
     sortOrder: {
       type: Number,
       default: 0,

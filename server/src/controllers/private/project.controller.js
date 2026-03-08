@@ -7,6 +7,7 @@ import {
   deleteFromCloudinary,
   uploadToCloudinary,
 } from "../../utils/cloudinary.js";
+import { Experience } from "../../models/experience.model.js";
 
 const addProject = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -17,12 +18,14 @@ const addProject = asynchandler(async (req, res) => {
     startDate,
     endDate,
     present,
+    featured,
     githubLink,
     liveLink,
     category,
     techStack,
     visibility,
     sortOrder,
+    organizationId,
   } = req.body;
 
   const fields = {};
@@ -32,6 +35,19 @@ const addProject = asynchandler(async (req, res) => {
   }
 
   fields.title = title;
+
+  // Add Organization only if it exists
+  if (organizationId) {
+    let organizationExists;
+
+    organizationExists = await Experience.findById(organizationId);
+
+    if (!organizationExists) {
+      throw new ApiError(409, "organization not found!");
+    }
+
+    fields.organizationId = organizationId;
+  }
 
   if (description) fields.description = description;
   if (startDate) fields.startDate = startDate;
@@ -46,6 +62,7 @@ const addProject = asynchandler(async (req, res) => {
       : JSON.parse(techStack);
 
   if (present !== undefined) fields.present = present === "true";
+  if (featured !== undefined) fields.featured = featured === "true";
   if (visibility !== undefined) fields.visibility = visibility === "true";
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
@@ -117,15 +134,29 @@ const updateProjectDetails = asynchandler(async (req, res) => {
     startDate,
     endDate,
     present,
+    featured,
     githubLink,
     liveLink,
     category,
     techStack,
     visibility,
     sortOrder,
+    organizationId,
   } = req.body;
 
   const fields = {};
+
+  if (organizationId !== undefined) {
+    let organizationExists;
+
+    organizationExists = await Experience.findById(organizationId);
+
+    if (organizationId && !organizationExists) {
+      throw new ApiError(409, "organization not found!");
+    }
+
+    fields.organizationId = organizationId;
+  }
 
   if (title) fields.title = title;
   if (description !== undefined) fields.description = description;
@@ -141,6 +172,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
       : JSON.parse(techStack);
 
   if (present !== undefined) fields.present = present;
+  if (featured !== undefined) fields.featured = featured;
   if (visibility !== undefined) fields.visibility = visibility;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 

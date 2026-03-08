@@ -18,6 +18,15 @@ const GENDERS = [
   { label: "Other", value: "other" },
 ];
 
+const EMPLOYMENT_TYPE = [
+  { label: "Full Time", value: "full-time" },
+  { label: "Part Time", value: "part-time" },
+  { label: "Contract", value: "contract" },
+  { label: "Freelance", value: "freelance" },
+  { label: "Internship", value: "internship" },
+  { label: "Apprenticeship", value: "apprenticeship" },
+];
+
 const options = {
   httpOnly: true,
   secure: true,
@@ -25,4 +34,11 @@ const options = {
 
 const DB_NAME = "portfolio_backend";
 
-export { SOCIAL_PLATFORMS, SKILL_LEVEL, GENDERS, DB_NAME, options };
+export {
+  SOCIAL_PLATFORMS,
+  SKILL_LEVEL,
+  GENDERS,
+  EMPLOYMENT_TYPE,
+  DB_NAME,
+  options,
+};

@@ -7,6 +7,10 @@ const projectSchema = new Schema(
       ref: "User",
       required: true,
     },
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: "Experience",
+    },
     title: {
       type: String,
       required: true,
@@ -33,6 +37,10 @@ const projectSchema = new Schema(
         },
         message: "present must be false if endDate is provided",
       },
+    },
+    featured: {
+      type: Boolean,
+      default: true,
     },
     coverImage: {
       // Couldinary
