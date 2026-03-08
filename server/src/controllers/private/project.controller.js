@@ -104,15 +104,18 @@ const addProject = asynchandler(async (req, res) => {
     }));
   }
 
-  const newProject = await Project.create({ owner: loggedUserId, ...fields });
+  const createdProject = await Project.create({
+    owner: loggedUserId,
+    ...fields,
+  });
 
-  if (!newProject) {
+  if (!createdProject) {
     throw new ApiError(500, "couldn't create project!");
   }
 
   return res
     .status(201)
-    .json(new ApiRes(201, newProject, "project created succesfully!"));
+    .json(new ApiRes(201, createdProject, "project created succesfully!"));
 });
 
 const updateProjectDetails = asynchandler(async (req, res) => {
@@ -146,6 +149,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
 
   const fields = {};
 
+  // Updated Organization only if it exists
   if (organizationId !== undefined) {
     let organizationExists;
 

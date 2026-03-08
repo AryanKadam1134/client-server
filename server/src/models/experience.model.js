@@ -59,6 +59,10 @@ const experienceSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    featured: {
+      type: Boolean,
+      default: true,
+    },
     organizationImage: {
       // Couldinary
       url: {
