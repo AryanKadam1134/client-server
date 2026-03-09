@@ -339,6 +339,9 @@ const deleteProjectCoverImage = asynchandler(async (req, res) => {
     throw new ApiError(404, "project not found!");
   }
 
+  if (projectExists?.coverImage?.public_id)
+    await deleteFromCloudinary(projectExists?.coverImage);
+
   const updatedProject = await Project.findByIdAndUpdate(
     projectId,
     {
@@ -350,9 +353,6 @@ const deleteProjectCoverImage = asynchandler(async (req, res) => {
   if (!updatedProject) {
     throw new ApiError(500, "couldn't delete coverImage!");
   }
-
-  if (projectExists?.coverImage?.public_id)
-    deleteFromCloudinary(projectExists?.coverImage);
 
   return res
     .status(200)
