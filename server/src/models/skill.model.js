@@ -22,12 +22,12 @@ const skillSchema = new Schema(
       enum: SKILL_LEVEL.map((s) => s.value),
       default: "basic",
     },
+    description: {
+      type: String,
+    },
     visibility: {
       type: Boolean,
       default: true,
-    },
-    description: {
-      type: String,
     },
     sortOrder: {
       type: Number,

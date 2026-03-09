@@ -1,6 +1,34 @@
 import mongoose, { Schema, model } from "mongoose";
 import { EMPLOYMENT_TYPE } from "../constants.js";
 
+const positionSchema = new Schema(
+  {
+    role: {
+      type: String,
+      required: true,
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    endDate: {
+      type: Date,
+      validate: {
+        validator: function (positions) {
+          const presentCount = positions.filter((p) => p.present).length;
+          return presentCount <= 1;
+        },
+        message: "Only one position can have present = true",
+      },
+    },
+    present: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { _id: false },
+);
+
 const experienceSchema = new Schema(
   {
     owner: {
@@ -16,9 +44,15 @@ const experienceSchema = new Schema(
     description: {
       type: String,
     },
-    role: {
-      type: String,
-      required: true,
+    position: {
+      type: positionSchema,
+      validate: {
+        validator: function (positions) {
+          const presentCount = positions.filter((p) => p.present).length;
+          return presentCount <= 1;
+        },
+        message: "Only one position can have present = true",
+      },
     },
     employmentType: {
       type: String,
@@ -40,24 +74,6 @@ const experienceSchema = new Schema(
     ],
     location: {
       type: String,
-    },
-    startDate: {
-      type: Date,
-      required: true,
-    },
-    endDate: {
-      type: Date,
-      validate: {
-        validator: function (value) {
-          if (this.present) return value == null;
-          return true;
-        },
-        message: "endDate must be null if present is true",
-      },
-    },
-    present: {
-      type: Boolean,
-      default: false,
     },
     featured: {
       type: Boolean,

@@ -10,16 +10,13 @@ const addExperience = asynchandler(async (req, res) => {
   const {
     organization,
     description,
-    role,
     employmentType,
     organizationSize,
     organizationWebsite,
     location,
+    position,
     highLights,
     techStack,
-    startDate,
-    endDate,
-    present,
     featured,
     visibility,
     sortOrder,
@@ -34,13 +31,13 @@ const addExperience = asynchandler(async (req, res) => {
   fields.organization = organization;
 
   if (description) fields.description = description;
-  if (startDate) fields.startDate = startDate;
-  if (endDate) fields.endDate = endDate;
-  if (role) fields.role = role;
   if (employmentType) fields.employmentType = employmentType;
   if (organizationSize) fields.organizationSize = organizationSize;
   if (organizationWebsite) fields.organizationWebsite = organizationWebsite;
   if (location) fields.location = location;
+
+  if (position?.length > 0)
+    fields.position = Array.isArray(position) ? position : JSON.parse(position);
 
   if (techStack?.length > 0)
     fields.techStack = Array.isArray(techStack)
@@ -52,7 +49,6 @@ const addExperience = asynchandler(async (req, res) => {
       ? highLights
       : JSON.parse(highLights);
 
-  if (present !== undefined) fields.present = present === "true";
   if (featured !== undefined) fields.featured = featured === "true";
   if (visibility !== undefined) fields.visibility = visibility === "true";
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
