@@ -8,25 +8,32 @@ import {
   updateOrganizationImage,
 } from "../../controllers/private/experience.controller.js";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { upload } from "../../middlewares/multer.middleware.js";
 
 const experienceRouter = Router();
 
-experienceRouter.route("/add").post(verifyJWT, addExperience);
+experienceRouter
+  .route("/add")
+  .post(verifyJWT, upload.single("organizationImage"), addExperience);
 
 experienceRouter
-  .route("/:organizationId/update-details")
+  .route("/:experienceId/update-details")
   .patch(verifyJWT, updateExperience);
 
 experienceRouter
-  .route("/:organizationId/update-organizationImage")
-  .patch(verifyJWT, updateOrganizationImage);
+  .route("/:experienceId/update-organizationImage")
+  .patch(
+    verifyJWT,
+    upload.single("organizationImage"),
+    updateOrganizationImage,
+  );
 
 experienceRouter
-  .route("/:organizationId/delete")
+  .route("/:experienceId/delete")
   .delete(verifyJWT, deleteExperience);
 
 experienceRouter
-  .route("/:organizationId/delete-organizationImage")
+  .route("/:experienceId/delete-organizationImage")
   .delete(verifyJWT, deleteOrganiaztionImage);
 
 experienceRouter.route("/all").get(verifyJWT, getAllExperiences);

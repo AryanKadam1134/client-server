@@ -6,6 +6,7 @@ import asynchandler from "../../utils/asynchandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import { Project } from "../../models/project.model.js";
+import { Experience } from "../../models/experience.model.js";
 
 const getUserByUsername = asynchandler(async (req, res) => {
   return res
@@ -136,10 +137,49 @@ const getProjects = asynchandler(async (req, res) => {
     .json(new ApiRes(200, projects, "projects fetched successfully!"));
 });
 
+const getExperiences = asynchandler(async (req, res) => {
+  const { onlyFeatured } = req.query;
+
+  const fields = {
+    owner: new mongoose.Types.ObjectId(req.user?._id),
+    visibility: true,
+  };
+
+  if (onlyFeatured === "true") fields.featured = true;
+
+  const experiences = await Experience.aggregate([
+    {
+      $match: fields,
+    },
+    {
+      $lookup: {
+        from: "skills",
+        localField: "techStack",
+        foreignField: "_id",
+        as: "techStack",
+      },
+    },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
+  ]);
+
+  if (!experiences) {
+    throw new ApiError(500, "couldn't get experiences!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, experiences, "experiences fetched successfully!"));
+});
+
 export {
   getUserByUsername,
   getUserSocialAccounts,
   getSkillWithCategory,
   getCategoryWiseSkills,
   getProjects,
+  getExperiences,
 };

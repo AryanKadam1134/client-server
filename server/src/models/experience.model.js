@@ -14,11 +14,11 @@ const positionSchema = new Schema(
     endDate: {
       type: Date,
       validate: {
-        validator: function (positions) {
-          const presentCount = positions.filter((p) => p.present).length;
-          return presentCount <= 1;
+        validator: function (value) {
+          if (this.present && value) return false;
+          return true;
         },
-        message: "Only one position can have present = true",
+        message: "endDate must be null when present is true",
       },
     },
     present: {
@@ -44,16 +44,11 @@ const experienceSchema = new Schema(
     description: {
       type: String,
     },
-    position: {
-      type: positionSchema,
-      validate: {
-        validator: function (positions) {
-          const presentCount = positions.filter((p) => p.present).length;
-          return presentCount <= 1;
-        },
-        message: "Only one position can have present = true",
+    position: [
+      {
+        type: positionSchema,
       },
-    },
+    ],
     employmentType: {
       type: String,
       enum: EMPLOYMENT_TYPE?.map((type) => type.value),
@@ -102,5 +97,19 @@ const experienceSchema = new Schema(
   },
   { timestamps: true },
 );
+
+experienceSchema.pre("validate", function (next) {
+  if (!this.position || this.position.length === 0) {
+    return next();
+  }
+
+  const presentCount = this.position.filter((p) => p.present).length;
+
+  if (presentCount > 1) {
+    return next(new Error("Only one position can have present=true"));
+  }
+
+  // next();
+});
 
 export const Experience = model("Experience", experienceSchema);

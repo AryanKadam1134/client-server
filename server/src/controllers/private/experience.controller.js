@@ -67,7 +67,7 @@ const addExperience = asynchandler(async (req, res) => {
 
   let uploadedOrganizationImage;
 
-  const organizationImage = req.files?.organizationImage[0]?.path;
+  const organizationImage = req.file?.path;
 
   if (organizationImage)
     uploadedOrganizationImage = await uploadToCloudinary(organizationImage);
@@ -75,7 +75,7 @@ const addExperience = asynchandler(async (req, res) => {
   if (uploadedOrganizationImage?.secure_url) {
     fields.organizationImage = {
       url: uploadedOrganizationImage?.secure_url,
-      public_url: uploadedOrganizationImage?.public_url,
+      public_id: uploadedOrganizationImage?.public_id,
       resource_type: uploadedOrganizationImage?.resource_type,
     };
   }
@@ -86,7 +86,7 @@ const addExperience = asynchandler(async (req, res) => {
   });
 
   if (!createdOrganization) {
-    throw new ApiError(500, "couldn't create project!");
+    throw new ApiError(500, "couldn't create experience!");
   }
 
   return res
@@ -148,13 +148,9 @@ const updateExperience = asynchandler(async (req, res) => {
   if (visibility !== undefined) fields.visibility = visibility;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
-  const updatedExperience = await Experience.findByIdAndUpdate(
-    experienceId,
-    {
-      $set: fields,
-    },
-    { runValidators: true, new: true },
-  );
+  Object.assign(expeirneceExists, fields);
+
+  const updatedExperience = await expeirneceExists.save();
 
   if (!updatedExperience) {
     throw new ApiError(500, "couldn't update experience!");
@@ -189,9 +185,9 @@ const updateOrganizationImage = asynchandler(async (req, res) => {
   }
 
   if (expeirneceExists?.organizationImage?.public_id)
-    deleteFromCloudinary(expeirneceExists?.organizationImage);
+    await deleteFromCloudinary(expeirneceExists?.organizationImage);
 
-  const updatedProject = await Project.findByIdAndUpdate(
+  const updatedExperience = await Experience.findByIdAndUpdate(
     experienceId,
     {
       $set: {
@@ -210,8 +206,8 @@ const updateOrganizationImage = asynchandler(async (req, res) => {
     .json(
       new ApiRes(
         200,
-        updatedProject,
-        "project organizationImage updated successfully!",
+        updatedExperience,
+        "organizationImage updated successfully!",
       ),
     );
 });
@@ -250,9 +246,7 @@ const deleteOrganiaztionImage = asynchandler(async (req, res) => {
   const upatedExpereince = await Experience.findByIdAndUpdate(
     experienceId,
     {
-      $set: {
-        $unset: { organizationImage: "" },
-      },
+      $unset: { organizationImage: "" },
     },
     { new: true },
   );
