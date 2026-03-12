@@ -138,14 +138,14 @@ const getProjects = asynchandler(async (req, res) => {
 });
 
 const getExperiences = asynchandler(async (req, res) => {
-  const { onlyFeatured } = req.query;
+  const { featured = "all" } = req.query;
 
   const fields = {
     owner: new mongoose.Types.ObjectId(req.user?._id),
     visibility: true,
   };
 
-  if (onlyFeatured === "true") fields.featured = true;
+  if (featured !== "all") fields.featured = featured === "true";
 
   const experiences = await Experience.aggregate([
     {
