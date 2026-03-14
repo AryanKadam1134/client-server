@@ -77,4 +77,57 @@ const addEducation = asynchandler(async (req, res) => {
     .json(new ApiRes(201, createdInstitute, "institute created successfully!"));
 });
 
-export { addEducation };
+const updateEducationDetails = asynchandler(async (req, res) => {
+  const { educationId } = req.params;
+
+  const educationExists = await Education.findById(educationId);
+
+  if (!educationExists) {
+    throw new ApiError(404, "education does not exists!");
+  }
+
+  const {
+    instituteName,
+    qualification,
+    description,
+    address,
+    startYear,
+    endYear,
+    present,
+    percentage,
+    cgpa,
+    sortOrder,
+  } = req.body;
+
+  const fields = {};
+
+  if (instituteName !== undefined) fields.instituteName = instituteName;
+  if (qualification !== undefined) fields.qualification = qualification;
+  if (description !== undefined) fields.description = description;
+  if (address !== undefined) fields.address = address;
+  if (startYear !== undefined) fields.startYear = startYear;
+  if (endYear !== undefined) fields.endYear = endYear;
+  if (percentage !== undefined) fields.percentage = percentage;
+  if (cgpa !== undefined) fields.cgpa = cgpa;
+
+  if (present !== undefined) fields.present = present;
+  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
+
+  const updatedEducation = await Education.findByIdAndUpdate(
+    educationId,
+    {
+      $set: fields,
+    },
+    { new: true },
+  );
+
+  if (!updatedEducation) {
+    throw new ApiError(500, "couldn't update education!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, updatedEducation, "education updated succesfully!"));
+});
+
+export { addEducation, updateEducationDetails };
