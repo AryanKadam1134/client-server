@@ -2,7 +2,10 @@ import { Education } from "../../models/education.model.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
-import { uploadToCloudinary } from "../../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadToCloudinary,
+} from "../../utils/cloudinary.js";
 
 const addEducation = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -130,4 +133,53 @@ const updateEducationDetails = asynchandler(async (req, res) => {
     .json(new ApiRes(200, updatedEducation, "education updated succesfully!"));
 });
 
-export { addEducation, updateEducationDetails };
+const updateInstituteImage = asynchandler(async (req, res) => {
+  const { instituteId } = req.params;
+
+  if (!instituteId) {
+    throw new ApiError(400, "instituteId is required!");
+  }
+
+  const instituteExists = await Education.findById(instituteId);
+
+  if (!instituteExists) {
+    throw new ApiError(404, "institute not found!");
+  }
+
+  const instituteImage = req.file?.path;
+
+  if (!instituteImage) {
+    throw new ApiError(400, "missing image file path!");
+  }
+
+  const updatedImage = await uploadToCloudinary(instituteImage);
+
+  if (!updatedImage?.secure_url) {
+    throw new ApiError(500, "error while updating image on cloudinary!");
+  }
+
+  if (instituteExists?.instituteImage?.public_id)
+    deleteFromCloudinary(instituteExists?.instituteImage);
+
+  const updatedInstitute = await Education.findByIdAndUpdate(
+    instituteId,
+    {
+      $set: {
+        instituteImage: {
+          url: updatedImage?.secure_url,
+          public_id: updatedImage?.public_id,
+          resource_type: updatedImage?.resource_type,
+        },
+      },
+    },
+    { new: true },
+  );
+
+  return res
+    .status(200)
+    .json(
+      new ApiRes(200, updatedInstitute, "instituteImage updated successfully!"),
+    );
+});
+
+export { addEducation, updateEducationDetails, updateInstituteImage };

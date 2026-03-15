@@ -3,6 +3,7 @@ import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import {
   addEducation,
   updateEducationDetails,
+  updateInstituteImage,
 } from "../../controllers/private/education.controller.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 
@@ -14,6 +15,10 @@ educationRouter
 
 educationRouter
   .route("/:educationId/update")
-  .patch(verifyJWT, upload.single("instituteImage"), updateEducationDetails);
+  .patch(verifyJWT, updateEducationDetails);
+
+educationRouter
+  .route("/:educationId/update-instituteImage")
+  .patch(verifyJWT, upload.single("instituteImage"), updateInstituteImage);
 
 export default educationRouter;
