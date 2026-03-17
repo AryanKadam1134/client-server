@@ -83,6 +83,10 @@ const addEducation = asynchandler(async (req, res) => {
 const updateEducationDetails = asynchandler(async (req, res) => {
   const { educationId } = req.params;
 
+  if (!educationId) {
+    throw new ApiError(400, "educationId is required!");
+  }
+
   const educationExists = await Education.findById(educationId);
 
   if (!educationExists) {
@@ -134,15 +138,15 @@ const updateEducationDetails = asynchandler(async (req, res) => {
 });
 
 const updateInstituteImage = asynchandler(async (req, res) => {
-  const { instituteId } = req.params;
+  const { educationId } = req.params;
 
-  if (!instituteId) {
-    throw new ApiError(400, "instituteId is required!");
+  if (!educationId) {
+    throw new ApiError(400, "educationId is required!");
   }
 
-  const instituteExists = await Education.findById(instituteId);
+  const educationExists = await Education.findById(educationId);
 
-  if (!instituteExists) {
+  if (!educationExists) {
     throw new ApiError(404, "institute not found!");
   }
 
@@ -158,11 +162,11 @@ const updateInstituteImage = asynchandler(async (req, res) => {
     throw new ApiError(500, "error while updating image on cloudinary!");
   }
 
-  if (instituteExists?.instituteImage?.public_id)
-    deleteFromCloudinary(instituteExists?.instituteImage);
+  if (educationExists?.instituteImage?.public_id)
+    deleteFromCloudinary(educationExists?.instituteImage);
 
-  const updatedInstitute = await Education.findByIdAndUpdate(
-    instituteId,
+  const updatedEducation = await Education.findByIdAndUpdate(
+    educationId,
     {
       $set: {
         instituteImage: {
@@ -178,8 +182,81 @@ const updateInstituteImage = asynchandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiRes(200, updatedInstitute, "instituteImage updated successfully!"),
+      new ApiRes(200, updatedEducation, "instituteImage updated successfully!"),
     );
 });
 
-export { addEducation, updateEducationDetails, updateInstituteImage };
+const deleteEducation = asynchandler(async (req, res) => {
+  const { educationId } = req.params;
+
+  const educationExists = await Education.findById(educationId);
+
+  if (!educationExists) {
+    throw new ApiError(404, "education does not exists!");
+  }
+
+  if (educationExists?.instituteImage?.public_id)
+    await deleteFromCloudinary(educationExists?.instituteImage);
+
+  await Education.findByIdAndDelete(educationId);
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, null, "education deleted successfully!"));
+});
+
+const deleteInstituteImage = asynchandler(async (req, res) => {
+  const { educationId } = req.params;
+
+  if (!educationId) {
+    throw new ApiError(400, "educationId is required!");
+  }
+
+  const educationExists = await Education.findById(educationId);
+
+  if (!educationExists) {
+    throw new ApiError(404, "institute not found!");
+  }
+
+  if (educationExists?.instituteImage?.public_id)
+    await deleteFromCloudinary(educationExists?.instituteImage);
+
+  const updatedEducation = await Education.findByIdAndUpdate(
+    educationId,
+    {
+      $unset: { instituteImage: "" },
+    },
+    { new: true },
+  );
+
+  if (!updatedEducation) {
+    throw new ApiError(500, "couldn't delete instituteImage!");
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiRes(200, updatedEducation, "instituteImage deleted successfully!"),
+    );
+});
+
+const getAllEducations = asynchandler(async (req, res) => {
+  const educations = await Education.find({ owner: req.user?._id });
+
+  if (educations?.length <= 0) {
+    throw new ApiError(200, "user do not have any educations!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, educations, "educations fetched successfully!"));
+});
+
+export {
+  addEducation,
+  updateEducationDetails,
+  updateInstituteImage,
+  deleteEducation,
+  deleteInstituteImage,
+  getAllEducations,
+};
