@@ -36,8 +36,8 @@ const addEducation = asynchandler(async (req, res) => {
   if (address) fields.address = address;
   if (startYear) fields.startYear = startYear;
   if (endYear) fields.endYear = endYear;
-  if (percentage) fields.percentage = percentage;
-  if (cgpa) fields.cgpa = cgpa;
+  if (percentage) fields.percentage = Number(percentage);
+  if (cgpa) fields.cgpa = Number(cgpa);
 
   if (present !== undefined) fields.present = present === "true";
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
@@ -114,19 +114,15 @@ const updateEducationDetails = asynchandler(async (req, res) => {
   if (address !== undefined) fields.address = address;
   if (startYear !== undefined) fields.startYear = startYear;
   if (endYear !== undefined) fields.endYear = endYear;
-  if (percentage !== undefined) fields.percentage = percentage;
-  if (cgpa !== undefined) fields.cgpa = cgpa;
+  if (percentage !== undefined) fields.percentage = Number(percentage);
+  if (cgpa !== undefined) fields.cgpa = Number(cgpa);
 
   if (present !== undefined) fields.present = present;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
-  const updatedEducation = await Education.findByIdAndUpdate(
-    educationId,
-    {
-      $set: fields,
-    },
-    { new: true },
-  );
+  Object.assign(educationExists, fields);
+
+  const updatedEducation = await educationExists.save();
 
   if (!updatedEducation) {
     throw new ApiError(500, "couldn't update education!");

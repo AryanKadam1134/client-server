@@ -29,10 +29,10 @@ const educationSchema = new Schema(
       type: Number,
       validate: {
         validator: function (value) {
-          if (this.present) return value == null;
+          if (this.present && value) return false;
           return true;
         },
-        message: "endYear must be null if present is true",
+        message: "endYear must be null when present is true",
       },
     },
     present: {
