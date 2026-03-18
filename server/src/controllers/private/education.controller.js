@@ -62,7 +62,7 @@ const addEducation = asynchandler(async (req, res) => {
     fields.instituteImage = {
       url: uploadedInstituteImage?.secure_url,
       public_id: uploadedInstituteImage?.public_id,
-      resource_type: uploadedInstituteImage?.secure_resource_type,
+      resource_type: uploadedInstituteImage?.resource_type,
     };
   }
 

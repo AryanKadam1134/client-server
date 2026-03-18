@@ -183,7 +183,7 @@ const getEducations = asynchandler(async (req, res) => {
     .sort({ sortOrder: 1 })
     .lean();
 
-  if (educations?.length >= 0) {
+  if (educations?.length <= 0) {
     throw new ApiError(500, "user doesn't have any educations!");
   }
 
