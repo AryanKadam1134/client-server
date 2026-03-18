@@ -13,25 +13,21 @@ import { upload } from "../../middlewares/multer.middleware.js";
 const educationRouter = Router();
 
 educationRouter
-  .route("/add")
+  .route("/")
   .post(verifyJWT, upload.single("instituteImage"), addEducation);
 
-educationRouter
-  .route("/:educationId/update")
-  .patch(verifyJWT, updateEducationDetails);
+educationRouter.route("/:educationId").patch(verifyJWT, updateEducationDetails);
 
 educationRouter
-  .route("/:educationId/update-instituteImage")
+  .route("/:educationId/institute-image")
   .patch(verifyJWT, upload.single("instituteImage"), updateInstituteImage);
 
-educationRouter
-  .route("/:educationId/delete")
-  .delete(verifyJWT, deleteEducation);
+educationRouter.route("/:educationId").delete(verifyJWT, deleteEducation);
 
 educationRouter
-  .route("/:educationId/delete-instituteImage")
+  .route("/:educationId/institute-image")
   .delete(verifyJWT, deleteInstituteImage);
 
-educationRouter.route("/all").get(verifyJWT, getAllEducations);
+educationRouter.route("/").get(verifyJWT, getAllEducations);
 
 export default educationRouter;
