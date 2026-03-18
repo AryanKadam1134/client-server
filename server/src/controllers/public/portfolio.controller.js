@@ -7,6 +7,7 @@ import ApiError from "../../utils/ApiError.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import { Project } from "../../models/project.model.js";
 import { Experience } from "../../models/experience.model.js";
+import { Education } from "../../models/education.model.js";
 
 const getUserByUsername = asynchandler(async (req, res) => {
   return res
@@ -175,6 +176,22 @@ const getExperiences = asynchandler(async (req, res) => {
     .json(new ApiRes(200, experiences, "experiences fetched successfully!"));
 });
 
+const getEducations = asynchandler(async (req, res) => {
+  const educations = await Education.find({
+    owner: req.user?._id,
+  })
+    .sort({ sortOrder: 1 })
+    .lean();
+
+  if (educations?.length >= 0) {
+    throw new ApiError(500, "user doesn't have any educations!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, educations, "educations fetched successfully!"));
+});
+
 export {
   getUserByUsername,
   getUserSocialAccounts,
@@ -182,4 +199,5 @@ export {
   getCategoryWiseSkills,
   getProjects,
   getExperiences,
+  getEducations,
 };

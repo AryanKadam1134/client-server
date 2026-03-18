@@ -59,7 +59,6 @@ const educationSchema = new Schema(
       },
       resource_type: {
         type: String,
-        default: "image",
       },
     },
     sortOrder: {

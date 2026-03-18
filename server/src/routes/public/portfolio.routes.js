@@ -3,6 +3,7 @@ import { Router } from "express";
 import { findUserByUsername } from "../../middlewares/user.middleware.js";
 import {
   getCategoryWiseSkills,
+  getEducations,
   getExperiences,
   getProjects,
   getSkillWithCategory,
@@ -35,5 +36,9 @@ portfolioRouter
 portfolioRouter
   .route("/:username/experiences")
   .get(findUserByUsername, getExperiences);
+
+portfolioRouter
+  .route("/:username/educations")
+  .get(findUserByUsername, getEducations);
 
 export default portfolioRouter;
