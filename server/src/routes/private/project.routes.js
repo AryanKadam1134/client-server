@@ -14,7 +14,7 @@ import { upload } from "../../middlewares/multer.middleware.js";
 
 const projectRouter = Router();
 
-projectRouter.route("/add").post(
+projectRouter.route("/").post(
   verifyJWT,
   upload.fields([
     { name: "coverImage", maxCount: 1 },
@@ -23,28 +23,26 @@ projectRouter.route("/add").post(
   addProject,
 );
 
-projectRouter
-  .route("/:projectId/update-details")
-  .patch(verifyJWT, updateProjectDetails);
+projectRouter.route("/:projectId").patch(verifyJWT, updateProjectDetails);
 
 projectRouter
-  .route("/:projectId/update-coverImage")
+  .route("/:projectId/cover-image")
   .patch(verifyJWT, upload.single("coverImage"), updateProjectCoverImage);
 
 projectRouter
-  .route("/:projectId/update-projectImages")
+  .route("/:projectId/project-images")
   .patch(verifyJWT, upload.array("projectImages", 5), updateProjectImages);
 
-projectRouter.route("/:projectId/delete").delete(verifyJWT, deleteProject);
+projectRouter.route("/:projectId/").delete(verifyJWT, deleteProject);
 
 projectRouter
-  .route("/:projectId/delete-coverImage")
+  .route("/:projectId/cover-image")
   .delete(verifyJWT, deleteProjectCoverImage);
 
 projectRouter
-  .route("/:projectId/delete-projectImages/:imagePublicId")
+  .route("/:projectId/project-images/:imagePublicId")
   .delete(verifyJWT, deleteProjectImages);
 
-projectRouter.route("/all").get(verifyJWT, getAllProjects);
+projectRouter.route("/").get(verifyJWT, getAllProjects);
 
 export default projectRouter;

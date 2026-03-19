@@ -9,16 +9,14 @@ import {
 
 const skillCategoryRouter = Router();
 
-skillCategoryRouter.route("/add").post(verifyJWT, addSkillCategory);
+skillCategoryRouter.route("/").post(verifyJWT, addSkillCategory);
+
+skillCategoryRouter.route("/:categoryId").patch(verifyJWT, updateSkillCategory);
 
 skillCategoryRouter
-  .route("/:categoryId/update")
-  .patch(verifyJWT, updateSkillCategory);
-
-skillCategoryRouter
-  .route("/:categoryId/delete")
+  .route("/:categoryId")
   .delete(verifyJWT, deleteSkillCategory);
 
-skillCategoryRouter.route("/all").get(verifyJWT, getAllCategoryWiseSkills);
+skillCategoryRouter.route("/").get(verifyJWT, getAllCategoryWiseSkills);
 
 export default skillCategoryRouter;

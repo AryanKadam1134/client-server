@@ -9,12 +9,12 @@ import {
 
 const skillRouter = Router();
 
-skillRouter.route("/add").post(verifyJWT, addSkill);
+skillRouter.route("/").post(verifyJWT, addSkill);
 
-skillRouter.route("/:skillId/update").patch(verifyJWT, updateSkill);
+skillRouter.route("/:skillId").patch(verifyJWT, updateSkill);
 
-skillRouter.route("/:skillId/delete").delete(verifyJWT, deleteSkill);
+skillRouter.route("/:skillId").delete(verifyJWT, deleteSkill);
 
-skillRouter.route("/all").get(verifyJWT, getAllSkillWithCategory);
+skillRouter.route("/").get(verifyJWT, getAllSkillWithCategory);
 
 export default skillRouter;

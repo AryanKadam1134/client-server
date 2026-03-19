@@ -9,6 +9,6 @@ const socialAccountRouter = Router();
 
 socialAccountRouter.route("/manage").post(verifyJWT, manageSocialPlatforms);
 
-socialAccountRouter.route("/all").get(verifyJWT, getAllUserSocialPlatforms);
+socialAccountRouter.route("/").get(verifyJWT, getAllUserSocialPlatforms);
 
 export default socialAccountRouter;

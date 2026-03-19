@@ -13,29 +13,25 @@ import { upload } from "../../middlewares/multer.middleware.js";
 const experienceRouter = Router();
 
 experienceRouter
-  .route("/add")
+  .route("/")
   .post(verifyJWT, upload.single("organizationImage"), addExperience);
 
-experienceRouter
-  .route("/:experienceId/update-details")
-  .patch(verifyJWT, updateExperience);
+experienceRouter.route("/:experienceId").patch(verifyJWT, updateExperience);
 
 experienceRouter
-  .route("/:experienceId/update-organizationImage")
+  .route("/:experienceId/organization-image")
   .patch(
     verifyJWT,
     upload.single("organizationImage"),
     updateOrganizationImage,
   );
 
-experienceRouter
-  .route("/:experienceId/delete")
-  .delete(verifyJWT, deleteExperience);
+experienceRouter.route("/:experienceId").delete(verifyJWT, deleteExperience);
 
 experienceRouter
-  .route("/:experienceId/delete-organizationImage")
+  .route("/:experienceId/organization-image")
   .delete(verifyJWT, deleteOrganiaztionImage);
 
-experienceRouter.route("/all").get(verifyJWT, getAllExperiences);
+experienceRouter.route("/").get(verifyJWT, getAllExperiences);
 
 export default experienceRouter;
