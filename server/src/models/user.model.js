@@ -64,7 +64,6 @@ const userSchema = new Schema(
       },
       resource_type: {
         type: String,
-        default: "image",
       },
     },
     documentUrl: {

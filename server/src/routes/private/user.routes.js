@@ -2,6 +2,8 @@ import { Router } from "express";
 
 import {
   changePassword,
+  deleteUserImage,
+  deleteUserResume,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -34,17 +36,21 @@ userRouter.route("/login").post(loginUser);
 
 userRouter.route("/logout").post(verifyJWT, logoutUser);
 
-userRouter.route("/change-password").post(verifyJWT, changePassword);
+userRouter.route("/password").patch(verifyJWT, changePassword);
 
-userRouter.route("/update").patch(verifyJWT, updateUserDetails);
+userRouter.route("/").patch(verifyJWT, updateUserDetails);
 
 userRouter
-  .route("/update-image")
+  .route("/image")
   .patch(verifyJWT, upload.single("image"), updateUserImage);
 
 userRouter
-  .route("/update-resume")
+  .route("/resume")
   .patch(verifyJWT, upload.single("resumeOrCv"), updateUserResume);
+
+userRouter.route("/image").delete(verifyJWT, deleteUserImage);
+
+userRouter.route("/resume").delete(verifyJWT, deleteUserResume);
 
 userRouter.route("/restoreSession").post(verifyJWT, refreshAccessToken);
 

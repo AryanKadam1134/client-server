@@ -79,19 +79,12 @@ const refreshAccessToken = asynchandler(async (req, res) => {
 const registerUser = asynchandler(async (req, res) => {
   const { fullName, username, email, password } = req.body;
 
-  const image = req.files?.image[0]?.path;
-  const resumeOrCv = req.files?.resumeOrCv[0]?.path;
-
   if (
     [fullName, username, email, password].some(
       (field) => typeof field == "string" && field?.trim() == "",
     )
   ) {
     throw new ApiError(400, "all fields are required!");
-  }
-
-  if (!image || !resumeOrCv) {
-    throw new ApiError(400, "image and resumeOrCv are required!");
   }
 
   const userExists = await User.findOne({
@@ -104,9 +97,6 @@ const registerUser = asynchandler(async (req, res) => {
       "user already exist with similar username or email!",
     );
   }
-
-  const userImage = await uploadToCloudinary(image);
-  const userDocument = await uploadToCloudinary(resumeOrCv);
 
   const createdUser = await User.create({
     fullName,
@@ -189,8 +179,8 @@ const logoutUser = asynchandler(async (req, res) => {
 const changePassword = asynchandler(async (req, res) => {
   const { old_password, new_password } = req.body;
 
-  console.log("old_password: ", old_password);
-  console.log("new_password: ", new_password);
+  // console.log("old_password: ", old_password);
+  // console.log("new_password: ", new_password);
 
   if (!old_password || !new_password) {
     throw new ApiError(400, "all fields are required!");
@@ -224,7 +214,7 @@ const changePassword = asynchandler(async (req, res) => {
 });
 
 const updateUserDetails = asynchandler(async (req, res) => {
-  const { fullName, username, email, mobileNo, gender } = req.body;
+  const { fullName, username, email, mobileNo, gender, documentUrl } = req.body;
 
   const userExists = await User.findOne({
     $or: [{ username }, { email }],
@@ -242,8 +232,11 @@ const updateUserDetails = asynchandler(async (req, res) => {
   if (fullName) updatedDetails.fullName = fullName;
   if (username) updatedDetails.username = username;
   if (email) updatedDetails.email = email;
-  if (mobileNo !== undefined) updatedDetails.mobileNo = mobileNo;
   if (gender) updatedDetails.gender = gender;
+
+  // Can be null values
+  if (mobileNo !== undefined) updatedDetails.mobileNo = mobileNo;
+  if (documentUrl !== undefined) updatedDetails.documentUrl = documentUrl;
 
   if (Object.keys(updatedDetails).length === 0) {
     throw new ApiError(400, "no fields provided to update!");
@@ -263,9 +256,9 @@ const updateUserDetails = asynchandler(async (req, res) => {
 });
 
 const updateUserImage = asynchandler(async (req, res) => {
-  const loggedUserId = req.user?._id;
+  const loggedUser = req.user;
 
-  const loggedUser = await User.findById(loggedUserId);
+  const loggedUserId = loggedUser?._id;
 
   const userImageLocalPath = req.file?.path;
 
@@ -301,9 +294,9 @@ const updateUserImage = asynchandler(async (req, res) => {
 });
 
 const updateUserResume = asynchandler(async (req, res) => {
-  const loggedUserId = req.user?._id;
+  const loggedUser = req.user;
 
-  const loggedUser = await User.findById(loggedUserId);
+  const loggedUserId = loggedUser?._id;
 
   const userResumeLocalPath = req.file?.path;
 
@@ -339,6 +332,56 @@ const updateUserResume = asynchandler(async (req, res) => {
     .json(new ApiRes(200, user, "user resume updated successfully!"));
 });
 
+const deleteUserResume = asynchandler(async (req, res) => {
+  const loggedUser = req.user;
+
+  if (loggedUser?.resumeOrCv?.public_id)
+    await deleteFromCloudinary(loggedUser?.resumeOrCv);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    loggedUser?._id,
+    {
+      $unset: {
+        resumeOrCv: "",
+      },
+    },
+    { new: true },
+  );
+
+  if (!updatedUser) {
+    throw new ApiError(500, "couldn't delete resumeOrCv!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, updatedUser, "resumeOrCv deleted successfully!"));
+});
+
+const deleteUserImage = asynchandler(async (req, res) => {
+  const loggedUser = req.user;
+
+  if (loggedUser?.image?.public_id)
+    await deleteFromCloudinary(loggedUser?.image);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    loggedUser?._id,
+    {
+      $unset: {
+        image: "",
+      },
+    },
+    { new: true },
+  );
+
+  if (!updatedUser) {
+    throw new ApiError(500, "couldn't delete image!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, updatedUser, "image deleted successfully!"));
+});
+
 const forgotPassword = asynchandler(async (req, res) => {
   const { email } = req.body;
 
@@ -361,5 +404,7 @@ export {
   updateUserDetails,
   updateUserImage,
   updateUserResume,
+  deleteUserImage,
+  deleteUserResume,
   refreshAccessToken,
 };
