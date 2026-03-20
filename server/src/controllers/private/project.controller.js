@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
+
 import { Project } from "../../models/project.model.js";
-import ApiError from "../../utils/ApiError.js";
+import { Experience } from "../../models/experience.model.js";
+
 import ApiRes from "../../utils/ApiRes.js";
+import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import {
   deleteFromCloudinary,
   uploadToCloudinary,
 } from "../../utils/cloudinary.js";
-import { Experience } from "../../models/experience.model.js";
 
 const addProject = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;

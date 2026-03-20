@@ -272,7 +272,8 @@ const updateUserImage = asynchandler(async (req, res) => {
     throw new ApiError(500, "error while updating image on cloudinary!");
   }
 
-  if (loggedUser?.image?.public_id) deleteFromCloudinary(loggedUser?.image);
+  if (loggedUser?.image?.public_id)
+    await deleteFromCloudinary(loggedUser?.image);
 
   const user = await User.findByIdAndUpdate(
     loggedUserId,
@@ -311,7 +312,7 @@ const updateUserResume = asynchandler(async (req, res) => {
   }
 
   if (loggedUser?.resumeOrCv?.public_id)
-    deleteFromCloudinary(loggedUser?.resumeOrCv);
+    await deleteFromCloudinary(loggedUser?.resumeOrCv);
 
   const user = await User.findByIdAndUpdate(
     loggedUserId,
