@@ -58,8 +58,8 @@ const getSkillWithCategory = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (!skills) {
-    throw new ApiError(500, "couldn't get all skills!");
+  if (skills?.length <= 0) {
+    throw new ApiError(404, "skills not found!");
   }
 
   return res
@@ -97,8 +97,8 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (!categories) {
-    throw new ApiError(500, "couldn't get categories!");
+  if (categories?.length < 0) {
+    throw new ApiError(404, "categories not found!");
   }
 
   return res
@@ -129,8 +129,8 @@ const getProjects = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (!projects) {
-    throw new ApiError(500, "couldn't get projects!");
+  if (projects?.length) {
+    throw new ApiError(404, "projects not found!");
   }
 
   return res
@@ -167,8 +167,8 @@ const getExperiences = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (!experiences) {
-    throw new ApiError(500, "couldn't get experiences!");
+  if (experiences?.length <= 0) {
+    throw new ApiError(404, "experiences not found!");
   }
 
   return res
@@ -184,7 +184,7 @@ const getEducations = asynchandler(async (req, res) => {
     .lean();
 
   if (educations?.length <= 0) {
-    throw new ApiError(500, "user doesn't have any educations!");
+    throw new ApiError(404, "educations not found!");
   }
 
   return res

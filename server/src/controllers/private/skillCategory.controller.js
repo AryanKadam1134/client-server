@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+
 import { SkillCategory } from "../../models/skillCategory.model.js";
-import ApiError from "../../utils/ApiError.js";
+
 import ApiRes from "../../utils/ApiRes.js";
+import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 
 const addSkillCategory = asynchandler(async (req, res) => {
@@ -11,9 +13,10 @@ const addSkillCategory = asynchandler(async (req, res) => {
 
   if (!name) {
     throw new ApiError(400, "name is required!");
-  } else {
-    fields.name = name;
   }
+
+  fields.name = name;
+
   if (typeof visibility == "boolean") fields.visibility = visibility;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
@@ -36,8 +39,8 @@ const addSkillCategory = asynchandler(async (req, res) => {
   }
 
   return res
-    .status(200)
-    .json(new ApiRes(200, newCategory, "category created succesfully!"));
+    .status(201)
+    .json(new ApiRes(201, newCategory, "category created succesfully!"));
 });
 
 const updateSkillCategory = asynchandler(async (req, res) => {
@@ -88,12 +91,12 @@ const deleteSkillCategory = asynchandler(async (req, res) => {
   const deleteCategory = await SkillCategory.findByIdAndDelete(categoryId);
 
   if (!deleteCategory) {
-    throw new ApiError(404, "couldn't delete category!");
+    throw new ApiError(404, "category not found!");
   }
 
   return res
-    .status(200)
-    .json(new ApiRes(200, null, "category deleted successfully!"));
+    .status(204)
+    .json(new ApiRes(204, null, "category deleted successfully!"));
 });
 
 const getAllCategoryWiseSkills = asynchandler(async (req, res) => {
@@ -111,10 +114,15 @@ const getAllCategoryWiseSkills = asynchandler(async (req, res) => {
         as: "skills",
       },
     },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
   ]);
 
-  if (!categories) {
-    throw new ApiError(500, "couldn't get categories!");
+  if (categories?.length <= 0) {
+    throw new ApiError(404, "categories not found!");
   }
 
   return res

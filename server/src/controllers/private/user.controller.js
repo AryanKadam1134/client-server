@@ -110,8 +110,8 @@ const registerUser = asynchandler(async (req, res) => {
   }
 
   return res
-    .status(200)
-    .json(new ApiRes(200, createdUser, "user created successfully!"));
+    .status(201)
+    .json(new ApiRes(201, createdUser, "user created successfully!"));
 });
 
 const loginUser = asynchandler(async (req, res) => {
@@ -170,10 +170,10 @@ const logoutUser = asynchandler(async (req, res) => {
   });
 
   return res
-    .status(200)
+    .status(204)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiRes(200, "user logged out successfully!"));
+    .json(new ApiRes(204, "user logged out successfully!"));
 });
 
 const changePassword = asynchandler(async (req, res) => {
@@ -209,8 +209,8 @@ const changePassword = asynchandler(async (req, res) => {
   });
 
   return res
-    .status(200)
-    .json(new ApiRes(200, {}, "password changed successfully!"));
+    .status(204)
+    .json(new ApiRes(204, null, "password changed successfully!"));
 });
 
 const updateUserDetails = asynchandler(async (req, res) => {

@@ -1,6 +1,7 @@
 import { SocialAccount } from "../../models/socialAccount.model.js";
-import ApiError from "../../utils/ApiError.js";
+
 import ApiRes from "../../utils/ApiRes.js";
+import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 
 const manageSocialPlatforms = asynchandler(async (req, res) => {
@@ -39,9 +40,13 @@ const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
     owner: req.user?._id,
   });
 
+  if (platforms?.length <= 0) {
+    throw new ApiError(404, "user doesn't have any socail platforms!");
+  }
+
   return res
     .status(200)
-    .json(new ApiRes(200, platforms, "Platforms fetched successfully!"));
+    .json(new ApiRes(200, platforms, "platforms fetched successfully!"));
 });
 
 export { manageSocialPlatforms, getAllUserSocialPlatforms };

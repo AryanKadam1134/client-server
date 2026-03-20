@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
+
 import { Skill } from "../../models/skill.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
-import ApiError from "../../utils/ApiError.js";
+
 import ApiRes from "../../utils/ApiRes.js";
+import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 
 const addSkill = asynchandler(async (req, res) => {
@@ -15,9 +17,9 @@ const addSkill = asynchandler(async (req, res) => {
 
   if (!name) {
     throw new ApiError(400, "name is required!");
-  } else {
-    fields.name = name;
   }
+
+  fields.name = name;
 
   if (categoryId) {
     await SkillCategory.findById(categoryId)
@@ -38,7 +40,7 @@ const addSkill = asynchandler(async (req, res) => {
   });
 
   if (skillExists) {
-    throw new ApiError(404, "skill already exists!");
+    throw new ApiError(409, "skill already exists!");
   }
 
   const newSkill = await Skill.create({
@@ -47,12 +49,12 @@ const addSkill = asynchandler(async (req, res) => {
   });
 
   if (!newSkill) {
-    throw new ApiError(404, "couldn't create skill!");
+    throw new ApiError(500, "couldn't create skill!");
   }
 
   return res
-    .status(200)
-    .json(new ApiRes(200, newSkill, "skill added successfully!"));
+    .status(201)
+    .json(new ApiRes(201, newSkill, "skill added successfully!"));
 });
 
 const updateSkill = asynchandler(async (req, res) => {
@@ -82,8 +84,11 @@ const updateSkill = asynchandler(async (req, res) => {
   }
 
   if (name) fields.name = name;
-  if (description !== undefined) fields.description = description;
   if (level) fields.level = level;
+
+  // Can be null values
+  if (description !== undefined) fields.description = description;
+
   if (typeof visibility == "boolean") fields.visibility = visibility;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
@@ -114,12 +119,12 @@ const deleteSkill = asynchandler(async (req, res) => {
   const deletedSkill = await Skill.findByIdAndDelete(skillId);
 
   if (!deletedSkill) {
-    throw new ApiError(500, "couldn't delete skill!");
+    throw new ApiError(404, "skill not found!");
   }
 
   return res
-    .status(200)
-    .json(new ApiRes(200, null, "skill deleted succesfully!"));
+    .status(204)
+    .json(new ApiRes(204, null, "skill deleted succesfully!"));
 });
 
 const getAllSkillWithCategory = asynchandler(async (req, res) => {
@@ -144,10 +149,15 @@ const getAllSkillWithCategory = asynchandler(async (req, res) => {
         },
       },
     },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
   ]);
 
-  if (!skills) {
-    throw new ApiError(500, "couldn't get all skills!");
+  if (skills?.length <= 0) {
+    throw new ApiError(404, "skills not found!");
   }
 
   return res
