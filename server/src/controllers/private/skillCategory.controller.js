@@ -52,10 +52,14 @@ const updateSkillCategory = asynchandler(async (req, res) => {
     throw new ApiError(404, "categoryId is required!");
   }
 
-  const category = await SkillCategory.findById(categoryId);
+  const categoryExists = await SkillCategory.findById(categoryId);
 
-  if (!category) {
+  if (!categoryExists) {
     throw new ApiError(404, "category not found!");
+  }
+
+  if (categoryExists.owner.toString() !== req.user?._id) {
+    throw new ApiError(403, "unauthorized!");
   }
 
   const fields = {};

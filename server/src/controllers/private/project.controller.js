@@ -6,10 +6,13 @@ import { Experience } from "../../models/experience.model.js";
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { parseBoolean } from "../../utils/parseBoolean.js";
 import {
   deleteFromCloudinary,
   uploadToCloudinary,
 } from "../../utils/cloudinary.js";
+
+// always delete the images at last
 
 const addProject = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -61,9 +64,9 @@ const addProject = asynchandler(async (req, res) => {
       ? techStack
       : JSON.parse(techStack);
 
-  if (present !== undefined) fields.present = present === "true";
-  if (featured !== undefined) fields.featured = featured === "true";
-  if (visibility !== undefined) fields.visibility = visibility === "true";
+  if (present !== undefined) fields.present = parseBoolean(present);
+  if (featured !== undefined) fields.featured = parseBoolean(featured);
+  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   const projectExists = await Project.findOne({
@@ -165,9 +168,9 @@ const updateProjectDetails = asynchandler(async (req, res) => {
       ? techStack
       : JSON.parse(techStack);
 
-  if (present !== undefined) fields.present = present;
-  if (featured !== undefined) fields.featured = featured;
-  if (visibility !== undefined) fields.visibility = visibility;
+  if (present !== undefined) fields.present = parseBoolean(present);
+  if (featured !== undefined) fields.featured = parseBoolean(featured);
+  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   const updatedProject = await Project.findByIdAndUpdate(
