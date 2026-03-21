@@ -8,11 +8,9 @@ import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
 import {
-  deleteFromCloudinary,
   uploadToCloudinary,
+  deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
-
-// always delete the images at last
 
 const addProject = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -112,16 +110,14 @@ const addProject = asynchandler(async (req, res) => {
     ...fields,
   });
 
-  if (!createdProject) {
-    throw new ApiError(500, "couldn't create project!");
-  }
-
   return res
     .status(201)
-    .json(new ApiRes(201, createdProject, "project created succesfully!"));
+    .json(new ApiRes(201, createdProject, "project created successfully!"));
 });
 
 const updateProjectDetails = asynchandler(async (req, res) => {
+  const loggedUserId = req.user?._id;
+  
   const project = req.project;
 
   const {
@@ -162,8 +158,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
   if (githubLink !== undefined) fields.githubLink = githubLink;
   if (liveLink !== undefined) fields.liveLink = liveLink;
   if (category !== undefined) fields.category = category;
-
-  if (techStack !== undefined && techStack?.length > 0)
+  if (techStack !== undefined)
     fields.techStack = Array.isArray(techStack)
       ? techStack
       : JSON.parse(techStack);
@@ -173,6 +168,15 @@ const updateProjectDetails = asynchandler(async (req, res) => {
   if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
+  const projectExists = await Project.findOne({
+    owner: loggedUserId,
+    title,
+  });
+
+  if (projectExists) {
+    throw new ApiError(409, "project name already exists!");
+  }
+
   const updatedProject = await Project.findByIdAndUpdate(
     project._id,
     {
@@ -180,10 +184,6 @@ const updateProjectDetails = asynchandler(async (req, res) => {
     },
     { runValidators: true, new: true },
   );
-
-  if (!updatedProject) {
-    throw new ApiError(500, "couldn't update project!");
-  }
 
   return res
     .status(200)
@@ -202,11 +202,8 @@ const updateProjectCoverImage = asynchandler(async (req, res) => {
   const updatedImage = await uploadToCloudinary(coverImage);
 
   if (!updatedImage?.secure_url) {
-    throw new ApiError(500, "error while updating image on cloudinary!");
+    throw new ApiError(502, "error while updating image on cloudinary!");
   }
-
-  if (project?.coverImage?.public_id)
-    await deleteFromCloudinary(project.coverImage);
 
   const updatedProject = await Project.findByIdAndUpdate(
     project._id,
@@ -221,6 +218,17 @@ const updateProjectCoverImage = asynchandler(async (req, res) => {
     },
     { new: true },
   );
+
+  if (project?.coverImage?.public_id) {
+    try {
+      await deleteFromCloudinary(project.coverImage);
+    } catch (error) {
+      console.error(
+        "coverImage deletion failed in updateProjectCoverImage: ",
+        error,
+      );
+    }
+  }
 
   return res
     .status(200)
@@ -245,6 +253,10 @@ const updateProjectImages = asynchandler(async (req, res) => {
   const uploadedProjectImages = await Promise.all(
     newImages?.map((image) => uploadToCloudinary(image?.path)),
   );
+
+  if (uploadedProjectImages?.length <= 0) {
+    throw new ApiError(502, "upload failed!");
+  }
 
   const formattedImages = uploadedProjectImages?.map((image) => ({
     url: image?.secure_url,
@@ -274,15 +286,22 @@ const updateProjectImages = asynchandler(async (req, res) => {
 const deleteProject = asynchandler(async (req, res) => {
   const project = req.project;
 
-  if (project?.coverImage?.public_id)
-    await deleteFromCloudinary(project?.coverImage);
-
-  if (project?.projectImages?.length > 0)
-    await Promise.all(
-      project.projectImages?.map((image) => deleteFromCloudinary(image)),
-    );
-
   await Project.findByIdAndDelete(project._id);
+
+  try {
+    if (project?.coverImage?.public_id)
+      await deleteFromCloudinary(project?.coverImage);
+
+    if (project?.projectImages?.length > 0)
+      await Promise.all(
+        project.projectImages?.map((image) => deleteFromCloudinary(image)),
+      );
+  } catch (error) {
+    console.error(
+      "coverImage or projectImages deletion failed in deleteProject: ",
+      error,
+    );
+  }
 
   return res
     .status(200)
@@ -292,9 +311,6 @@ const deleteProject = asynchandler(async (req, res) => {
 const deleteProjectCoverImage = asynchandler(async (req, res) => {
   const project = req.project;
 
-  if (project?.coverImage?.public_id)
-    await deleteFromCloudinary(project.coverImage);
-
   const updatedProject = await Project.findByIdAndUpdate(
     project._id,
     {
@@ -303,10 +319,16 @@ const deleteProjectCoverImage = asynchandler(async (req, res) => {
     { new: true },
   );
 
-  if (!updatedProject) {
-    throw new ApiError(500, "couldn't delete coverImage!");
+  if (project?.coverImage?.public_id) {
+    try {
+      await deleteFromCloudinary(project.coverImage);
+    } catch (error) {
+      console.error(
+        "coverImage deletion failed in deleteProjectCoverImage: ",
+        error,
+      );
+    }
   }
-
   return res
     .status(200)
     .json(new ApiRes(200, updatedProject, "coverImage deleted successfully!"));
@@ -317,11 +339,9 @@ const deleteProjectImage = asynchandler(async (req, res) => {
 
   const { imagePublicId } = req.params;
 
-  const projectImage = project?.projectImages?.find(
-    (image) => image?.public_id == imagePublicId,
-  );
-
-  if (projectImage?.public_id) await deleteFromCloudinary(projectImage);
+  if (!imagePublicId) {
+    throw new ApiError(400, "imagePublicId is required!");
+  }
 
   const updatedProject = await Project.findByIdAndUpdate(
     project._id,
@@ -335,8 +355,19 @@ const deleteProjectImage = asynchandler(async (req, res) => {
     { new: true },
   );
 
-  if (!updatedProject) {
-    throw new ApiError(500, "couldn't delete project image!");
+  const projectImage = project?.projectImages?.find(
+    (image) => image?.public_id === imagePublicId,
+  );
+
+  if (projectImage?.public_id) {
+    try {
+      await deleteFromCloudinary(projectImage);
+    } catch (error) {
+      console.error(
+        "projectImage deletion failed in deleteProjectImage: ",
+        error,
+      );
+    }
   }
 
   return res
@@ -369,7 +400,7 @@ const getAllProjects = asynchandler(async (req, res) => {
   ]);
 
   if (projects?.length <= 0) {
-    return res.status(200).json(new ApiRes(200, null, "no projects found!"));
+    return res.status(200).json(new ApiRes(200, [], "no projects found!"));
   }
 
   return res
