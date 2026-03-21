@@ -116,8 +116,6 @@ const addProject = asynchandler(async (req, res) => {
 });
 
 const updateProjectDetails = asynchandler(async (req, res) => {
-  const loggedUserId = req.user?._id;
-  
   const project = req.project;
 
   const {
@@ -167,15 +165,6 @@ const updateProjectDetails = asynchandler(async (req, res) => {
   if (featured !== undefined) fields.featured = parseBoolean(featured);
   if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
-
-  const projectExists = await Project.findOne({
-    owner: loggedUserId,
-    title,
-  });
-
-  if (projectExists) {
-    throw new ApiError(409, "project name already exists!");
-  }
 
   const updatedProject = await Project.findByIdAndUpdate(
     project._id,

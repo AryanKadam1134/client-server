@@ -106,7 +106,7 @@ const registerUser = asynchandler(async (req, res) => {
   });
 
   if (!createdUser?._id) {
-    throw new ApiError(500, "couldn't create an user!");
+    throw new ApiError(500, "registration failed!");
   }
 
   return res
@@ -126,7 +126,7 @@ const loginUser = asynchandler(async (req, res) => {
   });
 
   if (!userExist) {
-    throw new ApiError(404, "user does not exists!");
+    throw new ApiError(404, "user not found!");
   }
 
   const isPasswordCorrect = await userExist.isPasswordCorrect(password);
