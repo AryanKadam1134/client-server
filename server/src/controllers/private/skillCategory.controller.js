@@ -44,9 +44,9 @@ const addSkillCategory = asynchandler(async (req, res) => {
 });
 
 const updateSkillCategory = asynchandler(async (req, res) => {
-  const { categoryId } = req.params;
-
   const { name, visibility, sortOrder } = req.body;
+
+  const { categoryId } = req.params;
 
   if (!categoryId) {
     throw new ApiError(404, "categoryId is required!");
@@ -88,7 +88,10 @@ const deleteSkillCategory = asynchandler(async (req, res) => {
     throw new ApiError(404, "categoryId is required!");
   }
 
-  const deleteCategory = await SkillCategory.findByIdAndDelete(categoryId);
+  const deleteCategory = await SkillCategory.findOneAndDelete({
+    owner: req.user?._id,
+    _id: categoryId,
+  });
 
   if (!deleteCategory) {
     throw new ApiError(404, "category not found!");

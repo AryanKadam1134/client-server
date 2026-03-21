@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
+
 import {
   manageSocialPlatforms,
   getAllUserSocialPlatforms,
 } from "../../controllers/private/socialAccount.controller.js";
+
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const socialAccountRouter = Router();
 

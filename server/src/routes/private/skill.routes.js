@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
+
 import {
   addSkill,
   deleteSkill,
   getAllSkillWithCategory,
   updateSkill,
 } from "../../controllers/private/skill.controller.js";
+
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const skillRouter = Router();
 

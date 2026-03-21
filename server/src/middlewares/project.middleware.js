@@ -1,8 +1,8 @@
-import { Project } from "../models/project.model";
+import { Project } from "../models/project.model.js";
 
-import asynchandler from "../utils/asynchandler";
+import asynchandler from "../utils/asynchandler.js";
 
-export const getProjectById = asynchandler(async (req, resizeBy, next) => {
+export const getProjectById = asynchandler(async (req, res, next) => {
   const { projectId } = req.params;
 
   if (!projectId) {
@@ -13,6 +13,10 @@ export const getProjectById = asynchandler(async (req, resizeBy, next) => {
 
   if (!projectExists) {
     throw new ApiError(404, "project not found!");
+  }
+
+  if (projectExists.owner.toString() !== req.user?._id.toString()) {
+    throw new ApiError(403, "unauthorized!");
   }
 
   req.project = projectExists;

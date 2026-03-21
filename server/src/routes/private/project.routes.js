@@ -1,16 +1,19 @@
 import { Router } from "express";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
+
 import {
   addProject,
   deleteProject,
   deleteProjectCoverImage,
-  deleteProjectImages,
+  deleteProjectImage,
   getAllProjects,
   updateProjectCoverImage,
   updateProjectDetails,
   updateProjectImages,
 } from "../../controllers/private/project.controller.js";
+
 import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getProjectById } from "../../middlewares/project.middleware.js";
 
 const projectRouter = Router();
 
@@ -23,25 +26,39 @@ projectRouter.route("/").post(
   addProject,
 );
 
-projectRouter.route("/:projectId").patch(verifyJWT, updateProjectDetails);
+projectRouter
+  .route("/:projectId")
+  .patch(verifyJWT, getProjectById, updateProjectDetails);
 
 projectRouter
   .route("/:projectId/cover-image")
-  .patch(verifyJWT, upload.single("coverImage"), updateProjectCoverImage);
+  .patch(
+    verifyJWT,
+    getProjectById,
+    upload.single("coverImage"),
+    updateProjectCoverImage,
+  );
 
 projectRouter
   .route("/:projectId/project-images")
-  .patch(verifyJWT, upload.array("projectImages", 5), updateProjectImages);
+  .patch(
+    verifyJWT,
+    getProjectById,
+    upload.array("projectImages", 5),
+    updateProjectImages,
+  );
 
-projectRouter.route("/:projectId/").delete(verifyJWT, deleteProject);
+projectRouter
+  .route("/:projectId/")
+  .delete(verifyJWT, getProjectById, deleteProject);
 
 projectRouter
   .route("/:projectId/cover-image")
-  .delete(verifyJWT, deleteProjectCoverImage);
+  .delete(verifyJWT, getProjectById, deleteProjectCoverImage);
 
 projectRouter
   .route("/:projectId/project-images/:imagePublicId")
-  .delete(verifyJWT, deleteProjectImages);
+  .delete(verifyJWT, getProjectById, deleteProjectImage);
 
 projectRouter.route("/").get(verifyJWT, getAllProjects);
 

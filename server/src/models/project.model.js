@@ -98,4 +98,6 @@ const projectSchema = new Schema(
   { timestamps: true },
 );
 
+projectSchema.index({ owner: 1, title: 1 }, { unique: true });
+
 export const Project = model("Project", projectSchema);
