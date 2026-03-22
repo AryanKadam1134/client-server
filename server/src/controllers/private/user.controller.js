@@ -37,6 +37,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 const refreshAccessToken = asynchandler(async (req, res) => {
   const cookieRefreshToken = req.cookies?.refreshToken;
 
+  // Decode Token
   const decodedToken = jwt.verify(
     cookieRefreshToken,
     process.env.REFRESH_TOKEN_SECRET,
@@ -48,13 +49,11 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     throw new ApiError(404, "user not found!");
   }
 
-  // console.log("storedToken: ", loggedUser?.refreshToken);
-  // console.log("cookieRefreshToken: ", cookieRefreshToken);
-
   if (loggedUser?.refreshToken !== cookieRefreshToken) {
     throw new ApiError(419, "session expired!");
   }
 
+  // Get access and referesh Token
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     loggedUser?._id,
   );
@@ -104,10 +103,6 @@ const registerUser = asynchandler(async (req, res) => {
     email,
     password,
   });
-
-  if (!createdUser?._id) {
-    throw new ApiError(500, "registration failed!");
-  }
 
   return res
     .status(201)
@@ -179,9 +174,6 @@ const logoutUser = asynchandler(async (req, res) => {
 const changePassword = asynchandler(async (req, res) => {
   const { old_password, new_password } = req.body;
 
-  // console.log("old_password: ", old_password);
-  // console.log("new_password: ", new_password);
-
   if (!old_password || !new_password) {
     throw new ApiError(400, "all fields are required!");
   }
@@ -202,11 +194,16 @@ const changePassword = asynchandler(async (req, res) => {
 
   await loggedUser.save({ validateBeforeSave: false });
 
-  await sendEmail({
-    to: loggedUser.email,
-    subject: "Your Password Was Changed Successfully 🔐",
-    html: passwordChangedTemplate(loggedUser),
-  });
+  // Fail safe
+  try {
+    await sendEmail({
+      to: loggedUser.email,
+      subject: "Your Password Was Changed Successfully 🔐",
+      html: passwordChangedTemplate(loggedUser),
+    });
+  } catch (error) {
+    console.error("Error sending mail in changePassword: ", error);
+  }
 
   return res
     .status(204)
@@ -272,9 +269,6 @@ const updateUserImage = asynchandler(async (req, res) => {
     throw new ApiError(500, "error while updating image on cloudinary!");
   }
 
-  if (loggedUser?.image?.public_id)
-    await deleteFromCloudinary(loggedUser?.image);
-
   const user = await User.findByIdAndUpdate(
     loggedUserId,
     {
@@ -289,9 +283,17 @@ const updateUserImage = asynchandler(async (req, res) => {
     { new: true },
   ).select("-password -refreshToken");
 
+  if (loggedUser?.image?.public_id) {
+    try {
+      await deleteFromCloudinary(loggedUser.image);
+    } catch (error) {
+      console.error("Error deleting user image in updateUserImage: ", error);
+    }
+  }
+
   return res
     .status(200)
-    .json(new ApiRes(200, user, "user resume updated successfully!"));
+    .json(new ApiRes(200, user, "user image updated successfully!"));
 });
 
 const updateUserResume = asynchandler(async (req, res) => {
@@ -308,11 +310,8 @@ const updateUserResume = asynchandler(async (req, res) => {
   const updatedResume = await uploadToCloudinary(userResumeLocalPath);
 
   if (!updatedResume?.secure_url) {
-    throw new ApiError(500, "error while updating resumeOrCv on cloudinary!");
+    throw new ApiError(500, "error while updating resume on cloudinary!");
   }
-
-  if (loggedUser?.resumeOrCv?.public_id)
-    await deleteFromCloudinary(loggedUser?.resumeOrCv);
 
   const user = await User.findByIdAndUpdate(
     loggedUserId,
@@ -328,41 +327,21 @@ const updateUserResume = asynchandler(async (req, res) => {
     { new: true },
   ).select("-password -refreshToken");
 
+  if (loggedUser?.resumeOrCv?.public_id) {
+    try {
+      await deleteFromCloudinary(loggedUser.resumeOrCv);
+    } catch (error) {
+      console.error("Error deleting user resume in updateUserResume: ", error);
+    }
+  }
+
   return res
     .status(200)
     .json(new ApiRes(200, user, "user resume updated successfully!"));
 });
 
-const deleteUserResume = asynchandler(async (req, res) => {
-  const loggedUser = req.user;
-
-  if (loggedUser?.resumeOrCv?.public_id)
-    await deleteFromCloudinary(loggedUser?.resumeOrCv);
-
-  const updatedUser = await User.findByIdAndUpdate(
-    loggedUser?._id,
-    {
-      $unset: {
-        resumeOrCv: "",
-      },
-    },
-    { new: true },
-  );
-
-  if (!updatedUser) {
-    throw new ApiError(500, "couldn't delete resumeOrCv!");
-  }
-
-  return res
-    .status(200)
-    .json(new ApiRes(200, updatedUser, "resumeOrCv deleted successfully!"));
-});
-
 const deleteUserImage = asynchandler(async (req, res) => {
   const loggedUser = req.user;
-
-  if (loggedUser?.image?.public_id)
-    await deleteFromCloudinary(loggedUser?.image);
 
   const updatedUser = await User.findByIdAndUpdate(
     loggedUser?._id,
@@ -374,13 +353,43 @@ const deleteUserImage = asynchandler(async (req, res) => {
     { new: true },
   );
 
-  if (!updatedUser) {
-    throw new ApiError(500, "couldn't delete image!");
+  if (loggedUser?.image?.public_id) {
+    try {
+      await deleteFromCloudinary(loggedUser.image);
+    } catch (error) {
+      console.error("Error deleting user image in deleteUserImage: ", error);
+    }
   }
 
   return res
     .status(200)
     .json(new ApiRes(200, updatedUser, "image deleted successfully!"));
+});
+
+const deleteUserResume = asynchandler(async (req, res) => {
+  const loggedUser = req.user;
+
+  const updatedUser = await User.findByIdAndUpdate(
+    loggedUser?._id,
+    {
+      $unset: {
+        resumeOrCv: "",
+      },
+    },
+    { new: true },
+  );
+
+  if (loggedUser?.resumeOrCv?.public_id) {
+    try {
+      await deleteFromCloudinary(loggedUser.resumeOrCv);
+    } catch (error) {
+      console.error("Error deleting user resume in deleteUserResume: ", error);
+    }
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, updatedUser, "resumeOrCv deleted successfully!"));
 });
 
 const forgotPassword = asynchandler(async (req, res) => {

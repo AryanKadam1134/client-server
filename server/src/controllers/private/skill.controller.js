@@ -92,6 +92,10 @@ const updateSkill = asynchandler(async (req, res) => {
   if (typeof visibility == "boolean") fields.visibility = visibility;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
+  if (Object.keys(fields).length === 0) {
+    throw new ApiError(400, "no fields provided to update!");
+  }
+
   const updatedSkill = await Skill.findByIdAndUpdate(
     skillId,
     {
