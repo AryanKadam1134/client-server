@@ -8,7 +8,7 @@ const manageSocialPlatforms = asynchandler(async (req, res) => {
   const { platforms } = req.body;
 
   if (!Array.isArray(platforms) || platforms?.length == 0) {
-    throw new ApiError(400, "invalid platforms data!");
+    throw new ApiError(400, "no fields provided to update!");
   }
 
   const createdPlatforms = await SocialAccount.bulkWrite(
@@ -41,7 +41,7 @@ const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
   });
 
   if (platforms?.length <= 0) {
-    throw new ApiError(404, "user doesn't have any socail platforms!");
+    return res.status(200).json(new ApiRes(200, [], "no platforms found!"));
   }
 
   return res

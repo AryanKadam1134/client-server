@@ -275,7 +275,7 @@ const getAllExperiences = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, experiences, "experiences fetched succesfully!"));
+    .json(new ApiRes(200, experiences, "experiences fetched successfully!"));
 });
 
 export {

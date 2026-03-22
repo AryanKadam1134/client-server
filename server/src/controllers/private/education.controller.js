@@ -130,7 +130,7 @@ const updateEducationDetails = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, updatedEducation, "education updated succesfully!"));
+    .json(new ApiRes(200, updatedEducation, "education updated successfully!"));
 });
 
 const updateInstituteImage = asynchandler(async (req, res) => {

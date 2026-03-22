@@ -9,16 +9,9 @@ import asynchandler from "../../utils/asynchandler.js";
 const addSkillCategory = asynchandler(async (req, res) => {
   const { name, visibility, sortOrder } = req.body;
 
-  const fields = {};
-
   if (!name) {
     throw new ApiError(400, "name is required!");
   }
-
-  fields.name = name;
-
-  if (typeof visibility == "boolean") fields.visibility = visibility;
-  if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
   const category = await SkillCategory.findOne({
     owner: req.user?._id,
@@ -26,24 +19,29 @@ const addSkillCategory = asynchandler(async (req, res) => {
   });
 
   if (category) {
-    throw new ApiError(409, "this category already exists!");
+    throw new ApiError(409, "category name already exists!");
   }
+
+  const fields = {};
+
+  fields.name = name;
+
+  if (typeof visibility == "boolean") fields.visibility = visibility;
+  if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
   const newCategory = await SkillCategory.create({
     owner: req.user?._id,
     ...fields,
   });
 
-  if (!newCategory) {
-    throw new ApiError(500, "couldn't create category!");
-  }
-
   return res
     .status(201)
-    .json(new ApiRes(201, newCategory, "category created succesfully!"));
+    .json(new ApiRes(201, newCategory, "category created successfully!"));
 });
 
 const updateSkillCategory = asynchandler(async (req, res) => {
+  const loggedUserId = req.user?._id;
+
   const { name, visibility, sortOrder } = req.body;
 
   const { categoryId } = req.params;
@@ -58,8 +56,17 @@ const updateSkillCategory = asynchandler(async (req, res) => {
     throw new ApiError(404, "category not found!");
   }
 
-  if (categoryExists.owner.toString() !== req.user?._id) {
+  if (categoryExists.owner.toString() !== loggedUserId) {
     throw new ApiError(403, "unauthorized!");
+  }
+
+  const sameCategoryName = await SkillCategory.findOne({
+    owner: loggedUserId,
+    name,
+  });
+
+  if (sameCategoryName) {
+    throw new ApiError(409, "category name already exists!");
   }
 
   const fields = {};
@@ -82,7 +89,7 @@ const updateSkillCategory = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, updatedCategory, "category updated succesfully!"));
+    .json(new ApiRes(200, updatedCategory, "category updated successfully!"));
 });
 
 const deleteSkillCategory = asynchandler(async (req, res) => {

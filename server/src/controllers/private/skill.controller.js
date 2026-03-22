@@ -110,7 +110,7 @@ const updateSkill = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, updatedSkill, "skill updated succesfully!"));
+    .json(new ApiRes(200, updatedSkill, "skill updated successfully!"));
 });
 
 const deleteSkill = asynchandler(async (req, res) => {
@@ -128,7 +128,7 @@ const deleteSkill = asynchandler(async (req, res) => {
 
   return res
     .status(204)
-    .json(new ApiRes(204, null, "skill deleted succesfully!"));
+    .json(new ApiRes(204, null, "skill deleted successfully!"));
 });
 
 const getAllSkillWithCategory = asynchandler(async (req, res) => {

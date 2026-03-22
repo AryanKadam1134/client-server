@@ -211,24 +211,15 @@ const changePassword = asynchandler(async (req, res) => {
 });
 
 const updateUserDetails = asynchandler(async (req, res) => {
+  const loggedUserId = req.user?._id;
+
   const { fullName, username, email, mobileNo, gender, documentUrl } = req.body;
-
-  const userExists = await User.findOne({
-    $or: [{ username }, { email }],
-  });
-
-  if (userExists) {
-    throw new ApiError(
-      409,
-      "user already exists with similar username or email",
-    );
-  }
 
   const updatedDetails = {};
 
-  if (fullName) updatedDetails.fullName = fullName;
   if (username) updatedDetails.username = username;
   if (email) updatedDetails.email = email;
+  if (fullName) updatedDetails.fullName = fullName;
   if (gender) updatedDetails.gender = gender;
 
   // Can be null values
@@ -239,8 +230,23 @@ const updateUserDetails = asynchandler(async (req, res) => {
     throw new ApiError(400, "no fields provided to update!");
   }
 
+  // Check if user exists if username or email is provided
+  if (username || email) {
+    const userExists = await User.findOne({
+      $or: [{ username }, { email }],
+      _id: { $ne: loggedUserId },
+    });
+
+    if (userExists) {
+      throw new ApiError(
+        409,
+        "user already exists with similar username or email",
+      );
+    }
+  }
+
   const updatedUser = await User.findByIdAndUpdate(
-    req.user?._id,
+    loggedUserId,
     {
       $set: updatedDetails,
     },
