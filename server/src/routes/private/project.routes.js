@@ -17,49 +17,35 @@ import { getProjectById } from "../../middlewares/project.middleware.js";
 
 const projectRouter = Router();
 
-projectRouter.route("/").post(
-  verifyJWT,
-  upload.fields([
-    { name: "coverImage", maxCount: 1 },
-    { name: "projectImages", maxCount: 5 },
-  ]),
-  addProject,
-);
+projectRouter.use(verifyJWT);
+
+projectRouter
+  .route("/")
+  .post(
+    upload.fields([
+      { name: "coverImage", maxCount: 1 },
+      { name: "projectImages", maxCount: 5 },
+    ]),
+    addProject,
+  )
+  .get(getAllProjects);
 
 projectRouter
   .route("/:projectId")
-  .patch(verifyJWT, getProjectById, updateProjectDetails);
+  .patch(getProjectById, updateProjectDetails)
+  .delete(getProjectById, deleteProject);
 
 projectRouter
   .route("/:projectId/cover-image")
-  .patch(
-    verifyJWT,
-    getProjectById,
-    upload.single("coverImage"),
-    updateProjectCoverImage,
-  );
+  .patch(getProjectById, upload.single("coverImage"), updateProjectCoverImage)
+  .delete(getProjectById, deleteProjectCoverImage);
 
 projectRouter
   .route("/:projectId/project-images")
-  .patch(
-    verifyJWT,
-    getProjectById,
-    upload.array("projectImages", 5),
-    updateProjectImages,
-  );
-
-projectRouter
-  .route("/:projectId/")
-  .delete(verifyJWT, getProjectById, deleteProject);
-
-projectRouter
-  .route("/:projectId/cover-image")
-  .delete(verifyJWT, getProjectById, deleteProjectCoverImage);
+  .patch(getProjectById, upload.array("projectImages", 5), updateProjectImages);
 
 projectRouter
   .route("/:projectId/project-images/:imagePublicId")
-  .delete(verifyJWT, getProjectById, deleteProjectImage);
-
-projectRouter.route("/").get(verifyJWT, getAllProjects);
+  .delete(getProjectById, deleteProjectImage);
 
 export default projectRouter;

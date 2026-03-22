@@ -6,33 +6,17 @@ import { SkillCategory } from "../../models/skillCategory.model.js";
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { parseBoolean } from "../../utils/parseBoolean.js";
 
 const addSkill = asynchandler(async (req, res) => {
-  const { name, description, categoryId, level, visibility, sortOrder } =
-    req.body;
-
   const loggedUserId = req.user?._id;
 
-  const fields = {};
+  const { name, description, categoryId, level, visibility, sortOrder } =
+    req.body;
 
   if (!name) {
     throw new ApiError(400, "name is required!");
   }
-
-  fields.name = name;
-
-  if (categoryId) {
-    await SkillCategory.findById(categoryId)
-      .then(() => (fields.categoryId = categoryId))
-      .catch((error) => {
-        throw new ApiError(404, "category doesn't exists!", error);
-      });
-  }
-
-  if (description) fields.description = description;
-  if (level) fields.level = level;
-  if (typeof visibility == "boolean") fields.visibility = visibility;
-  if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
   const skillExists = await Skill.findOne({
     owner: loggedUserId,
@@ -43,14 +27,32 @@ const addSkill = asynchandler(async (req, res) => {
     throw new ApiError(409, "skill already exists!");
   }
 
+  const fields = {};
+
+  fields.name = name;
+  if (level) fields.level = level;
+
+  // Can be null values
+  if (description !== undefined) fields.description = description;
+
+  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
+  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
+
+  // Check if category exists
+  if (categoryId) {
+    const categoryExists = await SkillCategory.findById(categoryId);
+
+    if (!categoryExists) {
+      throw new ApiError(404, "category not found!");
+    }
+
+    fields.categoryId = categoryId;
+  }
+
   const newSkill = await Skill.create({
     owner: loggedUserId,
     ...fields,
   });
-
-  if (!newSkill) {
-    throw new ApiError(500, "couldn't create skill!");
-  }
 
   return res
     .status(201)
@@ -58,30 +60,24 @@ const addSkill = asynchandler(async (req, res) => {
 });
 
 const updateSkill = asynchandler(async (req, res) => {
+  const skill = req.skill;
+
   const { name, description, categoryId, level, visibility, sortOrder } =
     req.body;
 
-  const { skillId } = req.params;
+  if (name) {
+    const sameSkillName = await Skill.findOne({
+      _id: { $ne: skill._id },
+      owner: skill?.owner,
+      name,
+    });
 
-  if (!skillId) {
-    throw new ApiError(400, "skillId is required!");
-  }
-
-  const skillExists = await Skill.findById(skillId);
-
-  if (!skillExists) {
-    throw new ApiError(404, "skill not found!");
+    if (sameSkillName) {
+      throw new ApiError(409, "skill name already exists!");
+    }
   }
 
   const fields = {};
-
-  if (categoryId) {
-    await SkillCategory.findById(categoryId)
-      .then(() => (fields.categoryId = categoryId))
-      .catch((error) => {
-        throw new ApiError(404, "category doesn't exists!", error);
-      });
-  }
 
   if (name) fields.name = name;
   if (level) fields.level = level;
@@ -89,24 +85,32 @@ const updateSkill = asynchandler(async (req, res) => {
   // Can be null values
   if (description !== undefined) fields.description = description;
 
-  if (typeof visibility == "boolean") fields.visibility = visibility;
-  if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
+  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
+  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
+
+  // Check if category exists (can be null)
+  if (categoryId !== undefined) {
+    const categoryExists = await SkillCategory.findById(categoryId);
+
+    // if null do not throw error
+    if (categoryId && !categoryExists) {
+      throw new ApiError(404, "category not found!");
+    }
+
+    fields.categoryId = categoryId;
+  }
 
   if (Object.keys(fields).length === 0) {
     throw new ApiError(400, "no fields provided to update!");
   }
 
   const updatedSkill = await Skill.findByIdAndUpdate(
-    skillId,
+    skill?._id,
     {
       $set: fields,
     },
     { new: true },
   );
-
-  if (!updatedSkill) {
-    throw new ApiError(500, "couldn't update skill!");
-  }
 
   return res
     .status(200)
@@ -114,21 +118,11 @@ const updateSkill = asynchandler(async (req, res) => {
 });
 
 const deleteSkill = asynchandler(async (req, res) => {
-  const { skillId } = req.params;
-
-  if (!skillId) {
-    throw new ApiError(400, "skillId is required!");
-  }
-
-  const deletedSkill = await Skill.findByIdAndDelete(skillId);
-
-  if (!deletedSkill) {
-    throw new ApiError(404, "skill not found!");
-  }
+  await req.skill.deleteOne();
 
   return res
-    .status(204)
-    .json(new ApiRes(204, null, "skill deleted successfully!"));
+    .status(200)
+    .json(new ApiRes(200, null, "skill deleted successfully!"));
 });
 
 const getAllSkillWithCategory = asynchandler(async (req, res) => {
@@ -160,8 +154,8 @@ const getAllSkillWithCategory = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (skills?.length <= 0) {
-    throw new ApiError(404, "skills not found!");
+  if (skills?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no skills found!"));
   }
 
   return res

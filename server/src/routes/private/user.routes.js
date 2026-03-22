@@ -42,15 +42,13 @@ userRouter.route("/").patch(verifyJWT, updateUserDetails);
 
 userRouter
   .route("/image")
-  .patch(verifyJWT, upload.single("image"), updateUserImage);
+  .patch(verifyJWT, upload.single("image"), updateUserImage)
+  .delete(verifyJWT, deleteUserImage);
 
 userRouter
   .route("/resume")
-  .patch(verifyJWT, upload.single("resumeOrCv"), updateUserResume);
-
-userRouter.route("/image").delete(verifyJWT, deleteUserImage);
-
-userRouter.route("/resume").delete(verifyJWT, deleteUserResume);
+  .patch(verifyJWT, upload.single("resumeOrCv"), updateUserResume)
+  .delete(verifyJWT, deleteUserResume);
 
 userRouter.route("/restoreSession").post(verifyJWT, refreshAccessToken);
 

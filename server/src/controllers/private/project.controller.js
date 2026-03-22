@@ -31,24 +31,22 @@ const addProject = asynchandler(async (req, res) => {
     organizationId,
   } = req.body;
 
-  const fields = {};
-
   if (!title) {
     throw new ApiError(400, "title is required!");
   }
 
-  fields.title = title;
+  const projectExists = await Project.findOne({
+    owner: loggedUserId,
+    title,
+  });
 
-  // Add Organization only if it exists
-  if (organizationId) {
-    const organizationExists = await Experience.findById(organizationId);
-
-    if (!organizationExists) {
-      throw new ApiError(404, "organization not found!");
-    }
-
-    fields.organizationId = organizationId;
+  if (projectExists) {
+    throw new ApiError(409, "project name already exists!");
   }
+
+  const fields = {};
+
+  fields.title = title;
 
   if (description) fields.description = description;
   if (startDate) fields.startDate = startDate;
@@ -67,13 +65,15 @@ const addProject = asynchandler(async (req, res) => {
   if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
-  const projectExists = await Project.findOne({
-    owner: loggedUserId,
-    title,
-  });
+  // Check if Organization exists
+  if (organizationId) {
+    const organizationExists = await Experience.findById(organizationId);
 
-  if (projectExists) {
-    throw new ApiError(409, "project name already exists!");
+    if (!organizationExists) {
+      throw new ApiError(404, "organization not found!");
+    }
+
+    fields.organizationId = organizationId;
   }
 
   const coverImage = req.files?.coverImage[0]?.path;
@@ -134,18 +134,19 @@ const updateProjectDetails = asynchandler(async (req, res) => {
     organizationId,
   } = req.body;
 
-  const fields = {};
+  if (title) {
+    const sameProjectName = await Project.findOne({
+      _id: { $ne: project._id },
+      owner: project?.owner,
+      title,
+    });
 
-  // Updated Organization only if it exists
-  if (organizationId !== undefined) {
-    const organizationExists = await Experience.findById(organizationId);
-
-    if (organizationId && !organizationExists) {
-      throw new ApiError(404, "organization not found!");
+    if (sameProjectName) {
+      throw new ApiError(409, "project name already exists!");
     }
-
-    fields.organizationId = organizationId;
   }
+
+  const fields = {};
 
   if (title) fields.title = title;
 
@@ -165,6 +166,18 @@ const updateProjectDetails = asynchandler(async (req, res) => {
   if (featured !== undefined) fields.featured = parseBoolean(featured);
   if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
+
+  // Check if Organization exists (can be null)
+  if (organizationId !== undefined) {
+    const organizationExists = await Experience.findById(organizationId);
+
+    // if null do not throw error
+    if (organizationId && !organizationExists) {
+      throw new ApiError(404, "organization not found!");
+    }
+
+    fields.organizationId = organizationId;
+  }
 
   const updatedProject = await Project.findByIdAndUpdate(
     project._id,
@@ -213,7 +226,7 @@ const updateProjectCoverImage = asynchandler(async (req, res) => {
       await deleteFromCloudinary(project.coverImage);
     } catch (error) {
       console.error(
-        "coverImage deletion failed in updateProjectCoverImage: ",
+        "Error deleting coverImage in updateProjectCoverImage: ",
         error,
       );
     }
@@ -243,7 +256,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
     newImages?.map((image) => uploadToCloudinary(image?.path)),
   );
 
-  if (uploadedProjectImages?.length <= 0) {
+  if (uploadedProjectImages?.length === 0) {
     throw new ApiError(502, "upload failed!");
   }
 
@@ -313,7 +326,7 @@ const deleteProjectCoverImage = asynchandler(async (req, res) => {
       await deleteFromCloudinary(project.coverImage);
     } catch (error) {
       console.error(
-        "coverImage deletion failed in deleteProjectCoverImage: ",
+        "Error deleting coverImage in deleteProjectCoverImage: ",
         error,
       );
     }
@@ -353,7 +366,7 @@ const deleteProjectImage = asynchandler(async (req, res) => {
       await deleteFromCloudinary(projectImage);
     } catch (error) {
       console.error(
-        "projectImage deletion failed in deleteProjectImage: ",
+        "Error deleting projectImage in deleteProjectImage: ",
         error,
       );
     }
@@ -388,7 +401,7 @@ const getAllProjects = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (projects?.length <= 0) {
+  if (projects?.length === 0) {
     return res.status(200).json(new ApiRes(200, [], "no projects found!"));
   }
 
