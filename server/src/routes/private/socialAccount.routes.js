@@ -9,8 +9,10 @@ import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const socialAccountRouter = Router();
 
-socialAccountRouter.route("/manage").post(verifyJWT, manageSocialPlatforms);
+socialAccountRouter.use(verifyJWT);
 
-socialAccountRouter.route("/").get(verifyJWT, getAllUserSocialPlatforms);
+socialAccountRouter.route("/manage").post(manageSocialPlatforms);
+
+socialAccountRouter.route("/").get(getAllUserSocialPlatforms);
 
 export default socialAccountRouter;

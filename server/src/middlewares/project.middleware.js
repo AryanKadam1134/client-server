@@ -1,5 +1,6 @@
 import { Project } from "../models/project.model.js";
 
+import ApiError from "../utils/ApiError.js";
 import asynchandler from "../utils/asynchandler.js";
 
 export const getProjectById = asynchandler(async (req, res, next) => {

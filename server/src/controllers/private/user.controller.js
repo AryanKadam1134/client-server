@@ -215,18 +215,18 @@ const updateUserDetails = asynchandler(async (req, res) => {
 
   const { fullName, username, email, mobileNo, gender, documentUrl } = req.body;
 
-  const updatedDetails = {};
+  const fields = {};
 
-  if (username) updatedDetails.username = username;
-  if (email) updatedDetails.email = email;
-  if (fullName) updatedDetails.fullName = fullName;
-  if (gender) updatedDetails.gender = gender;
+  if (username) fields.username = username;
+  if (email) fields.email = email;
+  if (fullName) fields.fullName = fullName;
+  if (gender) fields.gender = gender;
 
   // Can be null values
-  if (mobileNo !== undefined) updatedDetails.mobileNo = mobileNo;
-  if (documentUrl !== undefined) updatedDetails.documentUrl = documentUrl;
+  if (mobileNo !== undefined) fields.mobileNo = mobileNo;
+  if (documentUrl !== undefined) fields.documentUrl = documentUrl;
 
-  if (Object.keys(updatedDetails).length === 0) {
+  if (Object.keys(fields).length === 0) {
     throw new ApiError(400, "no fields provided to update!");
   }
 
@@ -248,7 +248,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     loggedUserId,
     {
-      $set: updatedDetails,
+      $set: fields,
     },
     { new: true },
   ).select("-password -refreshToken");
@@ -275,7 +275,7 @@ const updateUserImage = asynchandler(async (req, res) => {
     throw new ApiError(500, "error while updating image on cloudinary!");
   }
 
-  const user = await User.findByIdAndUpdate(
+  const updatedUser = await User.findByIdAndUpdate(
     loggedUserId,
     {
       $set: {
@@ -299,7 +299,7 @@ const updateUserImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, user, "user image updated successfully!"));
+    .json(new ApiRes(200, updatedUser, "user image updated successfully!"));
 });
 
 const updateUserResume = asynchandler(async (req, res) => {
@@ -319,7 +319,7 @@ const updateUserResume = asynchandler(async (req, res) => {
     throw new ApiError(500, "error while updating resume on cloudinary!");
   }
 
-  const user = await User.findByIdAndUpdate(
+  const updatedUser = await User.findByIdAndUpdate(
     loggedUserId,
     {
       $set: {
@@ -343,7 +343,7 @@ const updateUserResume = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, user, "user resume updated successfully!"));
+    .json(new ApiRes(200, updatedUser, "user resume updated successfully!"));
 });
 
 const deleteUserImage = asynchandler(async (req, res) => {

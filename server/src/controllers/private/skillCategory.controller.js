@@ -5,8 +5,11 @@ import { SkillCategory } from "../../models/skillCategory.model.js";
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { parseBoolean } from "../../utils/parseBoolean.js";
 
 const addSkillCategory = asynchandler(async (req, res) => {
+  const loggedUserId = req.user?._id;
+
   const { name, visibility, sortOrder } = req.body;
 
   if (!name) {
@@ -14,7 +17,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
   }
 
   const category = await SkillCategory.findOne({
-    owner: req.user?._id,
+    owner: loggedUserId,
     name,
   });
 
@@ -25,12 +28,11 @@ const addSkillCategory = asynchandler(async (req, res) => {
   const fields = {};
 
   fields.name = name;
-
   if (typeof visibility == "boolean") fields.visibility = visibility;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
   const newCategory = await SkillCategory.create({
-    owner: req.user?._id,
+    owner: loggedUserId,
     ...fields,
   });
 
@@ -40,52 +42,39 @@ const addSkillCategory = asynchandler(async (req, res) => {
 });
 
 const updateSkillCategory = asynchandler(async (req, res) => {
-  const loggedUserId = req.user?._id;
+  const category = req.category;
 
   const { name, visibility, sortOrder } = req.body;
 
-  const { categoryId } = req.params;
+  if (name) {
+    const sameCategoryName = await SkillCategory.findOne({
+      _id: { $ne: category._id },
+      owner: category?.owner,
+      name,
+    });
 
-  if (!categoryId) {
-    throw new ApiError(404, "categoryId is required!");
-  }
-
-  const categoryExists = await SkillCategory.findById(categoryId);
-
-  if (!categoryExists) {
-    throw new ApiError(404, "category not found!");
-  }
-
-  if (categoryExists.owner.toString() !== loggedUserId) {
-    throw new ApiError(403, "unauthorized!");
-  }
-
-  const sameCategoryName = await SkillCategory.findOne({
-    owner: loggedUserId,
-    name,
-  });
-
-  if (sameCategoryName) {
-    throw new ApiError(409, "category name already exists!");
+    if (sameCategoryName) {
+      throw new ApiError(409, "category name already exists!");
+    }
   }
 
   const fields = {};
 
   if (name) fields.name = name;
-  if (typeof visibility == "boolean") fields.visibility = visibility;
-  if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
+  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
+  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
+
+  if (Object.keys(fields).length === 0) {
+    throw new ApiError(400, "no fields provided to update!");
+  }
 
   const updatedCategory = await SkillCategory.findByIdAndUpdate(
-    categoryId,
+    category._id,
     {
       $set: fields,
     },
     { new: true },
   );
-
-  if (!updatedCategory) {
-    throw new ApiError(500, "couldn't updated category!");
-  }
 
   return res
     .status(200)
@@ -93,24 +82,11 @@ const updateSkillCategory = asynchandler(async (req, res) => {
 });
 
 const deleteSkillCategory = asynchandler(async (req, res) => {
-  const { categoryId } = req.params;
-
-  if (!categoryId) {
-    throw new ApiError(404, "categoryId is required!");
-  }
-
-  const deleteCategory = await SkillCategory.findOneAndDelete({
-    owner: req.user?._id,
-    _id: categoryId,
-  });
-
-  if (!deleteCategory) {
-    throw new ApiError(404, "category not found!");
-  }
+  await req.category.deleteOne();
 
   return res
-    .status(204)
-    .json(new ApiRes(204, null, "category deleted successfully!"));
+    .status(200)
+    .json(new ApiRes(200, null, "category deleted successfully!"));
 });
 
 const getAllCategoryWiseSkills = asynchandler(async (req, res) => {
@@ -135,8 +111,8 @@ const getAllCategoryWiseSkills = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (categories?.length <= 0) {
-    throw new ApiError(404, "categories not found!");
+  if (categories?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no categories found!"));
   }
 
   return res

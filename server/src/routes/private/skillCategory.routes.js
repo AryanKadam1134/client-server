@@ -8,17 +8,20 @@ import {
 } from "../../controllers/private/skillCategory.controller.js";
 
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getCategoryById } from "../../middlewares/skillCategory.middleware.js";
 
 const skillCategoryRouter = Router();
 
-skillCategoryRouter.route("/").post(verifyJWT, addSkillCategory);
+skillCategoryRouter.use(verifyJWT);
 
-skillCategoryRouter.route("/:categoryId").patch(verifyJWT, updateSkillCategory);
+skillCategoryRouter
+  .route("/")
+  .post(addSkillCategory)
+  .get(getAllCategoryWiseSkills);
 
 skillCategoryRouter
   .route("/:categoryId")
-  .delete(verifyJWT, deleteSkillCategory);
-
-skillCategoryRouter.route("/").get(verifyJWT, getAllCategoryWiseSkills);
+  .patch(getCategoryById, updateSkillCategory)
+  .delete(getCategoryById, deleteSkillCategory);
 
 export default skillCategoryRouter;

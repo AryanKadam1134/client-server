@@ -24,4 +24,6 @@ const skillCategorySchema = new Schema(
   { timestamps: true },
 );
 
+skillCategorySchema.index({ owner: 1, name: 1 }, { unique: true });
+
 export const SkillCategory = model("SkillCategory", skillCategorySchema);
