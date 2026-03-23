@@ -6,6 +6,7 @@ import {
   deleteFromCloudinary,
   uploadToCloudinary,
 } from "../../utils/cloudinary.js";
+import { parseBoolean } from "../../utils/parseBoolean.js";
 
 const addExperience = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -25,11 +26,20 @@ const addExperience = asynchandler(async (req, res) => {
     sortOrder,
   } = req.body;
 
-  const fields = {};
-
   if (!organization) {
     throw new ApiError(400, "organization is required!");
   }
+
+  const oragnizationExists = await Experience.findOne({
+    owner: loggedUserId,
+    organization,
+  });
+
+  if (oragnizationExists) {
+    throw new ApiError(409, "organization name already exists!");
+  }
+
+  const fields = {};
 
   fields.organization = organization;
 
@@ -52,18 +62,9 @@ const addExperience = asynchandler(async (req, res) => {
       ? highLights
       : JSON.parse(highLights);
 
-  if (featured !== undefined) fields.featured = featured === "true";
-  if (visibility !== undefined) fields.visibility = visibility === "true";
+  if (featured !== undefined) fields.featured = parseBoolean(featured);
+  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
-
-  const oragnizationExists = await Experience.findOne({
-    owner: loggedUserId,
-    organization,
-  });
-
-  if (oragnizationExists) {
-    throw new ApiError(409, "organization name already exists!");
-  }
 
   let uploadedOrganizationImage;
 
@@ -85,10 +86,6 @@ const addExperience = asynchandler(async (req, res) => {
     ...fields,
   });
 
-  if (!createdOrganization) {
-    throw new ApiError(500, "couldn't create experience!");
-  }
-
   return res
     .status(201)
     .json(
@@ -97,13 +94,7 @@ const addExperience = asynchandler(async (req, res) => {
 });
 
 const updateExperience = asynchandler(async (req, res) => {
-  const { experienceId } = req.params;
-
-  const expeirneceExists = await Experience.findById(experienceId);
-
-  if (!expeirneceExists) {
-    throw new ApiError(404, "couldn't find experience!");
-  }
+  const experience = req.experience;
 
   const {
     organization,
@@ -120,9 +111,23 @@ const updateExperience = asynchandler(async (req, res) => {
     sortOrder,
   } = req.body;
 
+  if (organization) {
+    const sameOrganizationName = await Experience.findOne({
+      _id: { $ne: experience._id },
+      owner: experience?.owner,
+      organization,
+    });
+
+    if (sameOrganizationName) {
+      throw new ApiError(409, "organization name already exists!");
+    }
+  }
+
   const fields = {};
 
-  if (organization) fields.organization = organization;
+  fields.organization = organization;
+
+  // Can be null values
   if (description !== undefined) fields.description = description;
   if (employmentType !== undefined) fields.employmentType = employmentType;
   if (organizationSize !== undefined)
@@ -131,15 +136,15 @@ const updateExperience = asynchandler(async (req, res) => {
     fields.organizationWebsite = organizationWebsite;
   if (location !== undefined) fields.location = location;
 
-  if (position !== undefined && position?.length > 0)
+  if (position !== undefined)
     fields.position = Array.isArray(position) ? position : JSON.parse(position);
 
-  if (techStack !== undefined && techStack?.length > 0)
+  if (techStack !== undefined)
     fields.techStack = Array.isArray(techStack)
       ? techStack
       : JSON.parse(techStack);
 
-  if (highLights !== undefined && highLights?.length > 0)
+  if (highLights !== undefined)
     fields.highLights = Array.isArray(highLights)
       ? highLights
       : JSON.parse(highLights);
@@ -148,13 +153,9 @@ const updateExperience = asynchandler(async (req, res) => {
   if (visibility !== undefined) fields.visibility = visibility;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
-  Object.assign(expeirneceExists, fields);
+  Object.assign(experience, fields);
 
-  const updatedExperience = await expeirneceExists.save();
-
-  if (!updatedExperience) {
-    throw new ApiError(500, "couldn't update experience!");
-  }
+  const updatedExperience = await experience.save();
 
   return res
     .status(200)
@@ -164,13 +165,7 @@ const updateExperience = asynchandler(async (req, res) => {
 });
 
 const updateOrganizationImage = asynchandler(async (req, res) => {
-  const { experienceId } = req.params;
-
-  const expeirneceExists = await Experience.findById(experienceId);
-
-  if (!expeirneceExists) {
-    throw new ApiError(404, "couldn't find experience!");
-  }
+  const experience = req.experience;
 
   const organizationImage = req.file?.path;
 
@@ -184,11 +179,8 @@ const updateOrganizationImage = asynchandler(async (req, res) => {
     throw new ApiError(500, "error while updating image on cloudinary!");
   }
 
-  if (expeirneceExists?.organizationImage?.public_id)
-    await deleteFromCloudinary(expeirneceExists?.organizationImage);
-
   const updatedExperience = await Experience.findByIdAndUpdate(
-    experienceId,
+    experience._id,
     {
       $set: {
         organizationImage: {
@@ -200,6 +192,17 @@ const updateOrganizationImage = asynchandler(async (req, res) => {
     },
     { new: true },
   );
+
+  if (experience?.organizationImage?.public_id) {
+    try {
+      await deleteFromCloudinary(experience.organizationImage);
+    } catch (error) {
+      console.error(
+        "Error deleting organizationImage in updateOrganizationImage: ",
+        error,
+      );
+    }
+  }
 
   return res
     .status(200)
@@ -213,18 +216,20 @@ const updateOrganizationImage = asynchandler(async (req, res) => {
 });
 
 const deleteExperience = asynchandler(async (req, res) => {
-  const { experienceId } = req.params;
+  const experience = req.experience;
 
-  const expeirneceExists = await Experience.findById(experienceId);
+  await experience.deleteOne();
 
-  if (!expeirneceExists) {
-    throw new ApiError(404, "couldn't find organization!");
+  if (experience?.organizationImage?.public_id) {
+    try {
+      await deleteFromCloudinary(experience.organizationImage);
+    } catch (error) {
+      console.error(
+        "Error deleting organizationImage in deleteExperience: ",
+        error,
+      );
+    }
   }
-
-  if (expeirneceExists?.organizationImage?.public_id)
-    await deleteFromCloudinary(expeirneceExists?.organizationImage);
-
-  await Experience.findByIdAndDelete(experienceId);
 
   return res
     .status(200)
@@ -232,27 +237,25 @@ const deleteExperience = asynchandler(async (req, res) => {
 });
 
 const deleteOrganiaztionImage = asynchandler(async (req, res) => {
-  const { experienceId } = req.params;
-
-  const expeirneceExists = await Experience.findById(experienceId);
-
-  if (!expeirneceExists) {
-    throw new ApiError(404, "couldn't find organization!");
-  }
-
-  if (expeirneceExists?.organizationImage?.public_id)
-    await deleteFromCloudinary(expeirneceExists?.organizationImage);
+  const experience = req.experience;
 
   const upatedExpereince = await Experience.findByIdAndUpdate(
-    experienceId,
+    experience._id,
     {
       $unset: { organizationImage: "" },
     },
     { new: true },
   );
 
-  if (!upatedExpereince) {
-    throw new ApiError(500, "couldn't delete organizationImage!");
+  if (experience?.organizationImage?.public_id) {
+    try {
+      await deleteFromCloudinary(experience.organizationImage);
+    } catch (error) {
+      console.error(
+        "Error deleting organizationImage in deleteOrganiaztionImage: ",
+        error,
+      );
+    }
   }
 
   return res
@@ -269,8 +272,8 @@ const deleteOrganiaztionImage = asynchandler(async (req, res) => {
 const getAllExperiences = asynchandler(async (req, res) => {
   const experiences = await Experience.find({ owner: req.user?._id });
 
-  if (experiences?.length <= 0) {
-    throw new ApiError(404, "user does not have any experiences!");
+  if (experiences?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "experiences not found!"));
   }
 
   return res
