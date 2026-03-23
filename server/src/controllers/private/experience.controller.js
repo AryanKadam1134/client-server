@@ -1,12 +1,13 @@
 import { Experience } from "../../models/experience.model.js";
-import ApiError from "../../utils/ApiError.js";
+
 import ApiRes from "../../utils/ApiRes.js";
+import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { parseBoolean } from "../../utils/parseBoolean.js";
 import {
   deleteFromCloudinary,
   uploadToCloudinary,
 } from "../../utils/cloudinary.js";
-import { parseBoolean } from "../../utils/parseBoolean.js";
 
 const addExperience = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -273,7 +274,7 @@ const getAllExperiences = asynchandler(async (req, res) => {
   const experiences = await Experience.find({ owner: req.user?._id });
 
   if (experiences?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "experiences not found!"));
+    return res.status(200).json(new ApiRes(200, [], "no experiences found!"));
   }
 
   return res

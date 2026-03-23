@@ -58,8 +58,8 @@ const getSkillWithCategory = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (skills?.length <= 0) {
-    throw new ApiError(404, "skills not found!");
+  if (skills?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no skills found!"));
   }
 
   return res
@@ -97,8 +97,8 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (categories?.length < 0) {
-    throw new ApiError(404, "categories not found!");
+  if (categories?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no categories found!"));
   }
 
   return res
@@ -129,8 +129,8 @@ const getProjects = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (projects?.length) {
-    throw new ApiError(404, "projects not found!");
+  if (projects?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no projects found!"));
   }
 
   return res
@@ -167,8 +167,8 @@ const getExperiences = asynchandler(async (req, res) => {
     },
   ]);
 
-  if (experiences?.length <= 0) {
-    throw new ApiError(404, "experiences not found!");
+  if (experiences?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no experiences found!"));
   }
 
   return res
@@ -183,8 +183,8 @@ const getEducations = asynchandler(async (req, res) => {
     .sort({ sortOrder: 1 })
     .lean();
 
-  if (educations?.length <= 0) {
-    throw new ApiError(404, "educations not found!");
+  if (educations?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no educations found!"));
   }
 
   return res
