@@ -11,6 +11,7 @@ import {
 
 import { upload } from "../../middlewares/multer.middleware.js";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getEducationById } from "../../middlewares/education.middleware.js";
 
 const educationRouter = Router();
 
@@ -23,12 +24,16 @@ educationRouter
 
 educationRouter
   .route("/:educationId")
-  .patch(updateEducationDetails)
-  .delete(deleteEducation);
+  .patch(getEducationById, updateEducationDetails)
+  .delete(getEducationById, deleteEducation);
 
 educationRouter
   .route("/:educationId/institute-image")
-  .patch(upload.single("instituteImage"), updateInstituteImage)
-  .delete(deleteInstituteImage);
+  .patch(
+    getEducationById,
+    upload.single("instituteImage"),
+    updateInstituteImage,
+  )
+  .delete(getEducationById, deleteInstituteImage);
 
 export default educationRouter;

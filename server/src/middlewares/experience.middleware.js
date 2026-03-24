@@ -13,7 +13,7 @@ export const getExperienceById = asynchandler(async (req, res, next) => {
   const experienceExists = await Experience.findById(experienceId);
 
   if (!experienceExists) {
-    throw new ApiError(404, "skill not found!");
+    throw new ApiError(404, "experience not found!");
   }
 
   if (experienceExists.owner.toString() !== req.user?._id.toString()) {

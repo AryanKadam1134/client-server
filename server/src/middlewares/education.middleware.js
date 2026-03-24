@@ -13,7 +13,7 @@ export const getEducationById = asynchandler(async (req, res, next) => {
   const educationExists = await Education.findById(educationId);
 
   if (!educationExists) {
-    throw new ApiError(404, "skill not found!");
+    throw new ApiError(404, "education not found!");
   }
 
   if (educationExists.owner.toString() !== req.user?._id.toString()) {

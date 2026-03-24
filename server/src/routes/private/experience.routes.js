@@ -11,6 +11,7 @@ import {
 
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import { upload } from "../../middlewares/multer.middleware.js";
+import { getExperienceById } from "../../middlewares/experience.middleware.js";
 
 const experienceRouter = Router();
 
@@ -23,12 +24,16 @@ experienceRouter
 
 experienceRouter
   .route("/:experienceId")
-  .patch(updateExperience)
-  .delete(deleteExperience);
+  .patch(getExperienceById, updateExperience)
+  .delete(getExperienceById, deleteExperience);
 
 experienceRouter
   .route("/:experienceId/organization-image")
-  .patch(upload.single("organizationImage"), updateOrganizationImage)
-  .delete(deleteOrganiaztionImage);
+  .patch(
+    getExperienceById,
+    upload.single("organizationImage"),
+    updateOrganizationImage,
+  )
+  .delete(getExperienceById, deleteOrganiaztionImage);
 
 export default experienceRouter;
