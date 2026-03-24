@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import {
   addExperience,
   deleteExperience,
@@ -7,6 +8,7 @@ import {
   updateExperience,
   updateOrganizationImage,
 } from "../../controllers/private/experience.controller.js";
+
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 

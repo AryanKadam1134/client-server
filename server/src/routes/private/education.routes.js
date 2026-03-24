@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
+
 import {
   addEducation,
   deleteEducation,
@@ -8,26 +8,27 @@ import {
   updateEducationDetails,
   updateInstituteImage,
 } from "../../controllers/private/education.controller.js";
+
 import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const educationRouter = Router();
 
+educationRouter.use(verifyJWT);
+
 educationRouter
   .route("/")
-  .post(verifyJWT, upload.single("instituteImage"), addEducation);
+  .post(upload.single("instituteImage"), addEducation)
+  .get(getAllEducations);
 
-educationRouter.route("/:educationId").patch(verifyJWT, updateEducationDetails);
+educationRouter
+  .route("/:educationId")
+  .patch(updateEducationDetails)
+  .delete(deleteEducation);
 
 educationRouter
   .route("/:educationId/institute-image")
-  .patch(verifyJWT, upload.single("instituteImage"), updateInstituteImage);
-
-educationRouter.route("/:educationId").delete(verifyJWT, deleteEducation);
-
-educationRouter
-  .route("/:educationId/institute-image")
-  .delete(verifyJWT, deleteInstituteImage);
-
-educationRouter.route("/").get(verifyJWT, getAllEducations);
+  .patch(upload.single("instituteImage"), updateInstituteImage)
+  .delete(deleteInstituteImage);
 
 export default educationRouter;
