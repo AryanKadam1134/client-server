@@ -5,8 +5,8 @@ import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
 import {
-  deleteFromCloudinary,
   uploadToCloudinary,
+  deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
 
 const addExperience = asynchandler(async (req, res) => {
@@ -126,7 +126,7 @@ const updateExperience = asynchandler(async (req, res) => {
 
   const fields = {};
 
-  fields.organization = organization;
+  if (organization) fields.organization = organization;
 
   // Can be null values
   if (description !== undefined) fields.description = description;
