@@ -5,8 +5,8 @@ import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
 import {
-  deleteFromCloudinary,
   uploadToCloudinary,
+  deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
 
 const addCertificate = asynchandler(async (req, res) => {
@@ -215,4 +215,90 @@ const updateCertificateImage = asynchandler(async (req, res) => {
     );
 });
 
-export { addCertificate, updateCertificate, updateCertificateImage };
+const deleteCertificate = asynchandler(async (req, res) => {
+  const certificate = req.certificate;
+
+  await certificate.deleteOne();
+
+  if (certificate?.certificateImage?.public_id) {
+    try {
+      await deleteFromCloudinary(certificate.certificateImage);
+    } catch (error) {
+      console.error(
+        "Error deleting certificateImage in deleteCertificate: ",
+        error,
+      );
+    }
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, null, "certificate deleted successfully!"));
+});
+
+const deleteCertificateImage = asynchandler(async (req, res) => {
+  const certificate = req.certificate;
+
+  if (!certificate?.credentialUrl) {
+    throw new ApiError(
+      400,
+      "either credential URL or certificate image is required!",
+    );
+  }
+
+  const upatedCertificate = await Certificate.findByIdAndUpdate(
+    certificate._id,
+    {
+      $unset: { certificateImage: "" },
+    },
+    { new: true },
+  );
+
+  if (certificate?.certificateImage?.public_id) {
+    try {
+      await deleteFromCloudinary(certificate.certificateImage);
+    } catch (error) {
+      console.error(
+        "Error deleting certificateImage in deleteOrganiaztionImage: ",
+        error,
+      );
+    }
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiRes(
+        200,
+        upatedCertificate,
+        "certificateImage deleted successfully!",
+      ),
+    );
+});
+
+const getAllCertificates = asynchandler(async (req, res) => {
+  const certificates = await Certificate.find({
+    owner: req.user?._id,
+  })
+    .sort({ sortOrder: 1 })
+    .lean();
+
+  if (certificates?.length === 0) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, certificates, "no certificates found!"));
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, certificates, "certificates fetched successfully!"));
+});
+
+export {
+  addCertificate,
+  updateCertificate,
+  updateCertificateImage,
+  deleteCertificate,
+  deleteCertificateImage,
+  getAllCertificates,
+};
