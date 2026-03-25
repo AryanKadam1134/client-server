@@ -29,6 +29,10 @@ const addEducation = asynchandler(async (req, res) => {
     throw new ApiError(400, "instituteName is required!");
   }
 
+  if (!qualification) {
+    throw new ApiError(400, "qualification is required!");
+  }
+
   const educationExists = await Education.findOne({
     owner: loggedUserId,
     instituteName,
@@ -41,8 +45,8 @@ const addEducation = asynchandler(async (req, res) => {
   const fields = {};
 
   fields.instituteName = instituteName;
+  fields.qualification = qualification;
 
-  if (qualification) fields.qualification = qualification;
   if (description) fields.description = description;
   if (address) fields.address = address;
   if (startYear) fields.startYear = startYear;
@@ -109,9 +113,9 @@ const updateEducationDetails = asynchandler(async (req, res) => {
   const fields = {};
 
   if (instituteName) fields.instituteName = instituteName;
+  if (qualification) fields.qualification = qualification;
 
   // Can be null values
-  if (qualification !== undefined) fields.qualification = qualification;
   if (description !== undefined) fields.description = description;
   if (address !== undefined) fields.address = address;
   if (startYear !== undefined) fields.startYear = startYear;

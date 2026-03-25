@@ -11,19 +11,35 @@ const certificateSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-    },
+    description: String,
     issuer: {
       type: String,
       required: true,
     },
-    certificateUrl: {
-      type: String,
-      required: true,
+
+    credentialId: String,
+    credentialUrl: String,
+
+    // Couldinary
+    certificateImage: {
+      url: String,
+      public_id: String,
+      resource_type: String,
     },
-    date: {
-      type: Date,
+
+    issueDate: Date,
+    expiryDate: Date,
+
+    skills: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Skill",
+      },
+    ],
+
+    featured: {
+      type: Boolean,
+      default: true,
     },
     visibility: {
       type: Boolean,
@@ -36,5 +52,14 @@ const certificateSchema = new Schema(
   },
   { timestamps: true },
 );
+
+certificateSchema.pre("validate", function (next) {
+  if (!this.credentialUrl && !this.certificateImage?.url) {
+    return next(
+      new Error("Either credential URL or certificate image is required"),
+    );
+  }
+  next();
+});
 
 export const Certificate = model("Certificate", certificateSchema);

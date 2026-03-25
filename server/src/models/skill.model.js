@@ -17,14 +17,14 @@ const skillSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "SkillCategory",
     },
+    description: String,
+
     level: {
       type: String,
       enum: SKILL_LEVEL.map((s) => s.value),
       default: "basic",
     },
-    description: {
-      type: String,
-    },
+
     visibility: {
       type: Boolean,
       default: true,

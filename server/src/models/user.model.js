@@ -22,11 +22,6 @@ const userSchema = new Schema(
       lowercase: true,
       index: true,
     },
-    password: {
-      type: String,
-      required: [true, "password is required!"],
-      trim: true,
-    },
     email: {
       type: String,
       required: [true, "email is required!"],
@@ -34,6 +29,12 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true,
     },
+    password: {
+      type: String,
+      required: [true, "password is required!"],
+      trim: true,
+    },
+
     mobileNo: {
       type: Number,
       unique: true,
@@ -42,36 +43,21 @@ const userSchema = new Schema(
       type: String,
       enum: GENDERS.map((g) => g.value),
     },
+
+    // Couldinary
     image: {
-      // Couldinary
-      url: {
-        type: String,
-      },
-      public_id: {
-        type: String,
-      },
-      resource_type: {
-        type: String,
-      },
+      url: String,
+      public_id: String,
+      resource_type: String,
     },
     resumeOrCv: {
-      // Couldinary
-      url: {
-        type: String,
-      },
-      public_id: {
-        type: String,
-      },
-      resource_type: {
-        type: String,
-      },
+      url: String,
+      public_id: String,
+      resource_type: String,
     },
-    documentUrl: {
-      type: String,
-    },
-    refreshToken: {
-      type: String,
-    },
+    documentUrl: String,
+
+    refreshToken: String,
   },
   { timestamps: true },
 );

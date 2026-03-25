@@ -41,25 +41,24 @@ const experienceSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
+    description: String,
+    organizationSize: String,
+    organizationWebsite: {
       type: String,
+      match: [/^https?:\/\/.+/, "Invalid URL"],
     },
+
     position: [
       {
         type: positionSchema,
       },
     ],
+
     employmentType: {
       type: String,
       enum: EMPLOYMENT_TYPE?.map((type) => type.value),
     },
-    organizationSize: {
-      type: String,
-    },
-    organizationWebsite: {
-      type: String,
-      match: [/^https?:\/\/.+/, "Invalid URL"],
-    },
+
     highLights: [String],
     techStack: [
       {
@@ -67,24 +66,21 @@ const experienceSchema = new Schema(
         ref: "Skill",
       },
     ],
+
     location: {
       type: String,
     },
+
+    // Couldinary
+    organizationImage: {
+      url: String,
+      public_id: String,
+      resource_type: String,
+    },
+
     featured: {
       type: Boolean,
       default: true,
-    },
-    organizationImage: {
-      // Couldinary
-      url: {
-        type: String,
-      },
-      public_id: {
-        type: String,
-      },
-      resource_type: {
-        type: String,
-      },
     },
     visibility: {
       type: Boolean,

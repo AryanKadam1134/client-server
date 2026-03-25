@@ -15,12 +15,9 @@ const educationSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-    },
-    address: {
-      type: String,
-    },
+    description: String,
+    address: String,
+
     startYear: {
       type: Number,
       required: true,
@@ -39,6 +36,7 @@ const educationSchema = new Schema(
       type: Boolean,
       default: false,
     },
+
     percentage: {
       type: Number,
       min: 0,
@@ -49,18 +47,14 @@ const educationSchema = new Schema(
       min: 0,
       max: 10,
     },
+
+    // Couldinary
     instituteImage: {
-      // Couldinary
-      url: {
-        type: String,
-      },
-      public_id: {
-        type: String,
-      },
-      resource_type: {
-        type: String,
-      },
+      url: String,
+      public_id: String,
+      resource_type: String,
     },
+
     sortOrder: {
       type: Number,
       default: 0,

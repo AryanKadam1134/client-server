@@ -15,15 +15,11 @@ const projectSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-    },
-    startDate: {
-      type: Date,
-    },
-    endDate: {
-      type: Date,
-    },
+    description: String,
+
+    startDate: Date,
+    endDate: Date,
+
     present: {
       type: Boolean,
       default: false,
@@ -38,54 +34,41 @@ const projectSchema = new Schema(
         message: "present must be false if endDate is provided",
       },
     },
-    featured: {
-      type: Boolean,
-      default: true,
-    },
-    coverImage: {
-      // Couldinary
-      url: {
-        type: String,
-      },
-      public_id: {
-        type: String,
-      },
-      resource_type: {
-        type: String,
-      },
-    },
-    projectImages: [
-      {
-        // Couldinary
-        url: {
-          type: String,
-        },
-        public_id: {
-          type: String,
-        },
-        resource_type: {
-          type: String,
-          default: "image",
-        },
-      },
-    ],
-    githubLink: {
-      type: String,
-    },
-    liveLink: {
-      type: String,
-    },
+
     category: {
       type: String,
       enum: ["personal", "freelance", "hackathon", "client", "open-source"],
       default: "personal",
     },
+
     techStack: [
       {
         type: Schema.Types.ObjectId,
         ref: "Skill",
       },
     ],
+
+    // Couldinary
+    coverImage: {
+      url: String,
+      public_id: String,
+      resource_type: String,
+    },
+    projectImages: [
+      {
+        url: String,
+        public_id: String,
+        resource_type: String,
+      },
+    ],
+
+    githubLink: String,
+    liveLink: String,
+
+    featured: {
+      type: Boolean,
+      default: true,
+    },
     visibility: {
       type: Boolean,
       default: true,

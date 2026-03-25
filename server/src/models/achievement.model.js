@@ -11,27 +11,19 @@ const achievementSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-    },
+    description: String,
+
+    date: Date,
+
+    // Couldinary
     images: [
       {
-        // Couldinary
-        url: {
-          type: String,
-        },
-        public_id: {
-          type: String,
-        },
-        resource_type: {
-          type: String,
-          default: "image",
-        },
+        url: String,
+        public_id: String,
+        resource_type: String,
       },
     ],
-    date: {
-      type: Date,
-    },
+
     visibility: {
       type: Boolean,
       default: true,
