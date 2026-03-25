@@ -1,0 +1,26 @@
+import { Certificate } from "../models/certificate.model";
+
+import ApiError from "../utils/ApiError";
+import asynchandler from "../utils/asynchandler.js";
+
+export const getCertificateById = asynchandler(async (req, res, next) => {
+  const { certificateId } = req.params;
+
+  if (!certificateId) {
+    throw new ApiError(400, "certificateId is required!");
+  }
+
+  const certificateExists = await Certificate.findById(certificateId);
+
+  if (!certificateExists) {
+    throw new ApiError(404, "certificate not found!");
+  }
+
+  if (certificateExists.owner.toString() !== req.user?._id.toString()) {
+    throw new ApiError(403, "unauthorized!");
+  }
+
+  req.certificate = certificateExists;
+
+  next();
+});
