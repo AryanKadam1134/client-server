@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+import ApiError from "../utils/ApiError.js";
 
 const certificateSchema = new Schema(
   {
@@ -53,13 +54,13 @@ const certificateSchema = new Schema(
   { timestamps: true },
 );
 
-certificateSchema.pre("validate", function (next) {
+certificateSchema.pre("validate", async function () {
   if (!this.credentialUrl && !this.certificateImage?.url) {
-    return next(
-      new Error("Either credential URL or certificate image is required"),
+    throw new ApiError(
+      500,
+      "Either credential URL or certificate image is required",
     );
   }
-  next();
 });
 
 export const Certificate = model("Certificate", certificateSchema);

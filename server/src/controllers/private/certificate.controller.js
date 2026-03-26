@@ -8,6 +8,7 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
+import mongoose from "mongoose";
 
 const addCertificate = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -139,14 +140,20 @@ const updateCertificate = asynchandler(async (req, res) => {
   if (issueDate !== undefined) fields.issueDate = issueDate;
   if (expiryDate !== undefined) fields.expiryDate = expiryDate;
 
-  if (skills?.length > 0)
+  if (skills !== undefined)
     fields.skills = Array.isArray(skills) ? skills : JSON.parse(skills);
 
   if (featured !== undefined) fields.featured = parseBoolean(featured);
   if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
-  if (!(certificate?.certificateImage?.public_id || credentialUrl)) {
+  if (
+    !(
+      certificate?.credentialUrl ||
+      certificate?.certificateImage?.public_id ||
+      credentialUrl
+    )
+  ) {
     throw new ApiError(
       400,
       "either credential URL or certificate image is required!",
@@ -277,11 +284,26 @@ const deleteCertificateImage = asynchandler(async (req, res) => {
 });
 
 const getAllCertificates = asynchandler(async (req, res) => {
-  const certificates = await Certificate.find({
-    owner: req.user?._id,
-  })
-    .sort({ sortOrder: 1 })
-    .lean();
+  const certificates = await Certificate.aggregate([
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $lookup: {
+        from: "skills",
+        foreignField: "_id",
+        localField: "skills",
+        as: "skills",
+      },
+    },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
+  ]);
 
   if (certificates?.length === 0) {
     return res

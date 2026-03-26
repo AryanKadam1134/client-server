@@ -1,6 +1,6 @@
-import { Certificate } from "../models/certificate.model";
+import { Certificate } from "../models/certificate.model.js";
 
-import ApiError from "../utils/ApiError";
+import ApiError from "../utils/ApiError.js";
 import asynchandler from "../utils/asynchandler.js";
 
 export const getCertificateById = asynchandler(async (req, res, next) => {

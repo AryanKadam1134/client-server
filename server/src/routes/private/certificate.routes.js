@@ -29,7 +29,11 @@ certificateRoutes
 
 certificateRoutes
   .route("/:certificateId/certificate-image")
-  .patch(getCertificateById, updateCertificateImage)
+  .patch(
+    getCertificateById,
+    upload.single("certificateImage"),
+    updateCertificateImage,
+  )
   .delete(getCertificateById, deleteCertificateImage);
 
 export default certificateRoutes;
