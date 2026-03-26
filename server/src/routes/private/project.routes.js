@@ -36,11 +36,6 @@ projectRouter
   .delete(getProjectById, deleteProject);
 
 projectRouter
-  .route("/:projectId/cover-image")
-  .patch(getProjectById, upload.single("coverImage"), updateProjectCoverImage)
-  .delete(getProjectById, deleteProjectCoverImage);
-
-projectRouter
   .route("/:projectId/project-images")
   .patch(getProjectById, upload.array("projectImages", 5), updateProjectImages);
 

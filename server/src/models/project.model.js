@@ -49,10 +49,9 @@ const projectSchema = new Schema(
     ],
 
     // Couldinary
-    coverImage: {
-      url: String,
-      public_id: String,
-      resource_type: String,
+    coverImageIndex: {
+      type: Number,
+      default: 0,
     },
     projectImages: [
       {
