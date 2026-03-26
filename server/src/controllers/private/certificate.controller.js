@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import { Certificate } from "../../models/certificate.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
@@ -8,7 +10,6 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
-import mongoose from "mongoose";
 
 const addCertificate = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;

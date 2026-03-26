@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
-import { Skill } from "../../models/skill.model.js";
-import { SocialAccount } from "../../models/socialAccount.model.js";
+
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { SkillCategory } from "../../models/skillCategory.model.js";
+
+import { Skill } from "../../models/skill.model.js";
 import { Project } from "../../models/project.model.js";
-import { Experience } from "../../models/experience.model.js";
 import { Education } from "../../models/education.model.js";
+import { Experience } from "../../models/experience.model.js";
+import { Certificate } from "../../models/certificate.model.js";
+import { SkillCategory } from "../../models/skillCategory.model.js";
+import { SocialAccount } from "../../models/socialAccount.model.js";
 
 const getUserByUsername = asynchandler(async (req, res) => {
   return res
@@ -107,12 +109,18 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
 });
 
 const getProjects = asynchandler(async (req, res) => {
+  const { featured = "all" } = req.query;
+
+  const fields = {
+    owner: new mongoose.Types.ObjectId(req.user?._id),
+    visibility: true,
+  };
+
+  if (featured !== "all") fields.featured = featured === "true";
+
   const projects = await Project.aggregate([
     {
-      $match: {
-        owner: new mongoose.Types.ObjectId(req.user?._id),
-        visibility: true,
-      },
+      $match: fields,
     },
     {
       $lookup: {
@@ -139,18 +147,12 @@ const getProjects = asynchandler(async (req, res) => {
 });
 
 const getExperiences = asynchandler(async (req, res) => {
-  const { featured = "all" } = req.query;
-
-  const fields = {
-    owner: new mongoose.Types.ObjectId(req.user?._id),
-    visibility: true,
-  };
-
-  if (featured !== "all") fields.featured = featured === "true";
-
   const experiences = await Experience.aggregate([
     {
-      $match: fields,
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+        visibility: true,
+      },
     },
     {
       $lookup: {
@@ -192,6 +194,44 @@ const getEducations = asynchandler(async (req, res) => {
     .json(new ApiRes(200, educations, "educations fetched successfully!"));
 });
 
+const getCertificates = asynchandler(async (req, res) => {
+  const { featured = "all" } = req.query;
+
+  const fields = {
+    owner: new mongoose.Types.ObjectId(req.user?._id),
+    visibility: true,
+  };
+
+  if (featured !== "all") fields.featured = featured === "true";
+
+  const certificates = await Certificate.aggregate([
+    {
+      $match: fields,
+    },
+    {
+      $lookup: {
+        from: "skills",
+        localField: "skills",
+        foreignField: "_id",
+        as: "skills",
+      },
+    },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
+  ]);
+
+  if (certificates?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no certificates found!"));
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, certificates, "certificates fetched successfully!"));
+});
+
 export {
   getUserByUsername,
   getUserSocialAccounts,
@@ -200,4 +240,5 @@ export {
   getProjects,
   getExperiences,
   getEducations,
+  getCertificates,
 };
