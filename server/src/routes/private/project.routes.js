@@ -3,10 +3,8 @@ import { Router } from "express";
 import {
   addProject,
   deleteProject,
-  deleteProjectCoverImage,
   deleteProjectImage,
   getAllProjects,
-  updateProjectCoverImage,
   updateProjectDetails,
   updateProjectImages,
 } from "../../controllers/private/project.controller.js";

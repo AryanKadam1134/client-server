@@ -23,7 +23,11 @@ const achievementSchema = new Schema(
         resource_type: String,
       },
     ],
-
+    
+    featured: {
+      type: Boolean,
+      default: true,
+    },
     visibility: {
       type: Boolean,
       default: true,

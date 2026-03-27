@@ -249,105 +249,105 @@ const deleteProject = asynchandler(async (req, res) => {
     .json(new ApiRes(200, null, "project deleted successfully!"));
 });
 
-// const deleteProjectImage = asynchandler(async (req, res) => {
-//   const project = req.project;
-//   const { imagePublicId } = req.params;
-
-//   if (!imagePublicId) {
-//     throw new ApiError(400, "imagePublicId is required!");
-//   }
-
-//   // 🔍 Find index of image to delete
-//   const deleteIndex = project.projectImages.findIndex(
-//     (img) => img.public_id === imagePublicId
-//   );
-
-//   if (deleteIndex === -1) {
-//     throw new ApiError(404, "Image not found!");
-//   }
-
-//   const imageToDelete = project.projectImages[deleteIndex];
-
-//   // 🧠 Adjust coverImageIndex
-//   let newCoverIndex = project.coverImageIndex;
-
-//   if (deleteIndex === project.coverImageIndex) {
-//     // If cover image is deleted → fallback
-//     newCoverIndex = 0;
-//   } else if (deleteIndex < project.coverImageIndex) {
-//     // Shift left
-//     newCoverIndex -= 1;
-//   }
-
-//   // 🗑 Remove image
-//   project.projectImages.splice(deleteIndex, 1);
-
-//   // 🧨 Edge case: no images left
-//   if (project.projectImages.length === 0) {
-//     newCoverIndex = null;
-//   }
-
-//   project.coverImageIndex = newCoverIndex;
-
-//   await project.save();
-
-//   // ☁️ Delete from Cloudinary
-//   try {
-//     await deleteFromCloudinary(imageToDelete);
-//   } catch (error) {
-//     console.error(
-//       "Error deleting projectImage in deleteProjectImage: ",
-//       error
-//     );
-//   }
-
-//   return res.status(200).json(
-//     new ApiRes(200, project, "project image deleted successfully!")
-//   );
-// });
-
 const deleteProjectImage = asynchandler(async (req, res) => {
   const project = req.project;
-
   const { imagePublicId } = req.params;
 
   if (!imagePublicId) {
     throw new ApiError(400, "imagePublicId is required!");
   }
 
-  const updatedProject = await Project.findByIdAndUpdate(
-    project._id,
-    {
-      $pull: {
-        projectImages: {
-          public_id: imagePublicId,
-        },
-      },
-    },
-    { new: true },
+  // 🔍 Find index of image to delete
+  const deleteIndex = project.projectImages.findIndex(
+    (img) => img.public_id === imagePublicId
   );
 
-  const projectImage = project?.projectImages?.find(
-    (image) => image?.public_id === imagePublicId,
-  );
-
-  if (projectImage?.public_id) {
-    try {
-      await deleteFromCloudinary(projectImage);
-    } catch (error) {
-      console.error(
-        "Error deleting projectImage in deleteProjectImage: ",
-        error,
-      );
-    }
+  if (deleteIndex === -1) {
+    throw new ApiError(404, "Image not found!");
   }
 
-  return res
-    .status(200)
-    .json(
-      new ApiRes(200, updatedProject, "project image deleted successfully!"),
+  const imageToDelete = project.projectImages[deleteIndex];
+
+  // 🧠 Adjust coverImageIndex
+  let newCoverIndex = project.coverImageIndex;
+
+  if (deleteIndex === project.coverImageIndex) {
+    // If cover image is deleted → fallback
+    newCoverIndex = 0;
+  } else if (deleteIndex < project.coverImageIndex) {
+    // Shift left
+    newCoverIndex -= 1;
+  }
+
+  // 🗑 Remove image
+  project.projectImages.splice(deleteIndex, 1);
+
+  // 🧨 Edge case: no images left
+  if (project.projectImages.length === 0) {
+    newCoverIndex = null;
+  }
+
+  project.coverImageIndex = newCoverIndex;
+
+  await project.save();
+
+  // ☁️ Delete from Cloudinary
+  try {
+    await deleteFromCloudinary(imageToDelete);
+  } catch (error) {
+    console.error(
+      "Error deleting projectImage in deleteProjectImage: ",
+      error
     );
+  }
+
+  return res.status(200).json(
+    new ApiRes(200, project, "project image deleted successfully!")
+  );
 });
+
+// const deleteProjectImage = asynchandler(async (req, res) => {
+//   const project = req.project;
+
+//   const { imagePublicId } = req.params;
+
+//   if (!imagePublicId) {
+//     throw new ApiError(400, "imagePublicId is required!");
+//   }
+
+//   const updatedProject = await Project.findByIdAndUpdate(
+//     project._id,
+//     {
+//       $pull: {
+//         projectImages: {
+//           public_id: imagePublicId,
+//         },
+//       },
+//     },
+//     { new: true },
+//   );
+
+//   const projectImage = project?.projectImages?.find(
+//     (image) => image?.public_id === imagePublicId,
+//   );
+
+//   if (projectImage?.public_id) {
+//     try {
+//       await deleteFromCloudinary(projectImage);
+//     } catch (error) {
+//       console.error(
+//         "Error deleting projectImage in deleteProjectImage: ",
+//         error,
+//       );
+//     }
+//   }
+
+//   return res
+//     .status(200)
+//     .json(
+//       new ApiRes(200, updatedProject, "project image deleted successfully!"),
+//     );
+// });
 
 const getAllProjects = asynchandler(async (req, res) => {
   const projects = await Project.aggregate([
