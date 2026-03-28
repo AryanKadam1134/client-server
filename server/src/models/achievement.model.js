@@ -11,11 +11,25 @@ const achievementSchema = new Schema(
       type: String,
       required: true,
     },
+
+    certificateId: {
+      type: Schema.Types.ObjectId,
+      ref: "Certificate",
+    },
+
+    issuer: String,
     description: String,
+    link: String,
 
     date: Date,
 
+    location: String,
+
     // Couldinary
+    coverImageIndex: {
+      type: Number,
+      default: 0,
+    },
     images: [
       {
         url: String,
@@ -23,7 +37,7 @@ const achievementSchema = new Schema(
         resource_type: String,
       },
     ],
-    
+
     featured: {
       type: Boolean,
       default: true,
@@ -39,5 +53,8 @@ const achievementSchema = new Schema(
   },
   { timestamps: true },
 );
+
+achievementSchema.index({ owner: 1, sortOrder: 1 });
+achievementSchema.index({ owner: 1, date: -1 });
 
 export const Achievement = model("Achievement", achievementSchema);
