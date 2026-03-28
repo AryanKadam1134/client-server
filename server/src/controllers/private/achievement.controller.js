@@ -66,7 +66,7 @@ const addAchievement = asynchandler(async (req, res) => {
     fields.certificateId = certificateId;
   }
 
-  const achievementImages = req.files?.achievementImages;
+  const achievementImages = req.files;
 
   let uploadedImages;
 
@@ -110,6 +110,7 @@ const updateAchievement = asynchandler(async (req, res) => {
     visibility,
     sortOrder,
     certificateId,
+    coverImageIndex,
   } = req.body;
 
   if (title) {

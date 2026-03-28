@@ -19,7 +19,7 @@ projectRouter.use(verifyJWT);
 
 projectRouter
   .route("/")
-  .post(upload.fields([{ name: "projectImages", maxCount: 5 }]), addProject)
+  .post(upload.array("projectImages", 5), addProject)
   .get(getAllProjects);
 
 projectRouter

@@ -76,7 +76,7 @@ const addProject = asynchandler(async (req, res) => {
     fields.organizationId = organizationId;
   }
 
-  const projectImages = req.files?.projectImages;
+  const projectImages = req.files;
 
   let uploadedProjectImages;
 
