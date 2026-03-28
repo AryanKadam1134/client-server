@@ -96,7 +96,7 @@ const addAchievement = asynchandler(async (req, res) => {
     );
 });
 
-const updateAchievementDetails = asynchandler(async (req, res) => {
+const updateAchievement = asynchandler(async (req, res) => {
   const achievement = req.achievement;
 
   const {
@@ -317,6 +317,13 @@ const getAllAchievement = asynchandler(async (req, res) => {
       },
     },
     {
+      $addFields: {
+        certificateDetails: {
+          $first: "$certificateDetails",
+        },
+      },
+    },
+    {
       $sort: {
         sortOrder: 1,
       },
@@ -332,4 +339,11 @@ const getAllAchievement = asynchandler(async (req, res) => {
     .json(new ApiRes(200, achievements, "achievements fetched successfully!"));
 });
 
-export { addAchievement, updateAchievementDetails, updateAchievementImages };
+export {
+  addAchievement,
+  updateAchievement,
+  updateAchievementImages,
+  deleteAchievement,
+  deleteAchievementImage,
+  getAllAchievement,
+};

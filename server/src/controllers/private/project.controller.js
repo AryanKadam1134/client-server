@@ -370,6 +370,13 @@ const getAllProjects = asynchandler(async (req, res) => {
       },
     },
     {
+      $addFields: {
+        organizationDetails: {
+          $first: "$organizationDetails",
+        },
+      },
+    },
+    {
       $sort: {
         sortOrder: 1,
       },

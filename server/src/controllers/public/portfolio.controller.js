@@ -8,6 +8,7 @@ import { Project } from "../../models/project.model.js";
 import { Education } from "../../models/education.model.js";
 import { Experience } from "../../models/experience.model.js";
 import { Certificate } from "../../models/certificate.model.js";
+import { Achievement } from "../../models/achievement.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import { SocialAccount } from "../../models/socialAccount.model.js";
 
@@ -131,6 +132,21 @@ const getProjects = asynchandler(async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "experiences",
+        localField: "organizationId",
+        foreignField: "_id",
+        as: "organizationDetails",
+      },
+    },
+    {
+      $addFields: {
+        organizationDetails: {
+          $first: "$organizationDetails",
+        },
+      },
+    },
+    {
       $sort: {
         sortOrder: 1,
       },
@@ -232,6 +248,51 @@ const getCertificates = asynchandler(async (req, res) => {
     .json(new ApiRes(200, certificates, "certificates fetched successfully!"));
 });
 
+const getAchievements = asynchandler(async (req, res) => {
+  const { featured = "all" } = req.query;
+
+  const fields = {
+    owner: new mongoose.Types.ObjectId(req.user?._id),
+    visibility: true,
+  };
+
+  if (featured !== "all") fields.featured = featured === "true";
+
+  const achievements = await Achievement.aggregate([
+    {
+      $match: fields,
+    },
+    {
+      $lookup: {
+        from: "certificates",
+        localField: "certificateId",
+        foreignField: "_id",
+        as: "certificateDetails",
+      },
+    },
+    {
+      $addFields: {
+        certificateDetails: {
+          $first: "$certificateDetails",
+        },
+      },
+    },
+    {
+      $sort: {
+        sortOrder: 1,
+      },
+    },
+  ]);
+
+  if (achievements?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no achievements found!"));
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, achievements, "achievements fetched successfully!"));
+});
+
 export {
   getUserByUsername,
   getUserSocialAccounts,
@@ -241,4 +302,5 @@ export {
   getExperiences,
   getEducations,
   getCertificates,
+  getAchievements,
 };

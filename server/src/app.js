@@ -25,6 +25,7 @@ import projectRouter from "./routes/private/project.routes.js";
 import experienceRouter from "./routes/private/experience.routes.js";
 import educationRouter from "./routes/private/education.routes.js";
 import certificateRoutes from "./routes/private/certificate.routes.js";
+import achievementRouter from "./routes/private/achievement.routes.js";
 
 app.use("/api/admin/filter", filterRoutes);
 
@@ -43,6 +44,8 @@ app.use("/api/admin/experience", experienceRouter);
 app.use("/api/admin/education", educationRouter);
 
 app.use("/api/admin/certificate", certificateRoutes);
+
+app.use("/api/admin/achievement", achievementRouter);
 
 // Public
 import portfolioRouter from "./routes/public/portfolio.routes.js";
