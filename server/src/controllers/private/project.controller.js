@@ -259,7 +259,7 @@ const deleteProjectImage = asynchandler(async (req, res) => {
 
   // 🔍 Find index of image to delete
   const deleteIndex = project.projectImages.findIndex(
-    (img) => img.public_id === imagePublicId
+    (img) => img.public_id === imagePublicId,
   );
 
   if (deleteIndex === -1) {
@@ -295,15 +295,12 @@ const deleteProjectImage = asynchandler(async (req, res) => {
   try {
     await deleteFromCloudinary(imageToDelete);
   } catch (error) {
-    console.error(
-      "Error deleting projectImage in deleteProjectImage: ",
-      error
-    );
+    console.error("Error deleting projectImage in deleteProjectImage: ", error);
   }
 
-  return res.status(200).json(
-    new ApiRes(200, project, "project image deleted successfully!")
-  );
+  return res
+    .status(200)
+    .json(new ApiRes(200, project, "project image deleted successfully!"));
 });
 
 // const deleteProjectImage = asynchandler(async (req, res) => {
@@ -362,6 +359,14 @@ const getAllProjects = asynchandler(async (req, res) => {
         localField: "techStack",
         foreignField: "_id",
         as: "techStack",
+      },
+    },
+    {
+      $lookup: {
+        from: "experiences",
+        localField: "organizationId",
+        foreignField: "_id",
+        as: "organizationDetails",
       },
     },
     {

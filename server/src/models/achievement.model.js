@@ -17,8 +17,8 @@ const achievementSchema = new Schema(
       ref: "Certificate",
     },
 
-    issuer: String,
     description: String,
+    issuer: String,
     link: String,
 
     date: Date,
@@ -30,7 +30,7 @@ const achievementSchema = new Schema(
       type: Number,
       default: 0,
     },
-    images: [
+    achievementImages: [
       {
         url: String,
         public_id: String,
