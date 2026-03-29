@@ -200,9 +200,7 @@ const getExperiences = asynchandler(async (req, res) => {
 const getEducations = asynchandler(async (req, res) => {
   const educations = await Education.find({
     owner: req.user?._id,
-  })
-    .sort({ sortOrder: 1 })
-    .lean();
+  }).sort({ latestYear: 1 });
 
   if (educations?.length === 0) {
     return res.status(200).json(new ApiRes(200, [], "no educations found!"));

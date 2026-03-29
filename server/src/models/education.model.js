@@ -37,6 +37,8 @@ const educationSchema = new Schema(
       default: false,
     },
 
+    latestYear: Number,
+
     percentage: {
       type: Number,
       min: 0,
@@ -54,13 +56,18 @@ const educationSchema = new Schema(
       public_id: String,
       resource_type: String,
     },
-
-    sortOrder: {
-      type: Number,
-      default: 0,
-    },
   },
   { timestamps: true },
 );
+
+educationSchema.pre("save", async function () {
+  if (this.present) {
+    this.latestYear = new Date().getFullYear();
+  } else if (this.endYear) {
+    this.latestYear = this.endYear;
+  } else {
+    this.latestYear = this.startYear;
+  }
+});
 
 export const Education = model("Education", educationSchema);

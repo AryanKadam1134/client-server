@@ -22,7 +22,6 @@ const addEducation = asynchandler(async (req, res) => {
     present,
     percentage,
     cgpa,
-    sortOrder,
   } = req.body;
 
   if (!instituteName) {
@@ -55,7 +54,6 @@ const addEducation = asynchandler(async (req, res) => {
   if (cgpa) fields.cgpa = Number(cgpa);
 
   if (present !== undefined) fields.present = parseBoolean(present);
-  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   let uploadedInstituteImage;
 
@@ -95,7 +93,6 @@ const updateEducationDetails = asynchandler(async (req, res) => {
     present,
     percentage,
     cgpa,
-    sortOrder,
   } = req.body;
 
   if (instituteName) {
@@ -124,7 +121,6 @@ const updateEducationDetails = asynchandler(async (req, res) => {
   if (cgpa !== undefined) fields.cgpa = Number(cgpa);
 
   if (present !== undefined) fields.present = parseBoolean(present);
-  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   Object.assign(education, fields);
 
@@ -236,7 +232,9 @@ const deleteInstituteImage = asynchandler(async (req, res) => {
 });
 
 const getAllEducations = asynchandler(async (req, res) => {
-  const educations = await Education.find({ owner: req.user?._id });
+  const educations = await Education.find({ owner: req.user?._id }).sort({
+    latestYear: -1,
+  });
 
   if (educations?.length === 0) {
     return res.status(200).json(new ApiRes(200, [], "no educations found!"));
