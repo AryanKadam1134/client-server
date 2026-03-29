@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
 
 import { Skill } from "../../models/skill.model.js";
 import { Project } from "../../models/project.model.js";
@@ -171,6 +172,9 @@ const getExperiences = asynchandler(async (req, res) => {
       },
     },
     {
+      $sort: { latestDate: -1 },
+    },
+    {
       $lookup: {
         from: "skills",
         localField: "techStack",
@@ -178,16 +182,15 @@ const getExperiences = asynchandler(async (req, res) => {
         as: "techStack",
       },
     },
-    {
-      $sort: {
-        sortOrder: 1,
-      },
-    },
   ]);
 
   if (experiences?.length === 0) {
     return res.status(200).json(new ApiRes(200, [], "no experiences found!"));
   }
+
+  experiences.forEach((exp) => {
+    exp.position = sortPositionsByDate(exp.position);
+  });
 
   return res
     .status(200)

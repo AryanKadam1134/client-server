@@ -1,9 +1,12 @@
+import mongoose from "mongoose";
+
 import { Experience } from "../../models/experience.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
+import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
@@ -22,9 +25,7 @@ const addExperience = asynchandler(async (req, res) => {
     position,
     highLights,
     techStack,
-    featured,
     visibility,
-    sortOrder,
   } = req.body;
 
   if (!organization) {
@@ -63,9 +64,7 @@ const addExperience = asynchandler(async (req, res) => {
       ? highLights
       : JSON.parse(highLights);
 
-  if (featured !== undefined) fields.featured = parseBoolean(featured);
   if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
-  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   let uploadedOrganizationImage;
 
@@ -107,9 +106,7 @@ const updateExperience = asynchandler(async (req, res) => {
     position,
     highLights,
     techStack,
-    featured,
     visibility,
-    sortOrder,
   } = req.body;
 
   if (organization) {
@@ -150,9 +147,7 @@ const updateExperience = asynchandler(async (req, res) => {
       ? highLights
       : JSON.parse(highLights);
 
-  if (featured !== undefined) fields.featured = featured;
-  if (visibility !== undefined) fields.visibility = visibility;
-  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
+  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
 
   Object.assign(experience, fields);
 
@@ -271,11 +266,32 @@ const deleteOrganiaztionImage = asynchandler(async (req, res) => {
 });
 
 const getAllExperiences = asynchandler(async (req, res) => {
-  const experiences = await Experience.find({ owner: req.user?._id });
+  const experiences = await Experience.aggregate([
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $sort: { latestDate: -1 },
+    },
+    {
+      $lookup: {
+        from: "skills",
+        localField: "techStack",
+        foreignField: "_id",
+        as: "techStack",
+      },
+    },
+  ]);
 
   if (experiences?.length === 0) {
     return res.status(200).json(new ApiRes(200, [], "no experiences found!"));
   }
+
+  experiences.forEach((exp) => {
+    exp.position = sortPositionsByDate(exp.position);
+  });
 
   return res
     .status(200)

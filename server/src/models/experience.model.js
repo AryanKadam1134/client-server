@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 import { EMPLOYMENT_TYPE } from "../constants.js";
+import ApiError from "../utils/ApiError.js";
 
 const positionSchema = new Schema(
   {
@@ -54,6 +55,8 @@ const experienceSchema = new Schema(
       },
     ],
 
+    latestDate: Date,
+
     employmentType: {
       type: String,
       enum: EMPLOYMENT_TYPE?.map((type) => type.value),
@@ -78,34 +81,46 @@ const experienceSchema = new Schema(
       resource_type: String,
     },
 
-    featured: {
-      type: Boolean,
-      default: true,
-    },
     visibility: {
       type: Boolean,
       default: true,
-    },
-    sortOrder: {
-      type: Number,
-      default: 0,
     },
   },
   { timestamps: true },
 );
 
-experienceSchema.pre("validate", function (next) {
+experienceSchema.pre("validate", async function () {
   if (!this.position || this.position.length === 0) {
-    return next();
+    throw new ApiError(400, "At least one position is required");
   }
 
   const presentCount = this.position.filter((p) => p.present).length;
 
   if (presentCount > 1) {
-    return next(new Error("Only one position can have present=true"));
+    throw new ApiError(409, "Only one position can have present=true");
   }
+});
 
-  // next();
+experienceSchema.pre("save", async function () {
+  if (!this.position || this.position.length === 0) return;
+
+  let latest = null;
+
+  this.position.forEach((pos) => {
+    if (pos.present) {
+      latest = new Date(); // ongoing = most recent
+    } else if (pos.endDate) {
+      if (!latest || pos.endDate > latest) {
+        latest = pos.endDate;
+      }
+    } else if (pos.startDate) {
+      if (!latest || pos.startDate > latest) {
+        latest = pos.startDate;
+      }
+    }
+  });
+
+  this.latestDate = latest;
 });
 
 export const Experience = model("Experience", experienceSchema);
