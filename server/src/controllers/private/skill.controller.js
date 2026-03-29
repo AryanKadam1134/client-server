@@ -31,11 +31,11 @@ const addSkill = asynchandler(async (req, res) => {
 
   fields.name = name;
   if (level) fields.level = level;
+  if (visibility) fields.visibility = visibility;
 
   // Can be null values
   if (description !== undefined) fields.description = description;
 
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   // Check if category exists
@@ -81,11 +81,11 @@ const updateSkill = asynchandler(async (req, res) => {
 
   if (name) fields.name = name;
   if (level) fields.level = level;
+  if (visibility) fields.visibility = visibility;
 
   // Can be null values
   if (description !== undefined) fields.description = description;
 
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   // Check if category exists (can be null)

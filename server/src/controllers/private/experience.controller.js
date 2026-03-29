@@ -50,6 +50,7 @@ const addExperience = asynchandler(async (req, res) => {
   if (organizationSize) fields.organizationSize = organizationSize;
   if (organizationWebsite) fields.organizationWebsite = organizationWebsite;
   if (location) fields.location = location;
+  if (visibility) fields.visibility = visibility;
 
   if (position?.length > 0)
     fields.position = Array.isArray(position) ? position : JSON.parse(position);
@@ -63,8 +64,6 @@ const addExperience = asynchandler(async (req, res) => {
     fields.highLights = Array.isArray(highLights)
       ? highLights
       : JSON.parse(highLights);
-
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
 
   let uploadedOrganizationImage;
 
@@ -125,6 +124,8 @@ const updateExperience = asynchandler(async (req, res) => {
 
   if (organization) fields.organization = organization;
 
+  if (visibility) fields.visibility = visibility;
+
   // Can be null values
   if (description !== undefined) fields.description = description;
   if (employmentType !== undefined) fields.employmentType = employmentType;
@@ -146,8 +147,6 @@ const updateExperience = asynchandler(async (req, res) => {
     fields.highLights = Array.isArray(highLights)
       ? highLights
       : JSON.parse(highLights);
-
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
 
   Object.assign(experience, fields);
 

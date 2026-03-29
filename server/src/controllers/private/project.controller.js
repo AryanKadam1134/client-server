@@ -54,6 +54,7 @@ const addProject = asynchandler(async (req, res) => {
   if (githubLink) fields.githubLink = githubLink;
   if (liveLink) fields.liveLink = liveLink;
   if (category) fields.category = category;
+  if (visibility) fields.visibility = visibility;
 
   if (techStack?.length > 0)
     fields.techStack = Array.isArray(techStack)
@@ -62,7 +63,6 @@ const addProject = asynchandler(async (req, res) => {
 
   if (present !== undefined) fields.present = parseBoolean(present);
   if (featured !== undefined) fields.featured = parseBoolean(featured);
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   // Check if Organization exists
@@ -139,6 +139,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
   const fields = {};
 
   if (title) fields.title = title;
+  if (visibility) fields.visibility = visibility;
 
   // Can be null values
   if (description !== undefined) fields.description = description;
@@ -147,6 +148,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
   if (githubLink !== undefined) fields.githubLink = githubLink;
   if (liveLink !== undefined) fields.liveLink = liveLink;
   if (category !== undefined) fields.category = category;
+
   if (techStack !== undefined)
     fields.techStack = Array.isArray(techStack)
       ? techStack
@@ -154,7 +156,6 @@ const updateProjectDetails = asynchandler(async (req, res) => {
 
   if (present !== undefined) fields.present = parseBoolean(present);
   if (featured !== undefined) fields.featured = parseBoolean(featured);
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   // Check if Organization exists (can be null)

@@ -1,5 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 
+import { VISIBILITY } from "../constants.js";
+
 const achievementSchema = new Schema(
   {
     owner: {
@@ -43,8 +45,9 @@ const achievementSchema = new Schema(
       default: true,
     },
     visibility: {
-      type: Boolean,
-      default: true,
+      type: String,
+      enum: VISIBILITY.map((v) => v.value),
+      default: "public",
     },
     sortOrder: {
       type: Number,

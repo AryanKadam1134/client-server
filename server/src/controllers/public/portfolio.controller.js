@@ -22,7 +22,7 @@ const getUserByUsername = asynchandler(async (req, res) => {
 const getUserSocialAccounts = asynchandler(async (req, res) => {
   const platforms = await SocialAccount.find({
     owner: req.user?._id,
-    visibility: true,
+    visibility: "public",
   })
     .sort({ sortOrder: 1 })
     .lean();
@@ -37,7 +37,7 @@ const getSkillWithCategory = asynchandler(async (req, res) => {
     {
       $match: {
         owner: new mongoose.Types.ObjectId(req.user?._id),
-        visibility: true,
+        visibility: "public",
       },
     },
     {
@@ -76,7 +76,7 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
     {
       $match: {
         owner: new mongoose.Types.ObjectId(req.user?._id),
-        visibility: true,
+        visibility: "public",
       },
     },
     {
@@ -88,7 +88,7 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
         pipeline: [
           {
             $match: {
-              visibility: true,
+              visibility: "public",
             },
           },
         ],
@@ -115,7 +115,7 @@ const getProjects = asynchandler(async (req, res) => {
 
   const fields = {
     owner: new mongoose.Types.ObjectId(req.user?._id),
-    visibility: true,
+    visibility: "public",
   };
 
   if (featured !== "all") fields.featured = featured === "true";
@@ -168,7 +168,7 @@ const getExperiences = asynchandler(async (req, res) => {
     {
       $match: {
         owner: new mongoose.Types.ObjectId(req.user?._id),
-        visibility: true,
+        visibility: "public",
       },
     },
     {
@@ -216,7 +216,7 @@ const getCertificates = asynchandler(async (req, res) => {
 
   const fields = {
     owner: new mongoose.Types.ObjectId(req.user?._id),
-    visibility: true,
+    visibility: "public",
   };
 
   if (featured !== "all") fields.featured = featured === "true";
@@ -254,7 +254,7 @@ const getAchievements = asynchandler(async (req, res) => {
 
   const fields = {
     owner: new mongoose.Types.ObjectId(req.user?._id),
-    visibility: true,
+    visibility: "public",
   };
 
   if (featured !== "all") fields.featured = featured === "true";

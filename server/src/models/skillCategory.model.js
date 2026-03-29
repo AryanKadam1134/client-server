@@ -1,5 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 
+import { VISIBILITY } from "../constants.js";
+
 const skillCategorySchema = new Schema(
   {
     owner: {
@@ -13,8 +15,9 @@ const skillCategorySchema = new Schema(
       unique: true,
     },
     visibility: {
-      type: Boolean,
-      default: true,
+      type: String,
+      enum: VISIBILITY.map((v) => v.value),
+      default: "public",
     },
     sortOrder: {
       type: Number,

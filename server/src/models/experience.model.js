@@ -1,5 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
-import { EMPLOYMENT_TYPE } from "../constants.js";
+
+import { EMPLOYMENT_TYPE, VISIBILITY } from "../constants.js";
+
 import ApiError from "../utils/ApiError.js";
 
 const positionSchema = new Schema(
@@ -82,8 +84,9 @@ const experienceSchema = new Schema(
     },
 
     visibility: {
-      type: Boolean,
-      default: true,
+      type: String,
+      enum: VISIBILITY.map((v) => v.value),
+      default: "public",
     },
   },
   { timestamps: true },

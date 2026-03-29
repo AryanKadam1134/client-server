@@ -50,9 +50,9 @@ const addAchievement = asynchandler(async (req, res) => {
   if (issuer) fields.issuer = issuer;
   if (link) fields.link = link;
   if (location) fields.location = location;
+  if (visibility) fields.visibility = visibility;
 
   if (featured !== undefined) fields.featured = parseBoolean(featured);
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   // Check if Certificate exists
@@ -128,6 +128,7 @@ const updateAchievement = asynchandler(async (req, res) => {
   const fields = {};
 
   if (title) fields.title = title;
+  if (visibility) fields.visibility = visibility;
 
   // Can be null values
   if (description !== undefined) fields.description = description;
@@ -137,7 +138,6 @@ const updateAchievement = asynchandler(async (req, res) => {
   if (location !== undefined) fields.location = location;
 
   if (featured !== undefined) fields.featured = parseBoolean(featured);
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   // Check if Certificate exists (can be null)

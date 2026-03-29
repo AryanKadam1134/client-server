@@ -5,7 +5,6 @@ import { SkillCategory } from "../../models/skillCategory.model.js";
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
-import { parseBoolean } from "../../utils/parseBoolean.js";
 
 const addSkillCategory = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -28,7 +27,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
   const fields = {};
 
   fields.name = name;
-  if (typeof visibility == "boolean") fields.visibility = visibility;
+  if (visibility) fields.visibility = visibility;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
   const newCategory = await SkillCategory.create({
@@ -61,7 +60,7 @@ const updateSkillCategory = asynchandler(async (req, res) => {
   const fields = {};
 
   if (name) fields.name = name;
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
+  if (visibility) fields.visibility = visibility;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   if (Object.keys(fields).length === 0) {

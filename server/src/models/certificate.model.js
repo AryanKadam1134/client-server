@@ -1,4 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
+
+import { VISIBILITY } from "../constants.js";
+
 import ApiError from "../utils/ApiError.js";
 
 const certificateSchema = new Schema(
@@ -43,8 +46,9 @@ const certificateSchema = new Schema(
       default: true,
     },
     visibility: {
-      type: Boolean,
-      default: true,
+      type: String,
+      enum: VISIBILITY.map((v) => v.value),
+      default: "public",
     },
     sortOrder: {
       type: Number,

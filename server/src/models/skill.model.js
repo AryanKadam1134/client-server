@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 
-import { SKILL_LEVEL } from "../constants.js";
+import { SKILL_LEVEL, VISIBILITY } from "../constants.js";
 
 const skillSchema = new Schema(
   {
@@ -26,8 +26,9 @@ const skillSchema = new Schema(
     },
 
     visibility: {
-      type: Boolean,
-      default: true,
+      type: String,
+      enum: VISIBILITY.map((v) => v.value),
+      default: "public",
     },
     sortOrder: {
       type: Number,

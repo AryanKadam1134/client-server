@@ -58,11 +58,12 @@ const addCertificate = asynchandler(async (req, res) => {
   if (issueDate) fields.issueDate = issueDate;
   if (expiryDate) fields.expiryDate = expiryDate;
 
+  if (visibility) fields.visibility = visibility;
+
   if (skills?.length > 0)
     fields.skills = Array.isArray(skills) ? skills : JSON.parse(skills);
 
   if (featured !== undefined) fields.featured = parseBoolean(featured);
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   let uploadedCertificateImage;
@@ -135,6 +136,8 @@ const updateCertificate = asynchandler(async (req, res) => {
 
   if (certificateUrl) fields.certificateUrl = certificateUrl;
 
+  if (visibility) fields.visibility = visibility;
+
   if (credentialId !== undefined) fields.credentialId = credentialId;
   if (credentialUrl !== undefined) fields.credentialUrl = credentialUrl;
 
@@ -145,7 +148,6 @@ const updateCertificate = asynchandler(async (req, res) => {
     fields.skills = Array.isArray(skills) ? skills : JSON.parse(skills);
 
   if (featured !== undefined) fields.featured = parseBoolean(featured);
-  if (visibility !== undefined) fields.visibility = parseBoolean(visibility);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   if (

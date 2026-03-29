@@ -1,5 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
-import { SOCIAL_PLATFORMS } from "../constants.js";
+import { SOCIAL_PLATFORMS, VISIBILITY } from "../constants.js";
 
 const socialAccountSchema = new Schema(
   {
@@ -19,8 +19,9 @@ const socialAccountSchema = new Schema(
       match: [/^https?:\/\/.+/, "Invalid URL"],
     },
     visibility: {
-      type: Boolean,
-      default: true,
+      type: String,
+      enum: VISIBILITY.map((v) => v.value),
+      default: "public",
     },
     sortOrder: {
       type: Number,
