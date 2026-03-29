@@ -1,4 +1,10 @@
-import { SKILL_LEVEL, SOCIAL_PLATFORMS } from "../../constants.js";
+import {
+  SKILL_LEVEL,
+  SOCIAL_PLATFORMS,
+  GENDERS,
+  EMPLOYMENT_TYPE,
+  VISIBILITY,
+} from "../../constants.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
@@ -21,4 +27,28 @@ const getSkillLevel = asynchandler(async (req, res) => {
     .json(new ApiRes(200, SKILL_LEVEL, "skill levels fetched successfully!"));
 });
 
-export { getSocialPlatforms, getSkillLevel };
+const getGenders = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, GENDERS, "genders fetched successfully!"));
+});
+
+const getEmploymentTypes = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, VISIBILITY, "visibility fetched successfully!"));
+});
+
+const getVisibility = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiRes(
+        200,
+        EMPLOYMENT_TYPE,
+        "employment types fetched successfully!",
+      ),
+    );
+});
+
+export { getSocialPlatforms, getSkillLevel, getGenders, getEmploymentTypes, getVisibility };

@@ -27,6 +27,11 @@ const EMPLOYMENT_TYPE = [
   { label: "Apprenticeship", value: "apprenticeship" },
 ];
 
+const VISIBILITY = [
+  { label: "Public", value: "public" },
+  { label: "Private", value: "private" },
+];
+
 const options = {
   httpOnly: true,
   secure: true,
@@ -39,6 +44,7 @@ export {
   SKILL_LEVEL,
   GENDERS,
   EMPLOYMENT_TYPE,
+  VISIBILITY,
   DB_NAME,
   options,
 };
