@@ -9,6 +9,7 @@ import {
 
 import Dashboard from "./pages/private/Dashboard";
 import Authentication from "./pages/authentication/Authentication";
+
 import { useAuth } from "./context/AuthContext";
 
 function PublicRoute() {

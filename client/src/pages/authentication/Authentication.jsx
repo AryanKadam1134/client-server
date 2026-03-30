@@ -13,6 +13,8 @@ export default function Authentication() {
 
   const [isLogin, setIsLogin] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const {
@@ -41,9 +43,9 @@ export default function Authentication() {
   };
 
   const getInputClass = (error) =>
-    `w-full px-3 py-2 border rounded-md outline-none 
-   ${error ? "border-2 border-red-500" : "border-gray-500"} 
-   focus:border-transparent focus:ring focus:ring-blue-500 focus:bg-slate-200`;
+    `w-full px-3 py-2 border rounded-sm shadow-md outline-none 
+   ${error ? "border-2 border-red-400" : "border-gray-400"} 
+   focus:border-transparent focus:ring focus:ring-blue-400 focus:bg-slate-100`;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -93,6 +95,12 @@ export default function Authentication() {
                 })}
                 className={getInputClass(errors.userCredential)}
               />
+
+              {errors.userCredential && (
+                <p className="text-red-500 text-sm">
+                  {errors.userCredential.message}
+                </p>
+              )}
             </LabelInput>
           )}
 
@@ -116,19 +124,34 @@ export default function Authentication() {
 
           {/* Password */}
           <LabelInput id="password" label="Password" required>
-            <input
-              id="password"
-              type="password"
-              placeholder="password"
-              {...register("password", {
-                required: "password is required!",
-                minLength: {
-                  value: 6,
-                  message: "Minimum 6 characters",
-                },
-              })}
-              className={getInputClass(errors.password)}
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="password"
+                {...register("password", {
+                  required: "password is required!",
+                  minLength: {
+                    value: 6,
+                    message: "Minimum 6 characters",
+                  },
+                })}
+                className={`${getInputClass(errors.password)} pr-10`}
+              />
+
+              {/* 👁️ Toggle Button */}
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
+
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
           </LabelInput>
 
           {/* Submit */}

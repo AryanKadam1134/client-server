@@ -24,7 +24,7 @@ export default function LabelInput({
 
       <label
         htmlFor={id}
-        className={`text-sm font-semibold
+        className={`text-sm font-medium
         ${bold && `font-semibold`} ${!isCheckbox && `whitespace-nowrap`}`}
       >
         {label}
