@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+
 import { useForm } from "react-hook-form";
-import { apiEndpoints } from "../../api";
 import { useNavigate } from "react-router-dom";
+
+import { apiEndpoints } from "../../api";
+
 import { useAuth } from "../../context/AuthContext";
+import LabelInput from "../../components/ui/LabelInput";
 
 export default function Authentication() {
   const { login } = useAuth();
@@ -36,108 +40,96 @@ export default function Authentication() {
     }
   };
 
+  const getInputClass = (error) =>
+    `w-full px-3 py-2 border rounded-md outline-none 
+   ${error ? "border-2 border-red-500" : "border-gray-500"} 
+   focus:border-transparent focus:ring focus:ring-blue-500 focus:bg-slate-200`;
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold text-center mb-6">Authentication</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="text-sm space-y-4">
           {/* Full Name */}
           {!isLogin && (
-            <div>
+            <LabelInput id="fullName" label="Full Name" required>
               <input
+                id="fullName"
                 type="text"
                 placeholder="Full Name"
                 {...register("fullName", {
-                  required: "Full name is required",
+                  required: "Full Name is required!",
                 })}
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={getInputClass(errors.fullName)}
               />
-              {errors.fullName && (
-                <p className="text-red-500 text-sm">
-                  {errors.fullName.message}
-                </p>
-              )}
-            </div>
+            </LabelInput>
           )}
 
           {/* Username */}
           {!isLogin && (
-            <div>
+            <LabelInput id="username" label="Username" required>
               <input
+                id="username"
                 type="text"
-                placeholder="Username"
+                placeholder="username"
                 {...register("username", {
-                  required: "Username is required",
+                  required: "username is required!",
                 })}
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={getInputClass(errors.username)}
               />
-              {errors.username && (
-                <p className="text-red-500 text-sm">
-                  {errors.username.message}
-                </p>
-              )}
-            </div>
+            </LabelInput>
           )}
 
           {/* User Credential */}
           {isLogin && (
-            <div>
+            <LabelInput id="userCredential" label="Username or Email" required>
               <input
+                id="userCredential"
                 type="text"
                 placeholder="username or email"
                 {...register("userCredential", {
-                  required: "userCredential is required",
+                  required: "username or email is required!",
                 })}
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={getInputClass(errors.userCredential)}
               />
-              {errors.userCredential && (
-                <p className="text-red-500 text-sm">
-                  {errors.userCredential.message}
-                </p>
-              )}
-            </div>
+            </LabelInput>
           )}
 
           {/* Email */}
           {!isLogin && (
-            <div>
+            <LabelInput id="username" label="Email" required>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="email"
                 {...register("email", {
-                  required: "Email is required",
+                  required: "email is required!",
                   pattern: {
                     value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                     message: "Invalid email format",
                   },
                 })}
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={getInputClass(errors.email)}
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
-              )}
-            </div>
+            </LabelInput>
           )}
 
           {/* Password */}
-          <div>
+          <LabelInput id="password" label="Password" required>
             <input
+              id="password"
               type="password"
-              placeholder="Password"
+              placeholder="password"
               {...register("password", {
-                required: "Password is required",
+                required: "password is required!",
                 minLength: {
                   value: 6,
                   message: "Minimum 6 characters",
                 },
               })}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={getInputClass(errors.password)}
             />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
-          </div>
+          </LabelInput>
 
           {/* Submit */}
           <button

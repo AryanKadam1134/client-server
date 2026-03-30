@@ -7,7 +7,7 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import AdminDashboard from "./pages/private/AdminDashboard";
+import Dashboard from "./pages/private/Dashboard";
 import Authentication from "./pages/authentication/Authentication";
 import { useAuth } from "./context/AuthContext";
 
@@ -37,7 +37,7 @@ function App() {
 
         {/* 🔐 Protected Route */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin" element={<Dashboard />} />
         </Route>
       </Routes>
     </Router>

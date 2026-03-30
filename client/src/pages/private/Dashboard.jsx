@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { apiEndpoints } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
-export default function AdminDashboard() {
+export default function Dashboard() {
   const { logout } = useAuth();
 
   const [socialPlatforms, setSocialPlatforms] = useState(null);
