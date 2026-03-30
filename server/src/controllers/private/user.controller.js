@@ -62,6 +62,10 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     throw new ApiError(503, "couldn't generate access or refresh token!");
   }
 
+  const user = await User.findById(loggedUser?._id).select(
+    "-password -refreshToken",
+  );
+
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
@@ -69,7 +73,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     .json(
       new ApiRes(
         200,
-        { accessToken, refreshToken },
+        { user, accessToken, refreshToken },
         "session revived successfully!",
       ),
     );
@@ -110,14 +114,18 @@ const registerUser = asynchandler(async (req, res) => {
 });
 
 const loginUser = asynchandler(async (req, res) => {
-  const { username, password } = req.body;
+  const { userCredential, password } = req.body;
 
-  if (!username || !password) {
-    throw new ApiError(400, "username and password is required!");
+  if (!userCredential) {
+    throw new ApiError(400, "username or email is required!");
+  }
+
+  if (!password) {
+    throw new ApiError(400, "password is required!");
   }
 
   const userExist = await User.findOne({
-    username,
+    $or: [{ username: userCredential }, { email: userCredential }],
   });
 
   if (!userExist) {

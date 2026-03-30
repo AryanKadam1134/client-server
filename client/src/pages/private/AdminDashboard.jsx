@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react";
 
 import { apiEndpoints } from "../../api";
+import { useAuth } from "../../context/AuthContext";
 
 export default function AdminDashboard() {
+  const { logout } = useAuth();
+
   const [socialPlatforms, setSocialPlatforms] = useState(null);
 
-  const fetchSocialPlatforms = async () => {
-    try {
-      const res = await apiEndpoints.getSocialPlatforms();
-
-      const data = res.data?.data;
-
-      setSocialPlatforms(data);
-      console.log("Social Platforms: ", data);
-    } catch (error) {
-      console.error("Error fetching Social Platforms: ", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchSocialPlatforms = async () => {
+      try {
+        const res = await apiEndpoints.getSocialPlatforms();
+
+        const data = res.data;
+
+        setSocialPlatforms(data);
+        console.log("Social Platforms: ", data);
+      } catch (error) {
+        console.error("Error fetching Social Platforms: ", error);
+      }
+    };
+
     fetchSocialPlatforms();
   }, []);
 
@@ -27,6 +30,8 @@ export default function AdminDashboard() {
       {socialPlatforms?.map((platform, idx) => (
         <div key={idx}>{platform?.label}</div>
       ))}
+
+      <button onClick={logout}>Logout</button>
     </div>
   );
 }

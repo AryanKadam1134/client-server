@@ -304,49 +304,6 @@ const deleteProjectImage = asynchandler(async (req, res) => {
     .json(new ApiRes(200, project, "project image deleted successfully!"));
 });
 
-// const deleteProjectImage = asynchandler(async (req, res) => {
-//   const project = req.project;
-
-//   const { imagePublicId } = req.params;
-
-//   if (!imagePublicId) {
-//     throw new ApiError(400, "imagePublicId is required!");
-//   }
-
-//   const updatedProject = await Project.findByIdAndUpdate(
-//     project._id,
-//     {
-//       $pull: {
-//         projectImages: {
-//           public_id: imagePublicId,
-//         },
-//       },
-//     },
-//     { new: true },
-//   );
-
-//   const projectImage = project?.projectImages?.find(
-//     (image) => image?.public_id === imagePublicId,
-//   );
-
-//   if (projectImage?.public_id) {
-//     try {
-//       await deleteFromCloudinary(projectImage);
-//     } catch (error) {
-//       console.error(
-//         "Error deleting projectImage in deleteProjectImage: ",
-//         error,
-//       );
-//     }
-//   }
-
-//   return res
-//     .status(200)
-//     .json(
-//       new ApiRes(200, updatedProject, "project image deleted successfully!"),
-//     );
-// });
-
 const getAllProjects = asynchandler(async (req, res) => {
   const projects = await Project.aggregate([
     {
