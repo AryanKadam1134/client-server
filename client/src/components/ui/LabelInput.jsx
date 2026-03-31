@@ -3,13 +3,13 @@ import React from "react";
 export default function LabelInput({
   id,
   label,
-  bold,
+  children,
   className = "",
   colSpan = "col-span-1",
   orientation = "vertical",
-  required,
-  children,
   type,
+  bold,
+  required,
 }) {
   const isFile = type == "file";
 
@@ -25,7 +25,8 @@ export default function LabelInput({
       <label
         htmlFor={id}
         className={`text-sm font-medium
-        ${bold && `font-semibold`} ${!isCheckbox && `whitespace-nowrap`}`}
+        ${bold && `font-semibold`}
+        ${!isCheckbox && `whitespace-nowrap`}`}
       >
         {label}
         {required && <span className="text-red-600"> *</span>}
