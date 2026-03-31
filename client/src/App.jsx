@@ -12,6 +12,14 @@ import Authentication from "./pages/authentication/Authentication";
 
 import { useAuth } from "./context/AuthContext";
 import DashboardLayout from "./layouts/DashboardLayout";
+import SocialPlatforms from "./pages/private/SocialPlatforms";
+import Skills from "./pages/private/Skills";
+import SkillCategories from "./pages/private/SkillCategories";
+import Projects from "./pages/private/Projects";
+import Experiences from "./pages/private/Experiences";
+import Educations from "./pages/private/Educations";
+import Certificates from "./pages/private/Certificates";
+import Achievements from "./pages/private/Achievements";
 
 function PublicRoute() {
   const { user, authLoading } = useAuth();
@@ -54,6 +62,14 @@ function App() {
         {/* 🔐 Protected Route */}
         <Route element={<ProtectedRoute />}>
           <Route path="/details" element={<Dashboard />} />
+          <Route path="/social" element={<SocialPlatforms />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/skill-categories" element={<SkillCategories />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/experiences" element={<Experiences />} />
+          <Route path="/education" element={<Educations />} />
+          <Route path="/certificates" element={<Certificates />} />
+          <Route path="/achievements" element={<Achievements />} />
         </Route>
       </Routes>
     </Router>

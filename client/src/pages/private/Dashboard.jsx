@@ -23,7 +23,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-5 bg-gray-400 h-full">
+    <div>
       {socialPlatforms?.map((platform, idx) => (
         <div key={idx}>{platform?.label}</div>
       ))}

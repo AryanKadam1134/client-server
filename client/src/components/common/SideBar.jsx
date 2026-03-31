@@ -16,6 +16,21 @@ import {
 
 import { useAuth } from "../../context/AuthContext";
 
+const menus = [
+  { name: "Basic Details", path: "/details", icon: User },
+  { name: "Social Platforms", path: "/social", icon: Share2 },
+  { name: "Skills", path: "/skills", icon: Zap },
+  { name: "Skill Categories", path: "/skill-categories", icon: Layers },
+  { name: "Projects", path: "/projects", icon: FolderOpen },
+  { name: "Experience", path: "/experiences", icon: Briefcase },
+  { name: "Education", path: "/education", icon: GraduationCap },
+  { name: "Certificates", path: "/certificates", icon: Award },
+  { name: "Achievements", path: "/achievements", icon: Trophy },
+];
+
+const menuStyle =
+  "px-3 py-2 flex items-center justify-start gap-2.5 text-[13.5px] min-w-45";
+
 function NavItem({ menu }) {
   const Icon = menu.icon;
 
@@ -23,7 +38,11 @@ function NavItem({ menu }) {
     <NavLink
       to={menu.path}
       className={({ isActive }) =>
-        `px-3 py-2 flex items-center justify-start gap-2.5 ${isActive ? `border-l bg-gray-200` : ``} text-gray-800 hover:text-black hover:bg-gray-200 rounded-sm transition-colors`
+        `${menuStyle} border-l-2 ${
+          isActive
+            ? `border-black font-medium text-black bg-gray-200`
+            : `border-white text-gray-800 hover:text-black hover:bg-gray-200`
+        } rounded-sm transition-colors`
       }
     >
       <Icon size={17} />
@@ -36,29 +55,17 @@ function NavItem({ menu }) {
 export default function SideBar() {
   const { logout } = useAuth();
 
-  const menus = [
-    { name: "Basic Details", path: "/details", icon: User },
-    { name: "Social Platforms", path: "/social", icon: Share2 },
-    { name: "Skills", path: "/skills", icon: Zap },
-    { name: "Skill Categories", path: "/skill-categories", icon: Layers },
-    { name: "Projects", path: "/projects", icon: FolderOpen },
-    { name: "Experience", path: "/experiences", icon: Briefcase },
-    { name: "Education", path: "/education", icon: GraduationCap },
-    { name: "Certificates", path: "/certificates", icon: Award },
-    { name: "Achievements", path: "/achievements", icon: Trophy },
-  ];
-
   return (
-    <div className="h-full flex flex-col">
-      <div className="shrink-0 h-15 px-2.5 flex items-center border-b border-gray-600">
+    <div className="h-full flex flex-col px-2.5">
+      <div className="shrink-0 h-15 flex items-center border-b border-gray-200">
         <div className="flex items-center justify-start gap-2.5">
-          <div className="p-5 bg-gray-500 rounded-full"></div>
+          <div className="p-4 bg-gray-500 rounded-full"></div>
           <p className="text-nowrap text-md font-medium">Portfolio SAAS</p>
         </div>
       </div>
 
       {/* Menus List */}
-      <div className="pl-2.5 pr-4 py-3 flex flex-col justify-between text-sm h-full">
+      <div className="py-3 flex flex-col justify-between h-full">
         <div className="flex-1 flex flex-col gap-2">
           {menus.map((menu) => (
             <NavItem menu={menu} />
@@ -67,7 +74,7 @@ export default function SideBar() {
 
         <button
           onClick={logout}
-          className="px-3 py-2 flex items-center justify-start gap-2.5 text-red-500 hover:text-red-600 bg-red-100 hover:bg-red-200 rounded-sm transition-colors cursor-pointer"
+          className={`${menuStyle} text-red-500 hover:text-red-600 bg-red-100 hover:bg-red-200 rounded-sm transition-colors cursor-pointer`}
         >
           <LogOut size={17} />
 
