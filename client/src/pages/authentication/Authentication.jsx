@@ -28,7 +28,7 @@ export default function Authentication() {
     try {
       if (isLogin) {
         await login(payload);
-        navigate("/admin");
+        navigate("/details");
       } else {
         const res = await apiEndpoints.register(payload);
 

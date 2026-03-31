@@ -3,3 +3,17 @@
 body {
     font-family: "Poppins", sans-serif;
 }
+
+/* EXPANDED: normal left-aligned layout */
+.expanded .nav-item {
+  padding: 9px 10px;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+/* COLLAPSED: center the icon — zero padding, zero gap */
+.collapsed .nav-item {
+  padding: 9px 0;
+  gap: 0;
+  justify-content: center;
+}

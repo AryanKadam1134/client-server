@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { apiEndpoints } from "../../api";
 
-import { useAuth } from "../../context/AuthContext";
-
 export default function Dashboard() {
-  const { logout } = useAuth();
-
   const [socialPlatforms, setSocialPlatforms] = useState(null);
 
   useEffect(() => {
@@ -27,12 +23,10 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div>
+    <div className="p-5 bg-gray-400 h-full">
       {socialPlatforms?.map((platform, idx) => (
         <div key={idx}>{platform?.label}</div>
       ))}
-
-      <button onClick={logout}>Logout</button>
     </div>
   );
 }

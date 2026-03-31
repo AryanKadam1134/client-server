@@ -11,25 +11,40 @@ import Dashboard from "./pages/private/Dashboard";
 import Authentication from "./pages/authentication/Authentication";
 
 import { useAuth } from "./context/AuthContext";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 function PublicRoute() {
-  const { user } = useAuth();
+  const { user, authLoading } = useAuth();
 
-  // ❌ If logged in → redirect to admin
-  return user ? <Navigate to="/admin" replace /> : <Outlet />;
+  if (authLoading) {
+    return <div className="text-xl font-semibold">Restoring Session...</div>;
+  }
+
+  // ❌ If logged in → redirect to details
+  return user ? <Navigate to="/details" replace /> : <Outlet />;
 }
 
 function ProtectedRoute() {
-  const { user } = useAuth();
+  const { user, authLoading } = useAuth();
 
-  return user ? <Outlet /> : <Navigate to="/auth" replace />;
+  if (authLoading) {
+    return <div className="text-xl font-semibold">Restoring Session...</div>;
+  }
+
+  return user ? (
+    <DashboardLayout>
+      <Outlet />
+    </DashboardLayout>
+  ) : (
+    <Navigate to="/auth" replace />
+  );
 }
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/admin" />} />
+        <Route path="/" element={<Navigate to="/details" />} />
 
         {/* 🔓 Public Route (only if NOT logged in) */}
         <Route element={<PublicRoute />}>
@@ -38,7 +53,7 @@ function App() {
 
         {/* 🔐 Protected Route */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/admin" element={<Dashboard />} />
+          <Route path="/details" element={<Dashboard />} />
         </Route>
       </Routes>
     </Router>
