@@ -80,10 +80,10 @@ const refreshAccessToken = asynchandler(async (req, res) => {
 });
 
 const registerUser = asynchandler(async (req, res) => {
-  const { fullName, username, email, password } = req.body;
+  const { firstName, lastName, username, email, password } = req.body;
 
   if (
-    [fullName, username, email, password].some(
+    [firstName, lastName, username, email, password].some(
       (field) => typeof field == "string" && field?.trim() == "",
     )
   ) {
@@ -102,7 +102,8 @@ const registerUser = asynchandler(async (req, res) => {
   }
 
   const createdUser = await User.create({
-    fullName,
+    firstName,
+    lastName,
     username: username?.toLowerCase(),
     email,
     password,
@@ -221,13 +222,21 @@ const changePassword = asynchandler(async (req, res) => {
 const updateUserDetails = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
 
-  const { fullName, username, email, mobileNo, gender, documentUrl } = req.body;
+  const {
+    firstName,
+    lastName,
+    username,
+
+    mobileNo,
+    gender,
+    documentUrl,
+  } = req.body;
 
   const fields = {};
 
   if (username) fields.username = username;
-  if (email) fields.email = email;
-  if (fullName) fields.fullName = fullName;
+  if (firstName) fields.firstName = firstName;
+  if (lastName) fields.lastName = lastName;
   if (gender) fields.gender = gender;
 
   // Can be null values
@@ -239,9 +248,9 @@ const updateUserDetails = asynchandler(async (req, res) => {
   }
 
   // Check if user exists if username or email is provided
-  if (username || email) {
+  if (username) {
     const userExists = await User.findOne({
-      $or: [{ username }, { email }],
+      username,
       _id: { $ne: loggedUserId },
     });
 

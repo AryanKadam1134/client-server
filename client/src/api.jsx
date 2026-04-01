@@ -30,6 +30,10 @@ export const apiEndpoints = {
 
   getCurrentUser: () => api.get("/user"),
 
+  updateUser: (body) => api.patch("/user", body),
+
+  updateUserImage: (body) => api.patch("/user/image", body),
+
   getSocialPlatforms: () => api.get(`/filter/social-platforms`),
 
   // Filters

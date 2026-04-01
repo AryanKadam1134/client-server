@@ -35,6 +35,12 @@ const userSchema = new Schema(
       trim: true,
     },
 
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: String,
+
     mobileNo: {
       type: Number,
       unique: true,
@@ -43,6 +49,14 @@ const userSchema = new Schema(
       type: String,
       enum: GENDERS.map((g) => g.value),
     },
+
+    address: String,
+    pincode: Number,
+    city: String,
+    district: String,
+    state: String,
+
+    documentUrl: String,
 
     // Couldinary
     image: {
@@ -55,7 +69,6 @@ const userSchema = new Schema(
       public_id: String,
       resource_type: String,
     },
-    documentUrl: String,
 
     refreshToken: String,
   },

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
-import { inputClass } from "../../constants";
+import { commonInputClass } from "../../constants";
 
 const errorClass = (error) => {
-  return error ? "border-2 border-red-400" : "border-gray-400";
+  return error
+    ? "border-2 border-red-400"
+    : "border-gray-400 focus:border-transparent focus:ring focus:ring-blue-400";
 };
 
 // Note: Use only for Text Based Inputs
@@ -17,7 +19,7 @@ export default function CustomInput({ error, className, type, ...props }) {
       <input
         {...props}
         type={isPassword && showPassword ? "text" : type}
-        className={`${inputClass} ${errorClass(error)} ${className}`}
+        className={`${commonInputClass} ${errorClass(error)} ${className}`}
       />
 
       {isPassword && (

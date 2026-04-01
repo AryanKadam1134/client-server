@@ -23,8 +23,6 @@ export default function CustomRadioButtons({
           </label>
         </div>
       ))}
-
-      {error && error}
     </div>
   );
 }

@@ -49,17 +49,30 @@ export default function Authentication() {
         <h2 className="text-2xl font-bold text-center mb-6">Authentication</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="text-sm space-y-4">
-          {/* Full Name */}
+          {/* First Name */}
           {!isLogin && (
-            <LabelInput id="fullName" label="Full Name" required>
+            <LabelInput id="firstName" label="First Name" required>
               <CustomInput
-                id="fullName"
+                id="firstName"
                 type="text"
-                placeholder="Full Name"
-                {...register("fullName", {
-                  required: "Full Name is required!",
+                placeholder="First Name"
+                {...register("firstName", {
+                  required: "First Name is required!",
                 })}
-                error={errors.fullName}
+                error={errors.firstName}
+              />
+            </LabelInput>
+          )}
+
+          {/* Last Name */}
+          {!isLogin && (
+            <LabelInput id="lastName" label="Last Name">
+              <CustomInput
+                id="lastName"
+                type="text"
+                placeholder="Last Name"
+                {...register("lastName")}
+                error={errors.lastName}
               />
             </LabelInput>
           )}
@@ -122,8 +135,12 @@ export default function Authentication() {
               {...register("password", {
                 required: "password is required!",
                 minLength: {
-                  value: 6,
+                  value: 8,
                   message: "Minimum 6 characters",
+                },
+                maxLength: {
+                  value: 16,
+                  message: "Maximum 16 characters",
                 },
               })}
               className="pr-10"

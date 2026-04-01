@@ -17,7 +17,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 
 const menus = [
-  { name: "Basic Details", path: "/details", icon: User },
+  { name: "User Details", path: "/details", icon: User },
   { name: "Social Platforms", path: "/social", icon: Share2 },
   { name: "Skills", path: "/skills", icon: Zap },
   { name: "Skill Categories", path: "/skill-categories", icon: Layers },
@@ -68,7 +68,7 @@ export default function SideBar() {
       <div className="py-3 flex flex-col justify-between h-full">
         <div className="flex-1 flex flex-col gap-2">
           {menus.map((menu) => (
-            <NavItem menu={menu} />
+            <NavItem key={menu.name} menu={menu} />
           ))}
         </div>
 

@@ -1,4 +1,4 @@
-const inputClass =
-  "w-full px-3 py-2 border rounded-sm shadow-md outline-none focus:border-transparent focus:ring focus:ring-blue-400 focus:bg-slate-100";
+const commonInputClass =
+  "w-full px-3 py-2 border rounded-sm shadow-md outline-none focus:bg-gray-200 disabled:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed";
 
-export { inputClass };
+export { commonInputClass };
