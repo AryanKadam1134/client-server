@@ -1,32 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-import { apiEndpoints } from "../../api";
+import useSkillLevels from "../../hooks/useSkillLevels";
+import useEmploymentTypes from "../../hooks/useEmploymentTypes";
+import useGenders from "../../hooks/useGenders";
+import useSocailPlatforms from "../../hooks/useSocailPlatforms";
+import useVisibilities from "../../hooks/useVisibilities";
 
 export default function Dashboard() {
-  const [socialPlatforms, setSocialPlatforms] = useState(null);
+  const { skillLevels } = useSkillLevels();
+  const { employmentTypes } = useEmploymentTypes();
+  const { genders } = useGenders();
+  const { socialPlatforms } = useSocailPlatforms();
+  const { visibilities } = useVisibilities();
 
-  useEffect(() => {
-    const fetchSocialPlatforms = async () => {
-      try {
-        const res = await apiEndpoints.getSocialPlatforms();
-
-        const data = res.data;
-
-        setSocialPlatforms(data);
-        console.log("Social Platforms: ", data);
-      } catch (error) {
-        console.error("Error fetching Social Platforms: ", error);
-      }
-    };
-
-    fetchSocialPlatforms();
-  }, []);
-
-  return (
-    <div>
-      {socialPlatforms?.map((platform, idx) => (
-        <div key={idx}>{platform?.label}</div>
-      ))}
-    </div>
-  );
+  return <div>Welcome to Dashboard...</div>;
 }

@@ -31,4 +31,10 @@ export const apiEndpoints = {
   getSocialPlatforms: () => api.get(`/filter/social-platforms`),
 
   getSkillLevels: () => api.get(`/filter/skill-levels`),
+
+  getGenders: () => api.get(`/filter/genders`),
+
+  getEmploymentTypes: () => api.get(`/filter/employment-types`),
+
+  getVisibilities: () => api.get(`/filter/visibility`),
 };
