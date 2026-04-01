@@ -13,7 +13,7 @@ export default function useVisibilities() {
       const data = res.data;
 
       setVisibilities(data);
-      console.log("Visibilities: ", data);
+      // console.log("Visibilities: ", data);
     } catch (error) {
       console.error("Error fetching Visibilities: ", error);
     } finally {

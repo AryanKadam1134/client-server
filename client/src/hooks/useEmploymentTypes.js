@@ -13,7 +13,7 @@ export default function useEmploymentTypes() {
       const data = res.data;
 
       setEmploymentTypes(data);
-      console.log("Employment Types: ", data);
+      // console.log("Employment Types: ", data);
     } catch (error) {
       console.error("Error fetching Employment Types: ", error);
     } finally {

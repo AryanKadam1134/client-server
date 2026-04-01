@@ -13,7 +13,7 @@ export default function useSocailPlatforms() {
       const data = res.data;
 
       setSocialPlatforms(data);
-      console.log("Social Platforms: ", data);
+      // console.log("Social Platforms: ", data);
     } catch (error) {
       console.error("Error fetching Social Platforms: ", error);
     } finally {

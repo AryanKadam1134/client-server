@@ -13,7 +13,7 @@ export default function useSkillLevels() {
       const data = res.data;
 
       setSkillLevels(data);
-      console.log("Skill Levels: ", data);
+      // console.log("Skill Levels: ", data);
     } catch (error) {
       console.error("Error fetching Skill Levels: ", error);
     } finally {

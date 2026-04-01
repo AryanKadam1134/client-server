@@ -13,7 +13,7 @@ export default function useGenders() {
       const data = res.data;
 
       setGenders(data);
-      console.log("All Genders: ", data);
+      // console.log("All Genders: ", data);
     } catch (error) {
       console.error("Error fetching Genders: ", error);
     } finally {
