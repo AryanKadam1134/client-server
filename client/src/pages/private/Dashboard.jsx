@@ -1,17 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import useSkillLevels from "../../hooks/useSkillLevels";
-import useEmploymentTypes from "../../hooks/useEmploymentTypes";
-import useGenders from "../../hooks/useGenders";
-import useSocailPlatforms from "../../hooks/useSocailPlatforms";
-import useVisibilities from "../../hooks/useVisibilities";
+import { apiEndpoints } from "../../api";
+import { useEffect } from "react";
 
 export default function Dashboard() {
-  const { skillLevels } = useSkillLevels();
-  const { employmentTypes } = useEmploymentTypes();
-  const { genders } = useGenders();
-  const { socialPlatforms } = useSocailPlatforms();
-  const { visibilities } = useVisibilities();
+  const [user, setUser] = useState({});
 
-  return <div>Welcome to Dashboard...</div>;
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const res = await apiEndpoints.getCurrentUser();
+
+        const data = res.data;
+
+        setUser(data);
+        console.log("User Details: ", data);
+      } catch (error) {
+        console.error("Error fetching User Details: ", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
+
+  return <div className="grid grid-cols-12 gap-6">
+    
+    
+  </div>;
 }

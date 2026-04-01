@@ -28,8 +28,11 @@ export const apiEndpoints = {
 
   logout: () => api.post(`/user/logout`),
 
+  getCurrentUser: () => api.get("/user"),
+
   getSocialPlatforms: () => api.get(`/filter/social-platforms`),
 
+  // Filters
   getSkillLevels: () => api.get(`/filter/skill-levels`),
 
   getGenders: () => api.get(`/filter/genders`),

@@ -36,12 +36,6 @@ const getGenders = asynchandler(async (req, res) => {
 const getEmploymentTypes = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiRes(200, VISIBILITY, "visibility fetched successfully!"));
-});
-
-const getVisibility = asynchandler(async (req, res) => {
-  return res
-    .status(200)
     .json(
       new ApiRes(
         200,
@@ -51,4 +45,16 @@ const getVisibility = asynchandler(async (req, res) => {
     );
 });
 
-export { getSocialPlatforms, getSkillLevel, getGenders, getEmploymentTypes, getVisibility };
+const getVisibility = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, VISIBILITY, "visibility fetched successfully!"));
+});
+
+export {
+  getSocialPlatforms,
+  getSkillLevel,
+  getGenders,
+  getEmploymentTypes,
+  getVisibility,
+};

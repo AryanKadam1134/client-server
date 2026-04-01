@@ -266,6 +266,12 @@ const updateUserDetails = asynchandler(async (req, res) => {
     .json(new ApiRes(200, updatedUser, "user details updated successfully!"));
 });
 
+const getUserDetails = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, req.user, "user details fetched successfully!"));
+});
+
 const updateUserImage = asynchandler(async (req, res) => {
   const loggedUser = req.user;
 
@@ -426,6 +432,7 @@ export {
   logoutUser,
   changePassword,
   updateUserDetails,
+  getUserDetails,
   updateUserImage,
   updateUserResume,
   deleteUserImage,

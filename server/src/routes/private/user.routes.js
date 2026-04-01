@@ -4,6 +4,7 @@ import {
   changePassword,
   deleteUserImage,
   deleteUserResume,
+  getUserDetails,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -38,7 +39,10 @@ userRouter.route("/logout").post(verifyJWT, logoutUser);
 
 userRouter.route("/password").patch(verifyJWT, changePassword);
 
-userRouter.route("/").patch(verifyJWT, updateUserDetails);
+userRouter
+  .route("/")
+  .get(verifyJWT, getUserDetails)
+  .patch(verifyJWT, updateUserDetails);
 
 userRouter
   .route("/image")
