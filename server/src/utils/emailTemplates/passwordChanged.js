@@ -3,7 +3,7 @@ const passwordChangedTemplate = (user) => {
       <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px;">
         <h2 style="color: #1f2937;">Password Updated Successfully</h2>
 
-        <p style="color: #4b5563; font-size: 15px;">Hi ${user.fullName},</p>
+        <p style="color: #4b5563; font-size: 15px;">Hi ${user?.firstName} ${user?.lastName},</p>
 
         <p style="color: #4b5563; font-size: 15px;">
           This is a confirmation that your account password was successfully

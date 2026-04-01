@@ -10,10 +10,6 @@ const userSchema = new Schema(
       enum: ["admin"],
       default: "admin",
     },
-    fullName: {
-      type: String,
-      required: true,
-    },
     username: {
       type: String,
       required: true,
@@ -89,7 +85,8 @@ userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
-      fullName: this.fullName,
+      firstName: this.firstName,
+      lastName: this.lastName,
       username: this.username,
       email: this.email,
     },
