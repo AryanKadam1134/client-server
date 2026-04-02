@@ -240,7 +240,11 @@ const updateUserDetails = asynchandler(async (req, res) => {
   if (middleName) fields.middleName = middleName;
   if (lastName) fields.lastName = lastName;
   if (gender) fields.gender = gender;
-  if (location) fields.location = location;
+  if (location) {
+    for (const key in location) {
+      fields[`location.${key}`] = location[key];
+    }
+  }
 
   // Can be null values
   if (mobileNo !== undefined) fields.mobileNo = mobileNo;

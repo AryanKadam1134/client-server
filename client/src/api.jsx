@@ -36,7 +36,9 @@ export const apiEndpoints = {
 
   updateUserResume: (body) => api.patch("/user/resume", body),
 
-  getSocialPlatforms: () => api.get(`/filter/social-platforms`),
+  getUserSocialPlatforms: () => api.get(`/social`),
+
+  manageUserSocialPlatforms: (body) => api.post(`/social/manage`, body),
 
   // Filters
   getSkillLevels: () => api.get(`/filter/skill-levels`),

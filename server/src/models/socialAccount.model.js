@@ -11,7 +11,6 @@ const socialAccountSchema = new Schema(
     },
     name: {
       type: String,
-      enum: SOCIAL_PLATFORMS.map((p) => p.value),
       required: true,
     },
     link: {

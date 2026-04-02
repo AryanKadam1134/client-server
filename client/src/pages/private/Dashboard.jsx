@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
-import { SquarePen, FileText } from "lucide-react";
+import { Loader, SquarePen, FileText } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -16,6 +16,9 @@ export default function Dashboard() {
 
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
+
+  const [imageUploading, setImageUploading] = useState(false);
+
   const [preview, setPreview] = useState({
     image: null,
     resumeOrCv: null,
@@ -28,7 +31,6 @@ export default function Dashboard() {
     getValues,
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm();
-  // console.log("Update User Payload: ", getValues());
 
   const profileImage = getValues("image");
   const resumeOrCv = getValues("resumeOrCv");
@@ -69,7 +71,7 @@ export default function Dashboard() {
     console.log("Only Updated Fields:", updatedData);
 
     try {
-      await apiEndpoints.updateUser(data);
+      await apiEndpoints.updateUser(updatedData);
       fetchUserDetails();
     } catch (error) {
       console.error("Error updating User Details: ", error);
@@ -88,6 +90,8 @@ export default function Dashboard() {
   };
 
   const updateProfileImage = async (file) => {
+    setImageUploading(true);
+
     try {
       const formData = new FormData();
       formData.append("image", file);
@@ -97,6 +101,8 @@ export default function Dashboard() {
       fetchUserDetails(); // refresh data
     } catch (error) {
       console.error("Error updating image:", error);
+    } finally {
+      setImageUploading(false);
     }
   };
 
@@ -121,27 +127,35 @@ export default function Dashboard() {
     <div className="flex flex-col gap-6 text-sm">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-12 gap-6 p-3 border-b border-gray-500"
+        className="grid grid-cols-12 gap-6 p-3 text-sm border-b border-gray-500"
       >
         <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
-          <div className="relative group">
+          <div className="relative">
             {/* Image */}
             <img
               src={preview?.image || profileImage?.url}
               alt="User Profile"
-              className="size-45 rounded-full object-contain border"
+              className="size-45 rounded-full object-contain border border-gray-400"
             />
 
             {/* Overlay */}
-            <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-              <button
-                type="button"
-                onClick={() => fileInputRef.current.click()}
-                className="text-white text-sm bg-black/50 p-3 rounded-full"
-              >
-                <SquarePen size={20} className="text-gray-300" />
-              </button>
-            </div>
+            {imageUploading ? (
+              <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
+                <div className="text-white text-sm bg-black/50 p-3 rounded-full">
+                  <Loader size={20} className="text-gray-300 animate-spin" />
+                </div>
+              </div>
+            ) : (
+              <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 hover:opacity-100 hover:backdrop-blur-xs transition flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current.click()}
+                  className="text-white text-sm bg-black/50 p-3 rounded-full cursor-pointer"
+                >
+                  <SquarePen size={20} className="text-gray-300" />
+                </button>
+              </div>
+            )}
 
             {/* Hidden File Input */}
             <input
