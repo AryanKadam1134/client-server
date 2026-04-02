@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
-import { SquarePen } from "lucide-react";
+import { SquarePen, FileText } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -15,7 +15,11 @@ export default function Dashboard() {
   const { genders } = useGenders();
 
   const fileInputRef = useRef(null);
-  const [preview, setPreview] = useState(null);
+  const imageInputRef = useRef(null);
+  const [preview, setPreview] = useState({
+    image: null,
+    resumeOrCv: null,
+  });
 
   const {
     register,
@@ -27,6 +31,7 @@ export default function Dashboard() {
   // console.log("Update User Payload: ", getValues());
 
   const profileImage = getValues("image");
+  const resumeOrCv = getValues("resumeOrCv");
 
   const fetchUserDetails = async () => {
     try {
@@ -45,7 +50,14 @@ export default function Dashboard() {
     const updated = {};
 
     for (const key in dirtyFields) {
-      updated[key] = data[key];
+      if (
+        typeof dirtyFields[key] === "object" &&
+        !Array.isArray(dirtyFields[key])
+      ) {
+        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
+      } else {
+        updated[key] = data[key];
+      }
     }
 
     return updated;
@@ -64,14 +76,18 @@ export default function Dashboard() {
     }
   };
 
-  const updateProfileImage = async (e) => {
+  const uploadFile = (e, field, func) => {
     const file = e.target.files[0];
     if (!file) return;
 
     // ✅ Preview (instant UI feedback)
     const imageUrl = URL.createObjectURL(file);
-    setPreview(imageUrl);
+    setPreview((prev) => ({ ...prev, [field]: imageUrl }));
 
+    func(file);
+  };
+
+  const updateProfileImage = async (file) => {
     try {
       const formData = new FormData();
       formData.append("image", file);
@@ -81,6 +97,19 @@ export default function Dashboard() {
       fetchUserDetails(); // refresh data
     } catch (error) {
       console.error("Error updating image:", error);
+    }
+  };
+
+  const updateResume = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("resumeOrCv", file);
+
+      await apiEndpoints.updateUserResume(formData);
+
+      fetchUserDetails(); // refresh data
+    } catch (error) {
+      console.error("Error updating resume:", error);
     }
   };
 
@@ -98,7 +127,7 @@ export default function Dashboard() {
           <div className="relative group">
             {/* Image */}
             <img
-              src={preview || profileImage?.url}
+              src={preview?.image || profileImage?.url}
               alt="User Profile"
               className="size-45 rounded-full object-contain border"
             />
@@ -108,7 +137,7 @@ export default function Dashboard() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current.click()}
-                className="text-white text-sm bg-black/60 p-3 rounded-full"
+                className="text-white text-sm bg-black/50 p-3 rounded-full"
               >
                 <SquarePen size={20} className="text-gray-300" />
               </button>
@@ -120,28 +149,10 @@ export default function Dashboard() {
               accept="image/*"
               ref={fileInputRef}
               className="hidden"
-              onChange={updateProfileImage}
+              onChange={(e) => uploadFile(e, "image", updateProfileImage)}
             />
           </div>
         </div>
-
-        {/* Username */}
-        <LabelInput
-          id="username"
-          label="Username"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <CustomInput
-            id="username"
-            type="text"
-            placeholder="username"
-            {...register("username", {
-              required: "username is required!",
-            })}
-            error={errors.username}
-          />
-        </LabelInput>
 
         {/* First Name */}
         <LabelInput
@@ -161,6 +172,21 @@ export default function Dashboard() {
           />
         </LabelInput>
 
+        {/* Middle Name */}
+        <LabelInput
+          id="middleName"
+          label="Middle Name"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        >
+          <CustomInput
+            id="middleName"
+            type="text"
+            placeholder="Middle Name"
+            {...register("middleName", {})}
+            error={errors.middleName}
+          />
+        </LabelInput>
+
         {/* Last Name */}
         <LabelInput
           id="lastName"
@@ -173,6 +199,24 @@ export default function Dashboard() {
             placeholder="Last Name"
             {...register("lastName")}
             error={errors.lastName}
+          />
+        </LabelInput>
+
+        {/* Username */}
+        <LabelInput
+          id="username"
+          label="Username"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+        >
+          <CustomInput
+            id="username"
+            type="text"
+            placeholder="username"
+            {...register("username", {
+              required: "username is required!",
+            })}
+            error={errors.username}
           />
         </LabelInput>
 
@@ -234,6 +278,53 @@ export default function Dashboard() {
           />
         </LabelInput>
 
+        <div className="col-span-6"></div>
+
+        {/* City */}
+        <LabelInput
+          id="city"
+          label="City"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-4"
+        >
+          <CustomInput
+            id="city"
+            type="text"
+            placeholder="e.g. Google Drive link"
+            {...register("location.city", {})}
+            error={errors.location?.city}
+          />
+        </LabelInput>
+
+        {/* State */}
+        <LabelInput
+          id="state"
+          label="State"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-4"
+        >
+          <CustomInput
+            id="state"
+            type="text"
+            placeholder="e.g. Google Drive link"
+            {...register("location.state", {})}
+            error={errors.location?.state}
+          />
+        </LabelInput>
+
+        {/* Country */}
+        <LabelInput
+          id="country"
+          label="Country"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-4"
+        >
+          <CustomInput
+            id="country"
+            type="text"
+            placeholder="e.g. Google Drive link"
+            {...register("location.country", {})}
+            error={errors.location?.country}
+          />
+        </LabelInput>
+
         {/* Resume Link */}
         <LabelInput
           id="documentUrl"
@@ -246,6 +337,43 @@ export default function Dashboard() {
             placeholder="e.g. Google Drive link"
             {...register("documentUrl", {})}
             error={errors.documentUrl}
+          />
+        </LabelInput>
+
+        {/* Resume PDF */}
+        <LabelInput
+          id="resumeOrCv"
+          label="Resume PDF"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+        >
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => imageInputRef.current.click()}
+              className="text-white text-sm bg-black/50 py-2 px-5 w-fit rounded cursor-pointer"
+            >
+              Choose File
+            </button>
+
+            {(preview?.resumeOrCv || resumeOrCv?.url) && (
+              <FileText
+                size={20}
+                onClick={() =>
+                  window.open(preview?.resumeOrCv || resumeOrCv?.url)
+                }
+              />
+            )}
+          </div>
+
+          {/* Hidden File Input */}
+          <input
+            id="resumeOrCv"
+            type="file"
+            accept=".pdf"
+            ref={imageInputRef}
+            className="hidden"
+            onChange={(e) => uploadFile(e, "resumeOrCv", updateResume)}
           />
         </LabelInput>
 

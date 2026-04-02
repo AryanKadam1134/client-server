@@ -223,12 +223,13 @@ const updateUserDetails = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
 
   const {
-    firstName,
-    lastName,
     username,
-
+    firstName,
+    middleName,
+    lastName,
     mobileNo,
     gender,
+    location,
     documentUrl,
   } = req.body;
 
@@ -236,8 +237,10 @@ const updateUserDetails = asynchandler(async (req, res) => {
 
   if (username) fields.username = username;
   if (firstName) fields.firstName = firstName;
+  if (middleName) fields.middleName = middleName;
   if (lastName) fields.lastName = lastName;
   if (gender) fields.gender = gender;
+  if (location) fields.location = location;
 
   // Can be null values
   if (mobileNo !== undefined) fields.mobileNo = mobileNo;

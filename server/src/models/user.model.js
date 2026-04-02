@@ -36,6 +36,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    middleName: String,
     lastName: String,
 
     mobileNo: {
@@ -47,11 +48,11 @@ const userSchema = new Schema(
       enum: GENDERS.map((g) => g.value),
     },
 
-    address: String,
-    pincode: Number,
-    city: String,
-    district: String,
-    state: String,
+    location: {
+      country: String,
+      state: String,
+      city: String,
+    },
 
     documentUrl: String,
 
