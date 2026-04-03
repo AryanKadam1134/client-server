@@ -7,7 +7,7 @@ export default function CustomRadioButtons({
   ...props
 }) {
   return (
-    <div className={`flex items-center gap-4 ${className}`}>
+    <div className={`flex items-center gap-4 mt-2 ${className}`}>
       {options.map((option) => (
         <div key={option.value} className="flex items-center gap-1">
           <input

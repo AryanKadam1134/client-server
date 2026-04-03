@@ -11,6 +11,114 @@ import { apiEndpoints } from "../../api";
 
 import useGenders from "../../hooks/useGenders";
 
+function ResumeDropZone({
+  fileInputRef,
+  preview,
+  resumeOrCv,
+  resumeUploading,
+  uploadFile,
+  updateResume,
+}) {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (!file || file.type !== "application/pdf") return;
+
+    // Simulate the same flow as file input
+    const fakeEvent = { target: { files: [file] } };
+    uploadFile(fakeEvent, "resumeOrCv", updateResume);
+  };
+
+  const hasFile = preview?.resumeOrCv || resumeOrCv?.url;
+  const fileName = resumeOrCv?.name || "resume.pdf";
+
+  return (
+    <LabelInput id="resumeOrCv" label="Resume PDF" required>
+      <div
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onClick={() => !resumeUploading && fileInputRef.current.click()}
+        className={`
+          flex-1 min-h-32 flex flex-col items-center justify-center gap-3
+          border-2 border-dashed rounded-lg cursor-pointer
+          transition-all duration-200 px-4 py-5 text-center
+          ${
+            isDragging
+              ? "border-blue-400 bg-blue-500/10"
+              : hasFile
+                ? "border-gray-500"
+                : "border-gray-600 bg-gray-800/20 hover:border-gray-400 hover:bg-gray-800/40"
+          }
+        `}
+      >
+        {resumeUploading ? (
+          <>
+            <Loader size={24} className="text-blue-400 animate-spin" />
+            <p className="text-gray-400 text-xs">Uploading...</p>
+          </>
+        ) : hasFile ? (
+          <>
+            <img src="/images/pdf.svg" alt="pdf svg" className="size-8" />
+            <p className="text-xs font-medium truncate w-full">{fileName}</p>
+            <p className="text-gray-500 text-xs">Click to replace</p>
+          </>
+        ) : (
+          <>
+            <FileText size={28} className="text-gray-500" />
+            <div>
+              <p className="text-gray-300 text-xs font-medium">
+                Drop your PDF here
+              </p>
+              <p className="text-gray-500 text-xs mt-0.5">or click to browse</p>
+            </div>
+            <p className="text-gray-600 text-xs">PDF only</p>
+          </>
+        )}
+      </div>
+
+      {/* Preview Button */}
+      {hasFile && !resumeUploading && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(preview?.resumeOrCv || resumeOrCv?.url);
+          }}
+          className="flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors py-1"
+        >
+          <FileText size={13} />
+          Preview PDF
+        </button>
+      )}
+
+      {/* Hidden File Input */}
+      <input
+        id="resumeOrCv"
+        type="file"
+        accept=".pdf"
+        ref={fileInputRef}
+        className="hidden"
+        onChange={(e) => uploadFile(e, "resumeOrCv", updateResume)}
+      />
+    </LabelInput>
+  );
+}
+
 export default function Dashboard() {
   const { genders } = useGenders();
 
@@ -18,6 +126,7 @@ export default function Dashboard() {
   const imageInputRef = useRef(null);
 
   const [imageUploading, setImageUploading] = useState(false);
+  const [resumeUploading, setResumeUploading] = useState(false);
 
   const [preview, setPreview] = useState({
     image: null,
@@ -107,6 +216,7 @@ export default function Dashboard() {
   };
 
   const updateResume = async (file) => {
+    setResumeUploading(true);
     try {
       const formData = new FormData();
       formData.append("resumeOrCv", file);
@@ -116,6 +226,8 @@ export default function Dashboard() {
       fetchUserDetails(); // refresh data
     } catch (error) {
       console.error("Error updating resume:", error);
+    } finally {
+      setResumeUploading(false);
     }
   };
 
@@ -129,6 +241,7 @@ export default function Dashboard() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-12 gap-6 p-3 text-sm border-b border-gray-500"
       >
+        {/* User Image */}
         <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
           <div className="relative">
             {/* Image */}
@@ -149,7 +262,7 @@ export default function Dashboard() {
               <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 hover:opacity-100 hover:backdrop-blur-xs transition flex items-center justify-center">
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current.click()}
+                  onClick={() => imageInputRef.current.click()}
                   className="text-white text-sm bg-black/50 p-3 rounded-full cursor-pointer"
                 >
                   <SquarePen size={20} className="text-gray-300" />
@@ -161,7 +274,7 @@ export default function Dashboard() {
             <input
               type="file"
               accept="image/*"
-              ref={fileInputRef}
+              ref={imageInputRef}
               className="hidden"
               onChange={(e) => uploadFile(e, "image", updateProfileImage)}
             />
@@ -294,11 +407,23 @@ export default function Dashboard() {
 
         <div className="col-span-6"></div>
 
+        {/* Resume PDF - Drag & Drop */}
+        <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3">
+          <ResumeDropZone
+            fileInputRef={fileInputRef}
+            preview={preview}
+            resumeOrCv={resumeOrCv}
+            resumeUploading={resumeUploading}
+            uploadFile={uploadFile}
+            updateResume={updateResume}
+          />
+        </div>
+
         {/* City */}
         <LabelInput
           id="city"
           label="City"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-4"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         >
           <CustomInput
             id="city"
@@ -313,7 +438,7 @@ export default function Dashboard() {
         <LabelInput
           id="state"
           label="State"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-4"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         >
           <CustomInput
             id="state"
@@ -328,7 +453,7 @@ export default function Dashboard() {
         <LabelInput
           id="country"
           label="Country"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-4"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         >
           <CustomInput
             id="country"
@@ -351,43 +476,6 @@ export default function Dashboard() {
             placeholder="e.g. Google Drive link"
             {...register("documentUrl", {})}
             error={errors.documentUrl}
-          />
-        </LabelInput>
-
-        {/* Resume PDF */}
-        <LabelInput
-          id="resumeOrCv"
-          label="Resume PDF"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => imageInputRef.current.click()}
-              className="text-white text-sm bg-black/50 py-2 px-5 w-fit rounded cursor-pointer"
-            >
-              Choose File
-            </button>
-
-            {(preview?.resumeOrCv || resumeOrCv?.url) && (
-              <FileText
-                size={20}
-                onClick={() =>
-                  window.open(preview?.resumeOrCv || resumeOrCv?.url)
-                }
-              />
-            )}
-          </div>
-
-          {/* Hidden File Input */}
-          <input
-            id="resumeOrCv"
-            type="file"
-            accept=".pdf"
-            ref={imageInputRef}
-            className="hidden"
-            onChange={(e) => uploadFile(e, "resumeOrCv", updateResume)}
           />
         </LabelInput>
 

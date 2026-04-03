@@ -40,6 +40,8 @@ export const apiEndpoints = {
 
   manageUserSocialPlatforms: (body) => api.post(`/social/manage`, body),
 
+  deleteUserSocialPlatform: (accountId) => api.delete(`/social/${accountId}`),
+
   // Filters
   getSkillLevels: () => api.get(`/filter/skill-levels`),
 

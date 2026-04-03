@@ -18,7 +18,7 @@ export default function SocialPlatforms() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const { fields } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "socialPlatforms",
   });
@@ -44,6 +44,16 @@ export default function SocialPlatforms() {
       fetchUserSocialPlatforms();
     } catch (error) {
       console.error("Error updating User Social Platforms: ", error);
+    }
+  };
+
+  const deleteSocialAccount = async (id) => {
+    try {
+      await apiEndpoints.deleteUserSocialPlatform(id);
+
+      fetchUserSocialPlatforms();
+    } catch (error) {
+      console.error("Error deleting Social Account: ", error);
     }
   };
 
@@ -89,31 +99,72 @@ export default function SocialPlatforms() {
           </LabelInput>
 
           <LabelInput
-            id={`socialPlatforms.${index}.visibility`}
-            label="Visibility"
+            id={`socialPlatforms.${index}.sortOrder`}
+            label="Sort Order"
             colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-            required
           >
-            <CustomRadioButtons
-              id={`socialPlatforms.${index}.visibility`}
-              name="visibility"
-              options={visibilities}
-              {...register(`socialPlatforms.${index}.visibility`, {
-                required: "Visibility is required!",
-              })}
-              error={errors.socialPlatforms?.[index]?.visibility}
+            <CustomInput
+              id={`socialPlatforms.${index}.sortOrder`}
+              type="number"
+              min={0}
+              placeholder="{`Enter ${item.name} Sort Order`}"
+              {...register(`socialPlatforms.${index}.sortOrder`, { min: 0 })}
+              error={errors.socialPlatforms?.[index]?.sortOrder}
             />
           </LabelInput>
+
+          <div className="col-span-12 sm:col-span-6 lg:col-span-3 flex items-start gap-6">
+            <LabelInput
+              id={`socialPlatforms.${index}.visibility`}
+              label="Visibility"
+              required
+            >
+              <CustomRadioButtons
+                id={`socialPlatforms.${index}.visibility`}
+                name="visibility"
+                options={visibilities}
+                {...register(`socialPlatforms.${index}.visibility`, {
+                  required: "Visibility is required!",
+                })}
+                error={errors.socialPlatforms?.[index]?.visibility}
+              />
+            </LabelInput>
+
+            <button
+              type="button"
+              onClick={() =>
+                item._id ? deleteSocialAccount(item._id) : remove(index)
+              }
+              className="px-5 py-2 w-fit text-white bg-red-500 hover:bg-red-600 rounded"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="col-span-12 place-self-end w-fit px-5 py-2 text-white bg-blue-500 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-      >
-        {isSubmitting ? "Saving" : "Save"}
-      </button>
+      <div className="col-span-12 flex items-center gap-3">
+        <button
+          onClick={() =>
+            append({
+              name: "",
+              link: "",
+              visibility: "public", // or default value
+            })
+          }
+          className="px-5 py-2 text-white bg-green-500 rounded-sm"
+        >
+          Add One
+        </button>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="px-5 py-2 justify-end text-white bg-blue-500 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+        >
+          {isSubmitting ? "Saving" : "Save"}
+        </button>
+      </div>
     </form>
   );
 }
