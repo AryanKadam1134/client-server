@@ -48,7 +48,7 @@ function ResumeDropZone({
   const fileName = resumeOrCv?.name || "resume.pdf";
 
   return (
-    <LabelInput id="resumeOrCv" label="Resume PDF" required>
+    <>
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -63,45 +63,51 @@ function ResumeDropZone({
               ? "border-blue-400 bg-blue-500/10"
               : hasFile
                 ? "border-gray-500"
-                : "border-gray-600 bg-gray-800/20 hover:border-gray-400 hover:bg-gray-800/40"
+                : "hover:bg-gray-200 border-gray-600 hover:border-gray-400"
           }
         `}
       >
         {resumeUploading ? (
           <>
             <Loader size={24} className="text-blue-400 animate-spin" />
-            <p className="text-gray-400 text-xs">Uploading...</p>
           </>
         ) : hasFile ? (
           <>
-            <img src="/images/pdf.svg" alt="pdf svg" className="size-8" />
-            <p className="text-xs font-medium truncate w-full">{fileName}</p>
-            <p className="text-gray-500 text-xs">Click to replace</p>
+            <div className="flex flex-col items-center gap-1">
+              <img src="/images/pdf.svg" alt="pdf svg" className="size-8" />
+              <p className="text-xs font-medium truncate w-full">{fileName}</p>
+            </div>
+
+            <p className="text-gray-600 text-xs">Click to replace</p>
           </>
         ) : (
           <>
-            <FileText size={28} className="text-gray-500" />
-            <div>
-              <p className="text-gray-300 text-xs font-medium">
+            <div className="flex flex-col items-center gap-1">
+              <FileText size={24} className="text-gray-500" />
+              <div className="text-gray-500 text-xs font-medium">
                 Drop your PDF here
-              </p>
-              <p className="text-gray-500 text-xs mt-0.5">or click to browse</p>
+                <br />
+                OR
+                <br />
+                Click to browse
+              </div>
             </div>
+
             <p className="text-gray-600 text-xs">PDF only</p>
           </>
         )}
       </div>
 
-      {/* Preview Button */}
+      {/* Preview & Delete Button */}
       {hasFile && !resumeUploading && (
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-5">
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               deleteResume();
             }}
-            className="flex items-center justify-center gap-1.5 text-xs text-red-400 hover:text-red-500 transition-colors py-1"
+            className="flex items-center justify-center gap-1.5 text-xs text-red-400 hover:text-red-500 transition-colors py-1 cursor-pointer"
           >
             <Trash2 size={13} />
             Delete PDF
@@ -113,7 +119,7 @@ function ResumeDropZone({
               e.stopPropagation();
               window.open(preview?.resumeOrCv || resumeOrCv?.url);
             }}
-            className="flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-500 transition-colors py-1"
+            className="flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-500 transition-colors py-1 cursor-pointer"
           >
             <FileText size={13} />
             Preview PDF
@@ -130,7 +136,7 @@ function ResumeDropZone({
         className="hidden"
         onChange={(e) => uploadFile(e, "resumeOrCv", updateResume)}
       />
-    </LabelInput>
+    </>
   );
 }
 
@@ -475,7 +481,12 @@ export default function Dashboard() {
         <div className="col-span-6"></div>
 
         {/* Resume PDF - Drag & Drop */}
-        <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3">
+        <LabelInput
+          id="resumeOrCv"
+          label="Resume PDF"
+          colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+        >
           <ResumeDropZone
             fileInputRef={fileInputRef}
             preview={preview}
@@ -485,7 +496,7 @@ export default function Dashboard() {
             updateResume={updateResume}
             deleteResume={deleteResume}
           />
-        </div>
+        </LabelInput>
 
         {/* City */}
         <LabelInput
