@@ -22,11 +22,7 @@ import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
 
 function PublicRoute() {
-  const { user, authLoading } = useAuth();
-
-  if (authLoading) {
-    return <div className="text-xl font-semibold">Restoring Session...</div>;
-  }
+  const { user } = useAuth();
 
   // ❌ If logged in → redirect to details
   return user ? <Navigate to="/details" replace /> : <Outlet />;
@@ -36,7 +32,11 @@ function ProtectedRoute() {
   const { user, authLoading } = useAuth();
 
   if (authLoading) {
-    return <div className="text-xl font-semibold">Restoring Session...</div>;
+    return (
+      <div className="h-screen flex items-center justify-center text-lg font-semibold">
+        Restoring Session...
+      </div>
+    );
   }
 
   return user ? (

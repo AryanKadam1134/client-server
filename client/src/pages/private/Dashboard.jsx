@@ -15,7 +15,7 @@ function ResumeDropZone({
   fileInputRef,
   preview,
   resumeOrCv,
-  resumeUploading,
+  resumeLoading,
   uploadFile,
   updateResume,
   deleteResume,
@@ -53,21 +53,21 @@ function ResumeDropZone({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={() => !resumeUploading && fileInputRef.current.click()}
+        onClick={() => !resumeLoading && fileInputRef.current.click()}
         className={`
           flex-1 min-h-32 flex flex-col items-center justify-center gap-3
-          border-2 border-dashed rounded-lg cursor-pointer
+          hover:bg-gray-200  border-2 border-dashed rounded-lg cursor-pointer
           transition-all duration-200 px-4 py-5 text-center
           ${
             isDragging
               ? "border-blue-400 bg-blue-500/10"
               : hasFile
                 ? "border-gray-500"
-                : "hover:bg-gray-200 border-gray-600 hover:border-gray-400"
+                : "border-gray-600 hover:border-gray-400"
           }
         `}
       >
-        {resumeUploading ? (
+        {resumeLoading ? (
           <>
             <Loader size={24} className="text-blue-400 animate-spin" />
           </>
@@ -99,7 +99,7 @@ function ResumeDropZone({
       </div>
 
       {/* Preview & Delete Button */}
-      {hasFile && !resumeUploading && (
+      {hasFile && !resumeLoading && (
         <div className="flex items-center justify-center gap-5">
           <button
             type="button"
@@ -146,8 +146,8 @@ export default function Dashboard() {
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
 
-  const [imageUploading, setImageUploading] = useState(false);
-  const [resumeUploading, setResumeUploading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [resumeLoading, setResumeLoading] = useState(false);
 
   const [preview, setPreview] = useState({
     image: null,
@@ -221,7 +221,7 @@ export default function Dashboard() {
   };
 
   const updateProfileImage = async (file) => {
-    setImageUploading(true);
+    setImageLoading(true);
 
     try {
       const formData = new FormData();
@@ -233,12 +233,12 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error updating image:", error);
     } finally {
-      setImageUploading(false);
+      setImageLoading(false);
     }
   };
 
   const deleteProfileImage = async () => {
-    setImageUploading(true);
+    setImageLoading(true);
 
     try {
       await apiEndpoints.deleteUserImage();
@@ -248,12 +248,12 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error deleting image:", error);
     } finally {
-      setImageUploading(false);
+      setImageLoading(false);
     }
   };
 
   const updateResume = async (file) => {
-    setResumeUploading(true);
+    setResumeLoading(true);
     try {
       const formData = new FormData();
       formData.append("resumeOrCv", file);
@@ -264,12 +264,12 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error updating resume:", error);
     } finally {
-      setResumeUploading(false);
+      setResumeLoading(false);
     }
   };
 
   const deleteResume = async () => {
-    setResumeUploading(true);
+    setResumeLoading(true);
 
     try {
       await apiEndpoints.deleteUserResume();
@@ -279,7 +279,7 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error deleting resume:", error);
     } finally {
-      setResumeUploading(false);
+      setResumeLoading(false);
     }
   };
 
@@ -314,7 +314,7 @@ export default function Dashboard() {
             />
 
             {/* Overlay */}
-            {imageUploading ? (
+            {imageLoading ? (
               <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
                 <div className="text-white text-sm bg-black/40 p-2 rounded-full">
                   <Loader size={20} className="text-gray-300 animate-spin" />
@@ -491,7 +491,7 @@ export default function Dashboard() {
             fileInputRef={fileInputRef}
             preview={preview}
             resumeOrCv={resumeOrCv}
-            resumeUploading={resumeUploading}
+            resumeLoading={resumeLoading}
             uploadFile={uploadFile}
             updateResume={updateResume}
             deleteResume={deleteResume}

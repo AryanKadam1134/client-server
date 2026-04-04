@@ -9,7 +9,7 @@ const errorClass = (error) => {
 };
 
 // Note: Use only for Text Based Inputs
-export default function CustomInput({ error, className, type, ...props }) {
+export default function CustomInput({ error, className = "", type, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = type == "password";
