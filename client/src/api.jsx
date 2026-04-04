@@ -34,7 +34,11 @@ export const apiEndpoints = {
 
   updateUserImage: (body) => api.patch("/user/image", body),
 
+  deleteUserImage: () => api.delete("/user/image"),
+
   updateUserResume: (body) => api.patch("/user/resume", body),
+
+  deleteUserResume: () => api.delete("/user/resume"),
 
   getUserSocialPlatforms: () => api.get(`/social`),
 

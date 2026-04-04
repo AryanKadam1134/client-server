@@ -5,6 +5,7 @@ import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import useVisibilities from "../../hooks/useVisibilities";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
+import { Trash2 } from "lucide-react";
 
 export default function SocialPlatforms() {
   const { visibilities } = useVisibilities();
@@ -113,7 +114,7 @@ export default function SocialPlatforms() {
             />
           </LabelInput>
 
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 flex items-start gap-6">
+          <div className="col-span-12 sm:col-span-6 lg:col-span-3 flex items-start gap-12">
             <LabelInput
               id={`socialPlatforms.${index}.visibility`}
               label="Visibility"
@@ -135,9 +136,9 @@ export default function SocialPlatforms() {
               onClick={() =>
                 item._id ? deleteSocialAccount(item._id) : remove(index)
               }
-              className="px-5 py-2 w-fit text-white bg-red-500 hover:bg-red-600 rounded"
+              className="self-end mb-1 p-2 w-fit text-white bg-red-500 hover:bg-red-600 rounded"
             >
-              Delete
+              <Trash2 size={18} />
             </button>
           </div>
         </div>
@@ -150,6 +151,7 @@ export default function SocialPlatforms() {
               name: "",
               link: "",
               visibility: "public", // or default value
+              sortOrder: 0,
             })
           }
           className="px-5 py-2 text-white bg-green-500 rounded-sm"

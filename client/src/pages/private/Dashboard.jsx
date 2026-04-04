@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
-import { Loader, SquarePen, FileText } from "lucide-react";
+import { Loader, SquarePen, FileText, Trash2 } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -18,6 +18,7 @@ function ResumeDropZone({
   resumeUploading,
   uploadFile,
   updateResume,
+  deleteResume,
 }) {
   const [isDragging, setIsDragging] = useState(false);
 
@@ -93,17 +94,31 @@ function ResumeDropZone({
 
       {/* Preview Button */}
       {hasFile && !resumeUploading && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(preview?.resumeOrCv || resumeOrCv?.url);
-          }}
-          className="flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors py-1"
-        >
-          <FileText size={13} />
-          Preview PDF
-        </button>
+        <div className="flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteResume();
+            }}
+            className="flex items-center justify-center gap-1.5 text-xs text-red-400 hover:text-red-500 transition-colors py-1"
+          >
+            <Trash2 size={13} />
+            Delete PDF
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(preview?.resumeOrCv || resumeOrCv?.url);
+            }}
+            className="flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-500 transition-colors py-1"
+          >
+            <FileText size={13} />
+            Preview PDF
+          </button>
+        </div>
       )}
 
       {/* Hidden File Input */}
@@ -196,6 +211,7 @@ export default function Dashboard() {
     setPreview((prev) => ({ ...prev, [field]: imageUrl }));
 
     func(file);
+    e.target.value = "";
   };
 
   const updateProfileImage = async (file) => {
@@ -207,9 +223,24 @@ export default function Dashboard() {
 
       await apiEndpoints.updateUserImage(formData);
 
-      fetchUserDetails(); // refresh data
+      fetchUserDetails();
     } catch (error) {
       console.error("Error updating image:", error);
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
+  const deleteProfileImage = async () => {
+    setImageUploading(true);
+
+    try {
+      await apiEndpoints.deleteUserImage();
+
+      setPreview({});
+      fetchUserDetails();
+    } catch (error) {
+      console.error("Error deleting image:", error);
     } finally {
       setImageUploading(false);
     }
@@ -223,9 +254,24 @@ export default function Dashboard() {
 
       await apiEndpoints.updateUserResume(formData);
 
-      fetchUserDetails(); // refresh data
+      fetchUserDetails();
     } catch (error) {
       console.error("Error updating resume:", error);
+    } finally {
+      setResumeUploading(false);
+    }
+  };
+
+  const deleteResume = async () => {
+    setResumeUploading(true);
+
+    try {
+      await apiEndpoints.deleteUserResume();
+
+      setPreview({});
+      fetchUserDetails();
+    } catch (error) {
+      console.error("Error deleting resume:", error);
     } finally {
       setResumeUploading(false);
     }
@@ -234,6 +280,12 @@ export default function Dashboard() {
   useEffect(() => {
     fetchUserDetails();
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (preview.image) URL.revokeObjectURL(preview.image);
+    };
+  }, [preview.image]);
 
   return (
     <div className="flex flex-col gap-6 text-sm">
@@ -246,7 +298,11 @@ export default function Dashboard() {
           <div className="relative">
             {/* Image */}
             <img
-              src={preview?.image || profileImage?.url}
+              src={
+                preview?.image ||
+                profileImage?.url ||
+                `/images/icon-7797704_640.png`
+              }
               alt="User Profile"
               className="size-45 rounded-full object-contain border border-gray-400"
             />
@@ -254,7 +310,7 @@ export default function Dashboard() {
             {/* Overlay */}
             {imageUploading ? (
               <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
-                <div className="text-white text-sm bg-black/50 p-3 rounded-full">
+                <div className="text-white text-sm bg-black/40 p-2 rounded-full">
                   <Loader size={20} className="text-gray-300 animate-spin" />
                 </div>
               </div>
@@ -262,10 +318,21 @@ export default function Dashboard() {
               <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 hover:opacity-100 hover:backdrop-blur-xs transition flex items-center justify-center">
                 <button
                   type="button"
-                  onClick={() => imageInputRef.current.click()}
-                  className="text-white text-sm bg-black/50 p-3 rounded-full cursor-pointer"
+                  className="p-2 text-sm text-white bg-black/40 flex items-center gap-3 rounded-full"
                 >
-                  <SquarePen size={20} className="text-gray-300" />
+                  <div
+                    onClick={deleteProfileImage}
+                    className="p-2 text-red-400 hover:text-red-500 bg-black/50 rounded-full cursor-pointer"
+                  >
+                    <Trash2 size={20} />
+                  </div>
+
+                  <div
+                    onClick={() => imageInputRef.current.click()}
+                    className="p-2 text-blue-400 hover:text-blue-500 bg-black/50 rounded-full cursor-pointer"
+                  >
+                    <SquarePen size={20} />
+                  </div>
                 </button>
               </div>
             )}
@@ -416,6 +483,7 @@ export default function Dashboard() {
             resumeUploading={resumeUploading}
             uploadFile={uploadFile}
             updateResume={updateResume}
+            deleteResume={deleteResume}
           />
         </div>
 
