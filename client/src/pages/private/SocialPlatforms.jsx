@@ -355,29 +355,30 @@ export default function SocialPlatforms() {
             />
           </LabelInput>
 
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 flex items-start gap-12">
-            <LabelInput
+          <LabelInput
+            id={`socialPlatforms.${index}.visibility`}
+            label="Visibility"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-2"
+            required
+          >
+            <CustomRadioButtons
               id={`socialPlatforms.${index}.visibility`}
-              label="Visibility"
-              required
-            >
-              <CustomRadioButtons
-                id={`socialPlatforms.${index}.visibility`}
-                name="visibility"
-                options={visibilities}
-                {...register(`socialPlatforms.${index}.visibility`, {
-                  required: "Visibility is required!",
-                })}
-                error={errors.socialPlatforms?.[index]?.visibility}
-              />
-            </LabelInput>
+              name="visibility"
+              options={visibilities}
+              {...register(`socialPlatforms.${index}.visibility`, {
+                required: "Visibility is required!",
+              })}
+              error={errors.socialPlatforms?.[index]?.visibility}
+            />
+          </LabelInput>
 
+          <div className="col-span-12 sm:col-span-1 flex items-center justify-center">
             <button
               type="button"
               onClick={() =>
                 item._id ? deleteSocialAccount(item._id) : remove(index)
               }
-              className="self-end mb-1 p-2 w-fit text-white bg-red-500 hover:bg-red-600 rounded"
+              className="mt-3 p-2 h-fit w-fit text-white bg-red-500 hover:bg-red-600 rounded cursor-pointer"
             >
               <Trash2 size={18} />
             </button>
@@ -393,16 +394,18 @@ export default function SocialPlatforms() {
                 name: "",
                 link: "",
                 visibility: "public", // or default value
-                sortOrder: 0,
+                sortOrder: fields?.length,
               })
             }
             className="shrink-0 px-5 py-2 text-white bg-green-500 rounded-sm"
           >
-            Add One
+            Add Custom Platform
           </button>
 
           <CustomSelect
+            placeholder="Select Platfrom"
             options={SOCIAL_APPS}
+            value={null}
             onChange={(e) => {
               const selectedValue = e.target.value;
 
@@ -410,7 +413,7 @@ export default function SocialPlatforms() {
                 name: selectedValue, // ✅ correct
                 link: "",
                 visibility: "public",
-                sortOrder: 0,
+                sortOrder: fields?.length,
               });
             }}
           />
