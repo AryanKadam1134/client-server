@@ -404,18 +404,19 @@ export default function SocialPlatforms() {
 
           <CustomSelect
             placeholder="Select Platfrom"
-            options={SOCIAL_APPS}
-            value={null}
-            onChange={(e) => {
-              const selectedValue = e.target.value;
-
+            options={[
+              { value: "Select Platfrom", label: "Select Platfrom" },
+              ...SOCIAL_APPS,
+            ]}
+            value="Select Platfrom"
+            onChange={(value) =>
               append({
-                name: selectedValue, // ✅ correct
+                name: value, // ✅ correct
                 link: "",
                 visibility: "public",
                 sortOrder: fields?.length,
-              });
-            }}
+              })
+            }
           />
         </div>
 
