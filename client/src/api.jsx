@@ -28,6 +28,7 @@ export const apiEndpoints = {
 
   logout: () => api.post(`/user/logout`),
 
+  // User Details
   getCurrentUser: () => api.get("/user"),
 
   updateUser: (body) => api.patch("/user", body),
@@ -48,9 +49,21 @@ export const apiEndpoints = {
   updateSocialPlatform: (accountId, body) =>
     api.patch(`/social/${accountId}`, body),
 
-  deleteUserSocialPlatform: (accountId) => api.delete(`/social/${accountId}`),
+  deleteSocialPlatform: (accountId) => api.delete(`/social/${accountId}`),
 
-  getUserSocialPlatforms: () => api.get(`/social`),
+  getSocialPlatforms: () => api.get(`/social`),
+
+  // Skills
+  addSkill: (body) => api.post(`/skill`, body),
+
+  updateSkill: (skillId, body) => api.patch(`/skill/${skillId}`, body),
+
+  deleteSkill: (skillId) => api.delete(`/skill/${skillId}`),
+
+  getSkills: () => api.get(`/skill`),
+
+  // Skill Categories
+  getSkillCategories: () => api.get(`/skillCategory`),
 
   // Filters
   getSkillLevels: () => api.get(`/filter/skill-levels`),

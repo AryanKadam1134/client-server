@@ -11,7 +11,9 @@ export default function DashboardLayout({ children }) {
       <div className="flex flex-col w-full overflow-hidden">
         <Header />
 
-        <div className="flex-1 p-8 h-full bg-slate-100 overflow-auto">{children}</div>
+        <div className="flex-1 p-8 h-full bg-gray-100 overflow-auto">
+          {children}
+        </div>
       </div>
     </div>
   );

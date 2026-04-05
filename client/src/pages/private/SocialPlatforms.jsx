@@ -270,9 +270,11 @@ export default function SocialPlatforms() {
     name: "socialPlatforms",
   });
 
-  const fetchUserSocialPlatforms = async () => {
+  console.log("dirty index: ", dirtyFields?.socialPlatforms?.[1]);
+
+  const fetchSocialPlatforms = async () => {
     try {
-      const res = await apiEndpoints.getUserSocialPlatforms();
+      const res = await apiEndpoints.getSocialPlatforms();
 
       const data = res.data;
 
@@ -318,26 +320,26 @@ export default function SocialPlatforms() {
         ),
       );
 
-      fetchUserSocialPlatforms();
+      fetchSocialPlatforms();
     } catch (error) {
       console.error("Error updating User Social Platforms: ", error);
     }
   };
 
-  const addAccount = async (payload) => {
+  const addPlatform = async (payload) => {
     try {
       const res = await apiEndpoints.addSocialPlatform(payload);
 
       const data = res.data;
 
-      fetchUserSocialPlatforms();
+      fetchSocialPlatforms();
       console.log("Social Platform Created: ", data);
     } catch (error) {
       console.error("Error creating Social Platform: ", error);
     }
   };
 
-  const updateAccount = async (payload) => {
+  const updatePlatform = async (payload) => {
     try {
       const res = await apiEndpoints.updateSocialPlatform(
         payload?._id,
@@ -346,25 +348,25 @@ export default function SocialPlatforms() {
 
       const data = res.data;
 
-      fetchUserSocialPlatforms();
+      fetchSocialPlatforms();
       console.log("Social Platform Updated: ", data);
     } catch (error) {
       console.error("Error updating Social Platform: ", error);
     }
   };
 
-  const deleteSocialAccount = async (id) => {
+  const deletePlatform = async (id) => {
     try {
-      await apiEndpoints.deleteUserSocialPlatform(id);
+      await apiEndpoints.deleteSocialPlatform(id);
 
-      fetchUserSocialPlatforms();
+      fetchSocialPlatforms();
     } catch (error) {
       console.error("Error deleting Social Account: ", error);
     }
   };
 
   useEffect(() => {
-    fetchUserSocialPlatforms();
+    fetchSocialPlatforms();
   }, []);
 
   return (
@@ -395,12 +397,15 @@ export default function SocialPlatforms() {
             id={`socialPlatforms.${index}.link`}
             label="Link"
             attachment={
-              <div
-                onClick={() => window.open(item?.link, "_blank")}
-                className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
-              >
-                <ExternalLink size={13}/> <p>Visit Link</p>
-              </div>
+              item?.link && (
+                <a
+                  href={item?.link}
+                  target="_blank"
+                  className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+                >
+                  <ExternalLink size={13} /> <p>Visit Link</p>
+                </a>
+              )
             }
             required
           >
@@ -421,7 +426,7 @@ export default function SocialPlatforms() {
               id={`socialPlatforms.${index}.sortOrder`}
               type="number"
               min={0}
-              placeholder="{`Enter ${item.name} Sort Order`}"
+              placeholder={`Enter ${item.name} Sort Order`}
               {...register(`socialPlatforms.${index}.sortOrder`, { min: 0 })}
               error={errors.socialPlatforms?.[index]?.sortOrder}
             />
@@ -448,7 +453,7 @@ export default function SocialPlatforms() {
             <CustomButton
               type="button"
               onClick={() =>
-                item._id ? deleteSocialAccount(item._id) : remove(index)
+                item._id ? deletePlatform(item._id) : remove(index)
               }
               bg_prop="bg-red-500 hover:bg-red-600"
             >
@@ -460,7 +465,7 @@ export default function SocialPlatforms() {
               <CustomButton
                 type="button"
                 onClick={() =>
-                  addAccount(getValues(`socialPlatforms.${index}`))
+                  addPlatform(getValues(`socialPlatforms.${index}`))
                 }
                 bg_prop="bg-green-500 hover:bg-green-600"
               >
@@ -469,17 +474,21 @@ export default function SocialPlatforms() {
             )}
 
             {/* Update Button */}
-            {dirtyFields?.socialPlatforms?.[index] && (
-              <CustomButton
-                type="button"
-                onClick={() =>
-                  updateAccount(getValues(`socialPlatforms.${index}`))
-                }
-                bg_prop="bg-green-500 hover:bg-green-600"
-              >
-                Update
-              </CustomButton>
-            )}
+            {item._id &&
+              dirtyFields?.socialPlatforms?.[index] &&
+              Object.values(dirtyFields?.socialPlatforms?.[index])?.some(
+                (v) => v,
+              ) && (
+                <CustomButton
+                  type="button"
+                  onClick={() =>
+                    updatePlatform(getValues(`socialPlatforms.${index}`))
+                  }
+                  bg_prop="bg-blue-500 hover:bg-blue-600"
+                >
+                  Update
+                </CustomButton>
+              )}
           </div>
         </div>
       ))}
@@ -490,7 +499,7 @@ export default function SocialPlatforms() {
             append({
               name: "",
               link: "",
-              visibility: "public", // or default value
+              visibility: "public",
               sortOrder: fields?.length,
             })
           }
