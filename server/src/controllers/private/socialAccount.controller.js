@@ -54,6 +54,94 @@ const manageSocialPlatforms = asynchandler(async (req, res) => {
     .json(new ApiRes(200, result, "Platforms managed successfully!"));
 });
 
+const addSocialAccount = asynchandler(async (req, res) => {
+  const loggedUserId = req.user?._id;
+
+  const { name, link, visibility, sortOrder } = req.body;
+
+  if (!name) {
+    throw new ApiError(400, "name is required!");
+  }
+
+  if (!link) {
+    throw new ApiError(400, "link is required!");
+  }
+
+  const accountExists = await SocialAccount.findOne({
+    owner: loggedUserId,
+    name,
+  });
+
+  if (accountExists) {
+    throw new ApiError(409, "account name already exists!");
+  }
+
+  const fields = {};
+
+  fields.name = name;
+  fields.link = link;
+  if (visibility) fields.visibility = visibility;
+  if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
+
+  const newSocialAccount = await SocialAccount.create({
+    owner: loggedUserId,
+    ...fields,
+  });
+
+  return res
+    .status(201)
+    .json(
+      new ApiRes(201, newSocialAccount, "social account created successfully!"),
+    );
+});
+
+const updateSocialAccount = asynchandler(async (req, res) => {
+  const socialAccount = req.socialAccount;
+
+  const { name, link, visibility, sortOrder } = req.body;
+
+  if (name) {
+    const sameAccountName = await SocialAccount.findOne({
+      _id: { $ne: socialAccount._id },
+      owner: socialAccount?.owner,
+      name,
+    });
+
+    if (sameAccountName) {
+      throw new ApiError(409, "social account name already exists!");
+    }
+  }
+
+  const fields = {};
+
+  if (name) fields.name = name;
+  if (link) fields.link = link;
+  if (visibility) fields.visibility = visibility;
+  if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
+
+  if (Object.keys(fields).length === 0) {
+    throw new ApiError(400, "no fields provided to update!");
+  }
+
+  const updatedSocialAccount = await SocialAccount.findByIdAndUpdate(
+    socialAccount._id,
+    {
+      $set: fields,
+    },
+    { new: true },
+  );
+
+  return res
+    .status(200)
+    .json(
+      new ApiRes(
+        200,
+        updatedSocialAccount,
+        "social account updated successfully!",
+      ),
+    );
+});
+
 const deleteSocialAccount = asynchandler(async (req, res) => {
   const { accountId } = req.params;
 
@@ -85,6 +173,8 @@ const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
 
 export {
   manageSocialPlatforms,
-  getAllUserSocialPlatforms,
+  addSocialAccount,
+  updateSocialAccount,
   deleteSocialAccount,
+  getAllUserSocialPlatforms,
 };
