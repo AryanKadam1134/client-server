@@ -1,12 +1,16 @@
 import React, { Fragment, useEffect } from "react";
-import { apiEndpoints } from "../../api";
+
 import { useForm, useFieldArray } from "react-hook-form";
+import { Trash2 } from "lucide-react";
+
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomSelect from "../../components/ui/CustomSelect";
-import useVisibilities from "../../hooks/useVisibilities";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
-import { Trash2 } from "lucide-react";
+
+import { apiEndpoints } from "../../api";
+
+import useVisibilities from "../../hooks/useVisibilities";
 
 const SOCIAL_APPS_LIST = [
   {
@@ -306,14 +310,16 @@ export default function SocialPlatforms() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="grid grid-cols-12 gap-6 p-3 text-sm border-b border-gray-500"
+      className="grid grid-cols-12 gap-6 text-sm"
     >
       {fields.map((item, index) => (
-        <div key={item._id} className="col-span-12 grid grid-cols-12 gap-6">
+        <div
+          key={item._id}
+          className="col-span-4 flex flex-col gap-6 p-5 border border-gray-500 rounded shadow-lg"
+        >
           <LabelInput
             id={`socialPlatforms.${index}.name`}
             label="Platform Name"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             required
           >
             <CustomInput
@@ -328,7 +334,6 @@ export default function SocialPlatforms() {
           <LabelInput
             id={`socialPlatforms.${index}.link`}
             label="Link"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             required
           >
             <CustomInput
@@ -343,7 +348,6 @@ export default function SocialPlatforms() {
           <LabelInput
             id={`socialPlatforms.${index}.sortOrder`}
             label="Sort Order"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
           >
             <CustomInput
               id={`socialPlatforms.${index}.sortOrder`}
@@ -355,30 +359,29 @@ export default function SocialPlatforms() {
             />
           </LabelInput>
 
-          <LabelInput
-            id={`socialPlatforms.${index}.visibility`}
-            label="Visibility"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-2"
-            required
-          >
-            <CustomRadioButtons
+          <div className="flex items-center justify-between">
+            <LabelInput
               id={`socialPlatforms.${index}.visibility`}
-              name="visibility"
-              options={visibilities}
-              {...register(`socialPlatforms.${index}.visibility`, {
-                required: "Visibility is required!",
-              })}
-              error={errors.socialPlatforms?.[index]?.visibility}
-            />
-          </LabelInput>
+              label="Visibility"
+              required
+            >
+              <CustomRadioButtons
+                id={`socialPlatforms.${index}.visibility`}
+                name="visibility"
+                options={visibilities}
+                {...register(`socialPlatforms.${index}.visibility`, {
+                  required: "Visibility is required!",
+                })}
+                error={errors.socialPlatforms?.[index]?.visibility}
+              />
+            </LabelInput>
 
-          <div className="col-span-12 sm:col-span-1 flex items-center justify-center">
             <button
               type="button"
               onClick={() =>
                 item._id ? deleteSocialAccount(item._id) : remove(index)
               }
-              className="mt-3 p-2 h-fit w-fit text-white bg-red-500 hover:bg-red-600 rounded cursor-pointer"
+              className="mr-2 p-2 h-fit w-fit text-white bg-red-500 hover:bg-red-600 rounded cursor-pointer"
             >
               <Trash2 size={18} />
             </button>

@@ -7,11 +7,10 @@ import {
   Outlet,
 } from "react-router-dom";
 
+import DashboardLayout from "./layouts/DashboardLayout";
+
 import Dashboard from "./pages/private/Dashboard";
 import Authentication from "./pages/authentication/Authentication";
-
-import { useAuth } from "./context/AuthContext";
-import DashboardLayout from "./layouts/DashboardLayout";
 import SocialPlatforms from "./pages/private/SocialPlatforms";
 import Skills from "./pages/private/Skills";
 import SkillCategories from "./pages/private/SkillCategories";
@@ -20,6 +19,8 @@ import Experiences from "./pages/private/Experiences";
 import Educations from "./pages/private/Educations";
 import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
+
+import { useAuth } from "./context/AuthContext";
 
 function PublicRoute() {
   const { user } = useAuth();

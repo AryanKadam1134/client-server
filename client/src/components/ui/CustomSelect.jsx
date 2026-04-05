@@ -2,6 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { commonInputClass } from "../../constants";
 import { ChevronDown } from "lucide-react";
 
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  autoUpdate,
+} from "@floating-ui/react";
+
 const errorClass = (error) => {
   return error
     ? "border-2 border-red-400"
@@ -16,6 +24,11 @@ export default function CustomSelect({
   onChange,
   placeholder = "Select...",
 }) {
+  const { refs, floatingStyles } = useFloating({
+    middleware: [offset(5), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+  });
+
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
 
@@ -37,6 +50,7 @@ export default function CustomSelect({
     <div ref={wrapperRef} className="relative w-full">
       {/* Input-like Trigger */}
       <div
+        ref={refs.setReference}
         onClick={() => setOpen((prev) => !prev)}
         className={`
           ${commonInputClass}
@@ -57,7 +71,14 @@ export default function CustomSelect({
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute z-50 mt-1 w-full bg-white border border-gray-300 rounded-sm shadow-md max-h-60 overflow-y-auto">
+        <div
+          ref={refs.setFloating}
+          style={{
+            ...floatingStyles,
+            width: refs.reference.current?.offsetWidth,
+          }}
+          className="z-50 mx-1 w-full bg-white border border-gray-300 rounded-sm shadow-md max-h-60 overflow-y-auto"
+        >
           {options.map((option) => (
             <div
               key={option.value}

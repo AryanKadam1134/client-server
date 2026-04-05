@@ -8,10 +8,10 @@ export default function DashboardLayout({ children }) {
     <div className="flex h-screen">
       <SideBar />
 
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full overflow-hidden">
         <Header />
 
-        <div className="p-5 h-full bg-slate-100">{children}</div>
+        <div className="flex-1 p-8 h-full bg-slate-100 overflow-auto">{children}</div>
       </div>
     </div>
   );

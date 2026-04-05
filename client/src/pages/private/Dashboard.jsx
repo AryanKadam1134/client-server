@@ -294,278 +294,276 @@ export default function Dashboard() {
   }, [preview.image]);
 
   return (
-    <div className="flex flex-col gap-6 text-sm">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-12 gap-6 p-3 text-sm border-b border-gray-500"
-      >
-        {/* User Image */}
-        <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
-          <div className="relative">
-            {/* Image */}
-            <img
-              src={
-                preview?.image ||
-                profileImage?.url ||
-                `/images/icon-7797704_640.png`
-              }
-              alt="User Profile"
-              className="size-45 rounded-full object-contain border border-gray-400"
-            />
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid grid-cols-12 gap-6 text-sm"
+    >
+      {/* User Image */}
+      <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
+        <div className="relative">
+          {/* Image */}
+          <img
+            src={
+              preview?.image ||
+              profileImage?.url ||
+              `/images/icon-7797704_640.png`
+            }
+            alt="User Profile"
+            className="size-45 rounded-full object-contain border border-gray-400"
+          />
 
-            {/* Overlay */}
-            {imageLoading ? (
-              <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
-                <div className="text-white text-sm bg-black/40 p-2 rounded-full">
-                  <Loader size={20} className="text-gray-300 animate-spin" />
-                </div>
+          {/* Overlay */}
+          {imageLoading ? (
+            <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
+              <div className="text-white text-sm bg-black/40 p-2 rounded-full">
+                <Loader size={20} className="text-gray-300 animate-spin" />
               </div>
-            ) : (
-              <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 hover:opacity-100 hover:backdrop-blur-xs transition flex items-center justify-center">
-                <button
-                  type="button"
-                  className="p-2 text-sm text-white bg-black/40 flex items-center gap-3 rounded-full"
+            </div>
+          ) : (
+            <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 hover:opacity-100 hover:backdrop-blur-xs transition flex items-center justify-center">
+              <button
+                type="button"
+                className="p-2 text-sm text-white bg-black/40 flex items-center gap-3 rounded-full"
+              >
+                <div
+                  onClick={deleteProfileImage}
+                  className="p-2 text-red-400 hover:text-red-500 bg-black/50 rounded-full cursor-pointer"
                 >
-                  <div
-                    onClick={deleteProfileImage}
-                    className="p-2 text-red-400 hover:text-red-500 bg-black/50 rounded-full cursor-pointer"
-                  >
-                    <Trash2 size={20} />
-                  </div>
+                  <Trash2 size={20} />
+                </div>
 
-                  <div
-                    onClick={() => imageInputRef.current.click()}
-                    className="p-2 text-blue-400 hover:text-blue-500 bg-black/50 rounded-full cursor-pointer"
-                  >
-                    <SquarePen size={20} />
-                  </div>
-                </button>
-              </div>
-            )}
+                <div
+                  onClick={() => imageInputRef.current.click()}
+                  className="p-2 text-blue-400 hover:text-blue-500 bg-black/50 rounded-full cursor-pointer"
+                >
+                  <SquarePen size={20} />
+                </div>
+              </button>
+            </div>
+          )}
 
-            {/* Hidden File Input */}
-            <input
-              type="file"
-              accept="image/*"
-              ref={imageInputRef}
-              className="hidden"
-              onChange={(e) => uploadFile(e, "image", updateProfileImage)}
-            />
-          </div>
+          {/* Hidden File Input */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={imageInputRef}
+            className="hidden"
+            onChange={(e) => uploadFile(e, "image", updateProfileImage)}
+          />
         </div>
+      </div>
 
-        {/* First Name */}
-        <LabelInput
+      {/* First Name */}
+      <LabelInput
+        id="firstName"
+        label="First Name"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
           id="firstName"
-          label="First Name"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <CustomInput
-            id="firstName"
-            type="text"
-            placeholder="First Name"
-            {...register("firstName", {
-              required: "First Name is required!",
-            })}
-            error={errors.firstName}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="First Name"
+          {...register("firstName", {
+            required: "First Name is required!",
+          })}
+          error={errors.firstName}
+        />
+      </LabelInput>
 
-        {/* Middle Name */}
-        <LabelInput
+      {/* Middle Name */}
+      <LabelInput
+        id="middleName"
+        label="Middle Name"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
           id="middleName"
-          label="Middle Name"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        >
-          <CustomInput
-            id="middleName"
-            type="text"
-            placeholder="Middle Name"
-            {...register("middleName", {})}
-            error={errors.middleName}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="Middle Name"
+          {...register("middleName", {})}
+          error={errors.middleName}
+        />
+      </LabelInput>
 
-        {/* Last Name */}
-        <LabelInput
+      {/* Last Name */}
+      <LabelInput
+        id="lastName"
+        label="Last Name"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
           id="lastName"
-          label="Last Name"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        >
-          <CustomInput
-            id="lastName"
-            type="text"
-            placeholder="Last Name"
-            {...register("lastName")}
-            error={errors.lastName}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="Last Name"
+          {...register("lastName")}
+          error={errors.lastName}
+        />
+      </LabelInput>
 
-        {/* Username */}
-        <LabelInput
+      {/* Username */}
+      <LabelInput
+        id="username"
+        label="Username"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
           id="username"
-          label="Username"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <CustomInput
-            id="username"
-            type="text"
-            placeholder="username"
-            {...register("username", {
-              required: "username is required!",
-            })}
-            error={errors.username}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="username"
+          {...register("username", {
+            required: "username is required!",
+          })}
+          error={errors.username}
+        />
+      </LabelInput>
 
-        {/* Email */}
-        <LabelInput
+      {/* Email */}
+      <LabelInput
+        id="email"
+        label="Email"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
           id="email"
-          label="Email"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <CustomInput
-            id="email"
-            type="text"
-            placeholder="email"
-            {...register("email", {
-              required: "email is required!",
-            })}
-            disabled
-            error={errors.email}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="email"
+          {...register("email", {
+            required: "email is required!",
+          })}
+          disabled
+          error={errors.email}
+        />
+      </LabelInput>
 
-        {/* Mobile No. */}
-        <LabelInput
+      {/* Mobile No. */}
+      <LabelInput
+        id="mobileNo"
+        label="Mobile No."
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
           id="mobileNo"
-          label="Mobile No."
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <CustomInput
-            id="mobileNo"
-            type="tel"
-            minLength={10}
-            maxLength={10}
-            placeholder="mobile no."
-            {...register("mobileNo", {
-              required: "mobile no. is required!",
-              minLength: 10,
-              maxLength: 10,
-            })}
-            error={errors.mobileNo}
-          />
-        </LabelInput>
+          type="tel"
+          minLength={10}
+          maxLength={10}
+          placeholder="mobile no."
+          {...register("mobileNo", {
+            required: "mobile no. is required!",
+            minLength: 10,
+            maxLength: 10,
+          })}
+          error={errors.mobileNo}
+        />
+      </LabelInput>
 
-        {/* Gender */}
-        <LabelInput
-          id="gender"
-          label="Gender"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <CustomRadioButtons
-            name="gender"
-            options={genders}
-            {...register("gender", {
-              required: "Gender is required!",
-            })}
-            error={errors.gender}
-          />
-        </LabelInput>
+      {/* Gender */}
+      <LabelInput
+        id="gender"
+        label="Gender"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomRadioButtons
+          name="gender"
+          options={genders}
+          {...register("gender", {
+            required: "Gender is required!",
+          })}
+          error={errors.gender}
+        />
+      </LabelInput>
 
-        <div className="col-span-6"></div>
+      <div className="col-span-6"></div>
 
-        {/* Resume PDF - Drag & Drop */}
-        <LabelInput
-          id="resumeOrCv"
-          label="Resume PDF"
-          colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-        >
-          <ResumeDropZone
-            fileInputRef={fileInputRef}
-            preview={preview}
-            resumeOrCv={resumeOrCv}
-            resumeLoading={resumeLoading}
-            uploadFile={uploadFile}
-            updateResume={updateResume}
-            deleteResume={deleteResume}
-          />
-        </LabelInput>
+      {/* Resume PDF - Drag & Drop */}
+      <LabelInput
+        id="resumeOrCv"
+        label="Resume PDF"
+        colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <ResumeDropZone
+          fileInputRef={fileInputRef}
+          preview={preview}
+          resumeOrCv={resumeOrCv}
+          resumeLoading={resumeLoading}
+          uploadFile={uploadFile}
+          updateResume={updateResume}
+          deleteResume={deleteResume}
+        />
+      </LabelInput>
 
-        {/* City */}
-        <LabelInput
+      {/* City */}
+      <LabelInput
+        id="city"
+        label="City"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
           id="city"
-          label="City"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        >
-          <CustomInput
-            id="city"
-            type="text"
-            placeholder="e.g. Google Drive link"
-            {...register("location.city", {})}
-            error={errors.location?.city}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="e.g. Google Drive link"
+          {...register("location.city", {})}
+          error={errors.location?.city}
+        />
+      </LabelInput>
 
-        {/* State */}
-        <LabelInput
+      {/* State */}
+      <LabelInput
+        id="state"
+        label="State"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
           id="state"
-          label="State"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        >
-          <CustomInput
-            id="state"
-            type="text"
-            placeholder="e.g. Google Drive link"
-            {...register("location.state", {})}
-            error={errors.location?.state}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="e.g. Google Drive link"
+          {...register("location.state", {})}
+          error={errors.location?.state}
+        />
+      </LabelInput>
 
-        {/* Country */}
-        <LabelInput
+      {/* Country */}
+      <LabelInput
+        id="country"
+        label="Country"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
           id="country"
-          label="Country"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        >
-          <CustomInput
-            id="country"
-            type="text"
-            placeholder="e.g. Google Drive link"
-            {...register("location.country", {})}
-            error={errors.location?.country}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="e.g. Google Drive link"
+          {...register("location.country", {})}
+          error={errors.location?.country}
+        />
+      </LabelInput>
 
-        {/* Resume Link */}
-        <LabelInput
+      {/* Resume Link */}
+      <LabelInput
+        id="documentUrl"
+        label="Resume Link (Optional)"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
           id="documentUrl"
-          label="Resume Link (Optional)"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        >
-          <CustomInput
-            id="documentUrl"
-            type="text"
-            placeholder="e.g. Google Drive link"
-            {...register("documentUrl", {})}
-            error={errors.documentUrl}
-          />
-        </LabelInput>
+          type="text"
+          placeholder="e.g. Google Drive link"
+          {...register("documentUrl", {})}
+          error={errors.documentUrl}
+        />
+      </LabelInput>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="col-span-12 place-self-end w-fit px-5 py-2 text-white bg-blue-500 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          {isSubmitting ? "Saving" : "Save"}
-        </button>
-      </form>
-    </div>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="col-span-12 place-self-end w-fit px-5 py-2 text-white bg-blue-500 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+      >
+        {isSubmitting ? "Saving" : "Save"}
+      </button>
+    </form>
   );
 }
