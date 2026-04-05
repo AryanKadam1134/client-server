@@ -10,6 +10,7 @@ import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 import { apiEndpoints } from "../../api";
 
 import useGenders from "../../hooks/useGenders";
+import CustomButton from "../../components/ui/CustomButton";
 
 function ResumeDropZone({
   fileInputRef,
@@ -56,15 +57,10 @@ function ResumeDropZone({
         onClick={() => !resumeLoading && fileInputRef.current.click()}
         className={`
           flex-1 min-h-32 flex flex-col items-center justify-center gap-3
-          hover:bg-gray-200  border-2 border-dashed rounded-lg cursor-pointer
+          border-2 border-dashed border-gray-500 hover:border-gray-600 rounded-lg cursor-pointer
           transition-all duration-200 px-4 py-5 text-center
-          ${
-            isDragging
-              ? "border-blue-400 bg-blue-500/10"
-              : hasFile
-                ? "border-gray-500"
-                : "border-gray-600 hover:border-gray-400"
-          }
+          ${isDragging && "border-blue-400 bg-blue-500/10"}
+          ${!resumeLoading && "hover:bg-gray-200"}
         `}
       >
         {resumeLoading ? (
@@ -557,13 +553,13 @@ export default function Dashboard() {
         />
       </LabelInput>
 
-      <button
+      <CustomButton
         type="submit"
+        className="col-span-12 place-self-end"
         disabled={isSubmitting}
-        className="col-span-12 place-self-end w-fit px-5 py-2 text-white bg-blue-500 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
-        {isSubmitting ? "Saving" : "Save"}
-      </button>
+        {isSubmitting ? "Saving..." : "Save"}
+      </CustomButton>
     </form>
   );
 }

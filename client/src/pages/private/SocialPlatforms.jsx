@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 
 import { useForm, useFieldArray } from "react-hook-form";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -11,6 +11,7 @@ import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 import { apiEndpoints } from "../../api";
 
 import useVisibilities from "../../hooks/useVisibilities";
+import CustomButton from "../../components/ui/CustomButton";
 
 const SOCIAL_APPS_LIST = [
   {
@@ -315,7 +316,7 @@ export default function SocialPlatforms() {
       {fields.map((item, index) => (
         <div
           key={item._id}
-          className="col-span-4 flex flex-col gap-6 p-5 border border-gray-500 rounded shadow-lg"
+          className="col-span-4 flex flex-col gap-6 p-5 border border-gray-500 rounded-md shadow-lg"
         >
           <LabelInput
             id={`socialPlatforms.${index}.name`}
@@ -389,26 +390,30 @@ export default function SocialPlatforms() {
         </div>
       ))}
 
-      <div className="col-span-12 flex items-center justify-between gap-3">
-        <div className="flex items-center justify-start gap-5">
-          <button
-            onClick={() =>
-              append({
-                name: "",
-                link: "",
-                visibility: "public", // or default value
-                sortOrder: fields?.length,
-              })
-            }
-            className="shrink-0 px-5 py-2 text-white bg-green-500 rounded-sm"
-          >
-            Add Custom Platform
-          </button>
+      <div className="col-span-4 flex flex-col items-center justify-center gap-3 p-6 border border-gray-500 rounded-md shadow-lg">
+        <div
+          onClick={() =>
+            append({
+              name: "",
+              link: "",
+              visibility: "public", // or default value
+              sortOrder: fields?.length,
+            })
+          }
+          className="flex flex-col items-center justify-center gap-1 w-full h-full
+        text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md border-2 border-gray-500 border-dashed cursor-pointer transition-colors"
+        >
+          <Plus size={24} />
+          Add Custom Platform <br />
+        </div>
 
+        <p>OR</p>
+
+        <LabelInput id="platfrom" label="Select Platfrom" className="w-full">
           <CustomSelect
             placeholder="Select Platfrom"
             options={[
-              { value: "Select Platfrom", label: "Select Platfrom" },
+              { value: "Select Platfrom", label: "Select" },
               ...SOCIAL_APPS,
             ]}
             value="Select Platfrom"
@@ -421,16 +426,16 @@ export default function SocialPlatforms() {
               })
             }
           />
-        </div>
-
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-5 py-2 justify-end text-white bg-blue-500 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          {isSubmitting ? "Saving" : "Save"}
-        </button>
+        </LabelInput>
       </div>
+
+      <CustomButton
+        type="submit"
+        className="col-span-12 place-self-end"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Saving..." : "Save"}
+      </CustomButton>
     </form>
   );
 }
