@@ -56,7 +56,7 @@ export default function SideBar() {
   const { logout } = useAuth();
 
   return (
-    <div className="h-full flex flex-col px-2.5">
+    <div className="h-full flex flex-col px-2.5 border-r border-gray-200">
       <div className="shrink-0 h-15 flex items-center border-b border-gray-200">
         <div className="flex items-center justify-start gap-2.5">
           <div className="p-4 bg-gray-500 rounded-full"></div>

@@ -1,17 +1,17 @@
 import React, { Fragment, useEffect } from "react";
 
 import { useForm, useFieldArray } from "react-hook-form";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ExternalLink } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
+import CustomButton from "../../components/ui/CustomButton";
 import CustomSelect from "../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../api";
 
 import useVisibilities from "../../hooks/useVisibilities";
-import CustomButton from "../../components/ui/CustomButton";
 
 const SOCIAL_APPS_LIST = [
   {
@@ -261,8 +261,8 @@ export default function SocialPlatforms() {
     handleSubmit,
     reset,
     control,
-
-    formState: { errors, isSubmitting },
+    getValues,
+    formState: { errors, isSubmitting, dirtyFields },
   } = useForm();
 
   const { fields, append, remove } = useFieldArray({
@@ -283,14 +283,73 @@ export default function SocialPlatforms() {
     }
   };
 
+  const getUpdatedSocialPlatforms = (data, dirtyFields) => {
+    if (!dirtyFields?.socialPlatforms) return [];
+
+    return data.socialPlatforms
+      .map((item, index) => {
+        const dirty = dirtyFields.socialPlatforms[index];
+
+        if (!dirty) return null; // skip untouched
+
+        const updatedItem = {};
+
+        for (const key in dirty) {
+          updatedItem[key] = item[key];
+        }
+
+        // always include _id for update
+        updatedItem._id = item._id;
+
+        return updatedItem;
+      })
+      .filter(Boolean); // remove nulls
+  };
+
   const onSubmit = async (data) => {
+    const updatedData = getUpdatedSocialPlatforms(data, dirtyFields);
+
+    console.log("Only Updated Fields:", updatedData);
+
     try {
-      await apiEndpoints.manageUserSocialPlatforms({
-        platforms: data?.socialPlatforms,
-      });
+      await Promise.all(
+        updatedData?.map((socialAccount) =>
+          apiEndpoints.updateSocialPlatform(socialAccount?._id, socialAccount),
+        ),
+      );
+
       fetchUserSocialPlatforms();
     } catch (error) {
       console.error("Error updating User Social Platforms: ", error);
+    }
+  };
+
+  const addAccount = async (payload) => {
+    try {
+      const res = await apiEndpoints.addSocialPlatform(payload);
+
+      const data = res.data;
+
+      fetchUserSocialPlatforms();
+      console.log("Social Platform Created: ", data);
+    } catch (error) {
+      console.error("Error creating Social Platform: ", error);
+    }
+  };
+
+  const updateAccount = async (payload) => {
+    try {
+      const res = await apiEndpoints.updateSocialPlatform(
+        payload?._id,
+        payload,
+      );
+
+      const data = res.data;
+
+      fetchUserSocialPlatforms();
+      console.log("Social Platform Updated: ", data);
+    } catch (error) {
+      console.error("Error updating Social Platform: ", error);
     }
   };
 
@@ -315,8 +374,8 @@ export default function SocialPlatforms() {
     >
       {fields.map((item, index) => (
         <div
-          key={item._id}
-          className="col-span-4 flex flex-col gap-6 p-5 border border-gray-500 rounded-md shadow-lg"
+          key={item._id || index}
+          className="col-span-4 flex flex-col gap-6 p-5 bg-white border border-gray-500 rounded-md shadow-lg"
         >
           <LabelInput
             id={`socialPlatforms.${index}.name`}
@@ -335,6 +394,14 @@ export default function SocialPlatforms() {
           <LabelInput
             id={`socialPlatforms.${index}.link`}
             label="Link"
+            attachment={
+              <div
+                onClick={() => window.open(item?.link, "_blank")}
+                className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+              >
+                <ExternalLink size={13}/> <p>Visit Link</p>
+              </div>
+            }
             required
           >
             <CustomInput
@@ -360,10 +427,11 @@ export default function SocialPlatforms() {
             />
           </LabelInput>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <LabelInput
               id={`socialPlatforms.${index}.visibility`}
               label="Visibility"
+              className="flex-1"
               required
             >
               <CustomRadioButtons
@@ -377,20 +445,46 @@ export default function SocialPlatforms() {
               />
             </LabelInput>
 
-            <button
+            <CustomButton
               type="button"
               onClick={() =>
                 item._id ? deleteSocialAccount(item._id) : remove(index)
               }
-              className="mr-2 p-2 h-fit w-fit text-white bg-red-500 hover:bg-red-600 rounded cursor-pointer"
+              bg_prop="bg-red-500 hover:bg-red-600"
             >
-              <Trash2 size={18} />
-            </button>
+              Remove
+            </CustomButton>
+
+            {/* Add button */}
+            {!item._id && (
+              <CustomButton
+                type="button"
+                onClick={() =>
+                  addAccount(getValues(`socialPlatforms.${index}`))
+                }
+                bg_prop="bg-green-500 hover:bg-green-600"
+              >
+                Add
+              </CustomButton>
+            )}
+
+            {/* Update Button */}
+            {dirtyFields?.socialPlatforms?.[index] && (
+              <CustomButton
+                type="button"
+                onClick={() =>
+                  updateAccount(getValues(`socialPlatforms.${index}`))
+                }
+                bg_prop="bg-green-500 hover:bg-green-600"
+              >
+                Update
+              </CustomButton>
+            )}
           </div>
         </div>
       ))}
 
-      <div className="col-span-4 flex flex-col items-center justify-center gap-3 p-6 border border-gray-500 rounded-md shadow-lg">
+      <div className="col-span-4 flex flex-col items-center justify-center gap-3 p-6 bg-white border border-gray-500 rounded-md shadow-lg">
         <div
           onClick={() =>
             append({

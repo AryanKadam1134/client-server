@@ -3,6 +3,7 @@ import React from "react";
 export default function LabelInput({
   id,
   label,
+  attachment,
   children,
   className = "",
   colSpan = "col-span-1",
@@ -24,15 +25,19 @@ export default function LabelInput({
 
       <label
         htmlFor={id}
-        className={`text-sm font-medium
+        className={`flex items-center justify-between text-sm font-medium
         ${bold && `font-semibold`}
         ${!isCheckbox && `whitespace-nowrap`}`}
       >
-        {label}
-        {required && <span className="text-red-600"> *</span>}
-        {orientation == "horizontal" && " :"}
+        <p>
+          {label}
+          {required && <span className="text-red-600"> *</span>}
+          {orientation == "horizontal" && " :"}
 
-        {isFile && <div className="mt-1">{children}</div>}
+          {isFile && <div className="mt-1">{children}</div>}
+        </p>
+
+        {attachment}
       </label>
 
       {!isCheckbox && !isFile && children}
