@@ -1,7 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
-import { Loader, SquarePen, FileText, Trash2 } from "lucide-react";
+import {
+  Loader,
+  SquarePen,
+  FileText,
+  Trash2,
+  FilePenLine,
+  Edit,
+} from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -419,6 +426,11 @@ export default function Dashboard() {
       <LabelInput
         id="email"
         label="Email"
+        attachment={
+          <div className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
+            <Edit size={13} /> <p>Update Email</p>
+          </div>
+        }
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
       >

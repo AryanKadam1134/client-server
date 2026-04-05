@@ -1,14 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useCombobox } from "downshift";
 import { commonInputClass } from "../../constants";
 import { ChevronDown } from "lucide-react";
-
-import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  autoUpdate,
-} from "@floating-ui/react";
 
 const errorClass = (error) => {
   return error
@@ -17,82 +9,71 @@ const errorClass = (error) => {
 };
 
 export default function CustomSelect({
-  error,
-  className = "",
   options = [],
+  error,
   value,
   onChange,
   placeholder = "Select...",
 }) {
-  const { refs, floatingStyles } = useFloating({
-    middleware: [offset(5), flip(), shift()],
-    whileElementsMounted: autoUpdate,
+  const selectedItem = options.find((opt) => opt.value === value) || null;
+
+  const {
+    isOpen,
+    getMenuProps,
+    getInputProps,
+    getItemProps,
+    highlightedIndex,
+    getToggleButtonProps,
+  } = useCombobox({
+    items: options,
+    selectedItem,
+    itemToString: (item) => item?.label || "",
+
+    onSelectedItemChange: ({ selectedItem }) => {
+      onChange(selectedItem?.value);
+    },
   });
 
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef(null);
-
-  const selectedOption = options.find((opt) => opt.value === value);
-
-  // Close on outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (!wrapperRef.current?.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
-    <div ref={wrapperRef} className="relative w-full">
-      {/* Input-like Trigger */}
-      <div
-        ref={refs.setReference}
-        onClick={() => setOpen((prev) => !prev)}
-        className={`
-          ${commonInputClass}
-          ${errorClass(error)}
-          ${className}
-          flex items-center justify-between gap-3 cursor-pointer
-        `}
-      >
-        <span className={`${!selectedOption ? "text-gray-400" : ""}`}>
-          {selectedOption?.label || placeholder}
-        </span>
-
-        <ChevronDown
-          size={18}
-          className={`transition-transform ${open ? "rotate-180" : ""}`}
+    <div className="relative w-full">
+      {/* Input */}
+      <div className="relative flex items-center">
+        <input
+          {...getInputProps({
+            placeholder,
+          })}
+          className={`${commonInputClass} ${errorClass(error)} pr-10`}
         />
+
+        <button
+          type="button"
+          {...getToggleButtonProps()}
+          className="absolute right-2"
+        >
+          <ChevronDown size={18} />
+        </button>
       </div>
 
       {/* Dropdown */}
-      {open && (
-        <div
-          ref={refs.setFloating}
-          style={{
-            ...floatingStyles,
-            width: refs.reference.current?.offsetWidth,
-          }}
-          className="z-50 mx-1 w-full bg-white border border-gray-300 rounded-sm shadow-md max-h-60 overflow-y-auto"
-        >
-          {options.map((option) => (
-            <div
-              key={option.value}
-              onClick={() => {
-                onChange(option.value);
-                setOpen(false);
-              }}
-              className="px-3 py-2 cursor-pointer hover:bg-gray-100 text-sm"
+      <ul
+        {...getMenuProps()}
+        className={`absolute z-50 mt-1 w-full bg-white border rounded-sm shadow-md max-h-60 overflow-y-auto ${
+          !isOpen && "hidden"
+        }`}
+      >
+        {isOpen &&
+          options.map((item, index) => (
+            <li
+              key={item.value}
+              {...getItemProps({ item, index })}
+              className={`px-3 py-2 cursor-pointer text-sm
+                ${highlightedIndex === index ? "bg-gray-100" : ""}
+              `}
             >
-              {option.label}
-            </div>
+              {item.label}
+            </li>
           ))}
-        </div>
-      )}
+      </ul>
     </div>
   );
 }

@@ -270,8 +270,6 @@ export default function SocialPlatforms() {
     name: "socialPlatforms",
   });
 
-  console.log("dirty index: ", dirtyFields?.socialPlatforms?.[1]);
-
   const fetchSocialPlatforms = async () => {
     try {
       const res = await apiEndpoints.getSocialPlatforms();
@@ -379,6 +377,7 @@ export default function SocialPlatforms() {
           key={item._id || index}
           className="col-span-4 flex flex-col gap-6 p-5 bg-white border border-gray-500 rounded-md shadow-lg"
         >
+          {/* Platform Name */}
           <LabelInput
             id={`socialPlatforms.${index}.name`}
             label="Platform Name"
@@ -393,6 +392,7 @@ export default function SocialPlatforms() {
             />
           </LabelInput>
 
+          {/* Platform Link */}
           <LabelInput
             id={`socialPlatforms.${index}.link`}
             label="Link"
@@ -418,6 +418,7 @@ export default function SocialPlatforms() {
             />
           </LabelInput>
 
+          {/* Sort Order */}
           <LabelInput
             id={`socialPlatforms.${index}.sortOrder`}
             label="Sort Order"
@@ -432,6 +433,7 @@ export default function SocialPlatforms() {
             />
           </LabelInput>
 
+          {/* Visibility & Action Buttons */}
           <div className="flex items-center justify-between gap-2">
             <LabelInput
               id={`socialPlatforms.${index}.visibility`}
