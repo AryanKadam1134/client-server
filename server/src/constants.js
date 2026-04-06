@@ -33,7 +33,7 @@ const VISIBILITY = [
 ];
 
 const options = {
-  httpOnly: false, // set to true in production
+  httpOnly: true, // set to true in production
   secure: false,
 };
 

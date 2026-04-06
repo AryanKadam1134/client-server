@@ -1,7 +1,10 @@
 import React from "react";
+
+import { Menu } from "lucide-react";
+
 import { useAuth } from "../../context/AuthContext";
 
-export default function Header() {
+export default function Header({ onMenuClick }) {
   const { user } = useAuth();
 
   const now = new Date();
@@ -19,8 +22,14 @@ export default function Header() {
   const dateNum = now.getDate();
 
   return (
-    <div className="shrink-0 h-15 w-full px-5 flex items-center justify-end text-sm shadow z-10">
-      <div className="flex items-center justify-center gap-2">
+    <div className="shrink-0 h-15 w-full px-5 flex items-center justify-between text-sm shadow z-10">
+      {/* Hamburger (mobile only) */}
+      <button onClick={onMenuClick} className="md:hidden">
+        <Menu size={22} />
+      </button>
+
+      {/* User Badge */}
+      <div className="flex items-center justify-center gap-2 ml-auto">
         <div className="flex flex-col items-end text-xs">
           <p className="font-medium">
             Welcome, {user?.firstName} {user?.lastName}

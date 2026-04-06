@@ -486,13 +486,14 @@ export default function Dashboard() {
         />
       </LabelInput>
 
-      <div className="col-span-6"></div>
+      <div className="hidden lg:block col-span-6"></div>
 
       {/* Resume PDF - Drag & Drop */}
       <LabelInput
         id="resumeOrCv"
         label="Resume PDF"
         colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
+        className="order-[98] lg:order-0"
         required
       >
         <ResumeDropZone
@@ -510,7 +511,7 @@ export default function Dashboard() {
       <LabelInput
         id="about"
         label="About"
-        colSpan="row-span-3 col-span-12 sm:col-span-9"
+        colSpan="row-span-3 col-span-12 lg:col-span-9"
       >
         <CustomTextArea
           id="about"
@@ -527,6 +528,7 @@ export default function Dashboard() {
         id="documentUrl"
         label="Resume Link (Optional)"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        className="order-[99] lg:order-0"
       >
         <CustomInput
           id="documentUrl"
@@ -584,7 +586,7 @@ export default function Dashboard() {
 
       <CustomButton
         type="submit"
-        className="col-span-12 place-self-end"
+        className="col-span-12 place-self-end order-last lg:order-0"
         disabled={isSubmitting}
       >
         {isSubmitting ? "Saving..." : "Save"}

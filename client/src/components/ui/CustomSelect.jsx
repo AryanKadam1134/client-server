@@ -57,7 +57,7 @@ export default function CustomSelect({
       {/* Dropdown */}
       <ul
         {...getMenuProps()}
-        className={`absolute z-50 mt-1 w-full bg-white border rounded-sm shadow-md max-h-60 overflow-y-auto ${
+        className={`absolute z-50 mt-1 w-full bg-white border border-gray-500 rounded-sm shadow-md max-h-60 overflow-y-auto ${
           !isOpen && "hidden"
         }`}
       >
@@ -67,7 +67,8 @@ export default function CustomSelect({
               key={item.value}
               {...getItemProps({ item, index })}
               className={`px-3 py-2 cursor-pointer text-sm
-                ${highlightedIndex === index ? "bg-gray-100" : ""}
+                ${highlightedIndex === index ? "bg-gray-200" : ""}
+                ${selectedItem === item ? "font-medium bg-gray-200" : ""}
               `}
             >
               {item.label}

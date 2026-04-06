@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   User,
@@ -28,59 +27,89 @@ const menus = [
   { name: "Achievements", path: "/achievements", icon: Trophy },
 ];
 
-const menuStyle =
-  "px-3 py-2 flex items-center justify-start gap-2.5 text-[13.5px] min-w-45";
+const menuStyle = "px-3 py-2 flex items-center gap-2.5 text-[13.5px] min-w-45";
 
-function NavItem({ menu }) {
+function NavItem({ menu, onClick }) {
   const Icon = menu.icon;
 
   return (
     <NavLink
       to={menu.path}
+      onClick={onClick} // ✅ close on click (mobile)
       className={({ isActive }) =>
         `${menuStyle} border-l-2 ${
           isActive
-            ? `border-black font-medium text-black bg-gray-200`
-            : `border-white text-gray-800 hover:text-black hover:bg-gray-200`
+            ? "border-black font-medium text-black bg-gray-200"
+            : "border-white text-gray-800 hover:text-black hover:bg-gray-200"
         } rounded-sm transition-colors`
       }
     >
       <Icon size={17} />
-
       <p className="text-nowrap">{menu.name}</p>
     </NavLink>
   );
 }
 
-export default function SideBar() {
+export default function SideBar({ isOpen, onClose }) {
   const { logout } = useAuth();
 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+  }, [isOpen]);
+
   return (
-    <div className="h-full flex flex-col px-2.5 border-r border-gray-200">
-      <div className="shrink-0 h-15 flex items-center border-b border-gray-200">
-        <div className="flex items-center justify-start gap-2.5">
-          <div className="p-4 bg-gray-500 rounded-full"></div>
-          <p className="text-nowrap text-md font-medium">Portfolio SAAS</p>
+    <>
+      {/* 🔥 Overlay (mobile only) */}
+      {isOpen && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+        />
+      )}
+
+      {/* 🔥 Sidebar */}
+      <div
+        className={`
+          fixed md:static top-0 left-0 z-50 h-full w-64 bg-white
+          transform transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
+          flex flex-col px-2.5 border-r border-gray-200
+        `}
+      >
+        {/* Header */}
+        <div className="shrink-0 h-15 flex items-center border-b border-gray-200">
+          <div className="flex items-center gap-2.5">
+            <div className="p-4 bg-gray-500 rounded-full"></div>
+            <p className="text-nowrap text-md font-medium">Portfolio SAAS</p>
+          </div>
+        </div>
+
+        {/* Menus */}
+        <div className="py-3 flex flex-col justify-between h-full">
+          <div className="flex-1 flex flex-col gap-2">
+            {menus.map((menu) => (
+              <NavItem
+                key={menu.name}
+                menu={menu}
+                onClick={onClose} // ✅ close on select
+              />
+            ))}
+          </div>
+
+          {/* Logout */}
+          <button
+            onClick={() => {
+              logout();
+              onClose(); // ✅ close on logout
+            }}
+            className={`${menuStyle} text-red-500 hover:text-red-600 bg-red-100 hover:bg-red-200 rounded-sm transition-colors cursor-pointer`}
+          >
+            <LogOut size={17} />
+            <p className="text-nowrap">Logout</p>
+          </button>
         </div>
       </div>
-
-      {/* Menus List */}
-      <div className="py-3 flex flex-col justify-between h-full">
-        <div className="flex-1 flex flex-col gap-2">
-          {menus.map((menu) => (
-            <NavItem key={menu.name} menu={menu} />
-          ))}
-        </div>
-
-        <button
-          onClick={logout}
-          className={`${menuStyle} text-red-500 hover:text-red-600 bg-red-100 hover:bg-red-200 rounded-sm transition-colors cursor-pointer`}
-        >
-          <LogOut size={17} />
-
-          <p className="text-nowrap">Logout</p>
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
