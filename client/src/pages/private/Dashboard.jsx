@@ -517,7 +517,7 @@ export default function Dashboard() {
           id="about"
           type="textarea"
           placeholder="About"
-          className="h-full"
+          className="h-full min-h-37.5"
           {...register("about")}
           error={errors.about}
         />

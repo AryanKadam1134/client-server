@@ -71,6 +71,22 @@ const userSchema = new Schema(
     },
 
     refreshToken: String,
+
+    sessions: [
+      {
+        refreshToken: {
+          type: String,
+          required: true,
+        },
+        userAgent: String,
+        ip: String,
+        deviceId: String,
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   { timestamps: true },
 );

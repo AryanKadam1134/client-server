@@ -22,9 +22,9 @@ api.interceptors.response.use(
 export const apiEndpoints = {
   register: (body) => api.post(`/user/register`, body),
 
-  login: (body) => api.post(`/user/login`, body),
+  login: (body, config) => api.post(`/user/login`, body, config),
 
-  restoreSession: (body) => api.post(`/user/restoreSession`, body),
+  restoreSession: (config) => api.post(`/user/restoreSession`, {}, config),
 
   logout: () => api.post(`/user/logout`),
 

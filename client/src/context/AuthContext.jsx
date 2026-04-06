@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+
+import { v4 as uuidv4 } from "uuid";
+
 import { apiEndpoints } from "../api";
 
 const AuthContext = createContext();
@@ -15,9 +18,20 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
+  let deviceId = localStorage.getItem("deviceId");
+
+  if (!deviceId) {
+    deviceId = uuidv4();
+    localStorage.setItem("deviceId", deviceId);
+  }
+
   const login = async (payload) => {
     try {
-      const res = await apiEndpoints.login(payload);
+      const res = await apiEndpoints.login(payload, {
+        headers: {
+          "x-device-id": deviceId,
+        },
+      });
 
       const data = res.data;
 
@@ -45,7 +59,11 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const res = await apiEndpoints.restoreSession();
+        const res = await apiEndpoints.restoreSession({
+          headers: {
+            "x-device-id": deviceId,
+          },
+        });
 
         const data = res.data;
 

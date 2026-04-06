@@ -14,8 +14,14 @@ import {
 } from "../../utils/cloudinary.js";
 import passwordChangedTemplate from "../../utils/emailTemplates/passwordChanged.js";
 
-const generateAccessAndRefreshToken = async (userId) => {
+const generateAccessAndRefreshToken = async (userId, req) => {
   if (!userId) return;
+
+  const deviceId = req.headers["x-device-id"];
+
+  if (!deviceId) {
+    throw new ApiError(400, "Device ID missing");
+  }
 
   try {
     const user = await User.findById(userId);
@@ -24,7 +30,34 @@ const generateAccessAndRefreshToken = async (userId) => {
     // console.log("accessToken: ", accessToken);
     // console.log("refreshToken: ", refreshToken);
 
-    user.refreshToken = refreshToken;
+    // add new session
+    const existingSessionIndex = user.sessions.findIndex(
+      (s) => s.deviceId === deviceId,
+    );
+
+    // ✅ CASE 1: Device already exists → UPDATE session
+    if (existingSessionIndex !== -1) {
+      const session = user.sessions[existingSessionIndex];
+      session.refreshToken = refreshToken;
+      session.userAgent = req.headers["user-agent"];
+      session.ip = req.ip;
+      session.createdAt = new Date();
+    }
+
+    // ✅ CASE 2: New device
+    else {
+      if (user.sessions.length >= 5) {
+        throw new ApiError(403, "Maximum devices limit reached (5)");
+      }
+
+      user.sessions.push({
+        deviceId,
+        refreshToken,
+        userAgent: req.headers["user-agent"],
+        ip: req.ip,
+      });
+    }
+
     await user.save({ validateBeforeSave: false });
 
     return { accessToken, refreshToken };
@@ -36,6 +69,16 @@ const generateAccessAndRefreshToken = async (userId) => {
 
 const refreshAccessToken = asynchandler(async (req, res) => {
   const cookieRefreshToken = req.cookies?.refreshToken;
+
+  const deviceId = req.headers["x-device-id"];
+
+  if (!cookieRefreshToken) {
+    throw new ApiError(401, "No refresh token");
+  }
+
+  if (!deviceId) {
+    throw new ApiError(400, "Device ID missing");
+  }
 
   // Decode Token
   const decodedToken = jwt.verify(
@@ -49,21 +92,26 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     throw new ApiError(404, "user not found!");
   }
 
-  if (loggedUser?.refreshToken !== cookieRefreshToken) {
+  console.log("Device Id:", deviceId);
+
+  const session = loggedUser.sessions.find((s) => s.deviceId === deviceId);
+
+  if (!session) {
     throw new ApiError(419, "session expired!");
   }
 
   // Get access and referesh Token
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     loggedUser?._id,
+    req,
   );
 
   if (!accessToken || !refreshToken) {
     throw new ApiError(503, "couldn't generate access or refresh token!");
   }
 
-  const user = await User.findById(loggedUser?._id).select(
-    "-password -refreshToken",
+  const user = await User.findById(loggedUser._id).select(
+    "-password -sessions",
   );
 
   return res
@@ -141,6 +189,7 @@ const loginUser = asynchandler(async (req, res) => {
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     userExist?._id,
+    req,
   );
 
   if (!accessToken || !refreshToken) {
@@ -148,7 +197,7 @@ const loginUser = asynchandler(async (req, res) => {
   }
 
   const loggedUser = await User.findById(userExist?._id).select(
-    "-password -refreshToken",
+    "-password -refreshToken -session",
   );
 
   if (!loggedUser) {
@@ -169,8 +218,10 @@ const loginUser = asynchandler(async (req, res) => {
 });
 
 const logoutUser = asynchandler(async (req, res) => {
+  const cookieRefreshToken = req.cookies?.refreshToken;
+
   await User.findByIdAndUpdate(req.user?._id, {
-    $set: { refreshToken: undefined },
+    $pull: { sessions: { refreshToken: cookieRefreshToken } },
   });
 
   return res
