@@ -18,6 +18,7 @@ import { apiEndpoints } from "../../api";
 
 import useGenders from "../../hooks/useGenders";
 import CustomButton from "../../components/ui/CustomButton";
+import CustomTextArea from "../../components/ui/CustomTextArea";
 
 function ResumeDropZone({
   fileInputRef,
@@ -505,6 +506,37 @@ export default function Dashboard() {
         />
       </LabelInput>
 
+      {/* About */}
+      <LabelInput
+        id="about"
+        label="About"
+        colSpan="row-span-3 col-span-12 sm:col-span-9"
+      >
+        <CustomTextArea
+          id="about"
+          type="textarea"
+          placeholder="About"
+          className="h-full"
+          {...register("about")}
+          error={errors.about}
+        />
+      </LabelInput>
+
+      {/* Resume Link */}
+      <LabelInput
+        id="documentUrl"
+        label="Resume Link (Optional)"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
+          id="documentUrl"
+          type="text"
+          placeholder="e.g. Google Drive link"
+          {...register("documentUrl", {})}
+          error={errors.documentUrl}
+        />
+      </LabelInput>
+
       {/* City */}
       <LabelInput
         id="city"
@@ -547,21 +579,6 @@ export default function Dashboard() {
           placeholder="e.g. Google Drive link"
           {...register("location.country", {})}
           error={errors.location?.country}
-        />
-      </LabelInput>
-
-      {/* Resume Link */}
-      <LabelInput
-        id="documentUrl"
-        label="Resume Link (Optional)"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-      >
-        <CustomInput
-          id="documentUrl"
-          type="text"
-          placeholder="e.g. Google Drive link"
-          {...register("documentUrl", {})}
-          error={errors.documentUrl}
         />
       </LabelInput>
 

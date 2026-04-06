@@ -33,8 +33,8 @@ const VISIBILITY = [
 ];
 
 const options = {
-  httpOnly: true,
-  secure: true,
+  httpOnly: false, // set to true in production
+  secure: false,
 };
 
 const DB_NAME = "portfolio_backend";

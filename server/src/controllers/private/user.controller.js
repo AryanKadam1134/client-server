@@ -227,6 +227,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
     firstName,
     middleName,
     lastName,
+    about,
     mobileNo,
     gender,
     location,
@@ -239,6 +240,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
   if (firstName) fields.firstName = firstName;
   if (middleName) fields.middleName = middleName;
   if (lastName) fields.lastName = lastName;
+  if (about) fields.about = about;
   if (gender) fields.gender = gender;
   if (location) {
     for (const key in location) {

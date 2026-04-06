@@ -39,6 +39,8 @@ const userSchema = new Schema(
     middleName: String,
     lastName: String,
 
+    about: String,
+
     mobileNo: {
       type: Number,
       unique: true,

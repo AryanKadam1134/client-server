@@ -28,6 +28,7 @@ export default function Authentication() {
     try {
       if (isLogin) {
         await login(payload);
+        
         navigate("/details");
       } else {
         const res = await apiEndpoints.register(payload);

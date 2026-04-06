@@ -375,7 +375,7 @@ export default function SocialPlatforms() {
       {fields.map((item, index) => (
         <div
           key={item._id || index}
-          className="col-span-4 flex flex-col gap-6 p-5 bg-white border border-gray-500 rounded-md shadow-lg"
+          className="col-span-12 sm:col-span-4 flex flex-col gap-6 p-5 bg-white border border-gray-500 rounded-md shadow-lg"
         >
           {/* Platform Name */}
           <LabelInput
