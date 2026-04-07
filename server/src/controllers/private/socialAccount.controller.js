@@ -157,6 +157,18 @@ const deleteSocialAccount = asynchandler(async (req, res) => {
     .json(new ApiRes(200, null, "social account deleted successfully!"));
 });
 
+const getSocialAccount = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiRes(
+        200,
+        req.socialAccount,
+        "social account fetched successfully!",
+      ),
+    );
+});
+
 const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
   const platforms = await SocialAccount.find({
     owner: req.user?._id,
@@ -174,6 +186,7 @@ const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
 export {
   manageSocialPlatforms,
   addSocialAccount,
+  getSocialAccount,
   updateSocialAccount,
   deleteSocialAccount,
   getAllUserSocialPlatforms,

@@ -21,6 +21,7 @@ import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
 
 import { useAuth } from "./context/AuthContext";
+import AddEditSocialAccount from "./pages/private/AddEditSocialAccount";
 
 function PublicRoute() {
   const { user } = useAuth();
@@ -49,6 +50,10 @@ function ProtectedRoute() {
   );
 }
 
+function CommonLayout() {
+  return <Outlet />;
+}
+
 function App() {
   return (
     <Router>
@@ -63,7 +68,11 @@ function App() {
         {/* 🔐 Protected Route */}
         <Route element={<ProtectedRoute />}>
           <Route path="/details" element={<Dashboard />} />
-          <Route path="/social" element={<SocialPlatforms />} />
+          <Route path="/social" element={<CommonLayout />}>
+            <Route index element={<SocialPlatforms />} />
+            <Route path="add" element={<AddEditSocialAccount />} />
+            <Route path=":accountId/edit" element={<AddEditSocialAccount />} />
+          </Route>
           <Route path="/skills" element={<Skills />} />
           <Route path="/skill-categories" element={<SkillCategories />} />
           <Route path="/projects" element={<Projects />} />

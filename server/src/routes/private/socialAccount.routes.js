@@ -6,6 +6,7 @@ import {
   deleteSocialAccount,
   addSocialAccount,
   updateSocialAccount,
+  getSocialAccount,
 } from "../../controllers/private/socialAccount.controller.js";
 
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
@@ -24,6 +25,7 @@ socialAccountRouter
 
 socialAccountRouter
   .route("/:accountId")
+  .get(getSocialAccountById, getSocialAccount)
   .patch(getSocialAccountById, updateSocialAccount)
   .delete(getSocialAccountById, deleteSocialAccount);
 

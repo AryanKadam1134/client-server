@@ -46,6 +46,8 @@ export const apiEndpoints = {
 
   addSocialPlatform: (body) => api.post(`/social`, body),
 
+  getSocialPlatform: (accountId) => api.get(`/social/${accountId}`),
+
   updateSocialPlatform: (accountId, body) =>
     api.patch(`/social/${accountId}`, body),
 
