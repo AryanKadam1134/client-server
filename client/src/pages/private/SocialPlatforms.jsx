@@ -41,8 +41,11 @@ export default function SocialPlatforms() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <CustomButton onClick={() => navigate("add")} className="self-end">
-        Add Social Platfrom
+      <CustomButton
+        onClick={() => navigate("add")}
+        className="self-end flex items-center gap-2"
+      >
+        <Plus size={18} /> Add Social Platfrom
       </CustomButton>
 
       <table
@@ -67,7 +70,15 @@ export default function SocialPlatforms() {
               className={index % 2 === 0 ? "bg-gray-200" : ""}
             >
               <td>{item?.name}</td>
-              <td>{item?.link}</td>
+              <td>
+                <a
+                  href={item?.link}
+                  target="_blank"
+                  className="hover:text-blue-600 hover:underline"
+                >
+                  {item?.link}
+                </a>
+              </td>
               <td>{item?.sortOrder}</td>
               <td>{item?.visibility}</td>
               <td>

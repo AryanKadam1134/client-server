@@ -264,7 +264,11 @@ export default function AddEditSocialAccount() {
     reset,
     control,
     formState: { errors, isSubmitting, dirtyFields },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      sortOrder: 0,
+    },
+  });
 
   const platformLink = useWatch({ control, name: "link" });
 
@@ -299,19 +303,18 @@ export default function AddEditSocialAccount() {
   };
 
   const addUpdatePlatform = async (payload) => {
-    const updatedData = getUpdatedFields(payload, dirtyFields);
-
     try {
       let res;
       if (accountId) {
+        const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await apiEndpoints.updateSocialPlatform(accountId, updatedData);
       } else {
-        res = await apiEndpoints.addSocialPlatform(updatedData);
+        res = await apiEndpoints.addSocialPlatform(payload);
       }
 
       const data = res.data;
 
-      fetchSocialPlatform();
+      if (accountId) fetchSocialPlatform();
       console.log("Social Platform Saved: ", data);
     } catch (error) {
       console.error("Error saving Social Platform: ", error);
@@ -382,7 +385,7 @@ export default function AddEditSocialAccount() {
           type="number"
           min={0}
           placeholder={`Enter Platform Sort Order`}
-          {...register("sortOrder", { min: 0 })}
+          {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
       </LabelInput>
