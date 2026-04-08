@@ -507,11 +507,27 @@ export default function Dashboard() {
         />
       </LabelInput>
 
+      {/* Headline */}
+      <LabelInput
+        id="headline"
+        label="Headline"
+        colSpan="row-span-3 col-span-12 lg:col-span-3"
+      >
+        <CustomTextArea
+          id="headline"
+          type="textarea"
+          placeholder="Headline"
+          className="h-full min-h-37.5"
+          {...register("headline")}
+          error={errors.headline}
+        />
+      </LabelInput>
+
       {/* About */}
       <LabelInput
         id="about"
         label="About"
-        colSpan="row-span-3 col-span-12 lg:col-span-9"
+        colSpan="row-span-3 col-span-12 lg:col-span-6"
       >
         <CustomTextArea
           id="about"

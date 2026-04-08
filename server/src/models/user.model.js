@@ -39,6 +39,7 @@ const userSchema = new Schema(
     middleName: String,
     lastName: String,
 
+    headline: String,
     about: String,
 
     mobileNo: {
