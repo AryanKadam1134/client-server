@@ -125,6 +125,12 @@ const deleteSkill = asynchandler(async (req, res) => {
     .json(new ApiRes(200, null, "skill deleted successfully!"));
 });
 
+const getSkill = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, req.skill, "skill fetched successfully!"));
+});
+
 const getAllSkillWithCategory = asynchandler(async (req, res) => {
   const skills = await Skill.aggregate([
     {
@@ -163,4 +169,10 @@ const getAllSkillWithCategory = asynchandler(async (req, res) => {
     .json(new ApiRes(200, skills, "skills fetched successfully!"));
 });
 
-export { addSkill, updateSkill, deleteSkill, getAllSkillWithCategory };
+export {
+  addSkill,
+  updateSkill,
+  deleteSkill,
+  getSkill,
+  getAllSkillWithCategory,
+};

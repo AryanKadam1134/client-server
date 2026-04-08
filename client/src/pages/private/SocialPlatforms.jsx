@@ -2,11 +2,11 @@ import React, { Fragment, useEffect, useState } from "react";
 
 import { Plus, Trash2, FilePenLine } from "lucide-react";
 
+import Table from "../../components/common/Table";
 import CustomButton from "../../components/ui/CustomButton";
 
 import { apiEndpoints } from "../../api";
 import { useNavigate } from "react-router-dom";
-import Table from "../../components/common/Table";
 
 export default function SocialPlatforms() {
   const navigate = useNavigate();

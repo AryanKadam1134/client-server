@@ -46,12 +46,12 @@ export const apiEndpoints = {
 
   addSocialPlatform: (body) => api.post(`/social`, body),
 
-  getSocialPlatform: (accountId) => api.get(`/social/${accountId}`),
-
   updateSocialPlatform: (accountId, body) =>
     api.patch(`/social/${accountId}`, body),
 
   deleteSocialPlatform: (accountId) => api.delete(`/social/${accountId}`),
+
+  getSocialPlatform: (accountId) => api.get(`/social/${accountId}`),
 
   getSocialPlatforms: () => api.get(`/social`),
 
@@ -61,6 +61,8 @@ export const apiEndpoints = {
   updateSkill: (skillId, body) => api.patch(`/skill/${skillId}`, body),
 
   deleteSkill: (skillId) => api.delete(`/skill/${skillId}`),
+
+  getSkill: (skillId) => api.get(`/skill/${skillId}`),
 
   getSkills: () => api.get(`/skill`),
 

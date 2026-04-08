@@ -22,6 +22,7 @@ import Achievements from "./pages/private/Achievements";
 
 import { useAuth } from "./context/AuthContext";
 import AddEditSocialAccount from "./pages/private/AddEditSocialAccount";
+import AddEditSkills from "./pages/private/AddEditSkills";
 
 function PublicRoute() {
   const { user } = useAuth();
@@ -68,12 +69,19 @@ function App() {
         {/* 🔐 Protected Route */}
         <Route element={<ProtectedRoute />}>
           <Route path="/details" element={<Dashboard />} />
+
           <Route path="/social" element={<CommonLayout />}>
             <Route index element={<SocialPlatforms />} />
             <Route path="add" element={<AddEditSocialAccount />} />
             <Route path=":accountId/edit" element={<AddEditSocialAccount />} />
           </Route>
-          <Route path="/skills" element={<Skills />} />
+
+          <Route path="/skills" element={<CommonLayout />}>
+            <Route index element={<Skills />} />
+            <Route path="add" element={<AddEditSkills />} />
+            <Route path=":skillId/edit" element={<AddEditSkills />} />
+          </Route>
+
           <Route path="/skill-categories" element={<SkillCategories />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/experiences" element={<Experiences />} />

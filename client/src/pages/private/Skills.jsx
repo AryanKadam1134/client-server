@@ -1,81 +1,18 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
-import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { Plus, Trash2, ExternalLink } from "lucide-react";
-import { Select } from "antd";
+import { Plus, Trash2, FilePenLine } from "lucide-react";
 
-import LabelInput from "../../components/ui/LabelInput";
-import CustomInput from "../../components/ui/CustomInput";
+import Table from "../../components/common/Table";
 import CustomButton from "../../components/ui/CustomButton";
-import CustomSelect from "../../components/ui/CustomSelect";
-import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../api";
 
-import useSkillLevels from "../../hooks/useSkillLevels";
-import useVisibilities from "../../hooks/useVisibilities";
-import useSkillCategories from "../../hooks/useSkillCategories";
-
-const TECH_SKILLS = [
-  { title: "HTML5", category: "Frontend" },
-  { title: "CSS3", category: "Frontend" },
-  { title: "JavaScript (ES6+)", category: "Frontend" },
-  { title: "TypeScript", category: "Frontend" },
-  { title: "React", category: "Frontend" },
-  { title: "Vue.js", category: "Frontend" },
-  { title: "Angular", category: "Frontend" },
-  { title: "Svelte", category: "Frontend" },
-  { title: "Next.js", category: "Frontend" },
-  { title: "Tailwind CSS", category: "Frontend" },
-  { title: "Sass/SCSS", category: "Frontend" },
-  { title: "Redux / Context API", category: "State Management" },
-  { title: "Node.js", category: "Backend" },
-  { title: "Express.js", category: "Backend" },
-  { title: "Python", category: "Backend" },
-  { title: "Django", category: "Backend" },
-  { title: "Ruby on Rails", category: "Backend" },
-  { title: "PHP", category: "Backend" },
-  { title: "Go (Golang)", category: "Backend" },
-  { title: "GraphQL", category: "API" },
-  { title: "REST API", category: "API" },
-  { title: "PostgreSQL", category: "Database" },
-  { title: "MongoDB", category: "Database" },
-  { title: "MySQL", category: "Database" },
-  { title: "Redis", category: "Database" },
-  { title: "Git / GitHub", category: "Tools" },
-  { title: "Docker", category: "DevOps" },
-  { title: "Kubernetes", category: "DevOps" },
-  { title: "AWS / Azure / GCP", category: "Cloud" },
-  { title: "Vercel / Netlify", category: "Deployment" },
-  { title: "CI/CD Pipelines", category: "DevOps" },
-  { title: "Unit Testing (Jest/Cypress)", category: "Testing" },
-  { title: "Web Performance Optimization", category: "Optimization" },
-  { title: "SEO Fundamentals", category: "Marketing" },
-  { title: "Web Accessibility (A11y)", category: "Frontend" },
-];
-
-const SKILLS = TECH_SKILLS.map((app) => ({
-  value: app.title,
-  label: app.title,
-}));
+import { useNavigate } from "react-router-dom";
 
 export default function Skills() {
-  const { visibilities } = useVisibilities();
-  const { skillLevels } = useSkillLevels();
-  const { categoriesFilter } = useSkillCategories();
+  const navigate = useNavigate();
 
-  const {
-    register,
-    reset,
-    control,
-    getValues,
-    formState: { errors, dirtyFields },
-  } = useForm();
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "skills",
-  });
+  const [skills, setSkills] = useState([]);
 
   const fetchSkills = async () => {
     try {
@@ -83,33 +20,10 @@ export default function Skills() {
 
       const data = res.data;
 
-      reset({ skills: data });
+      setSkills(data);
       console.log("User Skills: ", data);
     } catch (error) {
       console.error("Error fetching User Skills: ", error);
-    }
-  };
-
-  const addSkill = async (payload) => {
-    try {
-      const res = await apiEndpoints.addSkill(payload);
-
-      const data = res.data;
-
-      fetchSkills();
-      console.log("Skill Created: ", data);
-    } catch (error) {
-      console.error("Error creating Skill: ", error);
-    }
-  };
-
-  const updateSkill = async (payload) => {
-    try {
-      await apiEndpoints.updateSkill(payload?._id, payload);
-
-      fetchSkills();
-    } catch (error) {
-      console.error("Error updating Skill: ", error);
     }
   };
 
@@ -127,156 +41,55 @@ export default function Skills() {
     fetchSkills();
   }, []);
 
-  return (
-    <div className="grid grid-cols-12 gap-6 text-sm">
-      {fields.map((item, index) => (
-        <div
-          key={item._id || index}
-          className="col-span-12 sm:col-span-4 flex flex-col gap-6 p-5 bg-white border border-gray-500 rounded-md shadow-lg"
-        >
-          <LabelInput id={`skills.${index}.name`} label="Skill Name" required>
-            <CustomInput
-              id={`skills.${index}.name`}
-              type="text"
-              placeholder={`Enter Platform name`}
-              {...register(`skills.${index}.name`)}
-              error={errors.skills?.[index]?.name}
-            />
-          </LabelInput>
+  const tableHeading = [
+    { label: "Sr. No." },
+    { label: "Skill Name" },
+    { label: "Link" },
+    { label: "Sort Order" },
+    { label: "Visibility" },
+    { label: "Actions" },
+  ];
 
-          <LabelInput
-            id={`skills.${index}.categoryId`}
-            label="Category"
-            className="w-full"
+  const tableBody = skills?.map((data, index) => {
+    const { _id, name, categoryId, level, sortOrder, visibility } = data;
+
+    return {
+      cells: [
+        index + 1,
+        name,
+        categoryId,
+        level,
+        sortOrder === 0 ? "0" : sortOrder,
+        visibility,
+        <div className="flex items-center justify-center gap-1">
+          <button
+            onClick={() => navigate(`${_id}/edit`)}
+            className="p-1 text-white bg-green-500 hover:bg-green-600 rounded transition-colors cursor-pointer"
           >
-            <Controller
-              name={`skills.${index}.categoryId`}
-              control={control}
-              render={({ field }) => (
-                <CustomSelect
-                  id={`skills.${index}.categoryId`}
-                  placeholder="Select Category"
-                  options={categoriesFilter}
-                  value={field.value}
-                  onChange={field.onChange} // send value to hook form
-                />
-              )}
-            />
-          </LabelInput>
+            <FilePenLine size={18} />
+          </button>
 
-          <LabelInput id={`skills.${index}.level`} label="Level" required>
-            <CustomRadioButtons
-              id={`skills.${index}.level`}
-              name="level"
-              options={skillLevels}
-              {...register(`skills.${index}.level`, {
-                required: "Visibility is required!",
-              })}
-              error={errors.skills?.[index]?.level}
-            />
-          </LabelInput>
+          <button
+            onClick={() => deleteSkill(_id)}
+            className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>,
+      ],
+    };
+  });
 
-          <LabelInput id={`skills.${index}.sortOrder`} label="Sort Order">
-            <CustomInput
-              id={`skills.${index}.sortOrder`}
-              type="number"
-              min={0}
-              placeholder={`Enter ${item.name} Sort Order`}
-              {...register(`skills.${index}.sortOrder`, { min: 0 })}
-              error={errors.skills?.[index]?.sortOrder}
-            />
-          </LabelInput>
+  return (
+    <div className="flex flex-col gap-6 text-sm">
+      <CustomButton
+        onClick={() => navigate("add")}
+        className="self-end flex items-center gap-2"
+      >
+        <Plus size={18} /> Add Skill
+      </CustomButton>
 
-          <div className="flex items-center justify-between gap-2">
-            <LabelInput
-              id={`skills.${index}.visibility`}
-              label="Visibility"
-              className="flex-1"
-              required
-            >
-              <CustomRadioButtons
-                id={`skills.${index}.visibility`}
-                name="visibility"
-                options={visibilities}
-                {...register(`skills.${index}.visibility`, {
-                  required: "Visibility is required!",
-                })}
-                error={errors.skills?.[index]?.visibility}
-              />
-            </LabelInput>
-
-            <CustomButton
-              type="button"
-              onClick={() => (item._id ? deleteSkill(item._id) : remove(index))}
-              bg_prop="bg-red-500 hover:bg-red-600"
-            >
-              Remove
-            </CustomButton>
-
-            {/* Add button */}
-            {!item._id && (
-              <CustomButton
-                type="button"
-                onClick={() => addSkill(getValues(`skills.${index}`))}
-                bg_prop="bg-green-500 hover:bg-green-600"
-              >
-                Add
-              </CustomButton>
-            )}
-
-            {/* Update Button */}
-            {item?._id &&
-              dirtyFields?.skills?.[index] &&
-              Object.values(dirtyFields?.skills?.[index])?.some((v) => v) && (
-                <CustomButton
-                  type="button"
-                  onClick={() => updateSkill(getValues(`skills.${index}`))}
-                  bg_prop="bg-blue-500 hover:bg-blue-600"
-                >
-                  Update
-                </CustomButton>
-              )}
-          </div>
-        </div>
-      ))}
-
-      <div className="col-span-4 flex flex-col items-center justify-center gap-3 p-6 bg-white border border-gray-500 rounded-md shadow-lg">
-        <div
-          onClick={() =>
-            append({
-              name: "",
-              categoryId: "",
-              level: "",
-              visibility: "public", // or default value
-              sortOrder: fields?.length,
-            })
-          }
-          className="flex flex-col items-center justify-center gap-1 w-full h-full
-          text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md border-2 border-gray-500 border-dashed cursor-pointer transition-colors"
-        >
-          <Plus size={24} />
-          Add Custom Platform <br />
-        </div>
-
-        <p>OR</p>
-
-        <LabelInput id="platfrom" label="Select Platfrom" className="w-full">
-          <CustomSelect
-            placeholder="Select Platfrom"
-            options={[{ value: "Select Platfrom", label: "Select" }, ...SKILLS]}
-            value="Select Platfrom"
-            onChange={(value) =>
-              append({
-                name: value, // ✅ correct
-                categoryId: "",
-                level: "",
-                visibility: "public",
-                sortOrder: fields?.length,
-              })
-            }
-          />
-        </LabelInput>
-      </div>
+      <Table tableHeading={tableHeading} tableBody={tableBody} />
     </div>
   );
 }
