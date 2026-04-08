@@ -6,6 +6,7 @@ import CustomButton from "../../components/ui/CustomButton";
 
 import { apiEndpoints } from "../../api";
 import { useNavigate } from "react-router-dom";
+import Table from "../../components/common/Table";
 
 export default function SocialPlatforms() {
   const navigate = useNavigate();
@@ -39,6 +40,44 @@ export default function SocialPlatforms() {
     fetchSocialPlatforms();
   }, []);
 
+  const tableHeading = [
+    { label: "Sr. No." },
+    { label: "Platform Name" },
+    { label: "Link" },
+    { label: "Sort Order" },
+    { label: "Visibility" },
+    { label: "Actions" },
+  ];
+
+  const tableBody = platforms?.map((data, index) => {
+    const { _id, name, link, sortOrder, visibility } = data;
+
+    return {
+      cells: [
+        index + 1,
+        name,
+        link,
+        sortOrder === 0 ? "0" : sortOrder,
+        visibility,
+        <div className="flex items-center justify-center gap-1">
+          <button
+            onClick={() => navigate(`${_id}/edit`)}
+            className="p-1 text-white bg-green-500 hover:bg-green-600 rounded transition-colors cursor-pointer"
+          >
+            <FilePenLine size={18} />
+          </button>
+
+          <button
+            onClick={() => deletePlatform(_id)}
+            className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>,
+      ],
+    };
+  });
+
   return (
     <div className="flex flex-col gap-6 text-sm">
       <CustomButton
@@ -48,60 +87,7 @@ export default function SocialPlatforms() {
         <Plus size={18} /> Add Social Platfrom
       </CustomButton>
 
-      <table
-        className="w-full 
-        [&_th]:px-2 [&_th]:py-3 [&_th]:text-center [&_th]:min-w-[100px] [&_th]:whitespace-nowrap
-        [&_td]:px-2 [&_td]:py-3 [&_td]:text-center [&_td]:min-w-[100px] [&_td]:whitespace-nowrap"
-      >
-        <thead>
-          <tr>
-            <th>Platform Name</th>
-            <th>Link</th>
-            <th>Sort Order</th>
-            <th>Visibility</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {platforms.map((item, index) => (
-            <tr
-              key={item?.name || index}
-              className={index % 2 === 0 ? "bg-gray-200" : ""}
-            >
-              <td>{item?.name}</td>
-              <td>
-                <a
-                  href={item?.link}
-                  target="_blank"
-                  className="hover:text-blue-600 hover:underline"
-                >
-                  {item?.link}
-                </a>
-              </td>
-              <td>{item?.sortOrder}</td>
-              <td>{item?.visibility}</td>
-              <td>
-                <div className="flex items-center justify-center gap-1">
-                  <button
-                    onClick={() => navigate(`${item?._id}/edit`)}
-                    className="p-1 text-white bg-green-500 hover:bg-green-600 rounded transition-colors cursor-pointer"
-                  >
-                    <FilePenLine size={18} />
-                  </button>
-
-                  <button
-                    onClick={() => deletePlatform(item?._id)}
-                    className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Table tableHeading={tableHeading} tableBody={tableBody} />
     </div>
   );
 }

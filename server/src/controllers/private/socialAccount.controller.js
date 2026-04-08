@@ -143,14 +143,7 @@ const updateSocialAccount = asynchandler(async (req, res) => {
 });
 
 const deleteSocialAccount = asynchandler(async (req, res) => {
-  const { accountId } = req.params;
-
-  const deleted = await SocialAccount.findByIdAndDelete(accountId);
-
-  console.log("Deleted Social Platfrom: ", accountId);
-  if (!deleted) {
-    throw new ApiError(500, "couldn't delete social platform!");
-  }
+  await req.socialAccount.deleteOne();
 
   return res
     .status(200)
