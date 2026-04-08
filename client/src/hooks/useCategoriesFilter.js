@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { apiEndpoints } from "../api";
 
-export default function useSkillCategories() {
+export default function useCategoriesFilter() {
   const [categoriesLoading, setLoading] = useState(true);
   const [categoriesFilter, setCategoriesFilter] = useState([]);
 

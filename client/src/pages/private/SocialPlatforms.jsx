@@ -6,6 +6,7 @@ import Table from "../../components/common/Table";
 import CustomButton from "../../components/ui/CustomButton";
 
 import { apiEndpoints } from "../../api";
+
 import { useNavigate } from "react-router-dom";
 
 export default function SocialPlatforms() {

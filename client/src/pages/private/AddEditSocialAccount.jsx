@@ -7,6 +7,7 @@ import { ExternalLink } from "lucide-react";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
+import CustomSelect from "../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../api";
@@ -331,6 +332,18 @@ export default function AddEditSocialAccount() {
       onSubmit={handleSubmit(addUpdatePlatform)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
+      <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+        <CustomSelect
+          id="categoryId"
+          placeholder="Select Platform"
+          options={SOCIAL_APPS}
+          value={null}
+          onChange={(value) => reset({ name: value })} // send value to hook form
+        />
+      </div>
+
+      <div className="hidden sm:block col-span-9"></div>
+
       {/* Platform Name */}
       <LabelInput
         id="name"

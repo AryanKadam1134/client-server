@@ -1,15 +1,20 @@
 import React, { Fragment, useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine } from "lucide-react";
 
 import Table from "../../components/common/Table";
 import CustomButton from "../../components/ui/CustomButton";
 
+import { getCategoryName } from "../../utils/getCategoryName";
+
 import { apiEndpoints } from "../../api";
 
-import { useNavigate } from "react-router-dom";
+import useCategoriesFilter from "../../hooks/useCategoriesFilter";
 
 export default function Skills() {
+  const { categoriesFilter } = useCategoriesFilter();
+
   const navigate = useNavigate();
 
   const [skills, setSkills] = useState([]);
@@ -44,7 +49,8 @@ export default function Skills() {
   const tableHeading = [
     { label: "Sr. No." },
     { label: "Skill Name" },
-    { label: "Link" },
+    { label: "Category" },
+    { label: "Level" },
     { label: "Sort Order" },
     { label: "Visibility" },
     { label: "Actions" },
@@ -57,7 +63,7 @@ export default function Skills() {
       cells: [
         index + 1,
         name,
-        categoryId,
+        getCategoryName(categoriesFilter, categoryId),
         level,
         sortOrder === 0 ? "0" : sortOrder,
         visibility,

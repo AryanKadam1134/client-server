@@ -13,7 +13,7 @@ import { apiEndpoints } from "../../api";
 
 import useSkillLevels from "../../hooks/useSkillLevels";
 import useVisibilities from "../../hooks/useVisibilities";
-import useSkillCategories from "../../hooks/useSkillCategories";
+import useCategoriesFilter from "../../hooks/useCategoriesFilter";
 
 const TECH_SKILLS = [
   { title: "HTML5", category: "Frontend" },
@@ -61,7 +61,7 @@ const SKILLS = TECH_SKILLS.map((app) => ({
 export default function AddEditSkills() {
   const { visibilities } = useVisibilities();
   const { skillLevels } = useSkillLevels();
-  const { categoriesFilter } = useSkillCategories();
+  const { categoriesFilter } = useCategoriesFilter();
 
   const { skillId } = useParams();
 
@@ -136,6 +136,18 @@ export default function AddEditSkills() {
       onSubmit={handleSubmit(addUpdateSkill)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
+      <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+        <CustomSelect
+          id="categoryId"
+          placeholder="Select Category"
+          options={SKILLS}
+          value={null}
+          onChange={(value) => reset({ name: value })} // send value to hook form
+        />
+      </div>
+
+      <div className="hidden sm:block col-span-9"></div>
+
       {/* Skill Name */}
       <LabelInput
         id="name"
