@@ -3,14 +3,19 @@ import { Router } from "express";
 import {
   getEmploymentTypes,
   getGenders,
+  getSkillCategories,
   getSkillLevel,
   getSocialPlatforms,
   getVisibility,
 } from "../../controllers/private/filter.controller.js";
 
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+
 const filterRoutes = Router();
 
 filterRoutes.route("/social-platforms").get(getSocialPlatforms);
+
+filterRoutes.route("/skill-categories").get(verifyJWT, getSkillCategories);
 
 filterRoutes.route("/skill-levels").get(getSkillLevel);
 

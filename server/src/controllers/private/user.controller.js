@@ -92,8 +92,6 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     throw new ApiError(404, "user not found!");
   }
 
-  console.log("Device Id:", deviceId);
-
   const session = loggedUser.sessions.find((s) => s.deviceId === deviceId);
 
   if (!session) {

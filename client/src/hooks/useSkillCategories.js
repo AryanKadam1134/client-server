@@ -8,14 +8,12 @@ export default function useSkillCategories() {
 
   const fetchSkillCategories = async () => {
     try {
-      const res = await apiEndpoints.getSkillCategories();
+      const res = await apiEndpoints.getSkillCategoriesFilter();
 
       const data = res.data;
 
-      const formatted = data.map((c) => ({ label: c?.name, value: c?._id }));
-
-      setCategoriesFilter(formatted);
-      // console.log("Skill Levels: ", data);
+      setCategoriesFilter(data);
+      console.log("Skill Categories Filter: ", data);
     } catch (error) {
       console.error("Error fetching Skill Levels: ", error);
     } finally {

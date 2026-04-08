@@ -70,6 +70,8 @@ export const apiEndpoints = {
   getSkillCategories: () => api.get(`/skillCategory`),
 
   // Filters
+  getSkillCategoriesFilter: () => api.get(`/filter/skill-categories`),
+
   getSkillLevels: () => api.get(`/filter/skill-levels`),
 
   getGenders: () => api.get(`/filter/genders`),
