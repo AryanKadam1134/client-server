@@ -24,6 +24,7 @@ import AddEditSkillCategory from "./pages/private/AddEditSkillCategory";
 import AddEditSocialPlatform from "./pages/private/AddEditSocialPlatform";
 
 import { useAuth } from "./context/AuthContext";
+import AddEditProject from "./pages/private/AddEditProject";
 
 function PublicRoute() {
   const { user } = useAuth();
@@ -92,7 +93,12 @@ function App() {
             <Route path=":categoryId/edit" element={<AddEditSkillCategory />} />
           </Route>
 
-          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects" element={<CommonLayout />}>
+            <Route index element={<Projects />} />
+            <Route path="add" element={<AddEditProject />} />
+            <Route path=":projectId/edit" element={<AddEditProject />} />
+          </Route>
+
           <Route path="/experiences" element={<Experiences />} />
           <Route path="/education" element={<Educations />} />
           <Route path="/certificates" element={<Certificates />} />

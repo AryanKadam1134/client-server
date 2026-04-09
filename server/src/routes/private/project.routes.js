@@ -5,6 +5,7 @@ import {
   deleteProject,
   deleteProjectImage,
   getAllProjects,
+  getProject,
   updateProjectDetails,
   updateProjectImages,
 } from "../../controllers/private/project.controller.js";
@@ -24,6 +25,7 @@ projectRouter
 
 projectRouter
   .route("/:projectId")
+  .get(getProjectById, getProject)
   .patch(getProjectById, updateProjectDetails)
   .delete(getProjectById, deleteProject);
 

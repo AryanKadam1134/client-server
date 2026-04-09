@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }) {
       <div className="flex flex-col w-full overflow-hidden">
         <Header onMenuClick={() => setIsSidebarOpen(true)} />
 
-        <div className="flex-1 p-8 h-full bg-gray-100 overflow-auto">
+        <div className="flex-1 p-8 h-full bg-gray-100 overflow-y-auto">
           {children}
         </div>
       </div>

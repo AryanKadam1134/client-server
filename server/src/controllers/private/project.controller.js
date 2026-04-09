@@ -304,6 +304,12 @@ const deleteProjectImage = asynchandler(async (req, res) => {
     .json(new ApiRes(200, project, "project image deleted successfully!"));
 });
 
+const getProject = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, req.project, "project fetched successfully!"));
+});
+
 const getAllProjects = asynchandler(async (req, res) => {
   const projects = await Project.aggregate([
     {
@@ -356,5 +362,6 @@ export {
   updateProjectImages,
   deleteProject,
   deleteProjectImage,
+  getProject,
   getAllProjects,
 };

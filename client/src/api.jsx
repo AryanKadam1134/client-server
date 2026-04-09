@@ -79,6 +79,17 @@ export const apiEndpoints = {
 
   getSkillCategories: () => api.get(`/skillCategories`),
 
+  // Projects
+  addProject: (body) => api.post(`/projects`, body),
+
+  updateProject: (projectId, body) => api.patch(`/projects/${projectId}`, body),
+
+  deleteProject: (projectId) => api.delete(`/projects/${projectId}`),
+
+  getProject: (projectId) => api.get(`/projects/${projectId}`),
+
+  getProjects: () => api.get(`/projects`),
+
   // Filters
   getSkillCategoriesFilter: () => api.get(`/filters/skill-categories`),
 

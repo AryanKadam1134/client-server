@@ -12,10 +12,10 @@ import { apiEndpoints } from "../../api";
 
 import useVisibilities from "../../hooks/useVisibilities";
 
-export default function AddEditSkillCategory() {
+export default function AddEditProject() {
   const { visibilities } = useVisibilities();
 
-  const { categoryId } = useParams();
+  const { projectId } = useParams();
 
   const {
     register,
@@ -45,61 +45,93 @@ export default function AddEditSkillCategory() {
     return updated;
   };
 
-  const fetchSkillCategory = async () => {
+  const fetchProject = async () => {
     try {
-      const res = await apiEndpoints.getSkillCategory(categoryId);
+      const res = await apiEndpoints.getProject(projectId);
 
       const data = res.data;
 
       reset(data);
-      console.log("Skill Category: ", data);
+      console.log("Project: ", data);
     } catch (error) {
-      console.error("Error fetching Skill Category: ", error);
+      console.error("Error fetching Project: ", error);
     }
   };
 
-  const addUpdateSkillCategory = async (payload) => {
+  const addUpdateProject = async (payload) => {
     try {
       let res;
-      if (categoryId) {
+      if (projectId) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSkillCategory(categoryId, updatedData);
+        res = await apiEndpoints.updateProject(projectId, updatedData);
       } else {
-        res = await apiEndpoints.addSkillCategory(payload);
+        res = await apiEndpoints.addProject(payload);
       }
 
       const data = res.data;
 
-      if (categoryId) fetchSkillCategory();
-      console.log("Skill Category Saved: ", data);
+      if (projectId) fetchProject();
+      console.log("Project Saved: ", data);
     } catch (error) {
-      console.error("Error saving Skill Category: ", error);
+      console.error("Error saving Project: ", error);
     }
   };
 
   useEffect(() => {
-    if (!categoryId) return;
-    fetchSkillCategory();
-  }, [categoryId]);
+    if (!projectId) return;
+    fetchProject();
+  }, [projectId]);
 
   return (
     <form
-      onSubmit={handleSubmit(addUpdateSkillCategory)}
+      onSubmit={handleSubmit(addUpdateProject)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
-      {/* Category Name */}
+      {/* Project Name */}
       <LabelInput
-        id="name"
-        label="Category Name"
+        id="title"
+        label="Project Name"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
       >
         <CustomInput
-          id="name"
+          id="title"
           type="text"
-          placeholder={`Enter Category Name`}
-          {...register("name")}
-          error={errors?.name}
+          placeholder={`Enter Project Name`}
+          {...register("title")}
+          error={errors?.title}
+        />
+      </LabelInput>
+
+      {/* Live Link */}
+      <LabelInput
+        id="liveLink"
+        label="Live Link"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
+          id="liveLink"
+          type="text"
+          placeholder={`Link`}
+          {...register("liveLink")}
+          error={errors?.liveLink}
+        />
+      </LabelInput>
+
+      {/* Github Link */}
+      <LabelInput
+        id="githubLink"
+        label="Github Link"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
+          id="githubLink"
+          type="text"
+          placeholder={`Enter Github Link`}
+          {...register("githubLink")}
+          error={errors?.githubLink}
         />
       </LabelInput>
 
@@ -113,7 +145,7 @@ export default function AddEditSkillCategory() {
           id="sortOrder"
           type="number"
           min={0}
-          placeholder={`Enter Category Sort Order`}
+          placeholder={`Enter Project Sort Order`}
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
