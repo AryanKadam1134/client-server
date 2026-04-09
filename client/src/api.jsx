@@ -20,73 +20,73 @@ api.interceptors.response.use(
 );
 
 export const apiEndpoints = {
-  register: (body) => api.post(`/user/register`, body),
+  // Authentication
+  register: (body) => api.post(`/users/register`, body),
 
-  login: (body, config) => api.post(`/user/login`, body, config),
+  login: (body, config) => api.post(`/users/login`, body, config),
 
-  restoreSession: (config) => api.post(`/user/restoreSession`, {}, config),
+  restoreSession: (config) => api.post(`/users/restoreSession`, {}, config),
 
-  logout: () => api.post(`/user/logout`),
+  logout: () => api.post(`/users/logout`),
 
   // User Details
-  getCurrentUser: () => api.get("/user"),
+  getCurrentUser: () => api.get("/users"),
 
-  updateUser: (body) => api.patch("/user", body),
+  updateUser: (body) => api.patch("/users", body),
 
-  updateUserImage: (body) => api.patch("/user/image", body),
+  updateUserImage: (body) => api.patch("/users/image", body),
 
-  deleteUserImage: () => api.delete("/user/image"),
+  deleteUserImage: () => api.delete("/users/image"),
 
-  updateUserResume: (body) => api.patch("/user/resume", body),
+  updateUserResume: (body) => api.patch("/users/resume", body),
 
-  deleteUserResume: () => api.delete("/user/resume"),
+  deleteUserResume: () => api.delete("/users/resume"),
 
-  // Social Account
-  manageUserSocialPlatforms: (body) => api.post(`/social/manage`, body),
+  // Social Platfroms
+  addSocialPlatform: (body) => api.post(`/socialPlatforms`, body),
 
-  addSocialPlatform: (body) => api.post(`/social`, body),
+  updateSocialPlatform: (platformId, body) =>
+    api.patch(`/socialPlatforms/${platformId}`, body),
 
-  updateSocialPlatform: (accountId, body) =>
-    api.patch(`/social/${accountId}`, body),
+  deleteSocialPlatform: (platformId) =>
+    api.delete(`/socialPlatforms/${platformId}`),
 
-  deleteSocialPlatform: (accountId) => api.delete(`/social/${accountId}`),
+  getSocialPlatform: (platformId) => api.get(`/socialPlatforms/${platformId}`),
 
-  getSocialPlatform: (accountId) => api.get(`/social/${accountId}`),
-
-  getSocialPlatforms: () => api.get(`/social`),
+  getSocialPlatforms: () => api.get(`/socialPlatforms`),
 
   // Skills
-  addSkill: (body) => api.post(`/skill`, body),
+  addSkill: (body) => api.post(`/skills`, body),
 
-  updateSkill: (skillId, body) => api.patch(`/skill/${skillId}`, body),
+  updateSkill: (skillId, body) => api.patch(`/skills/${skillId}`, body),
 
-  deleteSkill: (skillId) => api.delete(`/skill/${skillId}`),
+  deleteSkill: (skillId) => api.delete(`/skills/${skillId}`),
 
-  getSkill: (skillId) => api.get(`/skill/${skillId}`),
+  getSkill: (skillId) => api.get(`/skills/${skillId}`),
 
-  getSkills: () => api.get(`/skill`),
+  getSkills: () => api.get(`/skills`),
 
   // Skill Categories
-  addSkillCategory: (body) => api.post(`/skillCategory`, body),
+  addSkillCategory: (body) => api.post(`/skillCategories`, body),
 
   updateSkillCategory: (categoryId, body) =>
-    api.patch(`/skillCategory/${categoryId}`, body),
+    api.patch(`/skillCategories/${categoryId}`, body),
 
   deleteSkillCategory: (categoryId) =>
-    api.delete(`/skillCategory/${categoryId}`),
+    api.delete(`/skillCategories/${categoryId}`),
 
-  getSkillCategory: (categoryId) => api.get(`/skillCategory/${categoryId}`),
+  getSkillCategory: (categoryId) => api.get(`/skillCategories/${categoryId}`),
 
-  getSkillCategories: () => api.get(`/skillCategory`),
+  getSkillCategories: () => api.get(`/skillCategories`),
 
   // Filters
-  getSkillCategoriesFilter: () => api.get(`/filter/skill-categories`),
+  getSkillCategoriesFilter: () => api.get(`/filters/skill-categories`),
 
-  getSkillLevels: () => api.get(`/filter/skill-levels`),
+  getSkillLevels: () => api.get(`/filters/skill-levels`),
 
-  getGenders: () => api.get(`/filter/genders`),
+  getGenders: () => api.get(`/filters/genders`),
 
-  getEmploymentTypes: () => api.get(`/filter/employment-types`),
+  getEmploymentTypes: () => api.get(`/filters/employment-types`),
 
-  getVisibilities: () => api.get(`/filter/visibility`),
+  getVisibilities: () => api.get(`/filters/visibility`),
 };

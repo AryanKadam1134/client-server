@@ -10,7 +10,7 @@ import {
   getProjects,
   getSkillWithCategory,
   getUserByUsername,
-  getUserSocialAccounts,
+  getUserSocialPlatforms,
 } from "../../controllers/public/portfolio.controller.js";
 
 const portfolioRouter = Router();
@@ -21,7 +21,7 @@ portfolioRouter
 
 portfolioRouter
   .route("/:username/social-platforms")
-  .get(findUserByUsername, getUserSocialAccounts);
+  .get(findUserByUsername, getUserSocialPlatforms);
 
 portfolioRouter
   .route("/:username/skills")

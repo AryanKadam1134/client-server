@@ -254,10 +254,10 @@ const SOCIAL_APPS = SOCIAL_APPS_LIST.map((app) => ({
   label: app.title,
 }));
 
-export default function AddEditSocialAccount() {
+export default function AddEditSocialPlatform() {
   const { visibilities } = useVisibilities();
 
-  const { accountId } = useParams();
+  const { platformId } = useParams();
 
   const {
     register,
@@ -292,7 +292,7 @@ export default function AddEditSocialAccount() {
 
   const fetchSocialPlatform = async () => {
     try {
-      const res = await apiEndpoints.getSocialPlatform(accountId);
+      const res = await apiEndpoints.getSocialPlatform(platformId);
 
       const data = res.data;
 
@@ -306,16 +306,16 @@ export default function AddEditSocialAccount() {
   const addUpdatePlatform = async (payload) => {
     try {
       let res;
-      if (accountId) {
+      if (platformId) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSocialPlatform(accountId, updatedData);
+        res = await apiEndpoints.updateSocialPlatform(platformId, updatedData);
       } else {
         res = await apiEndpoints.addSocialPlatform(payload);
       }
 
       const data = res.data;
 
-      if (accountId) fetchSocialPlatform();
+      if (platformId) fetchSocialPlatform();
       console.log("Social Platform Saved: ", data);
     } catch (error) {
       console.error("Error saving Social Platform: ", error);
@@ -323,9 +323,9 @@ export default function AddEditSocialAccount() {
   };
 
   useEffect(() => {
-    if (!accountId) return;
+    if (!platformId) return;
     fetchSocialPlatform();
-  }, [accountId]);
+  }, [platformId]);
 
   return (
     <form

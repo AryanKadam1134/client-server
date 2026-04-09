@@ -27,13 +27,13 @@ export default function SocialPlatforms() {
     }
   };
 
-  const deletePlatform = async (accountId) => {
+  const deletePlatform = async (platformId) => {
     try {
-      await apiEndpoints.deleteSocialPlatform(accountId);
+      await apiEndpoints.deleteSocialPlatform(platformId);
 
       fetchSocialPlatforms();
     } catch (error) {
-      console.error("Error deleting Social Account: ", error);
+      console.error("Error deleting Social Platform: ", error);
     }
   };
 

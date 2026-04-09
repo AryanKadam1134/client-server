@@ -18,7 +18,7 @@ app.use(cookieParser());
 // Private
 import filterRoutes from "./routes/private/filter.routes.js";
 import userRouter from "./routes/private/user.routes.js";
-import socialAccountRouter from "./routes/private/socialAccount.routes.js";
+import socialPlatformRouter from "./routes/private/socialPlatform.routes.js";
 import skillCategoryRouter from "./routes/private/skillCategory.routes.js";
 import skillRouter from "./routes/private/skill.routes.js";
 import projectRouter from "./routes/private/project.routes.js";
@@ -27,25 +27,25 @@ import educationRouter from "./routes/private/education.routes.js";
 import certificateRoutes from "./routes/private/certificate.routes.js";
 import achievementRouter from "./routes/private/achievement.routes.js";
 
-app.use("/api/admin/filter", filterRoutes);
+app.use("/api/admin/filters", filterRoutes);
 
-app.use("/api/admin/user", userRouter);
+app.use("/api/admin/users", userRouter);
 
-app.use("/api/admin/social", socialAccountRouter);
+app.use("/api/admin/socialPlatforms", socialPlatformRouter);
 
-app.use("/api/admin/skillCategory", skillCategoryRouter);
+app.use("/api/admin/skillCategories", skillCategoryRouter);
 
-app.use("/api/admin/skill", skillRouter);
+app.use("/api/admin/skills", skillRouter);
 
-app.use("/api/admin/project", projectRouter);
+app.use("/api/admin/projects", projectRouter);
 
-app.use("/api/admin/experience", experienceRouter);
+app.use("/api/admin/experiences", experienceRouter);
 
-app.use("/api/admin/education", educationRouter);
+app.use("/api/admin/educations", educationRouter);
 
-app.use("/api/admin/certificate", certificateRoutes);
+app.use("/api/admin/certificates", certificateRoutes);
 
-app.use("/api/admin/achievement", achievementRouter);
+app.use("/api/admin/achievements", achievementRouter);
 
 // Public
 import portfolioRouter from "./routes/public/portfolio.routes.js";

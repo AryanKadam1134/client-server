@@ -11,7 +11,7 @@ import { Experience } from "../../models/experience.model.js";
 import { Certificate } from "../../models/certificate.model.js";
 import { Achievement } from "../../models/achievement.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
-import { SocialAccount } from "../../models/socialAccount.model.js";
+import { SocialPlatform } from "../../models/socialPlatform.model.js";
 
 const getUserByUsername = asynchandler(async (req, res) => {
   return res
@@ -19,8 +19,8 @@ const getUserByUsername = asynchandler(async (req, res) => {
     .json(new ApiRes(200, req.user, "user data fetched successfully!"));
 });
 
-const getUserSocialAccounts = asynchandler(async (req, res) => {
-  const platforms = await SocialAccount.find({
+const getUserSocialPlatforms = asynchandler(async (req, res) => {
+  const platforms = await SocialPlatform.find({
     owner: req.user?._id,
     visibility: "public",
   })
@@ -296,7 +296,7 @@ const getAchievements = asynchandler(async (req, res) => {
 
 export {
   getUserByUsername,
-  getUserSocialAccounts,
+  getUserSocialPlatforms,
   getSkillWithCategory,
   getCategoryWiseSkills,
   getProjects,

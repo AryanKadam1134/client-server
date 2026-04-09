@@ -19,11 +19,11 @@ import Experiences from "./pages/private/Experiences";
 import Educations from "./pages/private/Educations";
 import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
-
-import { useAuth } from "./context/AuthContext";
-import AddEditSocialAccount from "./pages/private/AddEditSocialAccount";
 import AddEditSkills from "./pages/private/AddEditSkills";
 import AddEditSkillCategory from "./pages/private/AddEditSkillCategory";
+import AddEditSocialPlatform from "./pages/private/AddEditSocialPlatform";
+
+import { useAuth } from "./context/AuthContext";
 
 function PublicRoute() {
   const { user } = useAuth();
@@ -73,8 +73,11 @@ function App() {
 
           <Route path="/social" element={<CommonLayout />}>
             <Route index element={<SocialPlatforms />} />
-            <Route path="add" element={<AddEditSocialAccount />} />
-            <Route path=":accountId/edit" element={<AddEditSocialAccount />} />
+            <Route path="add" element={<AddEditSocialPlatform />} />
+            <Route
+              path=":platformId/edit"
+              element={<AddEditSocialPlatform />}
+            />
           </Route>
 
           <Route path="/skills" element={<CommonLayout />}>

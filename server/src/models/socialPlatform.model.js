@@ -2,7 +2,7 @@ import mongoose, { Schema, model } from "mongoose";
 
 import { SOCIAL_PLATFORMS, VISIBILITY } from "../constants.js";
 
-const socialAccountSchema = new Schema(
+const socialPlatformSchema = new Schema(
   {
     owner: {
       type: Schema.Types.ObjectId,
@@ -31,6 +31,6 @@ const socialAccountSchema = new Schema(
   { timestamps: true },
 );
 
-socialAccountSchema.index({ owner: 1, name: 1 }, { unique: true });
+socialPlatformSchema.index({ owner: 1, name: 1 }, { unique: true });
 
-export const SocialAccount = model("SocialAccount", socialAccountSchema);
+export const SocialPlatform = model("SocialPlatform", socialPlatformSchema);
