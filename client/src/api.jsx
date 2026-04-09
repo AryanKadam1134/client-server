@@ -67,6 +67,16 @@ export const apiEndpoints = {
   getSkills: () => api.get(`/skill`),
 
   // Skill Categories
+  addSkillCategory: (body) => api.post(`/skillCategory`, body),
+
+  updateSkillCategory: (categoryId, body) =>
+    api.patch(`/skillCategory/${categoryId}`, body),
+
+  deleteSkillCategory: (categoryId) =>
+    api.delete(`/skillCategory/${categoryId}`),
+
+  getSkillCategory: (categoryId) => api.get(`/skillCategory/${categoryId}`),
+
   getSkillCategories: () => api.get(`/skillCategory`),
 
   // Filters

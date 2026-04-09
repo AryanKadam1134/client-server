@@ -23,6 +23,7 @@ import Achievements from "./pages/private/Achievements";
 import { useAuth } from "./context/AuthContext";
 import AddEditSocialAccount from "./pages/private/AddEditSocialAccount";
 import AddEditSkills from "./pages/private/AddEditSkills";
+import AddEditSkillCategory from "./pages/private/AddEditSkillCategory";
 
 function PublicRoute() {
   const { user } = useAuth();
@@ -82,7 +83,12 @@ function App() {
             <Route path=":skillId/edit" element={<AddEditSkills />} />
           </Route>
 
-          <Route path="/skill-categories" element={<SkillCategories />} />
+          <Route path="/skill-categories" element={<CommonLayout />}>
+            <Route index element={<SkillCategories />} />
+            <Route path="add" element={<AddEditSkillCategory />} />
+            <Route path=":categoryId/edit" element={<AddEditSkillCategory />} />
+          </Route>
+
           <Route path="/projects" element={<Projects />} />
           <Route path="/experiences" element={<Experiences />} />
           <Route path="/education" element={<Educations />} />

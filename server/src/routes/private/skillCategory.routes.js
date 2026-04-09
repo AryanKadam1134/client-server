@@ -4,6 +4,7 @@ import {
   addSkillCategory,
   deleteSkillCategory,
   getAllCategoryWiseSkills,
+  getSkillCategory,
   updateSkillCategory,
 } from "../../controllers/private/skillCategory.controller.js";
 
@@ -21,6 +22,7 @@ skillCategoryRouter
 
 skillCategoryRouter
   .route("/:categoryId")
+  .get(getCategoryById, getSkillCategory)
   .patch(getCategoryById, updateSkillCategory)
   .delete(getCategoryById, deleteSkillCategory);
 
