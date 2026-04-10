@@ -15,7 +15,7 @@ export default function useCategoriesFilter() {
       setCategoriesFilter(data);
       console.log("Skill Categories Filter: ", data);
     } catch (error) {
-      console.error("Error fetching Skill Levels: ", error);
+      console.error("Error fetching Skill Categories: ", error);
     } finally {
       setLoading(false);
     }

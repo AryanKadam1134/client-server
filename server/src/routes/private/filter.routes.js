@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  getAllOrganizations,
   getEmploymentTypes,
   getGenders,
   getSkillCategories,
@@ -16,6 +17,8 @@ const filterRoutes = Router();
 filterRoutes.route("/social-platforms").get(getSocialPlatforms);
 
 filterRoutes.route("/skill-categories").get(verifyJWT, getSkillCategories);
+
+filterRoutes.route("/organizations").get(verifyJWT, getAllOrganizations);
 
 filterRoutes.route("/skill-levels").get(getSkillLevel);
 

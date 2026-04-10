@@ -5,6 +5,7 @@ import {
   EMPLOYMENT_TYPE,
   VISIBILITY,
 } from "../../constants.js";
+import { Experience } from "../../models/experience.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import ApiError from "../../utils/ApiError.js";
 
@@ -42,6 +43,25 @@ const getSkillCategories = asynchandler(async (req, res) => {
     .json(new ApiRes(200, formatted, "categories fetched successfully!"));
 });
 
+const getAllOrganizations = asynchandler(async (req, res) => {
+  const organizations = await Experience.find({
+    owner: req.user?._id,
+  });
+
+  if (organizations?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no organizations found!"));
+  }
+
+  const formatted = organizations?.map((category) => ({
+    label: category?.organization,
+    value: category?._id,
+  }));
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, formatted, "organizations fetched successfully!"));
+});
+
 const getSkillLevel = asynchandler(async (req, res) => {
   return res
     .status(200)
@@ -75,6 +95,7 @@ const getVisibility = asynchandler(async (req, res) => {
 export {
   getSocialPlatforms,
   getSkillCategories,
+  getAllOrganizations,
   getSkillLevel,
   getGenders,
   getEmploymentTypes,

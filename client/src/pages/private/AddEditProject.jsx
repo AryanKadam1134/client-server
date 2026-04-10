@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -11,15 +11,19 @@ import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 import { apiEndpoints } from "../../api";
 
 import useVisibilities from "../../hooks/useVisibilities";
+import useOrganizationsList from "../../hooks/useOrganizationsList";
+import CustomSelect from "../../components/ui/CustomSelect";
 
 export default function AddEditProject() {
   const { visibilities } = useVisibilities();
+  const { organizationsList } = useOrganizationsList();
 
   const { projectId } = useParams();
 
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
@@ -100,6 +104,28 @@ export default function AddEditProject() {
           placeholder={`Enter Project Name`}
           {...register("title")}
           error={errors?.title}
+        />
+      </LabelInput>
+
+      {/* Organization */}
+      <LabelInput
+        id="organizationId"
+        label="Organization"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <Controller
+          name="organizationId"
+          control={control}
+          render={({ field }) => (
+            <CustomSelect
+              id="organizationId"
+              placeholder="Select Organization"
+              options={organizationsList}
+              value={field.value}
+              onChange={field.onChange} // send value to hook form
+            />
+          )}
         />
       </LabelInput>
 

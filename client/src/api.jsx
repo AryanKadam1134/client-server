@@ -93,6 +93,8 @@ export const apiEndpoints = {
   // Filters
   getSkillCategoriesFilter: () => api.get(`/filters/skill-categories`),
 
+  getOrganizationsList: () => api.get(`/filters/organizations`),
+
   getSkillLevels: () => api.get(`/filters/skill-levels`),
 
   getGenders: () => api.get(`/filters/genders`),
