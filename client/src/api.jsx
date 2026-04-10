@@ -95,6 +95,10 @@ export const apiEndpoints = {
 
   getOrganizationsList: () => api.get(`/filters/organizations`),
 
+  getProjectCategoriesList: () => api.get(`/filters/project-categories`),
+
+  getSkillsList: () => api.get(`/filters/skills`),
+
   getSkillLevels: () => api.get(`/filters/skill-levels`),
 
   getGenders: () => api.get(`/filters/genders`),

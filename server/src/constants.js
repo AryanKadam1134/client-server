@@ -18,6 +18,14 @@ const GENDERS = [
   { label: "Other", value: "other" },
 ];
 
+const PROJECT_CATEGORIES = [
+  { label: "Personal", value: "personal" },
+  { label: "Freelance", value: "freelance" },
+  { label: "Hackathon", value: "hackathon" },
+  { label: "Client", value: "client" },
+  { label: "Open Source", value: "open-source" },
+];
+
 const EMPLOYMENT_TYPE = [
   { label: "Full Time", value: "full-time" },
   { label: "Part Time", value: "part-time" },
@@ -43,6 +51,7 @@ export {
   SOCIAL_PLATFORMS,
   SKILL_LEVEL,
   GENDERS,
+  PROJECT_CATEGORIES,
   EMPLOYMENT_TYPE,
   VISIBILITY,
   DB_NAME,

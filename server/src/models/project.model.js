@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 
-import { VISIBILITY } from "../constants.js";
+import { PROJECT_CATEGORIES, VISIBILITY } from "../constants.js";
 
 const projectSchema = new Schema(
   {
@@ -39,7 +39,7 @@ const projectSchema = new Schema(
 
     category: {
       type: String,
-      enum: ["personal", "freelance", "hackathon", "client", "open-source"],
+      enum: PROJECT_CATEGORIES?.map((p) => p?.value),
       default: "personal",
     },
 

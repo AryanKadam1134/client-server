@@ -2,8 +2,10 @@ import { Router } from "express";
 
 import {
   getAllOrganizations,
+  getAllSkills,
   getEmploymentTypes,
   getGenders,
+  getProjectCategories,
   getSkillCategories,
   getSkillLevel,
   getSocialPlatforms,
@@ -19,6 +21,10 @@ filterRoutes.route("/social-platforms").get(getSocialPlatforms);
 filterRoutes.route("/skill-categories").get(verifyJWT, getSkillCategories);
 
 filterRoutes.route("/organizations").get(verifyJWT, getAllOrganizations);
+
+filterRoutes.route("/project-categories").get(verifyJWT, getProjectCategories);
+
+filterRoutes.route("/skills").get(verifyJWT, getAllSkills);
 
 filterRoutes.route("/skill-levels").get(getSkillLevel);
 

@@ -13,10 +13,15 @@ import { apiEndpoints } from "../../api";
 import useVisibilities from "../../hooks/useVisibilities";
 import useOrganizationsList from "../../hooks/useOrganizationsList";
 import CustomSelect from "../../components/ui/CustomSelect";
+import CustomTextArea from "../../components/ui/CustomTextArea";
+import useSkillsList from "../../hooks/useSkillsList";
+import useProjectCategoriesList from "../../hooks/useProjectCategoriesList";
 
 export default function AddEditProject() {
   const { visibilities } = useVisibilities();
   const { organizationsList } = useOrganizationsList();
+  const { skillsList } = useSkillsList();
+  const { projectCategoriesList } = useProjectCategoriesList();
 
   const { projectId } = useParams();
 
@@ -161,6 +166,22 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
+      {/* Description */}
+      <LabelInput
+        id="description"
+        label="Description"
+        colSpan="col-span-12 sm:col-span-6"
+        required
+      >
+        <CustomTextArea
+          id="description"
+          type="text"
+          placeholder={`Enter Description`}
+          {...register("description")}
+          error={errors?.description}
+        />
+      </LabelInput>
+
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
@@ -192,6 +213,50 @@ export default function AddEditProject() {
             required: "Visibility is required!",
           })}
           error={errors?.visibility}
+        />
+      </LabelInput>
+
+      {/* Tech Stack */}
+      <LabelInput
+        id="techStack"
+        label="Tech Stack"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <Controller
+          name="techStack"
+          control={control}
+          render={({ field }) => (
+            <CustomSelect
+              id="techStack"
+              placeholder="Select Tech Stack"
+              options={skillsList}
+              value={field.value}
+              onChange={field.onChange} // send value to hook form
+            />
+          )}
+        />
+      </LabelInput>
+
+      {/* Project Category */}
+      <LabelInput
+        id="category"
+        label="Project Category"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <CustomSelect
+              id="category"
+              placeholder="Select Project Category"
+              options={projectCategoriesList}
+              value={field.value}
+              onChange={field.onChange} // send value to hook form
+            />
+          )}
         />
       </LabelInput>
 
