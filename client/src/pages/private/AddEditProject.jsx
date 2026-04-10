@@ -16,6 +16,10 @@ import CustomSelect from "../../components/ui/CustomSelect";
 import CustomTextArea from "../../components/ui/CustomTextArea";
 import useSkillsList from "../../hooks/useSkillsList";
 import useProjectCategoriesList from "../../hooks/useProjectCategoriesList";
+import CustomMultiSelect from "../../components/ui/CustomMultiSelect";
+import CustomDatePicker from "../../components/ui/CustomDatePicker";
+
+import dayjs from "dayjs";
 
 export default function AddEditProject() {
   const { visibilities } = useVisibilities();
@@ -36,6 +40,10 @@ export default function AddEditProject() {
       sortOrder: 0,
     },
   });
+
+  const formatDate = (date) => {
+    return date ? dayjs(date).format("YYYY-MM-DD") : "";
+  };
 
   const getUpdatedFields = (data, dirtyFields) => {
     const updated = {};
@@ -60,7 +68,11 @@ export default function AddEditProject() {
 
       const data = res.data;
 
-      reset(data);
+      reset({
+        ...data,
+        startDate: formatDate(data?.startDate),
+        endDate: formatDate(data?.endDate),
+      });
       console.log("Project: ", data);
     } catch (error) {
       console.error("Error fetching Project: ", error);
@@ -182,6 +194,114 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
+      {/* Tech Stack */}
+      <LabelInput
+        id="techStack"
+        label="Tech Stack"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <Controller
+          name="techStack"
+          control={control}
+          render={({ field }) => (
+            <CustomMultiSelect
+              id="techStack"
+              placeholder="Select Tech Stack"
+              options={skillsList}
+              value={field.value}
+              onChange={field.onChange} // send value to hook form
+            />
+          )}
+        />
+      </LabelInput>
+
+      {/* Project Category */}
+      <LabelInput
+        id="category"
+        label="Project Category"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <CustomSelect
+              id="category"
+              placeholder="Select Project Category"
+              options={projectCategoriesList}
+              value={field.value}
+              onChange={field.onChange} // send value to hook form
+            />
+          )}
+        />
+      </LabelInput>
+
+      {/* Start Date */}
+      <LabelInput
+        id="startDate"
+        label="Start Date"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomDatePicker
+          id="startDate"
+          placeholder={`Enter Start Date`}
+          {...register("startDate")}
+          error={errors?.startDate}
+        />
+      </LabelInput>
+
+      {/* End Date */}
+      <LabelInput
+        id="endDate"
+        label="End Date"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomDatePicker
+          id="endDate"
+          placeholder={`Enter End Date`}
+          {...register("endDate")}
+          error={errors?.endDate}
+        />
+      </LabelInput>
+
+      {/* Present */}
+      <LabelInput
+        id="present"
+        label="Present"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        type="checkbox"
+        required
+      >
+        <input
+          id="present"
+          type="checkbox"
+          placeholder={`Enter Present`}
+          {...register("present")}
+          error={errors?.present}
+        />
+      </LabelInput>
+
+      {/* Featured */}
+      <LabelInput
+        id="featured"
+        label="Featured"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        type="checkbox"
+        required
+      >
+        <input
+          id="featured"
+          type="checkbox"
+          placeholder={`Enter Featured`}
+          {...register("featured")}
+          error={errors?.featured}
+        />
+      </LabelInput>
+
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
@@ -213,50 +333,6 @@ export default function AddEditProject() {
             required: "Visibility is required!",
           })}
           error={errors?.visibility}
-        />
-      </LabelInput>
-
-      {/* Tech Stack */}
-      <LabelInput
-        id="techStack"
-        label="Tech Stack"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
-      >
-        <Controller
-          name="techStack"
-          control={control}
-          render={({ field }) => (
-            <CustomSelect
-              id="techStack"
-              placeholder="Select Tech Stack"
-              options={skillsList}
-              value={field.value}
-              onChange={field.onChange} // send value to hook form
-            />
-          )}
-        />
-      </LabelInput>
-
-      {/* Project Category */}
-      <LabelInput
-        id="category"
-        label="Project Category"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
-      >
-        <Controller
-          name="category"
-          control={control}
-          render={({ field }) => (
-            <CustomSelect
-              id="category"
-              placeholder="Select Project Category"
-              options={projectCategoriesList}
-              value={field.value}
-              onChange={field.onChange} // send value to hook form
-            />
-          )}
         />
       </LabelInput>
 
