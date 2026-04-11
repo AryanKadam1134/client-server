@@ -1,33 +1,110 @@
-import React, { useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
+import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
+import { Trash2, Loader, FileText } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
+import CustomSelect from "../../components/ui/CustomSelect";
+import CustomTextArea from "../../components/ui/CustomTextArea";
+import CustomDatePicker from "../../components/ui/CustomDatePicker";
+import CustomMultiSelect from "../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../api";
 
+import useSkillsList from "../../hooks/useSkillsList";
 import useVisibilities from "../../hooks/useVisibilities";
 import useOrganizationsList from "../../hooks/useOrganizationsList";
-import CustomSelect from "../../components/ui/CustomSelect";
-import CustomTextArea from "../../components/ui/CustomTextArea";
-import useSkillsList from "../../hooks/useSkillsList";
 import useProjectCategoriesList from "../../hooks/useProjectCategoriesList";
-import CustomMultiSelect from "../../components/ui/CustomMultiSelect";
-import CustomDatePicker from "../../components/ui/CustomDatePicker";
 
-import dayjs from "dayjs";
+function DragDropUpload({
+  onChange,
+  loading = false,
+  text = "Drop files here",
+  className = "",
+  ...props // ✅ accept multiple, accept, etc.
+}) {
+  const fileInputRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (!files?.length) return;
+
+    onChange?.(files); // ✅ always pass FileList
+  };
+
+  const handleChange = (e) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+
+    onChange?.(files); // ✅ always pass FileList
+  };
+
+  return (
+    <>
+      <div
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={handleDrop}
+        onClick={() => !loading && fileInputRef.current.click()}
+        className={`
+          w-full min-h-32 flex flex-col items-center justify-center gap-3
+          border-2 border-dashed border-gray-500 rounded-lg cursor-pointer
+          transition-all duration-200 px-4 py-5 text-center
+          ${isDragging && "border-blue-400 bg-blue-500/10"}
+          ${!loading && "hover:bg-gray-200 hover:border-gray-600"}
+          ${className}
+        `}
+      >
+        {loading ? (
+          <Loader size={24} className="text-blue-400 animate-spin" />
+        ) : (
+          <>
+            <FileText size={24} className="text-gray-500" />
+
+            <div className="text-gray-500 text-xs font-medium">
+              {text}
+              <br />
+              OR
+              <br />
+              Click to browse
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Hidden Input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        onChange={handleChange}
+        {...props} // ✅ multiple, accept, etc.
+      />
+    </>
+  );
+}
 
 export default function AddEditProject() {
+  const { skillsList } = useSkillsList();
   const { visibilities } = useVisibilities();
   const { organizationsList } = useOrganizationsList();
-  const { skillsList } = useSkillsList();
   const { projectCategoriesList } = useProjectCategoriesList();
 
   const { projectId } = useParams();
+
+  const [imagesUploading, setImagesUploading] = useState(false);
 
   const {
     register,
@@ -38,8 +115,11 @@ export default function AddEditProject() {
   } = useForm({
     defaultValues: {
       sortOrder: 0,
+      featured: true,
     },
   });
+
+  const projectImages = useWatch({ control, name: "projectImages" });
 
   const formatDate = (date) => {
     return date ? dayjs(date).format("YYYY-MM-DD") : "";
@@ -95,6 +175,38 @@ export default function AddEditProject() {
       console.log("Project Saved: ", data);
     } catch (error) {
       console.error("Error saving Project: ", error);
+    }
+  };
+
+  // Can uplaod multiple
+  const updateProjectImage = async (files) => {
+    setImagesUploading(true);
+
+    try {
+      const formData = new FormData();
+      Array.from(files).forEach((file) => {
+        formData.append("projectImages", file);
+      });
+
+      await apiEndpoints.updateProjectImage(projectId, formData);
+
+      fetchProject();
+      console.log("Images uploaded successfully!");
+    } catch (error) {
+      console.error("Error updating Project Images: ", error);
+    } finally {
+      setImagesUploading(false);
+    }
+  };
+
+  const deleteProjectImage = async (imagePublicId) => {
+    try {
+      await apiEndpoints.deleteProjectImage(projectId, imagePublicId);
+
+      fetchProject();
+      console.log("Image deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting Project Image: ", error);
     }
   };
 
@@ -335,6 +447,42 @@ export default function AddEditProject() {
           error={errors?.visibility}
         />
       </LabelInput>
+
+      <div className="col-span-6"></div>
+
+      {/* Upload Image  */}
+      <LabelInput
+        id="visibility"
+        label="Upload Image"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <DragDropUpload
+          multiple
+          accept="image/*"
+          loading={imagesUploading}
+          onChange={(files) => updateProjectImage(files)}
+        />
+      </LabelInput>
+
+      <div className="col-span-12 sm:col-span-9 flex items-center justify-start gap-3">
+        {projectImages?.map((image, idx) => (
+          <div
+            key={image?.public_id || idx}
+            className="relative h-[100px] w-[200px]"
+          >
+            <img src={image?.url} alt="" />
+
+            <button
+              type="button"
+              onClick={() => deleteProjectImage(image?.public_id)}
+              className="absolute top-2 right-2 p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+        ))}
+      </div>
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
         {isSubmitting ? "Saving..." : "Save"}

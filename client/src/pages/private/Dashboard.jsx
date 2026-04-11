@@ -12,13 +12,13 @@ import {
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
+import CustomButton from "../../components/ui/CustomButton";
+import CustomTextArea from "../../components/ui/CustomTextArea";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../api";
 
 import useGenders from "../../hooks/useGenders";
-import CustomButton from "../../components/ui/CustomButton";
-import CustomTextArea from "../../components/ui/CustomTextArea";
 
 function ResumeDropZone({
   fileInputRef,
