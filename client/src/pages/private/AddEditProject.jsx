@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Trash2, Loader, FileText } from "lucide-react";
+import { Trash2, Loader, ChevronLeft, ChevronRight } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -20,81 +20,7 @@ import useSkillsList from "../../hooks/useSkillsList";
 import useVisibilities from "../../hooks/useVisibilities";
 import useOrganizationsList from "../../hooks/useOrganizationsList";
 import useProjectCategoriesList from "../../hooks/useProjectCategoriesList";
-
-function DragDropUpload({
-  onChange,
-  loading = false,
-  text = "Drop files here",
-  className = "",
-  ...props // ✅ accept multiple, accept, etc.
-}) {
-  const fileInputRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const files = e.dataTransfer.files;
-    if (!files?.length) return;
-
-    onChange?.(files); // ✅ always pass FileList
-  };
-
-  const handleChange = (e) => {
-    const files = e.target.files;
-    if (!files?.length) return;
-
-    onChange?.(files); // ✅ always pass FileList
-  };
-
-  return (
-    <>
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setIsDragging(true);
-        }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={handleDrop}
-        onClick={() => !loading && fileInputRef.current.click()}
-        className={`
-          w-full min-h-32 flex flex-col items-center justify-center gap-3
-          border-2 border-dashed border-gray-500 rounded-lg cursor-pointer
-          transition-all duration-200 px-4 py-5 text-center
-          ${isDragging && "border-blue-400 bg-blue-500/10"}
-          ${!loading && "hover:bg-gray-200 hover:border-gray-600"}
-          ${className}
-        `}
-      >
-        {loading ? (
-          <Loader size={24} className="text-blue-400 animate-spin" />
-        ) : (
-          <>
-            <FileText size={24} className="text-gray-500" />
-
-            <div className="text-gray-500 text-xs font-medium">
-              {text}
-              <br />
-              OR
-              <br />
-              Click to browse
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Hidden Input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        className="hidden"
-        onChange={handleChange}
-        {...props} // ✅ multiple, accept, etc.
-      />
-    </>
-  );
-}
+import DragDropUpload from "../../components/ui/DragDropUpload";
 
 export default function AddEditProject() {
   const { skillsList } = useSkillsList();
@@ -105,6 +31,7 @@ export default function AddEditProject() {
   const { projectId } = useParams();
 
   const [imagesUploading, setImagesUploading] = useState(false);
+  const [imageDeleting, setImageDeleting] = useState(null);
 
   const {
     register,
@@ -200,6 +127,8 @@ export default function AddEditProject() {
   };
 
   const deleteProjectImage = async (imagePublicId) => {
+    setImageDeleting(imagePublicId);
+
     try {
       await apiEndpoints.deleteProjectImage(projectId, imagePublicId);
 
@@ -207,6 +136,8 @@ export default function AddEditProject() {
       console.log("Image deleted successfully!");
     } catch (error) {
       console.error("Error deleting Project Image: ", error);
+    } finally {
+      setImageDeleting(null);
     }
   };
 
@@ -465,23 +396,67 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
-      <div className="col-span-12 sm:col-span-9 flex items-center justify-start gap-3">
-        {projectImages?.map((image, idx) => (
-          <div
-            key={image?.public_id || idx}
-            className="relative h-[100px] w-[200px]"
-          >
-            <img src={image?.url} alt="" />
+      <div className="col-span-12 sm:col-span-9 relative">
+        {/* Scroll Buttons */}
+        <button
+          type="button"
+          onClick={() =>
+            document
+              .getElementById("image-scroll")
+              ?.scrollBy({ left: -300, behavior: "smooth" })
+          }
+          className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white p-1 rounded-full cursor-pointer"
+        >
+          <ChevronLeft />
+        </button>
 
-            <button
-              type="button"
-              onClick={() => deleteProjectImage(image?.public_id)}
-              className="absolute top-2 right-2 p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
+        <button
+          type="button"
+          onClick={() =>
+            document
+              .getElementById("image-scroll")
+              ?.scrollBy({ left: 300, behavior: "smooth" })
+          }
+          className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white p-1 rounded-full cursor-pointer"
+        >
+          <ChevronRight />
+        </button>
+
+        {/* Image Container */}
+        <div
+          id="image-scroll"
+          className="grid grid-flow-col auto-cols-[80%] sm:auto-cols-[45%] lg:auto-cols-[30%] gap-4 overflow-x-auto scroll-smooth pb-2"
+        >
+          {projectImages?.map((image, idx) => (
+            <div
+              key={image?.public_id || idx}
+              className="relative group h-[120px] rounded overflow-hidden border border-gray-400"
             >
-              <Trash2 size={18} />
-            </button>
-          </div>
-        ))}
+              {/* Image */}
+              <img
+                src={image?.url}
+                alt=""
+                className="w-full h-full object-contain"
+              />
+
+              {/* Loader */}
+              {imageDeleting === image?.public_id && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                  <Loader size={24} className="animate-spin text-white" />
+                </div>
+              )}
+
+              {/* Delete Button (Hover Only) */}
+              <button
+                type="button"
+                onClick={() => deleteProjectImage(image?.public_id)}
+                className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
