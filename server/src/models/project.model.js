@@ -57,7 +57,7 @@ const projectSchema = new Schema(
     },
     projectImages: [
       {
-        url: String,
+        url: String, 
         public_id: String,
         resource_type: String,
       },

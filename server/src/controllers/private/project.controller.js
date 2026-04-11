@@ -194,8 +194,6 @@ const updateProjectImages = asynchandler(async (req, res) => {
 
   const newImages = req.files;
 
-  console.log("project images: ", newImages);
-
   if (project?.projectImages?.length + newImages?.length > 5) {
     throw new ApiError(409, "maximum 5 project images are allowed");
   }

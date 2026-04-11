@@ -9,6 +9,7 @@ import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomSelect from "../../components/ui/CustomSelect";
+import DragDropUpload from "../../components/ui/DragDropUpload";
 import CustomTextArea from "../../components/ui/CustomTextArea";
 import CustomDatePicker from "../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../components/ui/CustomMultiSelect";
@@ -20,7 +21,6 @@ import useSkillsList from "../../hooks/useSkillsList";
 import useVisibilities from "../../hooks/useVisibilities";
 import useOrganizationsList from "../../hooks/useOrganizationsList";
 import useProjectCategoriesList from "../../hooks/useProjectCategoriesList";
-import DragDropUpload from "../../components/ui/DragDropUpload";
 
 export default function AddEditProject() {
   const { skillsList } = useSkillsList();
@@ -43,6 +43,7 @@ export default function AddEditProject() {
     defaultValues: {
       sortOrder: 0,
       featured: true,
+      visibility: "public",
     },
   });
 
@@ -379,7 +380,7 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
-      <div className="col-span-6"></div>
+      <div className="hidden sm:block col-span-6"></div>
 
       {/* Upload Image  */}
       <LabelInput
