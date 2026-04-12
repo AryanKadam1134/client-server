@@ -96,7 +96,7 @@ export const apiEndpoints = {
 
   getProjects: () => api.get(`/projects`),
 
-  // Experience
+  // Experiences
   addExperience: (body) => api.post(`/experiences`, body),
 
   updateExperience: (experienceId, body) =>

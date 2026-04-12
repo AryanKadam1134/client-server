@@ -130,11 +130,10 @@ export default function CustomMultiSelect({
                 {...getItemProps({ item, index })}
                 className={`px-3 py-2 cursor-pointer text-sm flex justify-between
                   ${highlightedIndex === index ? "bg-gray-200" : ""}
-                  ${isSelected ? "font-medium" : ""}
+                  ${isSelected ? "font-medium bg-gray-200" : ""}
                 `}
               >
                 {item.label}
-                {isSelected && "✓"}
               </li>
             );
           })}

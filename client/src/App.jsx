@@ -24,7 +24,9 @@ import AddEditSkillCategory from "./pages/private/skill_categories/AddEditSkillC
 import Projects from "./pages/private/projects/Projects";
 import AddEditProject from "./pages/private/projects/AddEditProject";
 
-import Experiences from "./pages/private/Experiences";
+import Experiences from "./pages/private/experiences/Experiences";
+import AddEditExperiences from "./pages/private/experiences/AddEditExperiences";
+
 import Educations from "./pages/private/Educations";
 import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
@@ -104,7 +106,12 @@ function App() {
             <Route path=":projectId/edit" element={<AddEditProject />} />
           </Route>
 
-          <Route path="/experiences" element={<Experiences />} />
+          <Route path="/experiences" element={<CommonLayout />}>
+            <Route index element={<Experiences />} />
+            <Route path="add" element={<AddEditExperiences />} />
+            <Route path=":experienceId/edit" element={<AddEditExperiences />} />
+          </Route>
+
           <Route path="/education" element={<Educations />} />
           <Route path="/certificates" element={<Certificates />} />
           <Route path="/achievements" element={<Achievements />} />

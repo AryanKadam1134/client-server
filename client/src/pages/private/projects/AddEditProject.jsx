@@ -393,11 +393,12 @@ export default function AddEditProject() {
 
       {/* Upload Image  */}
       <LabelInput
-        id="visibility"
+        id="upload"
         label="Upload Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <DragDropUpload
+          id="upload"
           multiple
           accept="image/*"
           loading={imagesUploading}
