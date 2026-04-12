@@ -264,6 +264,12 @@ const deleteOrganiaztionImage = asynchandler(async (req, res) => {
     );
 });
 
+const getExperience = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, req.experience, "experience fetched successfully!"));
+});
+
 const getAllExperiences = asynchandler(async (req, res) => {
   const experiences = await Experience.aggregate([
     {
@@ -303,5 +309,6 @@ export {
   updateOrganizationImage,
   deleteExperience,
   deleteOrganiaztionImage,
+  getExperience,
   getAllExperiences,
 };

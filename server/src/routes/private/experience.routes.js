@@ -5,6 +5,7 @@ import {
   deleteExperience,
   deleteOrganiaztionImage,
   getAllExperiences,
+  getExperience,
   updateExperience,
   updateOrganizationImage,
 } from "../../controllers/private/experience.controller.js";
@@ -24,6 +25,7 @@ experienceRouter
 
 experienceRouter
   .route("/:experienceId")
+  .get(getExperienceById, getExperience)
   .patch(getExperienceById, updateExperience)
   .delete(getExperienceById, deleteExperience);
 
