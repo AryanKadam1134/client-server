@@ -3,7 +3,14 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Trash2, Loader, ChevronLeft, ChevronRight, Image } from "lucide-react";
+import {
+  Trash2,
+  Loader,
+  ChevronLeft,
+  ChevronRight,
+  Image,
+  ExternalLink,
+} from "lucide-react";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -50,6 +57,8 @@ export default function AddEditProject() {
 
   const projectImages = useWatch({ control, name: "projectImages" });
   const coverImageIndex = useWatch({ control, name: "coverImageIndex" });
+  const githubLink = useWatch({ control, name: "githubLink" });
+  const liveLink = useWatch({ control, name: "liveLink" });
 
   const formatDate = (date) => {
     return date ? dayjs(date).format("YYYY-MM-DD") : "";
@@ -210,6 +219,17 @@ export default function AddEditProject() {
         id="liveLink"
         label="Live Link"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        attachment={
+          liveLink && (
+            <a
+              href={liveLink}
+              target="_blank"
+              className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+            >
+              <ExternalLink size={13} /> <p>Visit Link</p>
+            </a>
+          )
+        }
       >
         <CustomInput
           id="liveLink"
@@ -225,6 +245,17 @@ export default function AddEditProject() {
         id="githubLink"
         label="Github Link"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        attachment={
+          githubLink && (
+            <a
+              href={githubLink}
+              target="_blank"
+              className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+            >
+              <ExternalLink size={13} /> <p>Visit Link</p>
+            </a>
+          )
+        }
       >
         <CustomInput
           id="githubLink"

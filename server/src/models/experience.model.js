@@ -51,7 +51,7 @@ const experienceSchema = new Schema(
       match: [/^https?:\/\/.+/, "Invalid URL"],
     },
 
-    position: [
+    positions: [
       {
         type: positionSchema,
       },
@@ -64,7 +64,7 @@ const experienceSchema = new Schema(
       enum: EMPLOYMENT_TYPE?.map((type) => type.value),
     },
 
-    highLights: [String],
+    highlights: [String],
     techStack: [
       {
         type: Schema.Types.ObjectId,
@@ -93,23 +93,23 @@ const experienceSchema = new Schema(
 );
 
 experienceSchema.pre("validate", async function () {
-  if (!this.position || this.position.length === 0) {
-    throw new ApiError(400, "At least one position is required");
+  if (!this.positions || this.positions.length === 0) {
+    throw new ApiError(400, "At least one positions is required");
   }
 
-  const presentCount = this.position.filter((p) => p.present).length;
+  const presentCount = this.positions.filter((p) => p.present).length;
 
   if (presentCount > 1) {
-    throw new ApiError(409, "Only one position can have present=true");
+    throw new ApiError(409, "Only one positions can have present=true");
   }
 });
 
 experienceSchema.pre("save", async function () {
-  if (!this.position || this.position.length === 0) return;
+  if (!this.positions || this.positions.length === 0) return;
 
   let latest = null;
 
-  this.position.forEach((pos) => {
+  this.positions.forEach((pos) => {
     if (pos.present) {
       latest = new Date(); // ongoing = most recent
     } else if (pos.endDate) {

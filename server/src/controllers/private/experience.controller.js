@@ -22,8 +22,8 @@ const addExperience = asynchandler(async (req, res) => {
     organizationSize,
     organizationWebsite,
     location,
-    position,
-    highLights,
+    positions,
+    highlights,
     techStack,
     visibility,
   } = req.body;
@@ -52,18 +52,18 @@ const addExperience = asynchandler(async (req, res) => {
   if (location) fields.location = location;
   if (visibility) fields.visibility = visibility;
 
-  if (position?.length > 0)
-    fields.position = Array.isArray(position) ? position : JSON.parse(position);
+  if (positions?.length > 0)
+    fields.positions = Array.isArray(positions) ? positions : JSON.parse(positions);
 
   if (techStack?.length > 0)
     fields.techStack = Array.isArray(techStack)
       ? techStack
       : JSON.parse(techStack);
 
-  if (highLights?.length > 0)
-    fields.highLights = Array.isArray(highLights)
-      ? highLights
-      : JSON.parse(highLights);
+  if (highlights?.length > 0)
+    fields.highlights = Array.isArray(highlights)
+      ? highlights
+      : JSON.parse(highlights);
 
   let uploadedOrganizationImage;
 
@@ -102,8 +102,8 @@ const updateExperience = asynchandler(async (req, res) => {
     organizationSize,
     organizationWebsite,
     location,
-    position,
-    highLights,
+    positions,
+    highlights,
     techStack,
     visibility,
   } = req.body;
@@ -135,18 +135,18 @@ const updateExperience = asynchandler(async (req, res) => {
     fields.organizationWebsite = organizationWebsite;
   if (location !== undefined) fields.location = location;
 
-  if (position !== undefined)
-    fields.position = Array.isArray(position) ? position : JSON.parse(position);
+  if (positions !== undefined)
+    fields.positions = Array.isArray(positions) ? positions : JSON.parse(positions);
 
   if (techStack !== undefined)
     fields.techStack = Array.isArray(techStack)
       ? techStack
       : JSON.parse(techStack);
 
-  if (highLights !== undefined)
-    fields.highLights = Array.isArray(highLights)
-      ? highLights
-      : JSON.parse(highLights);
+  if (highlights !== undefined)
+    fields.highlights = Array.isArray(highlights)
+      ? highlights
+      : JSON.parse(highlights);
 
   Object.assign(experience, fields);
 
@@ -295,7 +295,7 @@ const getAllExperiences = asynchandler(async (req, res) => {
   }
 
   experiences.forEach((exp) => {
-    exp.position = sortPositionsByDate(exp.position);
+    exp.positions = sortPositionsByDate(exp.positions);
   });
 
   return res

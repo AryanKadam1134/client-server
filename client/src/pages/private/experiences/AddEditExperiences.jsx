@@ -3,7 +3,14 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
-import { Trash2, Loader, ChevronLeft, ChevronRight, Image } from "lucide-react";
+import {
+  Trash2,
+  Loader,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  Image,
+} from "lucide-react";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -29,6 +36,7 @@ export default function AddEditExperiences() {
   const { experienceId } = useParams();
 
   const [imagesUploading, setImagesUploading] = useState(false);
+  const [imageDeleting, setImageDeleting] = useState(false);
 
   const {
     register,
@@ -41,7 +49,7 @@ export default function AddEditExperiences() {
       sortOrder: 0,
       featured: true,
       visibility: "public",
-      position: [
+      positions: [
         {
           role: "",
           startDate: "",
@@ -49,7 +57,7 @@ export default function AddEditExperiences() {
           present: null,
         },
       ],
-      highLights: [""],
+      highlights: [""],
     },
   });
 
@@ -59,13 +67,17 @@ export default function AddEditExperiences() {
     remove: removeHighlight,
   } = useFieldArray({
     control,
-    name: "highLights",
+    name: "highlights",
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "position",
+    name: "positions",
   });
   const organizationImage = useWatch({ control, name: "organizationImage" });
+  const organizationWebsite = useWatch({
+    control,
+    name: "organizationWebsite",
+  });
 
   const formatDate = (date) => {
     return date ? dayjs(date).format("YYYY-MM-DD") : "";
@@ -96,12 +108,12 @@ export default function AddEditExperiences() {
 
       reset({
         ...data,
-        position: data?.position?.map((pos) => ({
+        positions: data?.positions?.map((pos) => ({
           ...pos,
           startDate: formatDate(pos?.startDate),
           endDate: formatDate(pos?.endDate),
         })),
-        highLights: data?.highLights || [""],
+        highlights: data?.highlights || [""],
       });
       console.log("Experience: ", data);
     } catch (error) {
@@ -114,7 +126,7 @@ export default function AddEditExperiences() {
       let res;
       if (experienceId) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        updatedData.highLights = payload.highLights;
+        updatedData.highlights = payload.highlights;
 
         console.log("Updated Data: ", updatedData);
         res = await apiEndpoints.updateExperience(experienceId, updatedData);
@@ -154,6 +166,7 @@ export default function AddEditExperiences() {
   };
 
   const deleteOrganizationImage = async () => {
+    setImageDeleting(true);
     try {
       await apiEndpoints.deleteOrganizationImage(experienceId);
 
@@ -161,6 +174,8 @@ export default function AddEditExperiences() {
       console.log("Image deleted successfully!");
     } catch (error) {
       console.error("Error deleting Organization Image: ", error);
+    } finally {
+      setImageDeleting(false);
     }
   };
 
@@ -222,7 +237,7 @@ export default function AddEditExperiences() {
         <CustomInput
           id="organizationSize"
           type="text"
-          placeholder={`e,g, 10-20`}
+          placeholder={`e.g. 10-20`}
           {...register("organizationSize")}
           error={errors?.organizationSize}
         />
@@ -233,6 +248,17 @@ export default function AddEditExperiences() {
         id="organizationWebsite"
         label="Website"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        attachment={
+          organizationWebsite && (
+            <a
+              href={organizationWebsite}
+              target="_blank"
+              className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+            >
+              <ExternalLink size={13} /> <p>Visit Link</p>
+            </a>
+          )
+        }
       >
         <CustomInput
           id="organizationWebsite"
@@ -312,10 +338,14 @@ export default function AddEditExperiences() {
         />
       </LabelInput>
 
+      {/* Highlights */}
       <div className="col-span-12 flex flex-col gap-3 p-3 w-full border border-gray-500 rounded">
         <div className="flex items-center justify-between">
-          <p className="font-medium text-lg">
-            Highlights (Your Highlights inside the company)
+          <p className="font-medium text-[16px]">
+            Highlights{" "}
+            <span className="font-normal">
+              (your highlights inside the company)
+            </span>
           </p>
 
           <button
@@ -330,15 +360,15 @@ export default function AddEditExperiences() {
         {highlightFields.map((item, idx) => (
           <div
             key={item.id}
-            className="flex items-center justify-between gap-3"
+            className="flex items-center justify-between gap-6"
           >
             <div className="w-full">
               <CustomInput
                 placeholder={`Highlight ${idx + 1}`}
-                {...register(`highLights.${idx}`, {
+                {...register(`highlights.${idx}`, {
                   required: "Highlight is required",
                 })}
-                error={errors?.highLights?.[idx]}
+                error={errors?.highlights?.[idx]}
               />
             </div>
 
@@ -353,9 +383,10 @@ export default function AddEditExperiences() {
         ))}
       </div>
 
+      {/* Positions */}
       <div className="col-span-12 flex flex-col gap-3 p-3 w-full border border-gray-500 rounded">
         <div className="flex items-center justify-between">
-          <p className="font-medium text-lg">Positions</p>
+          <p className="font-medium text-[16px]">Positions / Posts</p>
 
           <button
             type="button"
@@ -364,69 +395,69 @@ export default function AddEditExperiences() {
             }
             className="px-4 py-2 bg-green-500 text-white rounded"
           >
-            Add Highlight
+            Add Position
           </button>
         </div>
 
         {fields?.map((data, idx) => (
           <div key={data?.role || idx} className="grid grid-cols-12 gap-6">
             <LabelInput
-              id={`position-${idx}.role`}
+              id={`positions-${idx}.role`}
               label="Role"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             >
               <CustomInput
-                id={`position-${idx}.role`}
+                id={`positions-${idx}.role`}
                 placeholder={`Enter Role`}
-                {...register(`position.${idx}.role`)}
-                error={errors?.position?.[idx]?.role}
+                {...register(`positions.${idx}.role`)}
+                error={errors?.positions?.[idx]?.role}
               />
             </LabelInput>
 
             {/* Start Date */}
             <LabelInput
-              id={`position-${idx}.startDate`}
+              id={`positions-${idx}.startDate`}
               label="Start Date"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
               required
             >
               <CustomDatePicker
-                id={`position-${idx}.startDate`}
+                id={`positions-${idx}.startDate`}
                 placeholder={`Enter Start Date`}
-                {...register(`position.${idx}.startDate`, {
+                {...register(`positions.${idx}.startDate`, {
                   required: "Start Date is required!",
                 })}
-                error={errors?.position?.[idx]?.startDate}
+                error={errors?.positions?.[idx]?.startDate}
               />
             </LabelInput>
 
             {/* End Date */}
             <LabelInput
-              id={`position-${idx}.endDate`}
+              id={`positions-${idx}.endDate`}
               label="End Date"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             >
               <CustomDatePicker
-                id={`position-${idx}.endDate`}
+                id={`positions-${idx}.endDate`}
                 placeholder={`Enter End Date`}
-                {...register(`position.${idx}.endDate`)}
-                error={errors?.position?.[idx]?.endDate}
+                {...register(`positions.${idx}.endDate`)}
+                error={errors?.positions?.[idx]?.endDate}
               />
             </LabelInput>
 
             {/* Present */}
             <LabelInput
-              id={`position-${idx}.present`}
+              id={`positions-${idx}.present`}
               label="Present"
               colSpan="col-span-9 sm:col-span-4 lg:col-span-2"
               type="checkbox"
             >
               <input
-                id={`position-${idx}.present`}
+                id={`positions-${idx}.present`}
                 type="checkbox"
                 placeholder={`Enter Present`}
-                {...register(`position.${idx}.present`)}
-                error={errors?.position?.[idx]?.present}
+                {...register(`positions.${idx}.present`)}
+                error={errors?.positions?.[idx]?.present}
               />
             </LabelInput>
 
@@ -460,12 +491,28 @@ export default function AddEditExperiences() {
         label="Cover Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
-        <div className="h-[120px] rounded overflow-hidden border border-gray-400">
+        <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
+          {/* Loader */}
+          {imageDeleting && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+              <Loader size={24} className="animate-spin text-white" />
+            </div>
+          )}
+
           <img
             src={organizationImage?.url}
             alt=""
             className="w-full h-full object-contain"
           />
+
+          {/* Delete Button (Hover Only) */}
+          <button
+            type="button"
+            onClick={deleteOrganizationImage}
+            className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
+          >
+            <Trash2 size={18} />
+          </button>
         </div>
       </LabelInput>
 
