@@ -25,6 +25,7 @@ export default function AddEditSkillCategory() {
   } = useForm({
     defaultValues: {
       sortOrder: 0,
+      visibility: "public",
     },
   });
 
@@ -98,7 +99,9 @@ export default function AddEditSkillCategory() {
           id="name"
           type="text"
           placeholder={`Enter Category Name`}
-          {...register("name")}
+          {...register("name", {
+            required: "Category Name is required!",
+          })}
           error={errors?.name}
         />
       </LabelInput>

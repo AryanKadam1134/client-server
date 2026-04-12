@@ -10,10 +10,10 @@ import { getCategoryName } from "../../../utils/getCategoryName";
 
 import { apiEndpoints } from "../../../api";
 
-import useCategoriesFilter from "../../../hooks/useCategoriesFilter";
+import useCategoriesList from "../../../hooks/useCategoriesList";
 
 export default function Skills() {
-  const { categoriesFilter } = useCategoriesFilter();
+  const { categoriesList } = useCategoriesList();
 
   const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ export default function Skills() {
       cells: [
         index + 1,
         name,
-        getCategoryName(categoriesFilter, categoryId),
+        getCategoryName(categoriesList, categoryId),
         level,
         sortOrder === 0 ? "0" : sortOrder,
         visibility,

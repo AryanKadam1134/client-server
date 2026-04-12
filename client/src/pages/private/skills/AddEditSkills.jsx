@@ -13,7 +13,7 @@ import { apiEndpoints } from "../../../api";
 
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
-import useCategoriesFilter from "../../../hooks/useCategoriesFilter";
+import useCategoriesList from "../../../hooks/useCategoriesList";
 
 const TECH_SKILLS = [
   { title: "HTML5", category: "Frontend" },
@@ -61,7 +61,7 @@ const SKILLS = TECH_SKILLS.map((app) => ({
 export default function AddEditSkills() {
   const { visibilities } = useVisibilities();
   const { skillLevels } = useSkillLevels();
-  const { categoriesFilter } = useCategoriesFilter();
+  const { categoriesList } = useCategoriesList();
 
   const { skillId } = useParams();
 
@@ -74,6 +74,7 @@ export default function AddEditSkills() {
   } = useForm({
     defaultValues: {
       sortOrder: 0,
+      visibility: "public",
     },
   });
 
@@ -159,11 +160,14 @@ export default function AddEditSkills() {
           id="name"
           type="text"
           placeholder={`Enter Skill Name`}
-          {...register("name")}
+          {...register("name", {
+            required: "Skill Name is required!",
+          })}
           error={errors?.name}
         />
       </LabelInput>
 
+      {/* Skill Category */}
       <LabelInput
         id="categoryId"
         label="Category"
@@ -177,7 +181,7 @@ export default function AddEditSkills() {
             <CustomSelect
               id="categoryId"
               placeholder="Select Category"
-              options={categoriesFilter}
+              options={categoriesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
             />
@@ -185,15 +189,18 @@ export default function AddEditSkills() {
         />
       </LabelInput>
 
+      {/* Skill Level */}
       <LabelInput
         id="level"
         label="Level"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         className="w-full"
+        required
       >
         <Controller
           name="level"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <CustomSelect
               id="level"

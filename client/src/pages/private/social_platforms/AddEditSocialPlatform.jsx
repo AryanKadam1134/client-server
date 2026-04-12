@@ -268,6 +268,7 @@ export default function AddEditSocialPlatform() {
   } = useForm({
     defaultValues: {
       sortOrder: 0,
+      visibility: "public",
     },
   });
 
@@ -355,7 +356,9 @@ export default function AddEditSocialPlatform() {
           id="name"
           type="text"
           placeholder={`Enter Platform Name`}
-          {...register("name")}
+          {...register("name", {
+            required: "Platform Name is required!",
+          })}
           error={errors?.name}
         />
       </LabelInput>
@@ -382,7 +385,9 @@ export default function AddEditSocialPlatform() {
           id="link"
           type="text"
           placeholder={`Enter Platform Link`}
-          {...register("link")}
+          {...register("link", {
+            required: "Platform Link is required!",
+          })}
           error={errors?.link}
         />
       </LabelInput>

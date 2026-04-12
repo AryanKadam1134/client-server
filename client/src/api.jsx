@@ -97,7 +97,7 @@ export const apiEndpoints = {
   getProjects: () => api.get(`/projects`),
 
   // Filters
-  getSkillCategoriesFilter: () => api.get(`/filters/skill-categories`),
+  getSkillCategoriesList: () => api.get(`/filters/skill-categories`),
 
   getOrganizationsList: () => api.get(`/filters/organizations`),
 

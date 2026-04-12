@@ -177,7 +177,9 @@ export default function AddEditProject() {
           id="title"
           type="text"
           placeholder={`Enter Project Name`}
-          {...register("title")}
+          {...register("title", {
+            required: "Project Name is required!",
+          })}
           error={errors?.title}
         />
       </LabelInput>
@@ -187,7 +189,6 @@ export default function AddEditProject() {
         id="organizationId"
         label="Organization"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <Controller
           name="organizationId"
@@ -209,7 +210,6 @@ export default function AddEditProject() {
         id="liveLink"
         label="Live Link"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <CustomInput
           id="liveLink"
@@ -225,7 +225,6 @@ export default function AddEditProject() {
         id="githubLink"
         label="Github Link"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <CustomInput
           id="githubLink"
@@ -241,7 +240,6 @@ export default function AddEditProject() {
         id="description"
         label="Description"
         colSpan="col-span-12 sm:col-span-6"
-        required
       >
         <CustomTextArea
           id="description"
@@ -257,7 +255,6 @@ export default function AddEditProject() {
         id="techStack"
         label="Tech Stack"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <Controller
           name="techStack"
@@ -279,7 +276,6 @@ export default function AddEditProject() {
         id="category"
         label="Project Category"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <Controller
           name="category"
@@ -306,7 +302,9 @@ export default function AddEditProject() {
         <CustomDatePicker
           id="startDate"
           placeholder={`Enter Start Date`}
-          {...register("startDate")}
+          {...register("startDate", {
+            required: "Start Date is required!",
+          })}
           error={errors?.startDate}
         />
       </LabelInput>
@@ -316,7 +314,6 @@ export default function AddEditProject() {
         id="endDate"
         label="End Date"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <CustomDatePicker
           id="endDate"
@@ -332,7 +329,6 @@ export default function AddEditProject() {
         label="Present"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         type="checkbox"
-        required
       >
         <input
           id="present"
@@ -349,7 +345,6 @@ export default function AddEditProject() {
         label="Featured"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         type="checkbox"
-        required
       >
         <input
           id="featured"
@@ -401,7 +396,6 @@ export default function AddEditProject() {
         id="visibility"
         label="Upload Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <DragDropUpload
           multiple
@@ -412,13 +406,18 @@ export default function AddEditProject() {
       </LabelInput>
 
       {/* Cover Image */}
-      <div className="col-span-12 sm:col-span-3 h-[120px] rounded overflow-hidden border border-gray-400">
-        <img
-          src={projectImages?.find((_, idx) => idx == coverImageIndex)?.url}
-          alt=""
-          className="w-full h-full object-contain"
-        />
-      </div>
+      <LabelInput
+        label="Cover Image"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <div className="h-[120px] rounded overflow-hidden border border-gray-400">
+          <img
+            src={projectImages?.find((_, idx) => idx == coverImageIndex)?.url}
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+      </LabelInput>
 
       <div className="col-span-12 sm:col-span-6 relative">
         {/* Scroll Buttons */}

@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 
 import { apiEndpoints } from "../api";
 
-export default function useCategoriesFilter() {
+export default function useCategoriesList() {
   const [categoriesLoading, setLoading] = useState(true);
-  const [categoriesFilter, setCategoriesFilter] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
 
   const fetchSkillCategories = async () => {
     try {
-      const res = await apiEndpoints.getSkillCategoriesFilter();
+      const res = await apiEndpoints.getSkillCategoriesList();
 
       const data = res.data;
 
-      setCategoriesFilter(data);
+      setCategoriesList(data);
       console.log("Skill Categories Filter: ", data);
     } catch (error) {
       console.error("Error fetching Skill Categories: ", error);
@@ -25,5 +25,5 @@ export default function useCategoriesFilter() {
     fetchSkillCategories();
   }, []);
 
-  return { categoriesLoading, categoriesFilter };
+  return { categoriesLoading, categoriesList };
 }
