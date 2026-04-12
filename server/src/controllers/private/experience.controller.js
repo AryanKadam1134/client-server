@@ -5,7 +5,6 @@ import { Experience } from "../../models/experience.model.js";
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
-import { parseBoolean } from "../../utils/parseBoolean.js";
 import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
 import {
   uploadToCloudinary,

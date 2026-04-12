@@ -1,15 +1,23 @@
 import React, { Fragment, useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine, ExternalLink } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import CustomButton from "../../../components/ui/CustomButton";
 
+import { getVisibility } from "../../../utils/getVisibility";
+import { getEmploymentType } from "../../../utils/getEmploymentType";
+
 import { apiEndpoints } from "../../../api";
 
-import { useNavigate } from "react-router-dom";
+import useVisibilities from "../../../hooks/useVisibilities";
+import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 
 export default function Experiences() {
+  const { visibilities } = useVisibilities();
+  const { employmentTypes } = useEmploymentTypes();
+
   const navigate = useNavigate();
 
   const [experiences, setExperiences] = useState([]);
@@ -65,10 +73,10 @@ export default function Experiences() {
       cells: [
         index + 1,
         organization,
-        employmentType,
+        getEmploymentType(employmentTypes, employmentType),
         organizationWebsite,
         location,
-        visibility,
+        getVisibility(visibilities, visibility),
         <div className="flex items-center justify-center gap-1">
           <button
             onClick={() => navigate(`${_id}/edit`)}

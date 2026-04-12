@@ -1,3 +1,3 @@
-export const getCategoryName = (categories, _id) => {
-  return categories?.find((c) => c?.value === _id)?.label;
+export const getCategoryName = (categories, value) => {
+  return categories?.find((c) => c?.value === value)?.label || null;
 };

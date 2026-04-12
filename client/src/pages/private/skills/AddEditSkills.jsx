@@ -59,8 +59,8 @@ const SKILLS = TECH_SKILLS.map((app) => ({
 }));
 
 export default function AddEditSkills() {
-  const { visibilities } = useVisibilities();
   const { skillLevels } = useSkillLevels();
+  const { visibilities } = useVisibilities();
   const { categoriesList } = useCategoriesList();
 
   const { skillId } = useParams();

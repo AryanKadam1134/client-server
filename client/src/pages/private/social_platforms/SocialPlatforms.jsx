@@ -1,15 +1,20 @@
 import React, { Fragment, useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import CustomButton from "../../../components/ui/CustomButton";
 
+import { getVisibility } from "../../../utils/getVisibility";
+
 import { apiEndpoints } from "../../../api";
 
-import { useNavigate } from "react-router-dom";
+import useVisibilities from "../../../hooks/useVisibilities";
 
 export default function SocialPlatforms() {
+  const { visibilities } = useVisibilities();
+
   const navigate = useNavigate();
 
   const [platforms, setPlatforms] = useState([]);
@@ -59,7 +64,7 @@ export default function SocialPlatforms() {
         name,
         link,
         sortOrder === 0 ? "0" : sortOrder,
-        visibility,
+        getVisibility(visibilities, visibility),
         <div className="flex items-center justify-center gap-1">
           <button
             onClick={() => navigate(`${_id}/edit`)}

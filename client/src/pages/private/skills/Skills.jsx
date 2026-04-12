@@ -6,13 +6,19 @@ import { Plus, Trash2, FilePenLine } from "lucide-react";
 import Table from "../../../components/common/Table";
 import CustomButton from "../../../components/ui/CustomButton";
 
+import { getSkillLevel } from "../../../utils/getSkillLevel";
+import { getVisibility } from "../../../utils/getVisibility";
 import { getCategoryName } from "../../../utils/getCategoryName";
 
 import { apiEndpoints } from "../../../api";
 
+import useSkillLevels from "../../../hooks/useSkillLevels";
+import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
 
 export default function Skills() {
+  const { skillLevels } = useSkillLevels();
+  const { visibilities } = useVisibilities();
   const { categoriesList } = useCategoriesList();
 
   const navigate = useNavigate();
@@ -64,9 +70,9 @@ export default function Skills() {
         index + 1,
         name,
         getCategoryName(categoriesList, categoryId),
-        level,
+        getSkillLevel(skillLevels, level),
         sortOrder === 0 ? "0" : sortOrder,
-        visibility,
+        getVisibility(visibilities, visibility),
         <div className="flex items-center justify-center gap-1">
           <button
             onClick={() => navigate(`${_id}/edit`)}
