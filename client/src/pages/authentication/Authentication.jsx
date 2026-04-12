@@ -9,6 +9,7 @@ import CustomInput from "../../components/ui/CustomInput";
 import { apiEndpoints } from "../../api";
 
 import { useAuth } from "../../context/AuthContext";
+import CustomButton from "../../components/ui/CustomButton";
 
 export default function Authentication() {
   const { login } = useAuth();
@@ -28,7 +29,7 @@ export default function Authentication() {
     try {
       if (isLogin) {
         await login(payload);
-        
+
         navigate("/details");
       } else {
         const res = await apiEndpoints.register(payload);
@@ -150,13 +151,13 @@ export default function Authentication() {
           </LabelInput>
 
           {/* Submit */}
-          <button
+          <CustomButton
             type="submit"
+            className="w-full"
             disabled={isSubmitting}
-            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition"
           >
             {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
+          </CustomButton>
 
           <p
             onClick={() => {
