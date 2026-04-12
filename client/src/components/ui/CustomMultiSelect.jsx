@@ -116,7 +116,7 @@ export default function CustomMultiSelect({
       {/* Dropdown */}
       <ul
         {...getMenuProps()}
-        className={`absolute z-50 mt-1 w-full bg-white border border-gray-500 rounded-sm shadow-md max-h-60 overflow-y-auto ${
+        className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-white border border-gray-500 rounded-sm shadow-md max-h-60 overflow-y-auto ${
           !isOpen && "hidden"
         }`}
       >
@@ -128,7 +128,7 @@ export default function CustomMultiSelect({
               <li
                 key={item.value}
                 {...getItemProps({ item, index })}
-                className={`px-3 py-2 cursor-pointer text-sm flex justify-between
+                className={`px-3 py-2 cursor-pointer text-sm rounded
                   ${highlightedIndex === index ? "bg-gray-200" : ""}
                   ${isSelected ? "font-medium bg-gray-200" : ""}
                 `}

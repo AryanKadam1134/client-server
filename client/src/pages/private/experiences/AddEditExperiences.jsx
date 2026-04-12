@@ -357,6 +357,8 @@ export default function AddEditExperiences() {
           </button>
         </div>
 
+        <div className="border-b border-gray-400" />
+
         {highlightFields.map((item, idx) => (
           <div
             key={item.id}
@@ -398,6 +400,8 @@ export default function AddEditExperiences() {
             Add Position
           </button>
         </div>
+
+        <div className="border-b border-gray-400" />
 
         {fields?.map((data, idx) => (
           <div key={data?.role || idx} className="grid grid-cols-12 gap-6">
