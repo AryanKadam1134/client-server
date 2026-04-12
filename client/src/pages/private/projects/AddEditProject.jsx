@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Trash2, Loader, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trash2, Loader, ChevronLeft, ChevronRight, Image } from "lucide-react";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -39,6 +39,7 @@ export default function AddEditProject() {
     control,
     reset,
     formState: { errors, isSubmitting, dirtyFields },
+    setValue,
   } = useForm({
     defaultValues: {
       sortOrder: 0,
@@ -48,6 +49,7 @@ export default function AddEditProject() {
   });
 
   const projectImages = useWatch({ control, name: "projectImages" });
+  const coverImageIndex = useWatch({ control, name: "coverImageIndex" });
 
   const formatDate = (date) => {
     return date ? dayjs(date).format("YYYY-MM-DD") : "";
@@ -103,6 +105,18 @@ export default function AddEditProject() {
       console.log("Project Saved: ", data);
     } catch (error) {
       console.error("Error saving Project: ", error);
+    }
+  };
+
+  const handleCoverChange = async (idx) => {
+    setValue("coverImageIndex", idx, { shouldDirty: true });
+
+    try {
+      await apiEndpoints.updateProject(projectId, {
+        coverImageIndex: idx,
+      });
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -397,7 +411,16 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
-      <div className="col-span-12 sm:col-span-9 relative">
+      {/* Cover Image */}
+      <div className="col-span-12 sm:col-span-3 h-[120px] rounded overflow-hidden border border-gray-400">
+        <img
+          src={projectImages?.find((_, idx) => idx == coverImageIndex)?.url}
+          alt=""
+          className="w-full h-full object-contain"
+        />
+      </div>
+
+      <div className="col-span-12 sm:col-span-6 relative">
         {/* Scroll Buttons */}
         <button
           type="button"
@@ -406,7 +429,7 @@ export default function AddEditProject() {
               .getElementById("image-scroll")
               ?.scrollBy({ left: -300, behavior: "smooth" })
           }
-          className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white p-1 rounded-full cursor-pointer"
+          className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-1 rounded-full cursor-pointer"
         >
           <ChevronLeft />
         </button>
@@ -418,7 +441,7 @@ export default function AddEditProject() {
               .getElementById("image-scroll")
               ?.scrollBy({ left: 300, behavior: "smooth" })
           }
-          className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white p-1 rounded-full cursor-pointer"
+          className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-1 rounded-full cursor-pointer"
         >
           <ChevronRight />
         </button>
@@ -445,6 +468,16 @@ export default function AddEditProject() {
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                   <Loader size={24} className="animate-spin text-white" />
                 </div>
+              )}
+
+              {idx !== coverImageIndex && (
+                <button
+                  type="button"
+                  onClick={() => handleCoverChange(idx)}
+                  className="absolute top-2 left-2 p-1 rounded bg-green-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-green-600 cursor-pointer"
+                >
+                  <Image size={18} />
+                </button>
               )}
 
               {/* Delete Button (Hover Only) */}
