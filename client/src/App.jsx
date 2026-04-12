@@ -7,24 +7,29 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import DashboardLayout from "./layouts/DashboardLayout";
-
-import Dashboard from "./pages/private/Dashboard";
 import Authentication from "./pages/authentication/Authentication";
-import SocialPlatforms from "./pages/private/SocialPlatforms";
-import Skills from "./pages/private/Skills";
-import SkillCategories from "./pages/private/SkillCategories";
-import Projects from "./pages/private/Projects";
+
+import DashboardLayout from "./layouts/DashboardLayout";
+import Dashboard from "./pages/private/Dashboard";
+
+import SocialPlatforms from "./pages/private/social_platforms/SocialPlatforms";
+import AddEditSocialPlatform from "./pages/private/social_platforms/AddEditSocialPlatform";
+
+import Skills from "./pages/private/skills/Skills";
+import AddEditSkills from "./pages/private/skills/AddEditSkills";
+
+import SkillCategories from "./pages/private/skill_categories/SkillCategories";
+import AddEditSkillCategory from "./pages/private/skill_categories/AddEditSkillCategory";
+
+import Projects from "./pages/private/projects/Projects";
+import AddEditProject from "./pages/private/projects/AddEditProject";
+
 import Experiences from "./pages/private/Experiences";
 import Educations from "./pages/private/Educations";
 import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
-import AddEditSkills from "./pages/private/AddEditSkills";
-import AddEditSkillCategory from "./pages/private/AddEditSkillCategory";
-import AddEditSocialPlatform from "./pages/private/AddEditSocialPlatform";
 
 import { useAuth } from "./context/AuthContext";
-import AddEditProject from "./pages/private/AddEditProject";
 
 function PublicRoute() {
   const { user } = useAuth();

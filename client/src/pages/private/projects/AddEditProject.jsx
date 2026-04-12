@@ -5,22 +5,22 @@ import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Trash2, Loader, ChevronLeft, ChevronRight } from "lucide-react";
 
-import LabelInput from "../../components/ui/LabelInput";
-import CustomInput from "../../components/ui/CustomInput";
-import CustomButton from "../../components/ui/CustomButton";
-import CustomSelect from "../../components/ui/CustomSelect";
-import DragDropUpload from "../../components/ui/DragDropUpload";
-import CustomTextArea from "../../components/ui/CustomTextArea";
-import CustomDatePicker from "../../components/ui/CustomDatePicker";
-import CustomMultiSelect from "../../components/ui/CustomMultiSelect";
-import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
+import LabelInput from "../../../components/ui/LabelInput";
+import CustomInput from "../../../components/ui/CustomInput";
+import CustomButton from "../../../components/ui/CustomButton";
+import CustomSelect from "../../../components/ui/CustomSelect";
+import DragDropUpload from "../../../components/ui/DragDropUpload";
+import CustomTextArea from "../../../components/ui/CustomTextArea";
+import CustomDatePicker from "../../../components/ui/CustomDatePicker";
+import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
+import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../api";
+import { apiEndpoints } from "../../../api";
 
-import useSkillsList from "../../hooks/useSkillsList";
-import useVisibilities from "../../hooks/useVisibilities";
-import useOrganizationsList from "../../hooks/useOrganizationsList";
-import useProjectCategoriesList from "../../hooks/useProjectCategoriesList";
+import useSkillsList from "../../../hooks/useSkillsList";
+import useVisibilities from "../../../hooks/useVisibilities";
+import useOrganizationsList from "../../../hooks/useOrganizationsList";
+import useProjectCategoriesList from "../../../hooks/useProjectCategoriesList";
 
 export default function AddEditProject() {
   const { skillsList } = useSkillsList();

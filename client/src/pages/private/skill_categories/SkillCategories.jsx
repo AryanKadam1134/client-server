@@ -1,70 +1,61 @@
 import React, { Fragment, useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine } from "lucide-react";
 
-import Table from "../../components/common/Table";
-import CustomButton from "../../components/ui/CustomButton";
+import Table from "../../../components/common/Table";
+import CustomButton from "../../../components/ui/CustomButton";
 
-import { getCategoryName } from "../../utils/getCategoryName";
+import { apiEndpoints } from "../../../api";
 
-import { apiEndpoints } from "../../api";
+import { useNavigate } from "react-router-dom";
 
-import useCategoriesFilter from "../../hooks/useCategoriesFilter";
-
-export default function Skills() {
-  const { categoriesFilter } = useCategoriesFilter();
-
+export default function SkillCategories() {
   const navigate = useNavigate();
 
-  const [skills, setSkills] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  const fetchSkills = async () => {
+  const fetchSkillCategories = async () => {
     try {
-      const res = await apiEndpoints.getSkills();
+      const res = await apiEndpoints.getSkillCategories();
 
       const data = res.data;
 
-      setSkills(data);
-      console.log("User Skills: ", data);
+      setCategories(data);
+      console.log("User Skill Categories: ", data);
     } catch (error) {
-      console.error("Error fetching User Skills: ", error);
+      console.error("Error fetching User Skill Categories: ", error);
     }
   };
 
-  const deleteSkill = async (id) => {
+  const deleteSkillCategory = async (categoryId) => {
     try {
-      await apiEndpoints.deleteSkill(id);
+      await apiEndpoints.deleteSkillCategory(categoryId);
 
-      fetchSkills();
+      fetchSkillCategories();
     } catch (error) {
-      console.error("Error deleting Skill: ", error);
+      console.error("Error deleting Skill Category: ", error);
     }
   };
 
   useEffect(() => {
-    fetchSkills();
+    fetchSkillCategories();
   }, []);
 
   const tableHeading = [
     { label: "Sr. No." },
-    { label: "Skill Name" },
-    { label: "Category" },
-    { label: "Level" },
+    { label: "Category Name" },
     { label: "Sort Order" },
     { label: "Visibility" },
     { label: "Actions" },
   ];
 
-  const tableBody = skills?.map((data, index) => {
-    const { _id, name, categoryId, level, sortOrder, visibility } = data;
+  const tableBody = categories?.map((data, index) => {
+    const { _id, name, sortOrder, visibility } = data;
 
     return {
       cells: [
         index + 1,
         name,
-        getCategoryName(categoriesFilter, categoryId),
-        level,
         sortOrder === 0 ? "0" : sortOrder,
         visibility,
         <div className="flex items-center justify-center gap-1">
@@ -76,7 +67,7 @@ export default function Skills() {
           </button>
 
           <button
-            onClick={() => deleteSkill(_id)}
+            onClick={() => deleteSkillCategory(_id)}
             className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
           >
             <Trash2 size={18} />
@@ -92,7 +83,7 @@ export default function Skills() {
         onClick={() => navigate("add")}
         className="self-end flex items-center gap-2"
       >
-        <Plus size={18} /> Add Skill
+        <Plus size={18} /> Add Skill Category
       </CustomButton>
 
       <Table tableHeading={tableHeading} tableBody={tableBody} />

@@ -4,15 +4,15 @@ import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { ExternalLink } from "lucide-react";
 
-import LabelInput from "../../components/ui/LabelInput";
-import CustomInput from "../../components/ui/CustomInput";
-import CustomButton from "../../components/ui/CustomButton";
-import CustomSelect from "../../components/ui/CustomSelect";
-import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
+import LabelInput from "../../../components/ui/LabelInput";
+import CustomInput from "../../../components/ui/CustomInput";
+import CustomButton from "../../../components/ui/CustomButton";
+import CustomSelect from "../../../components/ui/CustomSelect";
+import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../api";
+import { apiEndpoints } from "../../../api";
 
-import useVisibilities from "../../hooks/useVisibilities";
+import useVisibilities from "../../../hooks/useVisibilities";
 
 const SOCIAL_APPS_LIST = [
   {

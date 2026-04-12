@@ -11,7 +11,7 @@ connectDB()
     console.log("MongoDB is connected successfully!", res.connection.host);
 
     app.listen(port, () => {
-      console.log(`Server is listening on post: ${port}`);
+      console.log(`Server is listening on port: ${port}`);
     });
 
     app.on("error", (error) => {

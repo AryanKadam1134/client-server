@@ -3,17 +3,17 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
-import LabelInput from "../../components/ui/LabelInput";
-import CustomInput from "../../components/ui/CustomInput";
-import CustomButton from "../../components/ui/CustomButton";
-import CustomSelect from "../../components/ui/CustomSelect";
-import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
+import LabelInput from "../../../components/ui/LabelInput";
+import CustomInput from "../../../components/ui/CustomInput";
+import CustomButton from "../../../components/ui/CustomButton";
+import CustomSelect from "../../../components/ui/CustomSelect";
+import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../api";
+import { apiEndpoints } from "../../../api";
 
-import useSkillLevels from "../../hooks/useSkillLevels";
-import useVisibilities from "../../hooks/useVisibilities";
-import useCategoriesFilter from "../../hooks/useCategoriesFilter";
+import useSkillLevels from "../../../hooks/useSkillLevels";
+import useVisibilities from "../../../hooks/useVisibilities";
+import useCategoriesFilter from "../../../hooks/useCategoriesFilter";
 
 const TECH_SKILLS = [
   { title: "HTML5", category: "Frontend" },
