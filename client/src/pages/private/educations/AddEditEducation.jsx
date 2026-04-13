@@ -1,0 +1,343 @@
+import React, { useState, useEffect } from "react";
+
+import { useParams } from "react-router-dom";
+import { useForm, useWatch } from "react-hook-form";
+import {
+  Trash2,
+  Loader,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  Image,
+} from "lucide-react";
+
+import LabelInput from "../../../components/ui/LabelInput";
+import CustomInput from "../../../components/ui/CustomInput";
+import CustomButton from "../../../components/ui/CustomButton";
+import CustomSelect from "../../../components/ui/CustomSelect";
+import DragDropUpload from "../../../components/ui/DragDropUpload";
+import CustomTextArea from "../../../components/ui/CustomTextArea";
+import CustomDatePicker from "../../../components/ui/CustomDatePicker";
+import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
+import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
+
+import { apiEndpoints } from "../../../api";
+
+export default function AddEditEducation() {
+  const { educationId } = useParams();
+
+  const [imagesUploading, setImagesUploading] = useState(false);
+  const [imageDeleting, setImageDeleting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isSubmitting, dirtyFields },
+  } = useForm();
+
+  const instituteImage = useWatch({ control, name: "instituteImage" });
+
+  const getUpdatedFields = (data, dirtyFields) => {
+    const updated = {};
+
+    for (const key in dirtyFields) {
+      if (
+        typeof dirtyFields[key] === "object" &&
+        !Array.isArray(dirtyFields[key])
+      ) {
+        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
+      } else {
+        updated[key] = data[key];
+      }
+    }
+
+    return updated;
+  };
+
+  const fetchEducation = async () => {
+    try {
+      const res = await apiEndpoints.getEducation(educationId);
+
+      const data = res.data;
+
+      reset(data);
+      console.log("Education: ", data);
+    } catch (error) {
+      console.error("Error fetching Education: ", error);
+    }
+  };
+
+  const addUpdateEducation = async (payload) => {
+    try {
+      let res;
+      if (educationId) {
+        const updatedData = getUpdatedFields(payload, dirtyFields);
+
+        res = await apiEndpoints.updateEducation(educationId, updatedData);
+      } else {
+        res = await apiEndpoints.addEducation(payload);
+      }
+
+      const data = res.data;
+
+      if (educationId) fetchEducation();
+      console.log("Education Saved: ", data);
+    } catch (error) {
+      console.error("Error saving Education: ", error);
+    }
+  };
+
+  // Can uplaod multiple
+  const updateInstituteImage = async (files) => {
+    const file = files[0];
+
+    setImagesUploading(true);
+
+    try {
+      const formData = new FormData();
+
+      formData.append("instituteImage", file);
+
+      await apiEndpoints.updateInstituteImage(educationId, formData);
+
+      fetchEducation();
+      console.log("Images uploaded successfully!");
+    } catch (error) {
+      console.error("Error updating Education Images: ", error);
+    } finally {
+      setImagesUploading(false);
+    }
+  };
+
+  const deleteInstituteImage = async () => {
+    setImageDeleting(true);
+    try {
+      await apiEndpoints.deleteInstituteImage(educationId);
+
+      fetchEducation();
+      console.log("Image deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting Institute Image: ", error);
+    } finally {
+      setImageDeleting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!educationId) return;
+    fetchEducation();
+  }, [educationId]);
+
+  return (
+    <form
+      onSubmit={handleSubmit(addUpdateEducation)}
+      className="grid grid-cols-12 gap-6 text-sm"
+    >
+      {/* Institute Name */}
+      <LabelInput
+        id="instituteName"
+        label="Institute Name"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
+          id="instituteName"
+          type="text"
+          placeholder={`Enter Institute Name`}
+          {...register("instituteName", {
+            required: "Institute Name is required!",
+          })}
+          error={errors?.instituteName}
+        />
+      </LabelInput>
+
+      {/* Qualification */}
+      <LabelInput
+        id="qualification"
+        label="Qualification"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        required
+      >
+        <CustomInput
+          id="qualification"
+          type="text"
+          placeholder={`Enter Qualification`}
+          {...register("qualification", {
+            required: "Qualification is required!",
+          })}
+          error={errors?.qualification}
+        />
+      </LabelInput>
+
+      {/* Description */}
+      <LabelInput
+        id="description"
+        label="Description"
+        colSpan="col-span-12 sm:col-span-6"
+      >
+        <CustomTextArea
+          id="description"
+          type="text"
+          placeholder={`Enter Description`}
+          {...register("description")}
+          error={errors?.description}
+        />
+      </LabelInput>
+
+      {/* Address */}
+      <LabelInput
+        id="address"
+        label="Address"
+        colSpan="col-span-12 sm:col-span-6"
+      >
+        <CustomTextArea
+          id="address"
+          type="text"
+          placeholder={`Enter Address`}
+          {...register("address")}
+          error={errors?.address}
+        />
+      </LabelInput>
+
+      {/* Start Year */}
+      <LabelInput
+        id="startYear"
+        label="Start Year"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
+          id="startYear"
+          type="number"
+          placeholder={`Enter Start Year`}
+          {...register("startYear", {
+            required: "Start Year is required!",
+          })}
+          error={errors?.startYear}
+        />
+      </LabelInput>
+
+      {/* End Year */}
+      <LabelInput
+        id="endYear"
+        label="End Year"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
+          id="endYear"
+          type="number"
+          placeholder={`Enter End Year`}
+          {...register("endYear")}
+          error={errors?.endYear}
+        />
+      </LabelInput>
+
+      {/* Present */}
+      <LabelInput
+        id="present"
+        label="Present"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        type="checkbox"
+      >
+        <input
+          id="present"
+          type="checkbox"
+          placeholder={`Enter Present`}
+          {...register("present")}
+          error={errors?.present}
+        />
+      </LabelInput>
+
+      {/* Percentage */}
+      <LabelInput
+        id="percentage"
+        label="Percentage"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
+          id="percentage"
+          type="number"
+          step="any"
+          min={0}
+          max={100}
+          placeholder={`Enter Percentage`}
+          {...register("percentage", {
+            min: 0,
+            max: 10,
+          })}
+          error={errors?.percentage}
+        />
+      </LabelInput>
+
+      {/* CGPA */}
+      <LabelInput
+        id="cgpa"
+        label="CGPA"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <CustomInput
+          id="cgpa"
+          type="number"
+          step="any"
+          min={0}
+          max={10}
+          placeholder={`e.g. 7.1`}
+          {...register("cgpa", {
+            min: 0,
+            max: 10,
+          })}
+          error={errors?.cgpa}
+        />
+      </LabelInput>
+
+      {/* Upload Image  */}
+      <LabelInput
+        id="upload"
+        label="Upload Image"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <DragDropUpload
+          id="upload"
+          accept="image/*"
+          loading={imagesUploading}
+          onChange={(files) => updateInstituteImage(files)}
+        />
+      </LabelInput>
+
+      {/* Cover Image */}
+      <LabelInput
+        label="Cover Image"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
+        <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
+          {/* Loader */}
+          {imageDeleting && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+              <Loader size={24} className="animate-spin text-white" />
+            </div>
+          )}
+
+          <img
+            src={instituteImage?.url}
+            alt=""
+            className="w-full h-full object-contain"
+          />
+
+          {/* Delete Button (Hover Only) */}
+          <button
+            type="button"
+            onClick={deleteInstituteImage}
+            className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
+      </LabelInput>
+
+      <CustomButton type="submit" className="col-span-12 place-self-end">
+        {isSubmitting ? "Saving..." : "Save"}
+      </CustomButton>
+    </form>
+  );
+}

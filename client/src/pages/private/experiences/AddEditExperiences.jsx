@@ -128,7 +128,6 @@ export default function AddEditExperiences() {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         updatedData.highlights = payload.highlights;
 
-        console.log("Updated Data: ", updatedData);
         res = await apiEndpoints.updateExperience(experienceId, updatedData);
       } else {
         res = await apiEndpoints.addExperience(payload);

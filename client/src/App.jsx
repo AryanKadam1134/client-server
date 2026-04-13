@@ -28,6 +28,7 @@ import Experiences from "./pages/private/experiences/Experiences";
 import AddEditExperiences from "./pages/private/experiences/AddEditExperiences";
 
 import Educations from "./pages/private/educations/Educations";
+import AddEditEducation from "./pages/private/educations/AddEditEducation";
 
 import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
@@ -113,7 +114,12 @@ function App() {
             <Route path=":experienceId/edit" element={<AddEditExperiences />} />
           </Route>
 
-          <Route path="/education" element={<Educations />} />
+          <Route path="/education" element={<CommonLayout />}>
+            <Route index element={<Educations />} />
+            <Route path="add" element={<AddEditEducation />} />
+            <Route path=":educationId/edit" element={<AddEditEducation />} />
+          </Route>
+
           <Route path="/certificates" element={<Certificates />} />
           <Route path="/achievements" element={<Achievements />} />
         </Route>
