@@ -231,6 +231,12 @@ const deleteInstituteImage = asynchandler(async (req, res) => {
     );
 });
 
+const getEducation = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiRes(200, req.education, "education fetched successfully!"));
+});
+
 const getAllEducations = asynchandler(async (req, res) => {
   const educations = await Education.find({ owner: req.user?._id }).sort({
     latestYear: -1,
@@ -251,5 +257,6 @@ export {
   updateInstituteImage,
   deleteEducation,
   deleteInstituteImage,
+  getEducation,
   getAllEducations,
 };

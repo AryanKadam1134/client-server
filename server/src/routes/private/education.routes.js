@@ -5,6 +5,7 @@ import {
   deleteEducation,
   deleteInstituteImage,
   getAllEducations,
+  getEducation,
   updateEducationDetails,
   updateInstituteImage,
 } from "../../controllers/private/education.controller.js";
@@ -24,6 +25,7 @@ educationRouter
 
 educationRouter
   .route("/:educationId")
+  .get(getEducationById, getEducation)
   .patch(getEducationById, updateEducationDetails)
   .delete(getEducationById, deleteEducation);
 
