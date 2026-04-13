@@ -27,7 +27,8 @@ import AddEditProject from "./pages/private/projects/AddEditProject";
 import Experiences from "./pages/private/experiences/Experiences";
 import AddEditExperiences from "./pages/private/experiences/AddEditExperiences";
 
-import Educations from "./pages/private/Educations";
+import Educations from "./pages/private/educations/Educations";
+
 import Certificates from "./pages/private/Certificates";
 import Achievements from "./pages/private/Achievements";
 
