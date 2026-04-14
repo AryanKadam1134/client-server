@@ -286,6 +286,14 @@ const deleteCertificateImage = asynchandler(async (req, res) => {
     );
 });
 
+const getCertificate = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiRes(200, req.certificate, "certificate fetched successfully!"),
+    );
+});
+
 const getAllCertificates = asynchandler(async (req, res) => {
   const certificates = await Certificate.aggregate([
     {
@@ -325,5 +333,6 @@ export {
   updateCertificateImage,
   deleteCertificate,
   deleteCertificateImage,
+  getCertificate,
   getAllCertificates,
 };

@@ -9,6 +9,7 @@ import {
   deleteCertificate,
   deleteCertificateImage,
   getAllCertificates,
+  getCertificate,
   updateCertificate,
   updateCertificateImage,
 } from "../../controllers/private/certificate.controller.js";
@@ -24,6 +25,7 @@ certificateRoutes
 
 certificateRoutes
   .route("/:certificateId")
+  .get(getCertificateById, getCertificate)
   .patch(getCertificateById, updateCertificate)
   .delete(getCertificateById, deleteCertificate);
 

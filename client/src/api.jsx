@@ -133,6 +133,21 @@ export const apiEndpoints = {
 
   getEducations: () => api.get(`/educations`),
 
+  // Certificates
+  addCertificate: (body) => api.post(`/certificates`, body),
+
+  updateCertificate: (certificateId, body) =>
+    api.patch(`/certificates/${certificateId}`, body),
+
+  updateCertificateImage: (certificateId, body) =>
+    api.patch(`/certificates/${certificateId}/certificate-image`, body),
+
+  deleteCertificate: (certificateId) =>
+    api.delete(`/certificates/${certificateId}`),
+
+  deleteCertificateImage: (certificateId) =>
+    api.delete(`/certificates/${certificateId}/certificate-image`),
+
   // Filters
   getSkillCategoriesList: () => api.get(`/filters/skill-categories`),
 
