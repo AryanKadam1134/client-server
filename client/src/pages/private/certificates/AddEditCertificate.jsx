@@ -193,7 +193,6 @@ export default function AddEditCertificate() {
         id="credentialId"
         label="Credential Id"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
       >
         <CustomInput
           id="credentialId"
@@ -380,13 +379,15 @@ export default function AddEditCertificate() {
           />
 
           {/* Delete Button (Hover Only) */}
-          <button
-            type="button"
-            onClick={deleteCertificateImage}
-            className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
-          >
-            <Trash2 size={18} />
-          </button>
+          {certificateImage?.url && (
+            <button
+              type="button"
+              onClick={deleteCertificateImage}
+              className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
         </div>
       </LabelInput>
 

@@ -454,7 +454,6 @@ export default function AddEditExperiences() {
               <input
                 id={`positions-${idx}.present`}
                 type="checkbox"
-                placeholder={`Enter Present`}
                 {...register(`positions.${idx}.present`)}
                 error={errors?.positions?.[idx]?.present}
               />

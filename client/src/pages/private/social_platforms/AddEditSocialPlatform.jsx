@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
@@ -259,6 +259,8 @@ export default function AddEditSocialPlatform() {
 
   const { platformId } = useParams();
 
+  const [id, setId] = useState(platformId);
+
   const {
     register,
     handleSubmit,
@@ -293,7 +295,7 @@ export default function AddEditSocialPlatform() {
 
   const fetchSocialPlatform = async () => {
     try {
-      const res = await apiEndpoints.getSocialPlatform(platformId);
+      const res = await apiEndpoints.getSocialPlatform(id);
 
       const data = res.data;
 
@@ -307,16 +309,17 @@ export default function AddEditSocialPlatform() {
   const addUpdatePlatform = async (payload) => {
     try {
       let res;
-      if (platformId) {
+      if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSocialPlatform(platformId, updatedData);
+        res = await apiEndpoints.updateSocialPlatform(id, updatedData);
       } else {
         res = await apiEndpoints.addSocialPlatform(payload);
       }
 
       const data = res.data;
 
-      if (platformId) fetchSocialPlatform();
+      setId(data?._id);
+      if (data?._id) fetchSocialPlatform();
       console.log("Social Platform Saved: ", data);
     } catch (error) {
       console.error("Error saving Social Platform: ", error);
@@ -324,9 +327,9 @@ export default function AddEditSocialPlatform() {
   };
 
   useEffect(() => {
-    if (!platformId) return;
+    if (!id) return;
     fetchSocialPlatform();
-  }, [platformId]);
+  }, [id]);
 
   return (
     <form

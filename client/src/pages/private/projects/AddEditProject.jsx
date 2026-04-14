@@ -367,7 +367,6 @@ export default function AddEditProject() {
         <input
           id="present"
           type="checkbox"
-          placeholder={`Enter Present`}
           {...register("present")}
           error={errors?.present}
         />
@@ -383,7 +382,6 @@ export default function AddEditProject() {
         <input
           id="featured"
           type="checkbox"
-          placeholder={`Enter Featured`}
           {...register("featured")}
           error={errors?.featured}
         />

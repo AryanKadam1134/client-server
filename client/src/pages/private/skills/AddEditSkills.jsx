@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
@@ -65,6 +65,8 @@ export default function AddEditSkills() {
 
   const { skillId } = useParams();
 
+  const [id, setId] = useState(skillId);
+
   const {
     register,
     handleSubmit,
@@ -97,7 +99,7 @@ export default function AddEditSkills() {
 
   const fetchSkill = async () => {
     try {
-      const res = await apiEndpoints.getSkill(skillId);
+      const res = await apiEndpoints.getSkill(id);
 
       const data = res.data;
 
@@ -111,16 +113,17 @@ export default function AddEditSkills() {
   const addUpdateSkill = async (payload) => {
     try {
       let res;
-      if (skillId) {
+      if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSkill(skillId, updatedData);
+        res = await apiEndpoints.updateSkill(id, updatedData);
       } else {
         res = await apiEndpoints.addSkill(payload);
       }
 
       const data = res.data;
 
-      if (skillId) fetchSkill();
+      setId(data?._id);
+      if (data?._id) fetchSkill();
       console.log("Skill Saved: ", data);
     } catch (error) {
       console.error("Error saving Skill: ", error);
@@ -128,9 +131,9 @@ export default function AddEditSkills() {
   };
 
   useEffect(() => {
-    if (!skillId) return;
+    if (!id) return;
     fetchSkill();
-  }, [skillId]);
+  }, [id]);
 
   return (
     <form

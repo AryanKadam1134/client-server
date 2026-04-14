@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -16,6 +16,8 @@ export default function AddEditSkillCategory() {
   const { visibilities } = useVisibilities();
 
   const { categoryId } = useParams();
+
+  const [id, setId] = useState(categoryId);
 
   const {
     register,
@@ -48,7 +50,7 @@ export default function AddEditSkillCategory() {
 
   const fetchSkillCategory = async () => {
     try {
-      const res = await apiEndpoints.getSkillCategory(categoryId);
+      const res = await apiEndpoints.getSkillCategory(id);
 
       const data = res.data;
 
@@ -62,16 +64,17 @@ export default function AddEditSkillCategory() {
   const addUpdateSkillCategory = async (payload) => {
     try {
       let res;
-      if (categoryId) {
+      if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSkillCategory(categoryId, updatedData);
+        res = await apiEndpoints.updateSkillCategory(id, updatedData);
       } else {
         res = await apiEndpoints.addSkillCategory(payload);
       }
 
       const data = res.data;
 
-      if (categoryId) fetchSkillCategory();
+      setId(data?._id);
+      if (data?._id) fetchSkillCategory();
       console.log("Skill Category Saved: ", data);
     } catch (error) {
       console.error("Error saving Skill Category: ", error);
@@ -79,9 +82,9 @@ export default function AddEditSkillCategory() {
   };
 
   useEffect(() => {
-    if (!categoryId) return;
+    if (!id) return;
     fetchSkillCategory();
-  }, [categoryId]);
+  }, [id]);
 
   return (
     <form

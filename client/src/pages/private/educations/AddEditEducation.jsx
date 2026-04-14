@@ -235,7 +235,6 @@ export default function AddEditEducation() {
         <input
           id="present"
           type="checkbox"
-          placeholder={`Enter Present`}
           {...register("present")}
           error={errors?.present}
         />
@@ -316,13 +315,15 @@ export default function AddEditEducation() {
           />
 
           {/* Delete Button (Hover Only) */}
-          <button
-            type="button"
-            onClick={deleteInstituteImage}
-            className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
-          >
-            <Trash2 size={18} />
-          </button>
+          {instituteImage?.url && (
+            <button
+              type="button"
+              onClick={deleteInstituteImage}
+              className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
         </div>
       </LabelInput>
 
