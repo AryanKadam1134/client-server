@@ -22,7 +22,7 @@ const menus = [
   { name: "Skill Categories", path: "/skill-categories", icon: Layers },
   { name: "Projects", path: "/projects", icon: FolderOpen },
   { name: "Experience", path: "/experiences", icon: Briefcase },
-  { name: "Education", path: "/education", icon: GraduationCap },
+  { name: "Education", path: "/educations", icon: GraduationCap },
   { name: "Certificates", path: "/certificates", icon: Award },
   { name: "Achievements", path: "/achievements", icon: Trophy },
 ];

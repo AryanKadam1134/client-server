@@ -30,7 +30,9 @@ import AddEditExperiences from "./pages/private/experiences/AddEditExperiences";
 import Educations from "./pages/private/educations/Educations";
 import AddEditEducation from "./pages/private/educations/AddEditEducation";
 
-import Certificates from "./pages/private/Certificates";
+import Certificates from "./pages/private/certificates/Certificates";
+import AddEditCertificate from "./pages/private/certificates/AddEditCertificate";
+
 import Achievements from "./pages/private/Achievements";
 
 import { useAuth } from "./context/AuthContext";
@@ -114,13 +116,21 @@ function App() {
             <Route path=":experienceId/edit" element={<AddEditExperiences />} />
           </Route>
 
-          <Route path="/education" element={<CommonLayout />}>
+          <Route path="/educations" element={<CommonLayout />}>
             <Route index element={<Educations />} />
             <Route path="add" element={<AddEditEducation />} />
             <Route path=":educationId/edit" element={<AddEditEducation />} />
           </Route>
 
-          <Route path="/certificates" element={<Certificates />} />
+          <Route path="/certificates" element={<CommonLayout />}>
+            <Route index element={<Certificates />} />
+            <Route path="add" element={<AddEditCertificate />} />
+            <Route
+              path=":certificateId/edit"
+              element={<AddEditCertificate />}
+            />
+          </Route>
+
           <Route path="/achievements" element={<Achievements />} />
         </Route>
       </Routes>

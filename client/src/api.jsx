@@ -148,6 +148,10 @@ export const apiEndpoints = {
   deleteCertificateImage: (certificateId) =>
     api.delete(`/certificates/${certificateId}/certificate-image`),
 
+  getCertificate: (certificateId) => api.get(`/certificates/${certificateId}`),
+
+  getCertificates: () => api.get(`/certificates`),
+
   // Filters
   getSkillCategoriesList: () => api.get(`/filters/skill-categories`),
 

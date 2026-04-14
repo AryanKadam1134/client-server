@@ -7,77 +7,67 @@ import Table from "../../../components/common/Table";
 import CustomButton from "../../../components/ui/CustomButton";
 
 import { getVisibility } from "../../../utils/getVisibility";
-import { getEmploymentType } from "../../../utils/getEmploymentType";
 
 import { apiEndpoints } from "../../../api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
-import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 
-export default function Experiences() {
+export default function Certificates() {
   const { visibilities } = useVisibilities();
-  const { employmentTypes } = useEmploymentTypes();
 
   const navigate = useNavigate();
 
-  const [experiences, setExperiences] = useState([]);
+  const [certificates, setCertificates] = useState([]);
 
-  const fetchExperiences = async () => {
+  const fetchCertificate = async () => {
     try {
-      const res = await apiEndpoints.getExperiences();
+      const res = await apiEndpoints.getCertificates();
 
       const data = res.data;
 
-      setExperiences(data);
-      console.log("User Experiences: ", data);
+      setCertificates(data);
+      console.log("User Certificates: ", data);
     } catch (error) {
-      console.error("Error fetching User Experiences: ", error);
+      console.error("Error fetching User Certificates: ", error);
     }
   };
 
-  const deleteExperience = async (experienceId) => {
+  const deleteCertificate = async (certificateId) => {
     try {
-      await apiEndpoints.deleteExperience(experienceId);
+      await apiEndpoints.deleteCertificate(certificateId);
 
-      fetchExperiences();
+      fetchCertificate();
     } catch (error) {
-      console.error("Error deleting Experience: ", error);
+      console.error("Error deleting Certificates: ", error);
     }
   };
 
   useEffect(() => {
-    fetchExperiences();
+    fetchCertificate();
   }, []);
 
   const tableHeading = [
     { label: "Sr. No." },
-    { label: "Organiaztion Name" },
-    { label: "Exployment Type" },
-    { label: "Organization Website" },
-    { label: "Location" },
+    { label: "Title" },
+    { label: "Issuer" },
+    { label: "URL" },
     { label: "Visibility" },
+    { label: "Sort Order" },
     { label: "Actions" },
   ];
 
-  const tableBody = experiences?.map((data, index) => {
-    const {
-      _id,
-      organization,
-      employmentType,
-      organizationWebsite,
-      location,
-      visibility,
-    } = data;
+  const tableBody = certificates?.map((data, index) => {
+    const { _id, title, issuer, credentialUrl, visibility, sortOrder } = data;
 
     return {
       cells: [
         index + 1,
-        organization,
-        getEmploymentType(employmentTypes, employmentType),
-        organizationWebsite && (
+        title,
+        issuer,
+        credentialUrl && (
           <div className="flex justify-center">
             <a
-              href={`${organizationWebsite}`}
+              href={`${credentialUrl}`}
               target="_blank"
               className="text-blue-500 hover:text-blue-600"
             >
@@ -85,8 +75,8 @@ export default function Experiences() {
             </a>
           </div>
         ),
-        location,
         getVisibility(visibilities, visibility),
+        sortOrder,
         <div className="flex items-center justify-center gap-1">
           <button
             onClick={() => navigate(`${_id}/edit`)}
@@ -96,7 +86,7 @@ export default function Experiences() {
           </button>
 
           <button
-            onClick={() => deleteExperience(_id)}
+            onClick={() => deleteCertificate(_id)}
             className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
           >
             <Trash2 size={18} />
@@ -112,7 +102,7 @@ export default function Experiences() {
         onClick={() => navigate("add")}
         className="self-end flex items-center gap-2"
       >
-        <Plus size={18} /> Add Experience
+        <Plus size={18} /> Add Certificate
       </CustomButton>
 
       <Table tableHeading={tableHeading} tableBody={tableBody} />
