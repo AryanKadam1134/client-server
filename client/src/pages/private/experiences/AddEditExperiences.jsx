@@ -3,14 +3,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
-import {
-  Trash2,
-  Loader,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
-  Image,
-} from "lucide-react";
+import { Trash2, Loader, ExternalLink } from "lucide-react";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -34,6 +27,8 @@ export default function AddEditExperiences() {
   const { employmentTypes } = useEmploymentTypes();
 
   const { experienceId } = useParams();
+
+  const [id, setId] = useState(experienceId);
 
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(false);
@@ -102,7 +97,7 @@ export default function AddEditExperiences() {
 
   const fetchExperience = async () => {
     try {
-      const res = await apiEndpoints.getExperience(experienceId);
+      const res = await apiEndpoints.getExperience(id);
 
       const data = res.data;
 
@@ -124,18 +119,19 @@ export default function AddEditExperiences() {
   const addUpdateExperience = async (payload) => {
     try {
       let res;
-      if (experienceId) {
+      if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         updatedData.highlights = payload.highlights;
 
-        res = await apiEndpoints.updateExperience(experienceId, updatedData);
+        res = await apiEndpoints.updateExperience(id, updatedData);
       } else {
         res = await apiEndpoints.addExperience(payload);
       }
 
       const data = res.data;
 
-      if (experienceId) fetchExperience();
+      setId(data?._id);
+      if (data?._id) fetchExperience();
       console.log("Experience Saved: ", data);
     } catch (error) {
       console.error("Error saving Experience: ", error);
@@ -153,7 +149,7 @@ export default function AddEditExperiences() {
 
       formData.append("organizationImage", file);
 
-      await apiEndpoints.updateOrganizationImage(experienceId, formData);
+      await apiEndpoints.updateOrganizationImage(id, formData);
 
       fetchExperience();
       console.log("Images uploaded successfully!");
@@ -167,7 +163,7 @@ export default function AddEditExperiences() {
   const deleteOrganizationImage = async () => {
     setImageDeleting(true);
     try {
-      await apiEndpoints.deleteOrganizationImage(experienceId);
+      await apiEndpoints.deleteOrganizationImage(id);
 
       fetchExperience();
       console.log("Image deleted successfully!");
@@ -179,9 +175,9 @@ export default function AddEditExperiences() {
   };
 
   useEffect(() => {
-    if (!experienceId) return;
+    if (!id) return;
     fetchExperience();
-  }, [experienceId]);
+  }, [id]);
 
   return (
     <form

@@ -2,29 +2,20 @@ import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
-import {
-  Trash2,
-  Loader,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
-  Image,
-} from "lucide-react";
+import { Trash2, Loader } from "lucide-react";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
-import CustomSelect from "../../../components/ui/CustomSelect";
 import DragDropUpload from "../../../components/ui/DragDropUpload";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
-import CustomDatePicker from "../../../components/ui/CustomDatePicker";
-import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
-import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../../api";
 
 export default function AddEditEducation() {
   const { educationId } = useParams();
+
+  const [id, setId] = useState(educationId);
 
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(false);
@@ -58,7 +49,7 @@ export default function AddEditEducation() {
 
   const fetchEducation = async () => {
     try {
-      const res = await apiEndpoints.getEducation(educationId);
+      const res = await apiEndpoints.getEducation(id);
 
       const data = res.data;
 
@@ -72,17 +63,18 @@ export default function AddEditEducation() {
   const addUpdateEducation = async (payload) => {
     try {
       let res;
-      if (educationId) {
+      if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
 
-        res = await apiEndpoints.updateEducation(educationId, updatedData);
+        res = await apiEndpoints.updateEducation(id, updatedData);
       } else {
         res = await apiEndpoints.addEducation(payload);
       }
 
       const data = res.data;
 
-      if (educationId) fetchEducation();
+      setId(data?._id);
+      if (data?._id) fetchEducation();
       console.log("Education Saved: ", data);
     } catch (error) {
       console.error("Error saving Education: ", error);
@@ -100,7 +92,7 @@ export default function AddEditEducation() {
 
       formData.append("instituteImage", file);
 
-      await apiEndpoints.updateInstituteImage(educationId, formData);
+      await apiEndpoints.updateInstituteImage(id, formData);
 
       fetchEducation();
       console.log("Images uploaded successfully!");
@@ -114,7 +106,7 @@ export default function AddEditEducation() {
   const deleteInstituteImage = async () => {
     setImageDeleting(true);
     try {
-      await apiEndpoints.deleteInstituteImage(educationId);
+      await apiEndpoints.deleteInstituteImage(id);
 
       fetchEducation();
       console.log("Image deleted successfully!");
@@ -126,9 +118,9 @@ export default function AddEditEducation() {
   };
 
   useEffect(() => {
-    if (!educationId) return;
+    if (!id) return;
     fetchEducation();
-  }, [educationId]);
+  }, [id]);
 
   return (
     <form
@@ -258,13 +250,12 @@ export default function AddEditEducation() {
         <CustomInput
           id="percentage"
           type="number"
-          step="any"
           min={0}
           max={100}
           placeholder={`Enter Percentage`}
           {...register("percentage", {
             min: 0,
-            max: 10,
+            max: 100,
           })}
           error={errors?.percentage}
         />

@@ -37,6 +37,8 @@ export default function AddEditProject() {
 
   const { projectId } = useParams();
 
+  const [id, setId] = useState(projectId);
+
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(null);
 
@@ -83,7 +85,7 @@ export default function AddEditProject() {
 
   const fetchProject = async () => {
     try {
-      const res = await apiEndpoints.getProject(projectId);
+      const res = await apiEndpoints.getProject(id);
 
       const data = res.data;
 
@@ -101,16 +103,17 @@ export default function AddEditProject() {
   const addUpdateProject = async (payload) => {
     try {
       let res;
-      if (projectId) {
+      if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateProject(projectId, updatedData);
+        res = await apiEndpoints.updateProject(id, updatedData);
       } else {
         res = await apiEndpoints.addProject(payload);
       }
 
       const data = res.data;
 
-      if (projectId) fetchProject();
+      setId(data?._id);
+      if (data?._id) fetchProject();
       console.log("Project Saved: ", data);
     } catch (error) {
       console.error("Error saving Project: ", error);
@@ -121,7 +124,7 @@ export default function AddEditProject() {
     setValue("coverImageIndex", idx, { shouldDirty: true });
 
     try {
-      await apiEndpoints.updateProject(projectId, {
+      await apiEndpoints.updateProject(id, {
         coverImageIndex: idx,
       });
     } catch (err) {
@@ -139,7 +142,7 @@ export default function AddEditProject() {
         formData.append("projectImages", file);
       });
 
-      await apiEndpoints.updateProjectImage(projectId, formData);
+      await apiEndpoints.updateProjectImage(id, formData);
 
       fetchProject();
       console.log("Images uploaded successfully!");
@@ -154,7 +157,7 @@ export default function AddEditProject() {
     setImageDeleting(imagePublicId);
 
     try {
-      await apiEndpoints.deleteProjectImage(projectId, imagePublicId);
+      await apiEndpoints.deleteProjectImage(id, imagePublicId);
 
       fetchProject();
       console.log("Image deleted successfully!");
@@ -166,9 +169,9 @@ export default function AddEditProject() {
   };
 
   useEffect(() => {
-    if (!projectId) return;
+    if (!id) return;
     fetchProject();
-  }, [projectId]);
+  }, [id]);
 
   return (
     <form
