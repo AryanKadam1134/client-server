@@ -54,6 +54,6 @@ userRouter
   .patch(verifyJWT, upload.single("resumeOrCv"), updateUserResume)
   .delete(verifyJWT, deleteUserResume);
 
-userRouter.route("/restoreSession").post(verifyJWT, refreshAccessToken);
+userRouter.route("/restoreSession").post(refreshAccessToken);
 
 export default userRouter;

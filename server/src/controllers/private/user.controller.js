@@ -68,7 +68,7 @@ const generateAccessAndRefreshToken = async (userId, req) => {
 };
 
 const refreshAccessToken = asynchandler(async (req, res) => {
-  const cookieRefreshToken = req.cookies?.refreshToken;
+  const cookieRefreshToken = req.headers?.refreshtoken;
 
   const deviceId = req.headers["x-device-id"];
 
