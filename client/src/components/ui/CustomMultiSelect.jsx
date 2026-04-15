@@ -46,10 +46,44 @@ export default function CustomMultiSelect({
     getToggleButtonProps,
   } = useCombobox({
     items: filteredItems,
-    inputValue,
 
-    // 🔥 FIX: prevents [object Object]
+    inputValue, // ✅ controlled
+
     itemToString: (item) => (item ? item.label : ""),
+
+    // 🔥 IMPORTANT FIX
+    stateReducer: (state, actionAndChanges) => {
+      const { type, changes } = actionAndChanges;
+
+      switch (type) {
+        case useCombobox.stateChangeTypes.InputKeyDownEnter:
+        case useCombobox.stateChangeTypes.ItemClick: {
+          const clickedItem = changes.selectedItem;
+
+          if (clickedItem) {
+            if (value.includes(clickedItem.value)) {
+              // 🔥 Already selected → remove it
+              onChange(value.filter((v) => v !== clickedItem.value));
+            } else {
+              // ✅ Not selected → add it
+              onChange([...value, clickedItem.value]);
+            }
+            setInputValue("");
+          }
+
+          return {
+            ...changes,
+            isOpen: true,
+            inputValue: "",
+            highlightedIndex: state.highlightedIndex,
+            selectedItem: null, // 🔥 Reset so same item can be re-selected next time
+          };
+        }
+
+        default:
+          return changes;
+      }
+    },
 
     onInputValueChange: ({ inputValue }) => {
       setInputValue(inputValue || "");
@@ -58,11 +92,15 @@ export default function CustomMultiSelect({
     onSelectedItemChange: ({ selectedItem }) => {
       if (!selectedItem) return;
 
-      if (!value.includes(selectedItem.value)) {
+      if (value.includes(selectedItem.value)) {
+        // 🔥 Already selected → remove it
+        onChange(value.filter((v) => v !== selectedItem.value));
+      } else {
+        // ✅ Not selected → add it
         onChange([...value, selectedItem.value]);
       }
 
-      setInputValue(""); // clear after select
+      setInputValue("");
     },
   });
 
@@ -121,22 +159,30 @@ export default function CustomMultiSelect({
         }`}
       >
         {isOpen &&
-          filteredItems.map((item, index) => {
-            const isSelected = value.includes(item.value);
+          (filteredItems?.length > 0 ? (
+            filteredItems.map((item, index) => {
+              const isSelected = value.includes(item.value);
 
-            return (
-              <li
-                key={item.value}
-                {...getItemProps({ item, index })}
-                className={`px-3 py-2 cursor-pointer text-sm rounded
+              return (
+                <li
+                  key={item.value}
+                  {...getItemProps({ item, index })}
+                  className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded
                   ${highlightedIndex === index ? "bg-gray-200" : ""}
                   ${isSelected ? "font-medium bg-gray-200" : ""}
                 `}
-              >
-                {item.label}
-              </li>
-            );
-          })}
+                >
+                  {item.label} {isSelected && "✔"}
+                </li>
+              );
+            })
+          ) : (
+            <li
+              className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded`}
+            >
+              No Data
+            </li>
+          ))}
       </ul>
     </div>
   );
