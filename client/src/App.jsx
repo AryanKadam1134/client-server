@@ -33,7 +33,8 @@ import AddEditEducation from "./pages/private/educations/AddEditEducation";
 import Certificates from "./pages/private/certificates/Certificates";
 import AddEditCertificate from "./pages/private/certificates/AddEditCertificate";
 
-import Achievements from "./pages/private/Achievements";
+import Achievements from "./pages/private/achievements/Achievements";
+import AddEditAchievement from "./pages/private/achievements/AddEditAchievement";
 
 import { useAuth } from "./context/AuthContext";
 
@@ -131,7 +132,14 @@ function App() {
             />
           </Route>
 
-          <Route path="/achievements" element={<Achievements />} />
+          <Route path="/achievements" element={<CommonLayout />}>
+            <Route index element={<Achievements />} />
+            <Route path="add" element={<AddEditAchievement />} />
+            <Route
+              path=":achievementId/edit"
+              element={<AddEditAchievement />}
+            />
+          </Route>
         </Route>
       </Routes>
     </Router>
