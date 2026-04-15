@@ -18,8 +18,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import DragDropUpload from "../../../components/ui/DragDropUpload";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
-import CustomDatePicker from "../../../components/ui/CustomDatePicker";
-import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
+import CustomDatePicker from "../../../components/ui/CustomDatePicker"; 
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../../api";
