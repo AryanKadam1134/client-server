@@ -182,6 +182,8 @@ export const apiEndpoints = {
 
   getSkillsList: () => api.get(`/filters/skills`),
 
+  getCertificatesList: () => api.get(`/filters/certificates`),
+
   getSkillLevels: () => api.get(`/filters/skill-levels`),
 
   getGenders: () => api.get(`/filters/genders`),

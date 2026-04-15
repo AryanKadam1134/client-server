@@ -6,6 +6,7 @@ import {
   VISIBILITY,
   PROJECT_CATEGORIES,
 } from "../../constants.js";
+import { Certificate } from "../../models/certificate.model.js";
 import { Experience } from "../../models/experience.model.js";
 import { Skill } from "../../models/skill.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
@@ -95,6 +96,25 @@ const getAllSkills = asynchandler(async (req, res) => {
     .json(new ApiRes(200, formatted, "skills fetched successfully!"));
 });
 
+const getAllCertificates = asynchandler(async (req, res) => {
+  const certificates = await Certificate.find({
+    owner: req.user?._id,
+  });
+
+  if (certificates?.length === 0) {
+    return res.status(200).json(new ApiRes(200, [], "no certificates found!"));
+  }
+
+  const formatted = certificates?.map((certificate) => ({
+    label: certificate?.title,
+    value: certificate?._id,
+  }));
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, formatted, "certificates fetched successfully!"));
+});
+
 const getSkillLevel = asynchandler(async (req, res) => {
   return res
     .status(200)
@@ -131,6 +151,7 @@ export {
   getAllOrganizations,
   getProjectCategories,
   getAllSkills,
+  getAllCertificates,
   getSkillLevel,
   getGenders,
   getEmploymentTypes,

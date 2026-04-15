@@ -24,14 +24,12 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../../api";
 
-import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
-import useOrganizationsList from "../../../hooks/useOrganizationsList";
-import useProjectCategoriesList from "../../../hooks/useProjectCategoriesList";
+import useCertificatesList from "../../../hooks/useCertificatesList";
 
 export default function AddEditAchievement() {
   const { visibilities } = useVisibilities();
-  const { projectCategoriesList } = useProjectCategoriesList();
+  const { certificatesList } = useCertificatesList();
 
   const { achievementId } = useParams();
 
@@ -223,7 +221,7 @@ export default function AddEditAchievement() {
             <CustomSelect
               id="certificateId"
               placeholder="Select Attached Certificate"
-              options={projectCategoriesList}
+              options={certificatesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
             />

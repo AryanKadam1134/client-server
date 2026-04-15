@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  getAllCertificates,
   getAllOrganizations,
   getAllSkills,
   getEmploymentTypes,
@@ -25,6 +26,8 @@ filterRoutes.route("/organizations").get(verifyJWT, getAllOrganizations);
 filterRoutes.route("/project-categories").get(verifyJWT, getProjectCategories);
 
 filterRoutes.route("/skills").get(verifyJWT, getAllSkills);
+
+filterRoutes.route("/certificates").get(verifyJWT, getAllCertificates);
 
 filterRoutes.route("/skill-levels").get(getSkillLevel);
 
