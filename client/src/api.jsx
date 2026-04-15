@@ -152,6 +152,27 @@ export const apiEndpoints = {
 
   getCertificates: () => api.get(`/certificates`),
 
+  // Achievements
+  addachievement: (body) => api.post(`/achievements`, body),
+
+  updateachievement: (achievementId, body) =>
+    api.patch(`/achievements/${achievementId}`, body),
+
+  updateachievementImage: (achievementId, body) =>
+    api.patch(`/achievements/${achievementId}/achievement-images`, body),
+
+  deleteachievement: (achievementId) =>
+    api.delete(`/achievements/${achievementId}`),
+
+  deleteachievementImage: (achievementId, imagePublicId) =>
+    api.delete(
+      `/achievements/${achievementId}/achievement-images/${imagePublicId}`,
+    ),
+
+  getachievement: (achievementId) => api.get(`/achievements/${achievementId}`),
+
+  getachievements: () => api.get(`/achievements`),
+
   // Filters
   getSkillCategoriesList: () => api.get(`/filters/skill-categories`),
 

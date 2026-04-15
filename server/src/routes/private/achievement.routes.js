@@ -4,6 +4,7 @@ import {
   addAchievement,
   deleteAchievement,
   deleteAchievementImage,
+  getAchievement,
   getAllAchievement,
   updateAchievement,
   updateAchievementImages,
@@ -24,6 +25,7 @@ achievementRouter
 
 achievementRouter
   .route("/:achievementId")
+  .get(getAchievementById, getAchievement)
   .patch(getAchievementById, updateAchievement)
   .delete(getAchievementById, deleteAchievement);
 

@@ -302,6 +302,14 @@ const deleteAchievementImage = asynchandler(async (req, res) => {
     );
 });
 
+const getAchievement = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiRes(200, req.achievement, "achievement fecthed successfully!"),
+    );
+});
+
 const getAllAchievement = asynchandler(async (req, res) => {
   const achievements = await Achievement.aggregate([
     {
@@ -346,5 +354,6 @@ export {
   updateAchievementImages,
   deleteAchievement,
   deleteAchievementImage,
+  getAchievement,
   getAllAchievement,
 };
