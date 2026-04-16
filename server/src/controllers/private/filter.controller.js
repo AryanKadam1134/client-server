@@ -5,6 +5,7 @@ import {
   EMPLOYMENT_TYPE,
   VISIBILITY,
   PROJECT_CATEGORIES,
+  LOCATION_TYPE,
 } from "../../constants.js";
 import { Certificate } from "../../models/certificate.model.js";
 import { Experience } from "../../models/experience.model.js";
@@ -139,6 +140,14 @@ const getEmploymentTypes = asynchandler(async (req, res) => {
     );
 });
 
+const getLocationTypes = asynchandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiRes(200, LOCATION_TYPE, "location types fetched successfully!"),
+    );
+});
+
 const getVisibility = asynchandler(async (req, res) => {
   return res
     .status(200)
@@ -155,5 +164,6 @@ export {
   getSkillLevel,
   getGenders,
   getEmploymentTypes,
+  getLocationTypes,
   getVisibility,
 };

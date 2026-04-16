@@ -6,6 +6,7 @@ import {
   getAllSkills,
   getEmploymentTypes,
   getGenders,
+  getLocationTypes,
   getProjectCategories,
   getSkillCategories,
   getSkillLevel,
@@ -34,6 +35,8 @@ filterRoutes.route("/skill-levels").get(getSkillLevel);
 filterRoutes.route("/genders").get(getGenders);
 
 filterRoutes.route("/employment-types").get(getEmploymentTypes);
+
+filterRoutes.route("/location-types").get(getLocationTypes);
 
 filterRoutes.route("/visibility").get(getVisibility);
 

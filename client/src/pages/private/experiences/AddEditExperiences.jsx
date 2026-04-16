@@ -20,11 +20,13 @@ import { apiEndpoints } from "../../../api";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
+import useLocationTypesList from "../../../hooks/useLocationTypesList";
 
 export default function AddEditExperiences() {
   const { skillsList } = useSkillsList();
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
+  const { locationTypesList } = useLocationTypesList();
 
   const { experienceId } = useParams();
 
@@ -312,6 +314,27 @@ export default function AddEditExperiences() {
           placeholder="Comapany Location"
           {...register("location")}
           error={errors?.location}
+        />
+      </LabelInput>
+
+      {/* Location Type */}
+      <LabelInput
+        id="locationType"
+        label="Location Type"
+        colSpan="col-span-12 sm:col-span-6"
+      >
+        <Controller
+          name="locationType"
+          control={control}
+          render={({ field }) => (
+            <CustomSelect
+              id="locationType"
+              placeholder="e.g. On Site, Remote"
+              options={locationTypesList}
+              value={field.value}
+              onChange={field.onChange} // send value to hook form
+            />
+          )}
         />
       </LabelInput>
 

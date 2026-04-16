@@ -52,7 +52,9 @@ const addExperience = asynchandler(async (req, res) => {
   if (visibility) fields.visibility = visibility;
 
   if (positions?.length > 0)
-    fields.positions = Array.isArray(positions) ? positions : JSON.parse(positions);
+    fields.positions = Array.isArray(positions)
+      ? positions
+      : JSON.parse(positions);
 
   if (techStack?.length > 0)
     fields.techStack = Array.isArray(techStack)
@@ -101,6 +103,7 @@ const updateExperience = asynchandler(async (req, res) => {
     organizationSize,
     organizationWebsite,
     location,
+    locationType,
     positions,
     highlights,
     techStack,
@@ -133,9 +136,12 @@ const updateExperience = asynchandler(async (req, res) => {
   if (organizationWebsite !== undefined)
     fields.organizationWebsite = organizationWebsite;
   if (location !== undefined) fields.location = location;
+  if (locationType !== undefined) fields.locationType = locationType;
 
   if (positions !== undefined)
-    fields.positions = Array.isArray(positions) ? positions : JSON.parse(positions);
+    fields.positions = Array.isArray(positions)
+      ? positions
+      : JSON.parse(positions);
 
   if (techStack !== undefined)
     fields.techStack = Array.isArray(techStack)

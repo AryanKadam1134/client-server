@@ -190,5 +190,7 @@ export const apiEndpoints = {
 
   getEmploymentTypes: () => api.get(`/filters/employment-types`),
 
+  getLocationTypes: () => api.get(`/filters/location-types`),
+
   getVisibilities: () => api.get(`/filters/visibility`),
 };

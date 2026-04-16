@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 
-import { EMPLOYMENT_TYPE, VISIBILITY } from "../constants.js";
+import { EMPLOYMENT_TYPE, LOCATION_TYPE, VISIBILITY } from "../constants.js";
 
 import ApiError from "../utils/ApiError.js";
 
@@ -74,6 +74,11 @@ const experienceSchema = new Schema(
 
     location: {
       type: String,
+    },
+    locationType: {
+      type: String,
+      enum: LOCATION_TYPE?.map((t) => t.value),
+      required: true,
     },
 
     // Couldinary

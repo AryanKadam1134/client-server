@@ -35,6 +35,12 @@ const EMPLOYMENT_TYPE = [
   { label: "Apprenticeship", value: "apprenticeship" },
 ];
 
+const LOCATION_TYPE = [
+  { label: "On Site", value: "on-site" },
+  { label: "Remote", value: "remote" },
+  { label: "Hybrid", value: "hybrid" },
+];
+
 const VISIBILITY = [
   { label: "Public", value: "public" },
   { label: "Private", value: "private" },
@@ -53,6 +59,7 @@ export {
   GENDERS,
   PROJECT_CATEGORIES,
   EMPLOYMENT_TYPE,
+  LOCATION_TYPE,
   VISIBILITY,
   DB_NAME,
   options,
