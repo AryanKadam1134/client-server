@@ -345,10 +345,10 @@ export default function AddEditCertificate() {
         />
       </LabelInput>
 
-      {/* Upload Image  */}
+      {/* Upload Certificate Image  */}
       <LabelInput
         id="upload"
-        label="Upload Image"
+        label="Upload Certificate Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <DragDropUpload
@@ -359,9 +359,9 @@ export default function AddEditCertificate() {
         />
       </LabelInput>
 
-      {/* Cover Image */}
+      {/* Certificate Image */}
       <LabelInput
-        label="Cover Image"
+        label="Certificate Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">

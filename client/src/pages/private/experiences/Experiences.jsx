@@ -13,10 +13,13 @@ import { apiEndpoints } from "../../../api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
+import useLocationTypesList from "../../../hooks/useLocationTypesList";
+import { getLocationType } from "../../../utils/getLocationType";
 
 export default function Experiences() {
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
+  const { locationTypesList } = useLocationTypesList();
 
   const navigate = useNavigate();
 
@@ -53,8 +56,9 @@ export default function Experiences() {
     { label: "Sr. No." },
     { label: "Organiaztion Name" },
     { label: "Exployment Type" },
-    { label: "Organization Website" },
+
     { label: "Location" },
+    { label: "Location Type" },
     { label: "Visibility" },
     { label: "Actions" },
   ];
@@ -64,8 +68,8 @@ export default function Experiences() {
       _id,
       organization,
       employmentType,
-      organizationWebsite,
       location,
+      locationType,
       visibility,
     } = data;
 
@@ -74,18 +78,8 @@ export default function Experiences() {
         index + 1,
         organization,
         getEmploymentType(employmentTypes, employmentType),
-        organizationWebsite && (
-          <div className="flex justify-center">
-            <a
-              href={`${organizationWebsite}`}
-              target="_blank"
-              className="text-blue-500 hover:text-blue-600"
-            >
-              <ExternalLink size={18} />
-            </a>
-          </div>
-        ),
         location,
+        getLocationType(locationTypesList, locationType),
         getVisibility(visibilities, visibility),
         <div className="flex items-center justify-center gap-1">
           <button

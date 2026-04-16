@@ -261,11 +261,7 @@ export default function AddEditEducation() {
       </LabelInput>
 
       {/* CGPA */}
-      <LabelInput
-        id="cgpa"
-        label="CGPA"
-        colSpan="col-span-12 sm:col-span-6"
-      >
+      <LabelInput id="cgpa" label="CGPA" colSpan="col-span-12 sm:col-span-6">
         <CustomInput
           id="cgpa"
           type="number"
@@ -281,10 +277,10 @@ export default function AddEditEducation() {
         />
       </LabelInput>
 
-      {/* Upload Image  */}
+      {/* Upload Institute Image  */}
       <LabelInput
         id="upload"
-        label="Upload Image"
+        label="Upload Institute Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <DragDropUpload
@@ -295,9 +291,9 @@ export default function AddEditEducation() {
         />
       </LabelInput>
 
-      {/* Cover Image */}
+      {/* Institute Image */}
       <LabelInput
-        label="Cover Image"
+        label="Institute Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">

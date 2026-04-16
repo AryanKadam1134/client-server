@@ -322,10 +322,12 @@ export default function AddEditExperiences() {
         id="locationType"
         label="Location Type"
         colSpan="col-span-12 sm:col-span-6"
+        required
       >
         <Controller
           name="locationType"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <CustomSelect
               id="locationType"

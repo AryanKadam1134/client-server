@@ -337,10 +337,10 @@ export default function AddEditAchievement() {
 
       <div className="hidden sm:block col-span-6"></div>
 
-      {/* Upload Image  */}
+      {/* Upload Achievement Images  */}
       <LabelInput
         id="upload"
-        label="Upload Image"
+        label="Upload Achievement Images"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <DragDropUpload
@@ -352,9 +352,9 @@ export default function AddEditAchievement() {
         />
       </LabelInput>
 
-      {/* Cover Image */}
+      {/* Achievement Cover Image */}
       <LabelInput
-        label="Cover Image"
+        label="Achievement Cover Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <div className="h-[120px] rounded overflow-hidden border border-gray-400">

@@ -423,10 +423,10 @@ export default function AddEditProject() {
 
       <div className="hidden sm:block col-span-6" />
 
-      {/* Upload Image  */}
+      {/* Upload Project Images */}
       <LabelInput
         id="upload"
-        label="Upload Image"
+        label="Upload Project Images"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <DragDropUpload
@@ -438,9 +438,9 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
-      {/* Cover Image */}
+      {/* Project Cover Image */}
       <LabelInput
-        label="Cover Image"
+        label="Project Cover Image"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <div className="h-[120px] rounded overflow-hidden border border-gray-400">
