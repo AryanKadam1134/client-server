@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
-import { Trash2, Loader, ExternalLink } from "lucide-react";
+import { Trash2, Loader, ExternalLink, Plus } from "lucide-react";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -309,7 +309,7 @@ export default function AddEditExperiences() {
         <CustomInput
           id="location"
           type="text"
-          placeholder={`Enter Location`}
+          placeholder="Comapany Location"
           {...register("location")}
           error={errors?.location}
         />
@@ -335,7 +335,7 @@ export default function AddEditExperiences() {
 
       {/* Highlights */}
       <div className="col-span-12 flex flex-col gap-3 p-3 w-full border border-gray-500 rounded">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <p className="font-medium text-[16px]">
             Highlights{" "}
             <span className="font-normal">
@@ -346,13 +346,21 @@ export default function AddEditExperiences() {
           <button
             type="button"
             onClick={() => appendHighlight("")}
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
+            className="hidden sm:block px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
           >
             Add Highlight
           </button>
+
+          <button
+            type="button"
+            onClick={() => appendHighlight("")}
+            className="block sm:hidden p-1 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
+          >
+            <Plus />
+          </button>
         </div>
 
-        <div className="border-b border-gray-400" />
+        <div className="border-b-2 border-gray-400" />
 
         {highlightFields.map((item, idx) => (
           <div
@@ -382,7 +390,7 @@ export default function AddEditExperiences() {
 
       {/* Positions */}
       <div className="col-span-12 flex flex-col gap-3 p-3 w-full border border-gray-500 rounded">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <p className="font-medium text-[16px]">Positions / Posts</p>
 
           <button
@@ -390,91 +398,107 @@ export default function AddEditExperiences() {
             onClick={() =>
               append({ role: "", startDate: "", endDate: "", present: false })
             }
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
+            className="hidden sm:block px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
           >
             Add Position
           </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              append({ role: "", startDate: "", endDate: "", present: false })
+            }
+            className="block sm:hidden p-1 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
+          >
+            <Plus />
+          </button>
         </div>
 
-        <div className="border-b border-gray-400" />
+        <div className="border-b-2 border-gray-400" />
 
-        {fields?.map((data, idx) => (
-          <div key={data?.role || idx} className="grid grid-cols-12 gap-6">
-            <LabelInput
-              id={`positions-${idx}.role`}
-              label="Role"
-              colSpan="col-span-12 sm:col-span-6"
-            >
-              <CustomInput
-                id={`positions-${idx}.role`}
-                placeholder={`Enter Role`}
-                {...register(`positions.${idx}.role`)}
-                error={errors?.positions?.[idx]?.role}
-              />
-            </LabelInput>
+        <div className="flex flex-col gap-6">
+          {fields?.map((data, idx) => (
+            <>
+              <div key={data?.role || idx} className="grid grid-cols-12 gap-6">
+                <LabelInput
+                  id={`positions-${idx}.role`}
+                  label="Role"
+                  colSpan="col-span-12 sm:col-span-6"
+                >
+                  <CustomInput
+                    id={`positions-${idx}.role`}
+                    placeholder="Job Role"
+                    {...register(`positions.${idx}.role`)}
+                    error={errors?.positions?.[idx]?.role}
+                  />
+                </LabelInput>
 
-            {/* Start Date */}
-            <LabelInput
-              id={`positions-${idx}.startDate`}
-              label="Start Date"
-              colSpan="col-span-12 sm:col-span-6"
-              required
-            >
-              <CustomDatePicker
-                id={`positions-${idx}.startDate`}
-                placeholder={`Enter Start Date`}
-                {...register(`positions.${idx}.startDate`, {
-                  required: "Start Date is required!",
-                })}
-                error={errors?.positions?.[idx]?.startDate}
-              />
-            </LabelInput>
+                {/* Start Date */}
+                <LabelInput
+                  id={`positions-${idx}.startDate`}
+                  label="Start Date"
+                  colSpan="col-span-12 sm:col-span-6"
+                  required
+                >
+                  <CustomDatePicker
+                    id={`positions-${idx}.startDate`}
+                    placeholder="Select Date"
+                    {...register(`positions.${idx}.startDate`, {
+                      required: "Start Date is required!",
+                    })}
+                    error={errors?.positions?.[idx]?.startDate}
+                  />
+                </LabelInput>
 
-            {/* End Date */}
-            <LabelInput
-              id={`positions-${idx}.endDate`}
-              label="End Date"
-              colSpan="col-span-12 sm:col-span-6"
-            >
-              <CustomDatePicker
-                id={`positions-${idx}.endDate`}
-                placeholder={`Enter End Date`}
-                {...register(`positions.${idx}.endDate`)}
-                error={errors?.positions?.[idx]?.endDate}
-              />
-            </LabelInput>
+                {/* End Date */}
+                <LabelInput
+                  id={`positions-${idx}.endDate`}
+                  label="End Date"
+                  colSpan="col-span-12 sm:col-span-6"
+                >
+                  <CustomDatePicker
+                    id={`positions-${idx}.endDate`}
+                    placeholder="Select Date"
+                    {...register(`positions.${idx}.endDate`)}
+                    error={errors?.positions?.[idx]?.endDate}
+                  />
+                </LabelInput>
 
-            {/* Present */}
-            <LabelInput
-              id={`positions-${idx}.present`}
-              label="Present"
-              colSpan="col-span-9 sm:col-span-4 lg:col-span-2"
-              type="checkbox"
-            >
-              <input
-                id={`positions-${idx}.present`}
-                type="checkbox"
-                {...register(`positions.${idx}.present`)}
-                error={errors?.positions?.[idx]?.present}
-              />
-            </LabelInput>
+                {/* Present */}
+                <LabelInput
+                  id={`positions-${idx}.present`}
+                  label="Currently working on this position"
+                  colSpan="col-span-9 sm:col-span-4 lg:col-span-5"
+                  type="checkbox"
+                >
+                  <input
+                    id={`positions-${idx}.present`}
+                    type="checkbox"
+                    {...register(`positions.${idx}.present`)}
+                    error={errors?.positions?.[idx]?.present}
+                  />
+                </LabelInput>
 
-            <button
-              type="button"
-              onClick={() => remove(idx)}
-              className="w-fit h-fit self-center col-span-3 sm:col-span-2 lg:col-span-1 p-2 bg-red-500 text-white rounded"
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
-        ))}
+                <button
+                  type="button"
+                  onClick={() => remove(idx)}
+                  className="w-fit h-fit self-center col-span-3 sm:col-span-2 lg:col-span-1 p-2 bg-red-500 text-white rounded"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+
+              <div className="last:hidden border-b-2 border-dashed border-gray-400"></div>
+            </>
+          ))}
+        </div>
       </div>
 
       {/* Upload Image  */}
       <LabelInput
         id="upload"
         label="Upload Image"
-        colSpan="col-span-12 sm:col-span-6"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <DragDropUpload
           id="upload"
@@ -485,7 +509,10 @@ export default function AddEditExperiences() {
       </LabelInput>
 
       {/* Cover Image */}
-      <LabelInput label="Cover Image" colSpan="col-span-12 sm:col-span-6">
+      <LabelInput
+        label="Cover Image"
+        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+      >
         <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
           {/* Loader */}
           {imageDeleting && (

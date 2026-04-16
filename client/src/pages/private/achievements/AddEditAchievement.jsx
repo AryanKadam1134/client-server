@@ -18,7 +18,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import DragDropUpload from "../../../components/ui/DragDropUpload";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
-import CustomDatePicker from "../../../components/ui/CustomDatePicker"; 
+import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { apiEndpoints } from "../../../api";
@@ -175,13 +175,13 @@ export default function AddEditAchievement() {
       <LabelInput
         id="title"
         label="Achievement Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="title"
           type="text"
-          placeholder={`Enter Achievement Name`}
+          placeholder="Achievement Name"
           {...register("title", {
             required: "Achievement Name is required!",
           })}
@@ -192,14 +192,14 @@ export default function AddEditAchievement() {
       {/* Issuer */}
       <LabelInput
         id="issuer"
-        label="Issuer"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        label="Issued By"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="issuer"
           type="text"
-          placeholder={`Enter Issuer`}
+          placeholder="Issuer's Name"
           {...register("issuer", {
             required: "Issuer is required!",
           })}
@@ -210,8 +210,8 @@ export default function AddEditAchievement() {
       {/* Attached Certificate */}
       <LabelInput
         id="certificateId"
-        label="Attached Certificate"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        label="Attach Existing Certificate"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <Controller
           name="certificateId"
@@ -219,7 +219,7 @@ export default function AddEditAchievement() {
           render={({ field }) => (
             <CustomSelect
               id="certificateId"
-              placeholder="Select Attached Certificate"
+              placeholder="Select"
               options={certificatesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
@@ -232,7 +232,7 @@ export default function AddEditAchievement() {
       <LabelInput
         id="link"
         label="Reffered Link"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         attachment={
           link && (
             <a
@@ -248,7 +248,7 @@ export default function AddEditAchievement() {
         <CustomInput
           id="link"
           type="text"
-          placeholder={`Link`}
+          placeholder="Event Link or Blog Link"
           {...register("link")}
           error={errors?.link}
         />
@@ -263,7 +263,7 @@ export default function AddEditAchievement() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder={`Enter Description`}
+          placeholder="About this Achievement"
           {...register("description")}
           error={errors?.description}
         />
@@ -273,12 +273,12 @@ export default function AddEditAchievement() {
       <LabelInput
         id="date"
         label="Date"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomDatePicker
           id="date"
-          placeholder={`Enter Date`}
+          placeholder="Select Date"
           {...register("date", {
             required: "Date is required!",
           })}
@@ -290,7 +290,7 @@ export default function AddEditAchievement() {
       <LabelInput
         id="featured"
         label="Featured"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
         <input
@@ -305,13 +305,13 @@ export default function AddEditAchievement() {
       <LabelInput
         id="sortOrder"
         label="Sort Order"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder={`Enter Achievement Sort Order`}
+          placeholder="Sort Order"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
@@ -321,7 +321,7 @@ export default function AddEditAchievement() {
       <LabelInput
         id="visibility"
         label="Visibility"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomRadioButtons

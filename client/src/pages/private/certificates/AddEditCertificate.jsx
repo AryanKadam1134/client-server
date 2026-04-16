@@ -156,13 +156,13 @@ export default function AddEditCertificate() {
       <LabelInput
         id="title"
         label="Certificate Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="title"
           type="text"
-          placeholder={`Enter Certificate Name`}
+          placeholder="Certificate Name"
           {...register("title", {
             required: "Certificate Name is required!",
           })}
@@ -174,13 +174,13 @@ export default function AddEditCertificate() {
       <LabelInput
         id="issuer"
         label="Issued By"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="issuer"
           type="text"
-          placeholder={`Enter Issuer's Name`}
+          placeholder="Certificate Issuer's Name"
           {...register("issuer", {
             required: "Issuer is required!",
           })}
@@ -192,12 +192,12 @@ export default function AddEditCertificate() {
       <LabelInput
         id="credentialId"
         label="Credential Id"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="credentialId"
           type="text"
-          placeholder={`Enter Credential Id`}
+          placeholder="Credential Id (if any)"
           {...register("credentialId")}
           error={errors?.credentialId}
         />
@@ -207,7 +207,7 @@ export default function AddEditCertificate() {
       <LabelInput
         id="credentialUrl"
         label="Credential URL"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         attachment={
           credentialUrl && (
             <a
@@ -223,7 +223,7 @@ export default function AddEditCertificate() {
         <CustomInput
           id="credentialUrl"
           type="text"
-          placeholder={`Link`}
+          placeholder="Drive Link or Other"
           {...register("credentialUrl")}
           error={errors?.credentialUrl}
         />
@@ -238,7 +238,7 @@ export default function AddEditCertificate() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder={`Enter Description`}
+          placeholder="About this certificate"
           {...register("description")}
           error={errors?.description}
         />
@@ -248,7 +248,7 @@ export default function AddEditCertificate() {
       <LabelInput
         id="skills"
         label="Skills"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <Controller
           name="skills"
@@ -269,12 +269,12 @@ export default function AddEditCertificate() {
       <LabelInput
         id="issueDate"
         label="Issue Date"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomDatePicker
           id="issueDate"
-          placeholder={`Enter Issue Date`}
+          placeholder="Select Date"
           {...register("issueDate", {
             required: "Issue Date is required!",
           })}
@@ -286,11 +286,11 @@ export default function AddEditCertificate() {
       <LabelInput
         id="expiryDate"
         label="Expiry Date"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomDatePicker
           id="expiryDate"
-          placeholder={`Enter Expiry Date`}
+          placeholder="Select Date"
           {...register("expiryDate")}
           error={errors?.expiryDate}
         />
@@ -300,7 +300,7 @@ export default function AddEditCertificate() {
       <LabelInput
         id="featured"
         label="Featured"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
         <input
@@ -315,13 +315,13 @@ export default function AddEditCertificate() {
       <LabelInput
         id="sortOrder"
         label="Sort Order"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder={`Enter Certificate Sort Order`}
+          placeholder="Sort Order"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
@@ -331,7 +331,7 @@ export default function AddEditCertificate() {
       <LabelInput
         id="visibility"
         label="Visibility"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomRadioButtons

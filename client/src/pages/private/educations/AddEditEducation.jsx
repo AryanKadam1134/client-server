@@ -131,13 +131,13 @@ export default function AddEditEducation() {
       <LabelInput
         id="instituteName"
         label="Institute Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="instituteName"
           type="text"
-          placeholder={`Enter Institute Name`}
+          placeholder="School / College Name"
           {...register("instituteName", {
             required: "Institute Name is required!",
           })}
@@ -149,13 +149,13 @@ export default function AddEditEducation() {
       <LabelInput
         id="qualification"
         label="Qualification"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="qualification"
           type="text"
-          placeholder={`Enter Qualification`}
+          placeholder="Degree / Field"
           {...register("qualification", {
             required: "Qualification is required!",
           })}
@@ -172,7 +172,7 @@ export default function AddEditEducation() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder={`Enter Description`}
+          placeholder="Enter Description"
           {...register("description")}
           error={errors?.description}
         />
@@ -187,7 +187,7 @@ export default function AddEditEducation() {
         <CustomTextArea
           id="address"
           type="text"
-          placeholder={`Enter Address`}
+          placeholder="Enter Address"
           {...register("address")}
           error={errors?.address}
         />
@@ -197,12 +197,12 @@ export default function AddEditEducation() {
       <LabelInput
         id="startYear"
         label="Start Year"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="startYear"
           type="number"
-          placeholder={`Enter Start Year`}
+          placeholder="e.g. 2021"
           {...register("startYear", {
             required: "Start Year is required!",
           })}
@@ -214,12 +214,12 @@ export default function AddEditEducation() {
       <LabelInput
         id="endYear"
         label="End Year"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="endYear"
           type="number"
-          placeholder={`Enter End Year`}
+          placeholder="e.g. 2025"
           {...register("endYear")}
           error={errors?.endYear}
         />
@@ -229,7 +229,7 @@ export default function AddEditEducation() {
       <LabelInput
         id="present"
         label="Present"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
         <input
@@ -244,14 +244,14 @@ export default function AddEditEducation() {
       <LabelInput
         id="percentage"
         label="Percentage"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="percentage"
           type="number"
           min={0}
           max={100}
-          placeholder={`Enter Percentage`}
+          placeholder="e.g. 81"
           {...register("percentage", {
             min: 0,
             max: 100,
@@ -264,7 +264,7 @@ export default function AddEditEducation() {
       <LabelInput
         id="cgpa"
         label="CGPA"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="cgpa"
@@ -272,7 +272,7 @@ export default function AddEditEducation() {
           step="any"
           min={0}
           max={10}
-          placeholder={`e.g. 7.1`}
+          placeholder="e.g. 8.1"
           {...register("cgpa", {
             min: 0,
             max: 10,
