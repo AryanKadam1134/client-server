@@ -188,13 +188,13 @@ export default function AddEditExperiences() {
       <LabelInput
         id="organization"
         label="Organization Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="organization"
           type="text"
-          placeholder={`Enter Organization Name`}
+          placeholder="Company Name"
           {...register("organization", {
             required: "Organization Name is required!",
           })}
@@ -206,7 +206,7 @@ export default function AddEditExperiences() {
       <LabelInput
         id="employmentType"
         label="Employment Type"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <Controller
           name="employmentType"
@@ -214,7 +214,7 @@ export default function AddEditExperiences() {
           render={({ field }) => (
             <CustomSelect
               id="employmentType"
-              placeholder="Select Employment Type"
+              placeholder="e.g. Full Time, Part Time"
               options={employmentTypes}
               value={field.value}
               onChange={field.onChange} // send value to hook form
@@ -227,12 +227,12 @@ export default function AddEditExperiences() {
       <LabelInput
         id="organizationSize"
         label="Organization Size"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="organizationSize"
           type="text"
-          placeholder={`e.g. 10-20`}
+          placeholder="e.g. 10-20"
           {...register("organizationSize")}
           error={errors?.organizationSize}
         />
@@ -241,8 +241,8 @@ export default function AddEditExperiences() {
       {/* Website */}
       <LabelInput
         id="organizationWebsite"
-        label="Website"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        label="Company's Website"
+        colSpan="col-span-12 sm:col-span-6"
         attachment={
           organizationWebsite && (
             <a
@@ -258,7 +258,7 @@ export default function AddEditExperiences() {
         <CustomInput
           id="organizationWebsite"
           type="text"
-          placeholder={`Enter Website`}
+          placeholder="Company Website"
           {...register("organizationWebsite")}
           error={errors?.organizationWebsite}
         />
@@ -273,7 +273,7 @@ export default function AddEditExperiences() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder={`Enter Description`}
+          placeholder="Enter Description"
           {...register("description")}
           error={errors?.description}
         />
@@ -283,7 +283,7 @@ export default function AddEditExperiences() {
       <LabelInput
         id="techStack"
         label="Tech Stack"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <Controller
           name="techStack"
@@ -304,7 +304,7 @@ export default function AddEditExperiences() {
       <LabelInput
         id="location"
         label="Location"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="location"
@@ -319,7 +319,7 @@ export default function AddEditExperiences() {
       <LabelInput
         id="visibility"
         label="Visibility"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomRadioButtons
@@ -346,7 +346,7 @@ export default function AddEditExperiences() {
           <button
             type="button"
             onClick={() => appendHighlight("")}
-            className="px-4 py-2 bg-green-500 text-white rounded"
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
           >
             Add Highlight
           </button>
@@ -390,7 +390,7 @@ export default function AddEditExperiences() {
             onClick={() =>
               append({ role: "", startDate: "", endDate: "", present: false })
             }
-            className="px-4 py-2 bg-green-500 text-white rounded"
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
           >
             Add Position
           </button>
@@ -403,7 +403,7 @@ export default function AddEditExperiences() {
             <LabelInput
               id={`positions-${idx}.role`}
               label="Role"
-              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              colSpan="col-span-12 sm:col-span-6"
             >
               <CustomInput
                 id={`positions-${idx}.role`}
@@ -417,7 +417,7 @@ export default function AddEditExperiences() {
             <LabelInput
               id={`positions-${idx}.startDate`}
               label="Start Date"
-              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              colSpan="col-span-12 sm:col-span-6"
               required
             >
               <CustomDatePicker
@@ -434,7 +434,7 @@ export default function AddEditExperiences() {
             <LabelInput
               id={`positions-${idx}.endDate`}
               label="End Date"
-              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              colSpan="col-span-12 sm:col-span-6"
             >
               <CustomDatePicker
                 id={`positions-${idx}.endDate`}
@@ -474,7 +474,7 @@ export default function AddEditExperiences() {
       <LabelInput
         id="upload"
         label="Upload Image"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <DragDropUpload
           id="upload"
@@ -485,10 +485,7 @@ export default function AddEditExperiences() {
       </LabelInput>
 
       {/* Cover Image */}
-      <LabelInput
-        label="Cover Image"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-      >
+      <LabelInput label="Cover Image" colSpan="col-span-12 sm:col-span-6">
         <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
           {/* Loader */}
           {imageDeleting && (

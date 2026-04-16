@@ -182,13 +182,13 @@ export default function AddEditProject() {
       <LabelInput
         id="title"
         label="Project Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="title"
           type="text"
-          placeholder={`Enter Project Name`}
+          placeholder="Project Name"
           {...register("title", {
             required: "Project Name is required!",
           })}
@@ -199,8 +199,8 @@ export default function AddEditProject() {
       {/* Organization */}
       <LabelInput
         id="organizationId"
-        label="Organization"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        label="Organization (Link Company you worked in)"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <Controller
           name="organizationId"
@@ -208,7 +208,7 @@ export default function AddEditProject() {
           render={({ field }) => (
             <CustomSelect
               id="organizationId"
-              placeholder="Select Organization"
+              placeholder="Select Company you worked in"
               options={organizationsList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
@@ -221,7 +221,7 @@ export default function AddEditProject() {
       <LabelInput
         id="liveLink"
         label="Live Link"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         attachment={
           liveLink && (
             <a
@@ -237,7 +237,7 @@ export default function AddEditProject() {
         <CustomInput
           id="liveLink"
           type="text"
-          placeholder={`Link`}
+          placeholder="Live URL"
           {...register("liveLink")}
           error={errors?.liveLink}
         />
@@ -247,7 +247,7 @@ export default function AddEditProject() {
       <LabelInput
         id="githubLink"
         label="Github Link"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         attachment={
           githubLink && (
             <a
@@ -263,7 +263,7 @@ export default function AddEditProject() {
         <CustomInput
           id="githubLink"
           type="text"
-          placeholder={`Enter Github Link`}
+          placeholder="Repository Link"
           {...register("githubLink")}
           error={errors?.githubLink}
         />
@@ -288,7 +288,7 @@ export default function AddEditProject() {
       <LabelInput
         id="techStack"
         label="Tech Stack"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <Controller
           name="techStack"
@@ -309,7 +309,7 @@ export default function AddEditProject() {
       <LabelInput
         id="category"
         label="Project Category"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <Controller
           name="category"
@@ -317,7 +317,7 @@ export default function AddEditProject() {
           render={({ field }) => (
             <CustomSelect
               id="category"
-              placeholder="Select Project Category"
+              placeholder="e.g. Personal, Freelance, Hackathon"
               options={projectCategoriesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
@@ -326,16 +326,31 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
+      {/* Featured */}
+      <LabelInput
+        id="featured"
+        label="Featured"
+        colSpan="col-span-12 sm:col-span-6"
+        type="checkbox"
+      >
+        <input
+          id="featured"
+          type="checkbox"
+          {...register("featured")}
+          error={errors?.featured}
+        />
+      </LabelInput>
+
       {/* Start Date */}
       <LabelInput
         id="startDate"
         label="Start Date"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomDatePicker
           id="startDate"
-          placeholder={`Enter Start Date`}
+          placeholder="Select Date"
           {...register("startDate", {
             required: "Start Date is required!",
           })}
@@ -347,11 +362,11 @@ export default function AddEditProject() {
       <LabelInput
         id="endDate"
         label="End Date"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomDatePicker
           id="endDate"
-          placeholder={`Enter End Date`}
+          placeholder="Select Date"
           {...register("endDate")}
           error={errors?.endDate}
         />
@@ -360,8 +375,8 @@ export default function AddEditProject() {
       {/* Present */}
       <LabelInput
         id="present"
-        label="Present"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        label="Currently working on this project"
+        colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
         <input
@@ -372,32 +387,17 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
-      {/* Featured */}
-      <LabelInput
-        id="featured"
-        label="Featured"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        type="checkbox"
-      >
-        <input
-          id="featured"
-          type="checkbox"
-          {...register("featured")}
-          error={errors?.featured}
-        />
-      </LabelInput>
-
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
         label="Sort Order"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder={`Enter Project Sort Order`}
+          placeholder="Sort Order"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
@@ -407,7 +407,7 @@ export default function AddEditProject() {
       <LabelInput
         id="visibility"
         label="Visibility"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomRadioButtons
@@ -421,7 +421,7 @@ export default function AddEditProject() {
         />
       </LabelInput>
 
-      <div className="hidden sm:block col-span-6"></div>
+      <div className="hidden sm:block col-span-6" />
 
       {/* Upload Image  */}
       <LabelInput

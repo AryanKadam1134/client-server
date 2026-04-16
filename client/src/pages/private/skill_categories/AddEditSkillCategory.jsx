@@ -95,13 +95,13 @@ export default function AddEditSkillCategory() {
       <LabelInput
         id="name"
         label="Category Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="name"
           type="text"
-          placeholder={`Enter Category Name`}
+          placeholder="Category Name"
           {...register("name", {
             required: "Category Name is required!",
           })}
@@ -113,13 +113,13 @@ export default function AddEditSkillCategory() {
       <LabelInput
         id="sortOrder"
         label="Sort Order"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder={`Enter Category Sort Order`}
+          placeholder="Sort Order"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
@@ -129,7 +129,7 @@ export default function AddEditSkillCategory() {
       <LabelInput
         id="visibility"
         label="Visibility"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomRadioButtons

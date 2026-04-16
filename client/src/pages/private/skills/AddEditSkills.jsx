@@ -140,29 +140,39 @@ export default function AddEditSkills() {
       onSubmit={handleSubmit(addUpdateSkill)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
-      <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-        <CustomSelect
-          id="categoryId"
-          placeholder="Select Category"
-          options={SKILLS}
-          value={null}
-          onChange={(value) => reset({ name: value })} // send value to hook form
-        />
-      </div>
+      {!skillId && (
+        <>
+          <LabelInput
+            id="popular"
+            label="Popular Skills"
+            colSpan="col-span-12 sm:col-span-6"
+          >
+            <CustomSelect
+              id="popular"
+              placeholder="Select Skill"
+              options={SKILLS}
+              value={null}
+              onChange={(value) => reset({ name: value })} // send value to hook form
+            />
+          </LabelInput>
 
-      <div className="hidden sm:block col-span-9"></div>
+          <div className="hidden sm:block col-span-6" />
+
+          <div className="col-span-12 border-b-2 border-dashed border-gray-500" />
+        </>
+      )}
 
       {/* Skill Name */}
       <LabelInput
         id="name"
         label="Skill Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="name"
           type="text"
-          placeholder={`Enter Skill Name`}
+          placeholder="e.g. HTML"
           {...register("name", {
             required: "Skill Name is required!",
           })}
@@ -173,8 +183,8 @@ export default function AddEditSkills() {
       {/* Skill Category */}
       <LabelInput
         id="categoryId"
-        label="Category"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        label="Skill Category"
+        colSpan="col-span-12 sm:col-span-6"
         className="w-full"
       >
         <Controller
@@ -196,7 +206,7 @@ export default function AddEditSkills() {
       <LabelInput
         id="level"
         label="Level"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         className="w-full"
         required
       >
@@ -207,7 +217,7 @@ export default function AddEditSkills() {
           render={({ field }) => (
             <CustomSelect
               id="level"
-              placeholder="Select Level"
+              placeholder="Select"
               options={skillLevels}
               value={field.value}
               onChange={field.onChange} // send value to hook form
@@ -220,13 +230,13 @@ export default function AddEditSkills() {
       <LabelInput
         id="sortOrder"
         label="Sort Order"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder={`Enter Skill Sort Order`}
+          placeholder="Sort Order"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
@@ -236,7 +246,7 @@ export default function AddEditSkills() {
       <LabelInput
         id="visibility"
         label="Visibility"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomRadioButtons

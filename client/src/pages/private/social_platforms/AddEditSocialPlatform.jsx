@@ -136,7 +136,7 @@ const SOCIAL_APPS_LIST = [
   },
   {
     id: 284,
-    title: "X (formerly Twitter)",
+    title: "X",
     category: "Social",
     route: {
       light: "https://svgl.app/library/x.svg",
@@ -336,29 +336,39 @@ export default function AddEditSocialPlatform() {
       onSubmit={handleSubmit(addUpdatePlatform)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
-      <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-        <CustomSelect
-          id="categoryId"
-          placeholder="Select Platform"
-          options={SOCIAL_APPS}
-          value={null}
-          onChange={(value) => reset({ name: value })} // send value to hook form
-        />
-      </div>
+      {!platformId && (
+        <>
+          <LabelInput
+            id="popular"
+            label="Popular Platforms"
+            colSpan="col-span-12 sm:col-span-6"
+          >
+            <CustomSelect
+              id="popular"
+              placeholder="Select Platform"
+              options={SOCIAL_APPS}
+              value={null}
+              onChange={(value) => reset({ name: value })} // send value to hook form
+            />
+          </LabelInput>
 
-      <div className="hidden sm:block col-span-9"></div>
+          <div className="hidden sm:block col-span-6" />
+
+          <div className="col-span-12 border-b-2 border-dashed border-gray-500" />
+        </>
+      )}
 
       {/* Platform Name */}
       <LabelInput
         id="name"
         label="Platform Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="name"
           type="text"
-          placeholder={`Enter Platform Name`}
+          placeholder="e.g. Github"
           {...register("name", {
             required: "Platform Name is required!",
           })}
@@ -370,7 +380,7 @@ export default function AddEditSocialPlatform() {
       <LabelInput
         id="link"
         label="Link"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         attachment={
           platformLink && (
             <a
@@ -387,7 +397,7 @@ export default function AddEditSocialPlatform() {
         <CustomInput
           id="link"
           type="text"
-          placeholder={`Enter Platform Link`}
+          placeholder="Platform Link"
           {...register("link", {
             required: "Platform Link is required!",
           })}
@@ -399,13 +409,13 @@ export default function AddEditSocialPlatform() {
       <LabelInput
         id="sortOrder"
         label="Sort Order"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder={`Enter Platform Sort Order`}
+          placeholder="Sort Order"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />
@@ -415,7 +425,7 @@ export default function AddEditSocialPlatform() {
       <LabelInput
         id="visibility"
         label="Visibility"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomRadioButtons

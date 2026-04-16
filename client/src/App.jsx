@@ -129,7 +129,7 @@ function App() {
             <Route
               path=":certificateId/edit"
               element={<AddEditCertificate />}
-            />
+            />,
           </Route>
 
           <Route path="/achievements" element={<CommonLayout />}>
