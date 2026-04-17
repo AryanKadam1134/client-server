@@ -22,7 +22,7 @@ const certificateSchema = new Schema(
     },
 
     credentialId: String,
-    credentialUrl: String,
+    credentialUrl: { type: String, match: [/^https?:\/\/.+/, "Invalid URL"] },
 
     // Couldinary
     certificateImage: {

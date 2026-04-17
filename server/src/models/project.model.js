@@ -57,14 +57,14 @@ const projectSchema = new Schema(
     },
     projectImages: [
       {
-        url: String, 
+        url: String,
         public_id: String,
         resource_type: String,
       },
     ],
 
-    githubLink: String,
-    liveLink: String,
+    githubLink: { type: String, match: [/^https?:\/\/.+/, "Invalid URL"] },
+    liveLink: { type: String, match: [/^https?:\/\/.+/, "Invalid URL"] },
 
     featured: {
       type: Boolean,

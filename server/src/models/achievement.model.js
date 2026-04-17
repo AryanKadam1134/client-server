@@ -21,7 +21,7 @@ const achievementSchema = new Schema(
 
     description: String,
     issuer: String,
-    link: String,
+    link: { type: String, match: [/^https?:\/\/.+/, "Invalid URL"] },
 
     date: Date,
 
