@@ -177,11 +177,7 @@ export default function CustomMultiSelect({
               );
             })
           ) : (
-            <li
-              className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded`}
-            >
-              No Data
-            </li>
+            <li className={`px-3 py-2 text-sm text-gray-500`}>No Data</li>
           ))}
       </ul>
     </div>

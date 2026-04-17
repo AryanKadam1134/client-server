@@ -238,7 +238,12 @@ export default function AddEditProject() {
           id="liveLink"
           type="text"
           placeholder="Live URL"
-          {...register("liveLink")}
+          {...register("liveLink", {
+            pattern: {
+              value: /^https:\/\/.+$/,
+              message: "URL must start with https://",
+            },
+          })}
           error={errors?.liveLink}
         />
       </LabelInput>
@@ -264,7 +269,12 @@ export default function AddEditProject() {
           id="githubLink"
           type="text"
           placeholder="Repository Link"
-          {...register("githubLink")}
+          {...register("githubLink", {
+            pattern: {
+              value: /^https:\/\/.+$/,
+              message: "URL must start with https://",
+            },
+          })}
           error={errors?.githubLink}
         />
       </LabelInput>

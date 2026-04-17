@@ -400,6 +400,10 @@ export default function AddEditSocialPlatform() {
           placeholder="Platform Link"
           {...register("link", {
             required: "Platform Link is required!",
+            pattern: {
+              value: /^https:\/\/.+$/,
+              message: "URL must start with https://",
+            },
           })}
           error={errors?.link}
         />

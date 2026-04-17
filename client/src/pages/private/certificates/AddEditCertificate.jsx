@@ -224,7 +224,12 @@ export default function AddEditCertificate() {
           id="credentialUrl"
           type="text"
           placeholder="Drive Link or Other"
-          {...register("credentialUrl")}
+          {...register("credentialUrl", {
+            pattern: {
+              value: /^https:\/\/.+$/,
+              message: "URL must start with https://",
+            },
+          })}
           error={errors?.credentialUrl}
         />
       </LabelInput>

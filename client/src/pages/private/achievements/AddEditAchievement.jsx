@@ -249,7 +249,12 @@ export default function AddEditAchievement() {
           id="link"
           type="text"
           placeholder="Event Link or Blog Link"
-          {...register("link")}
+          {...register("link", {
+            pattern: {
+              value: /^https:\/\/.+$/,
+              message: "URL must start with https://",
+            },
+          })}
           error={errors?.link}
         />
       </LabelInput>

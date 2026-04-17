@@ -1,12 +1,12 @@
 import { useCombobox } from "downshift";
+import { useState } from "react";
 import { commonInputClass } from "../../constants";
 import { ChevronDown } from "lucide-react";
 
-const errorClass = (error) => {
-  return error
+const errorClass = (error) =>
+  error
     ? "border-2 border-red-400"
     : "border-gray-400 focus:border-transparent focus:ring focus:ring-blue-400";
-};
 
 export default function CustomSelect({
   options = [],
@@ -15,7 +15,12 @@ export default function CustomSelect({
   onChange,
   placeholder = "Select...",
 }) {
+  const [inputValue, setInputValue] = useState("");
   const selectedItem = options.find((opt) => opt.value === value) || null;
+
+  const filteredItems = options.filter((item) =>
+    item.label.toLowerCase().includes(inputValue.toLowerCase()),
+  );
 
   const {
     isOpen,
@@ -25,23 +30,65 @@ export default function CustomSelect({
     highlightedIndex,
     getToggleButtonProps,
   } = useCombobox({
-    items: options,
-    selectedItem,
-    itemToString: (item) => item?.label || "",
+    items: filteredItems,
+    selectedItem: null, // 🔥 always null — we control display ourselves
+    inputValue,
+    itemToString: () => "", // 🔥 never let Downshift write the label into input
 
-    onSelectedItemChange: ({ selectedItem }) => {
-      onChange(selectedItem?.value);
+    stateReducer: (state, actionAndChanges) => {
+      const { type, changes } = actionAndChanges;
+
+      switch (type) {
+        case useCombobox.stateChangeTypes.ItemClick:
+        case useCombobox.stateChangeTypes.InputKeyDownEnter: {
+          const clicked = changes.selectedItem;
+          if (clicked) {
+            // toggle
+            onChange(value === clicked.value ? null : clicked.value);
+          }
+          setInputValue("");
+          return {
+            ...changes,
+            selectedItem: null,
+            inputValue: "",
+            isOpen: false,
+          };
+        }
+
+        case useCombobox.stateChangeTypes.InputBlur: {
+          setInputValue("");
+          return { ...changes, inputValue: "" };
+        }
+
+        default:
+          return changes;
+      }
+    },
+
+    onInputValueChange: ({ inputValue: newVal }) => {
+      // 🔥 Ignore Downshift trying to set the label as inputValue after selection
+      if (newVal === selectedItem?.label) return;
+      setInputValue(newVal || "");
     },
   });
 
   return (
     <div className="relative w-full">
-      {/* Input */}
       <div className="relative flex items-center">
         <input
           {...getInputProps({
-            placeholder,
+            onKeyDown: (e) => {
+              if (e.key === "Backspace") {
+                if (!inputValue && selectedItem) {
+                  // 🔥 Start editing from the label
+                  setInputValue(selectedItem.label.slice(0, -1));
+                  onChange(null);
+                }
+              }
+            },
           })}
+          value={selectedItem && !inputValue ? selectedItem.label : inputValue}
+          placeholder={placeholder}
           className={`${commonInputClass} ${errorClass(error)} pr-10`}
         />
 
@@ -54,26 +101,32 @@ export default function CustomSelect({
         </button>
       </div>
 
-      {/* Dropdown */}
       <ul
         {...getMenuProps()}
         className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-white border border-gray-500 rounded-sm shadow-md max-h-60 overflow-y-auto ${
-          !isOpen && "hidden"
+          !isOpen ? "hidden" : ""
         }`}
       >
         {isOpen &&
-          options.map((item, index) => (
-            <li
-              key={item.value}
-              {...getItemProps({ item, index })}
-              className={`px-3 py-2 cursor-pointer text-sm rounded
-                ${highlightedIndex === index ? "bg-gray-200" : ""}
-                ${selectedItem === item ? "font-medium bg-gray-200" : ""}
-              `}
-            >
-              {item.label}
-            </li>
-          ))}
+          filteredItems.map((item, index) => {
+            const isSelected = value === item.value;
+            return (
+              <li
+                key={item.value}
+                {...getItemProps({ item, index })}
+                className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded
+                  ${highlightedIndex === index ? "bg-gray-200" : ""}
+                  ${isSelected ? "font-medium bg-gray-200" : ""}
+                `}
+              >
+                {item.label} {isSelected && "✔"}
+              </li>
+            );
+          })}
+
+        {isOpen && filteredItems.length === 0 && (
+          <li className="px-3 py-2 text-sm">No results found</li>
+        )}
       </ul>
     </div>
   );

@@ -261,7 +261,12 @@ export default function AddEditExperiences() {
           id="organizationWebsite"
           type="text"
           placeholder="Company Website"
-          {...register("organizationWebsite")}
+          {...register("organizationWebsite", {
+            pattern: {
+              value: /^https:\/\/.+$/,
+              message: "URL must start with https://",
+            },
+          })}
           error={errors?.organizationWebsite}
         />
       </LabelInput>
