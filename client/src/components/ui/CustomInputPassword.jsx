@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 
-const inputClass = (error) => {
-  return `w-full px-3 py-2 border rounded-sm shadow-md outline-none 
-   ${error ? "border-2 border-red-400" : "border-gray-400"} 
-   focus:border-transparent focus:ring focus:ring-blue-400 focus:bg-slate-100`;
+import { Eye, EyeOff } from "lucide-react";
+
+import { commonInputClass } from "../../constants";
+
+const errorClass = (error) => {
+  return error
+    ? "border-2 border-red-400"
+    : "border-gray-400 focus:border-transparent focus:ring focus:ring-blue-400";
 };
 
 // Note: Use only for Text Based Inputs
@@ -15,15 +19,15 @@ export default function CustomInputPassword({ error, className, ...props }) {
       <input
         {...props}
         type={showPassword ? "text" : "password"}
-        className={`${inputClass(error)} ${className}`}
+        className={`${commonInputClass} ${errorClass(error)} ${className}`}
       />
 
       <button
         type="button"
         onClick={() => setShowPassword((prev) => !prev)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer"
       >
-        {showPassword ? "🙈" : "👁️"}
+        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
       </button>
     </div>
   );

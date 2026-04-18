@@ -49,6 +49,7 @@ const VISIBILITY = [
 const options = {
   httpOnly: true, // set to true in production
   secure: false,
+  sameSite: "strict",
 };
 
 const accessTokenOptions = {

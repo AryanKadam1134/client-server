@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
+import CustomButton from "../../components/ui/CustomButton";
+import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { apiEndpoints } from "../../api";
 
 import { useAuth } from "../../context/AuthContext";
-import CustomButton from "../../components/ui/CustomButton";
 
 export default function Authentication() {
   const { login } = useAuth();
@@ -130,9 +131,8 @@ export default function Authentication() {
 
           {/* Password */}
           <LabelInput id="password" label="Password" required>
-            <CustomInput
+            <CustomInputPassword
               id="password"
-              type="password"
               placeholder="password"
               {...register("password", {
                 required: "password is required!",
@@ -149,6 +149,18 @@ export default function Authentication() {
               error={errors.password}
             />
           </LabelInput>
+
+          {/* Remember Me */}
+          {isLogin && (
+            <LabelInput id="rememberMe" label="Remember Me?" type="checkbox">
+              <input
+                id="rememberMe"
+                type="checkbox"
+                {...register("rememberMe")}
+                error={errors?.rememberMe}
+              />
+            </LabelInput>
+          )}
 
           {/* Submit */}
           <CustomButton

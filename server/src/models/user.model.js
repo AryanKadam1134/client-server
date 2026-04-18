@@ -71,8 +71,6 @@ const userSchema = new Schema(
       resource_type: String,
     },
 
-    refreshToken: String,
-
     sessions: [
       {
         refreshToken: {
@@ -82,6 +80,7 @@ const userSchema = new Schema(
         userAgent: String,
         ip: String,
         deviceId: String,
+        rememberMe: Boolean,
         createdAt: {
           type: Date,
           default: Date.now,

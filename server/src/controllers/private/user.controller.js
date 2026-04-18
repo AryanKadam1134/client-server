@@ -34,15 +34,26 @@ const generateAccessAndRefreshToken = async (userId, req) => {
     // console.log("accessToken: ", accessToken);
     // console.log("refreshToken: ", refreshToken);
 
+    let rememberMe;
+
     // add new session
     const existingSessionIndex = user.sessions.findIndex(
       (s) => s.deviceId === deviceId,
     );
 
+    if (existingSessionIndex !== -1) {
+      // ✅ Preserve existing value
+      rememberMe = user.sessions[existingSessionIndex].rememberMe;
+    } else {
+      // ✅ Only take from login request
+      rememberMe = req.body?.rememberMe ?? false;
+    }
+
     // ✅ CASE 1: Device already exists → UPDATE session
     if (existingSessionIndex !== -1) {
       const session = user.sessions[existingSessionIndex];
       session.refreshToken = refreshToken;
+      session.rememberMe = rememberMe;
       session.userAgent = req.headers["user-agent"];
       session.ip = req.ip;
       session.createdAt = new Date();
@@ -57,6 +68,7 @@ const generateAccessAndRefreshToken = async (userId, req) => {
       user.sessions.push({
         deviceId,
         refreshToken,
+        rememberMe,
         userAgent: req.headers["user-agent"],
         ip: req.ip,
       });
@@ -102,6 +114,8 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     throw new ApiError(419, "session expired!");
   }
 
+  const rememberMe = session.rememberMe;
+
   // Get access and referesh Token
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     loggedUser?._id,
@@ -119,7 +133,11 @@ const refreshAccessToken = asynchandler(async (req, res) => {
   return res
     .status(200)
     .cookie("accessToken", accessToken, accessTokenOptions)
-    .cookie("refreshToken", refreshToken, refreshTokenOptions)
+    .cookie(
+      "refreshToken",
+      refreshToken,
+      rememberMe ? refreshTokenOptions : options,
+    )
     .json(
       new ApiRes(
         200,
@@ -165,7 +183,7 @@ const registerUser = asynchandler(async (req, res) => {
 });
 
 const loginUser = asynchandler(async (req, res) => {
-  const { userCredential, password } = req.body;
+  const { userCredential, password, rememberMe } = req.body;
 
   if (!userCredential) {
     throw new ApiError(400, "username or email is required!");
@@ -199,7 +217,7 @@ const loginUser = asynchandler(async (req, res) => {
   }
 
   const loggedUser = await User.findById(userExist?._id).select(
-    "-password -refreshToken -session",
+    "-password -refreshToken -sessions",
   );
 
   if (!loggedUser) {
@@ -209,7 +227,11 @@ const loginUser = asynchandler(async (req, res) => {
   return res
     .status(200)
     .cookie("accessToken", accessToken, accessTokenOptions)
-    .cookie("refreshToken", refreshToken, refreshTokenOptions)
+    .cookie(
+      "refreshToken",
+      refreshToken,
+      rememberMe ? refreshTokenOptions : options,
+    )
     .json(
       new ApiRes(
         200,
