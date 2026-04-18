@@ -51,6 +51,19 @@ const options = {
   secure: false,
 };
 
+const accessTokenOptions = {
+  httpOnly: true,
+  secure: false, // set to true in production
+  sameSite: "strict",
+};
+
+const refreshTokenOptions = {
+  httpOnly: true,
+  secure: false, // true in production (HTTPS)
+  sameSite: "strict",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ 7 days
+};
+
 const DB_NAME = "portfolio_backend";
 
 export {
@@ -63,4 +76,6 @@ export {
   VISIBILITY,
   DB_NAME,
   options,
+  accessTokenOptions,
+  refreshTokenOptions,
 };

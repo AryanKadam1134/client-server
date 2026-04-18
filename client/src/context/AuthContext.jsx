@@ -19,7 +19,6 @@ export function AuthProvider({ children }) {
   const [authLoading, setAuthLoading] = useState(true);
 
   let deviceId = localStorage.getItem("deviceId");
-  const refreshToken = localStorage.getItem("refreshToken");
 
   if (!deviceId) {
     deviceId = uuidv4();
@@ -38,7 +37,6 @@ export function AuthProvider({ children }) {
 
       if (res?.success) {
         setUser(data?.user);
-        localStorage.setItem("refreshToken", data?.refreshToken);
       }
 
       console.log("Login succesfull:", data);
@@ -64,7 +62,6 @@ export function AuthProvider({ children }) {
         const res = await apiEndpoints.restoreSession({
           headers: {
             "x-device-id": deviceId,
-            refreshtoken: refreshToken,
           },
         });
 
@@ -72,7 +69,6 @@ export function AuthProvider({ children }) {
 
         if (res?.success) {
           setUser(data?.user);
-          localStorage.setItem("refreshToken", data?.refreshToken);
         }
 
         console.log("Session restored: ", data);

@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 
-import { options } from "../../constants.js";
+import {
+  accessTokenOptions,
+  options,
+  refreshTokenOptions,
+} from "../../constants.js";
 
 import { User } from "../../models/user.model.js";
 
@@ -68,7 +72,7 @@ const generateAccessAndRefreshToken = async (userId, req) => {
 };
 
 const refreshAccessToken = asynchandler(async (req, res) => {
-  const cookieRefreshToken = req.headers?.refreshtoken;
+  const cookieRefreshToken = req.cookies?.refreshToken;
 
   const deviceId = req.headers["x-device-id"];
 
@@ -114,8 +118,8 @@ const refreshAccessToken = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie("refreshToken", refreshToken, refreshTokenOptions)
     .json(
       new ApiRes(
         200,
@@ -204,8 +208,8 @@ const loginUser = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie("refreshToken", refreshToken, refreshTokenOptions)
     .json(
       new ApiRes(
         200,
