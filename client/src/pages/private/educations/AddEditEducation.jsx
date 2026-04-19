@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { Trash2, Loader } from "lucide-react";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -26,7 +27,7 @@ export default function AddEditEducation() {
     control,
     reset,
     formState: { errors, isSubmitting, dirtyFields },
-  } = useForm();
+  } = useForm({ mode: "onChange" });
 
   const instituteImage = useWatch({ control, name: "instituteImage" });
 
@@ -143,6 +144,8 @@ export default function AddEditEducation() {
           })}
           error={errors?.instituteName}
         />
+
+        <FieldError error={errors.instituteName?.message} />
       </LabelInput>
 
       {/* Qualification */}
@@ -161,6 +164,8 @@ export default function AddEditEducation() {
           })}
           error={errors?.qualification}
         />
+
+        <FieldError error={errors.qualification?.message} />
       </LabelInput>
 
       {/* Description */}
@@ -173,7 +178,10 @@ export default function AddEditEducation() {
           id="description"
           type="text"
           placeholder="Enter Description"
-          {...register("description")}
+          maxLength={1000}
+          {...register("description", {
+            maxLength: 1000,
+          })}
           error={errors?.description}
         />
       </LabelInput>

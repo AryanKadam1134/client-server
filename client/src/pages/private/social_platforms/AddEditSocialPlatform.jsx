@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { ExternalLink } from "lucide-react";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -272,6 +273,7 @@ export default function AddEditSocialPlatform() {
       sortOrder: 0,
       visibility: "public",
     },
+    mode: "onChange",
   });
 
   const platformLink = useWatch({ control, name: "link" });
@@ -374,6 +376,8 @@ export default function AddEditSocialPlatform() {
           })}
           error={errors?.name}
         />
+
+        <FieldError error={errors.name?.message} />
       </LabelInput>
 
       {/* Platform Link */}
@@ -407,6 +411,8 @@ export default function AddEditSocialPlatform() {
           })}
           error={errors?.link}
         />
+
+        <FieldError error={errors.link?.message} />
       </LabelInput>
 
       {/* Sort Order */}
@@ -441,6 +447,8 @@ export default function AddEditSocialPlatform() {
           })}
           error={errors?.visibility}
         />
+
+        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       <CustomButton type="submit" className="col-span-12 place-self-end">

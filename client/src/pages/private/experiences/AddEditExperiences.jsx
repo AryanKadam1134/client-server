@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
 import { Trash2, Loader, ExternalLink, Plus } from "lucide-react";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -56,6 +57,7 @@ export default function AddEditExperiences() {
       ],
       highlights: [""],
     },
+    mode: "onChange",
   });
 
   const {
@@ -202,6 +204,8 @@ export default function AddEditExperiences() {
           })}
           error={errors?.organization}
         />
+
+        <FieldError error={errors.organization?.message} />
       </LabelInput>
 
       {/* Employment Type */}
@@ -209,20 +213,25 @@ export default function AddEditExperiences() {
         id="employmentType"
         label="Employment Type"
         colSpan="col-span-12 sm:col-span-6"
+        required
       >
         <Controller
           name="employmentType"
           control={control}
+          rules={{ required: "Employment Type is required!" }}
           render={({ field }) => (
             <CustomSelect
               id="employmentType"
               placeholder="e.g. Full Time, Part Time"
               options={employmentTypes}
               value={field.value}
-              onChange={field.onChange} // send value to hook form
+              onChange={field.onChange}
+              error={errors?.employmentType} // send value to hook form
             />
           )}
         />
+
+        <FieldError error={errors.employmentType?.message} />
       </LabelInput>
 
       {/* Organization Size */}
@@ -281,7 +290,10 @@ export default function AddEditExperiences() {
           id="description"
           type="text"
           placeholder="Enter Description"
-          {...register("description")}
+          maxLength={1000}
+          {...register("description", {
+            maxLength: 1000,
+          })}
           error={errors?.description}
         />
       </LabelInput>
@@ -332,7 +344,7 @@ export default function AddEditExperiences() {
         <Controller
           name="locationType"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: "Location Type is required!" }}
           render={({ field }) => (
             <CustomSelect
               id="locationType"
@@ -340,9 +352,12 @@ export default function AddEditExperiences() {
               options={locationTypesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
+              error={errors?.locationType}
             />
           )}
         />
+
+        <FieldError error={errors.locationType?.message} />
       </LabelInput>
 
       {/* Visibility  */}
@@ -361,6 +376,8 @@ export default function AddEditExperiences() {
           })}
           error={errors?.visibility}
         />
+
+        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       {/* Highlights */}
@@ -458,9 +475,13 @@ export default function AddEditExperiences() {
                   <CustomInput
                     id={`positions-${idx}.role`}
                     placeholder="Job Role"
-                    {...register(`positions.${idx}.role`)}
+                    {...register(`positions.${idx}.role`, {
+                      required: "Role is required!",
+                    })}
                     error={errors?.positions?.[idx]?.role}
                   />
+
+                  <FieldError error={errors.positions?.[idx]?.role?.message} />
                 </LabelInput>
 
                 {/* Start Date */}
@@ -477,6 +498,10 @@ export default function AddEditExperiences() {
                       required: "Start Date is required!",
                     })}
                     error={errors?.positions?.[idx]?.startDate}
+                  />
+
+                  <FieldError
+                    error={errors.positions?.[idx]?.startDate?.message}
                   />
                 </LabelInput>
 

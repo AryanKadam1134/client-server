@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
+import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -24,7 +25,9 @@ export default function Authentication() {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    mode: "onChange", // 🔥 important
+  });
 
   const onSubmit = async (payload) => {
     try {
@@ -64,6 +67,8 @@ export default function Authentication() {
                 })}
                 error={errors.firstName}
               />
+
+              <FieldError error={errors.firstName?.message} />
             </LabelInput>
           )}
 
@@ -92,6 +97,8 @@ export default function Authentication() {
                 })}
                 error={errors.username}
               />
+
+              <FieldError error={errors.username?.message} />
             </LabelInput>
           )}
 
@@ -107,6 +114,8 @@ export default function Authentication() {
                 })}
                 error={errors.userCredential}
               />
+
+              <FieldError error={errors.userCredential?.message} />
             </LabelInput>
           )}
 
@@ -126,6 +135,8 @@ export default function Authentication() {
                 })}
                 error={errors.email}
               />
+
+              <FieldError error={errors.email?.message} />
             </LabelInput>
           )}
 
@@ -148,6 +159,8 @@ export default function Authentication() {
               className="pr-10"
               error={errors.password}
             />
+
+            {!isLogin && <FieldError error={errors.password?.message} />}
           </LabelInput>
 
           {/* Remember Me */}

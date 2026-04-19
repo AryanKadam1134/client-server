@@ -12,6 +12,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -55,6 +56,7 @@ export default function AddEditProject() {
       featured: true,
       visibility: "public",
     },
+    mode: "onChange",
   });
 
   const projectImages = useWatch({ control, name: "projectImages" });
@@ -194,6 +196,8 @@ export default function AddEditProject() {
           })}
           error={errors?.title}
         />
+
+        <FieldError error={errors.title?.message} />
       </LabelInput>
 
       {/* Organization */}
@@ -288,8 +292,11 @@ export default function AddEditProject() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder={`Enter Description`}
-          {...register("description")}
+          placeholder="Enter Description"
+          maxLength={1000}
+          {...register("description", {
+            maxLength: 1000,
+          })}
           error={errors?.description}
         />
       </LabelInput>
@@ -366,6 +373,8 @@ export default function AddEditProject() {
           })}
           error={errors?.startDate}
         />
+
+        <FieldError error={errors.startDate?.message} />
       </LabelInput>
 
       {/* End Date */}

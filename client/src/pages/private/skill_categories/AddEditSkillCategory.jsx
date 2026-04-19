@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -29,6 +30,7 @@ export default function AddEditSkillCategory() {
       sortOrder: 0,
       visibility: "public",
     },
+    mode: "onChange",
   });
 
   const getUpdatedFields = (data, dirtyFields) => {
@@ -107,6 +109,8 @@ export default function AddEditSkillCategory() {
           })}
           error={errors?.name}
         />
+
+        <FieldError error={errors.name?.message} />
       </LabelInput>
 
       {/* Sort Order */}

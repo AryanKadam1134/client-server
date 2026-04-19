@@ -12,6 +12,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -50,6 +51,7 @@ export default function AddEditAchievement() {
       featured: true,
       visibility: "public",
     },
+    mode: "onChange",
   });
 
   const achievementImages = useWatch({ control, name: "achievementImages" });
@@ -187,6 +189,8 @@ export default function AddEditAchievement() {
           })}
           error={errors?.title}
         />
+
+        <FieldError error={errors.title?.message} />
       </LabelInput>
 
       {/* Issuer */}
@@ -205,6 +209,8 @@ export default function AddEditAchievement() {
           })}
           error={errors?.issuer}
         />
+
+        <FieldError error={errors.issuer?.message} />
       </LabelInput>
 
       {/* Attached Certificate */}
@@ -269,7 +275,10 @@ export default function AddEditAchievement() {
           id="description"
           type="text"
           placeholder="About this Achievement"
-          {...register("description")}
+          maxLength={1000}
+          {...register("description", {
+            maxLength: 1000,
+          })}
           error={errors?.description}
         />
       </LabelInput>
@@ -289,6 +298,8 @@ export default function AddEditAchievement() {
           })}
           error={errors?.date}
         />
+
+        <FieldError error={errors.data?.message} />
       </LabelInput>
 
       {/* Featured */}
@@ -338,6 +349,8 @@ export default function AddEditAchievement() {
           })}
           error={errors?.visibility}
         />
+
+        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       <div className="hidden sm:block col-span-6"></div>

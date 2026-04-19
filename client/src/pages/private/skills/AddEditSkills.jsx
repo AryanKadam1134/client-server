@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -78,6 +79,7 @@ export default function AddEditSkills() {
       sortOrder: 0,
       visibility: "public",
     },
+    mode: "onChange",
   });
 
   const getUpdatedFields = (data, dirtyFields) => {
@@ -178,6 +180,8 @@ export default function AddEditSkills() {
           })}
           error={errors?.name}
         />
+
+        <FieldError error={errors.name?.message} />
       </LabelInput>
 
       {/* Skill Category */}
@@ -213,17 +217,20 @@ export default function AddEditSkills() {
         <Controller
           name="level"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: "Skill Level is required!" }}
           render={({ field }) => (
             <CustomSelect
               id="level"
               placeholder="Select"
               options={skillLevels}
               value={field.value}
-              onChange={field.onChange} // send value to hook form
+              onChange={field.onChange}
+              error={errors?.level} // send value to hook form
             />
           )}
         />
+
+        <FieldError error={errors.level?.message} />
       </LabelInput>
 
       {/* Sort Order */}

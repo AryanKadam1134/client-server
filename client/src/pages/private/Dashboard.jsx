@@ -10,6 +10,7 @@ import {
   Edit,
 } from "lucide-react";
 
+import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -164,7 +165,9 @@ export default function Dashboard() {
     reset,
     getValues,
     formState: { errors, isSubmitting, dirtyFields },
-  } = useForm();
+  } = useForm({
+    mode: "onChange", // 🔥 important
+  });
 
   const profileImage = getValues("image");
   const resumeOrCv = getValues("resumeOrCv");
@@ -373,6 +376,8 @@ export default function Dashboard() {
           })}
           error={errors.firstName}
         />
+
+        <FieldError error={errors.firstName?.message} />
       </LabelInput>
 
       {/* Middle Name */}
@@ -421,6 +426,8 @@ export default function Dashboard() {
           })}
           error={errors.username}
         />
+
+        <FieldError error={errors.username?.message} />
       </LabelInput>
 
       {/* Email */}
@@ -457,16 +464,16 @@ export default function Dashboard() {
         <CustomInput
           id="mobileNo"
           type="tel"
-          minLength={10}
-          maxLength={10}
           placeholder="mobile no."
           {...register("mobileNo", {
-            required: "mobile no. is required!",
+            required: "Mobile No. is required!",
             minLength: 10,
             maxLength: 10,
           })}
           error={errors.mobileNo}
         />
+
+        <FieldError error={errors.mobileNo?.message} />
       </LabelInput>
 
       {/* Gender */}
@@ -484,6 +491,8 @@ export default function Dashboard() {
           })}
           error={errors.gender}
         />
+
+        <FieldError error={errors.gender?.message} />
       </LabelInput>
 
       <div className="hidden lg:block col-span-6"></div>
@@ -518,9 +527,13 @@ export default function Dashboard() {
           type="textarea"
           placeholder="Headline"
           className="h-full min-h-37.5"
-          {...register("headline")}
+          {...register("headline", {
+            maxLength: 100,
+          })}
           error={errors.headline}
         />
+
+        <FieldError error={errors.headline?.message} />
       </LabelInput>
 
       {/* About */}
@@ -534,9 +547,16 @@ export default function Dashboard() {
           type="textarea"
           placeholder="About"
           className="h-full min-h-37.5"
-          {...register("about")}
+          {...register("about", {
+            maxLength: {
+              value: 1000,
+              message: "Max 800 characters allowed!",
+            },
+          })}
           error={errors.about}
         />
+
+        <FieldError error={errors.about?.message} />
       </LabelInput>
 
       {/* Resume Link */}

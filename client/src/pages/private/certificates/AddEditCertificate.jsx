@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Trash2, Loader, ExternalLink } from "lucide-react";
 
+import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -42,6 +43,7 @@ export default function AddEditCertificate() {
       featured: true,
       visibility: "public",
     },
+    mode: "onChange",
   });
 
   const credentialUrl = useWatch({ control, name: "credentialUrl" });
@@ -168,6 +170,8 @@ export default function AddEditCertificate() {
           })}
           error={errors?.title}
         />
+
+        <FieldError error={errors.title?.message} />
       </LabelInput>
 
       {/* Issued By */}
@@ -186,6 +190,8 @@ export default function AddEditCertificate() {
           })}
           error={errors?.issuer}
         />
+
+        <FieldError error={errors.issuer?.message} />
       </LabelInput>
 
       {/* Credential Id */}
@@ -244,7 +250,10 @@ export default function AddEditCertificate() {
           id="description"
           type="text"
           placeholder="About this certificate"
-          {...register("description")}
+          maxLength={1000}
+          {...register("description", {
+            maxLength: 1000,
+          })}
           error={errors?.description}
         />
       </LabelInput>
@@ -285,6 +294,8 @@ export default function AddEditCertificate() {
           })}
           error={errors?.issueDate}
         />
+
+        <FieldError error={errors.issueDate?.message} />
       </LabelInput>
 
       {/* Expiry Date */}
@@ -348,6 +359,8 @@ export default function AddEditCertificate() {
           })}
           error={errors?.visibility}
         />
+
+        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       {/* Upload Certificate Image  */}
