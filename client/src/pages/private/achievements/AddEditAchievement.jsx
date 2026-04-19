@@ -275,12 +275,16 @@ export default function AddEditAchievement() {
           id="description"
           type="text"
           placeholder="About this Achievement"
-          maxLength={1000}
           {...register("description", {
-            maxLength: 1000,
+            maxLength: {
+              value: 1000,
+              message: "Max 1000 characters allowed!",
+            },
           })}
           error={errors?.description}
         />
+
+        <FieldError error={errors.description?.message} />
       </LabelInput>
 
       {/* Date */}
@@ -355,109 +359,113 @@ export default function AddEditAchievement() {
 
       <div className="hidden sm:block col-span-6"></div>
 
-      {/* Upload Achievement Images  */}
-      <LabelInput
-        id="upload"
-        label="Upload Achievement Images"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-      >
-        <DragDropUpload
-          id="upload"
-          multiple
-          accept="image/*"
-          loading={imagesUploading}
-          onChange={(files) => updateAchievementImage(files)}
-        />
-      </LabelInput>
-
-      {/* Achievement Cover Image */}
-      <LabelInput
-        label="Achievement Cover Image"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-      >
-        <div className="h-[120px] rounded overflow-hidden border border-gray-400">
-          <img
-            src={
-              achievementImages?.find((_, idx) => idx == coverImageIndex)?.url
-            }
-            alt=""
-            className="w-full h-full object-contain"
-          />
-        </div>
-      </LabelInput>
-
-      <div className="col-span-12 sm:col-span-6 relative">
-        {/* Scroll Buttons */}
-        <button
-          type="button"
-          onClick={() =>
-            document
-              .getElementById("image-scroll")
-              ?.scrollBy({ left: -300, behavior: "smooth" })
-          }
-          className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-1 rounded-full cursor-pointer"
-        >
-          <ChevronLeft />
-        </button>
-
-        <button
-          type="button"
-          onClick={() =>
-            document
-              .getElementById("image-scroll")
-              ?.scrollBy({ left: 300, behavior: "smooth" })
-          }
-          className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-1 rounded-full cursor-pointer"
-        >
-          <ChevronRight />
-        </button>
-
-        {/* Image Container */}
-        <div
-          id="image-scroll"
-          className="grid grid-flow-col auto-cols-[80%] sm:auto-cols-[45%] lg:auto-cols-[30%] gap-4 overflow-x-auto scroll-smooth pb-2"
-        >
-          {achievementImages?.map((image, idx) => (
-            <div
-              key={image?.public_id || idx}
-              className="relative group h-[120px] rounded overflow-hidden border border-gray-400"
-            >
-              {/* Image */}
+      {id && (
+        <>
+          {" "}
+          {/* Upload Achievement Images  */}
+          <LabelInput
+            id="upload"
+            label="Upload Achievement Images"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <DragDropUpload
+              id="upload"
+              multiple
+              accept="image/*"
+              loading={imagesUploading}
+              onChange={(files) => updateAchievementImage(files)}
+            />
+          </LabelInput>
+          {/* Achievement Cover Image */}
+          <LabelInput
+            label="Achievement Cover Image"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <div className="h-[120px] rounded overflow-hidden border border-gray-400">
               <img
-                src={image?.url}
+                src={
+                  achievementImages?.find((_, idx) => idx == coverImageIndex)
+                    ?.url
+                }
                 alt=""
                 className="w-full h-full object-contain"
               />
-
-              {/* Loader */}
-              {imageDeleting === image?.public_id && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                  <Loader size={24} className="animate-spin text-white" />
-                </div>
-              )}
-
-              {idx !== coverImageIndex && (
-                <button
-                  type="button"
-                  onClick={() => handleCoverChange(idx)}
-                  className="absolute top-2 left-2 p-1 rounded bg-green-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-green-600 cursor-pointer"
-                >
-                  <Image size={18} />
-                </button>
-              )}
-
-              {/* Delete Button (Hover Only) */}
-              <button
-                type="button"
-                onClick={() => deleteAchievementImage(image?.public_id)}
-                className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
-              >
-                <Trash2 size={18} />
-              </button>
             </div>
-          ))}
-        </div>
-      </div>
+          </LabelInput>
+          <div className="col-span-12 sm:col-span-6 relative">
+            {/* Scroll Buttons */}
+            <button
+              type="button"
+              onClick={() =>
+                document
+                  .getElementById("image-scroll")
+                  ?.scrollBy({ left: -300, behavior: "smooth" })
+              }
+              className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-1 rounded-full cursor-pointer"
+            >
+              <ChevronLeft />
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                document
+                  .getElementById("image-scroll")
+                  ?.scrollBy({ left: 300, behavior: "smooth" })
+              }
+              className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-1 rounded-full cursor-pointer"
+            >
+              <ChevronRight />
+            </button>
+
+            {/* Image Container */}
+            <div
+              id="image-scroll"
+              className="grid grid-flow-col auto-cols-[80%] sm:auto-cols-[45%] lg:auto-cols-[30%] gap-4 overflow-x-auto scroll-smooth pb-2"
+            >
+              {achievementImages?.map((image, idx) => (
+                <div
+                  key={image?.public_id || idx}
+                  className="relative group h-[120px] rounded overflow-hidden border border-gray-400"
+                >
+                  {/* Image */}
+                  <img
+                    src={image?.url}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+
+                  {/* Loader */}
+                  {imageDeleting === image?.public_id && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                      <Loader size={24} className="animate-spin text-white" />
+                    </div>
+                  )}
+
+                  {idx !== coverImageIndex && (
+                    <button
+                      type="button"
+                      onClick={() => handleCoverChange(idx)}
+                      className="absolute top-2 left-2 p-1 rounded bg-green-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-green-600 cursor-pointer"
+                    >
+                      <Image size={18} />
+                    </button>
+                  )}
+
+                  {/* Delete Button (Hover Only) */}
+                  <button
+                    type="button"
+                    onClick={() => deleteAchievementImage(image?.public_id)}
+                    className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
         {isSubmitting ? "Saving..." : "Save"}

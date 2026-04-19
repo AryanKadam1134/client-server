@@ -178,12 +178,16 @@ export default function AddEditEducation() {
           id="description"
           type="text"
           placeholder="Enter Description"
-          maxLength={1000}
           {...register("description", {
-            maxLength: 1000,
+            maxLength: {
+              value: 1000,
+              message: "Max 1000 characters allowed!",
+            },
           })}
           error={errors?.description}
         />
+
+        <FieldError error={errors.description?.message} />
       </LabelInput>
 
       {/* Address */}
@@ -285,51 +289,55 @@ export default function AddEditEducation() {
         />
       </LabelInput>
 
-      {/* Upload Institute Image  */}
-      <LabelInput
-        id="upload"
-        label="Upload Institute Image"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-      >
-        <DragDropUpload
-          id="upload"
-          accept="image/*"
-          loading={imagesUploading}
-          onChange={(files) => updateInstituteImage(files)}
-        />
-      </LabelInput>
+      {id && (
+        <>
+          {" "}
+          {/* Upload Institute Image  */}
+          <LabelInput
+            id="upload"
+            label="Upload Institute Image"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <DragDropUpload
+              id="upload"
+              accept="image/*"
+              loading={imagesUploading}
+              onChange={(files) => updateInstituteImage(files)}
+            />
+          </LabelInput>
+          {/* Institute Image */}
+          <LabelInput
+            label="Institute Image"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
+              {/* Loader */}
+              {imageDeleting && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                  <Loader size={24} className="animate-spin text-white" />
+                </div>
+              )}
 
-      {/* Institute Image */}
-      <LabelInput
-        label="Institute Image"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-      >
-        <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
-          {/* Loader */}
-          {imageDeleting && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-              <Loader size={24} className="animate-spin text-white" />
+              <img
+                src={instituteImage?.url}
+                alt=""
+                className="w-full h-full object-contain"
+              />
+
+              {/* Delete Button (Hover Only) */}
+              {instituteImage?.url && (
+                <button
+                  type="button"
+                  onClick={deleteInstituteImage}
+                  className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
+                >
+                  <Trash2 size={18} />
+                </button>
+              )}
             </div>
-          )}
-
-          <img
-            src={instituteImage?.url}
-            alt=""
-            className="w-full h-full object-contain"
-          />
-
-          {/* Delete Button (Hover Only) */}
-          {instituteImage?.url && (
-            <button
-              type="button"
-              onClick={deleteInstituteImage}
-              className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
-            >
-              <Trash2 size={18} />
-            </button>
-          )}
-        </div>
-      </LabelInput>
+          </LabelInput>
+        </>
+      )}
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
         {isSubmitting ? "Saving..." : "Save"}

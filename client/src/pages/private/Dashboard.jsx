@@ -550,7 +550,7 @@ export default function Dashboard() {
           {...register("about", {
             maxLength: {
               value: 1000,
-              message: "Max 800 characters allowed!",
+              message: "Max 1000 characters allowed!",
             },
           })}
           error={errors.about}
