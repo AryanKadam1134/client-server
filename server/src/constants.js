@@ -1,3 +1,5 @@
+const isProduction = process.env.NODE_ENV === "production";
+
 const SOCIAL_PLATFORMS = [
   { label: "GitHub", value: "github" },
   { label: "LinkedIn", value: "linkedin" },
@@ -48,20 +50,20 @@ const VISIBILITY = [
 
 const options = {
   httpOnly: true, // set to true in production
-  secure: false,
-  sameSite: "strict",
+  secure: isProduction ? true : false,
+  sameSite: isProduction ? "none" : "strict",
 };
 
 const accessTokenOptions = {
   httpOnly: true,
-  secure: false, // set to true in production
-  sameSite: "strict",
+  secure: isProduction ? true : false, // set to true in production
+  sameSite: isProduction ? "none" : "strict",
 };
 
 const refreshTokenOptions = {
   httpOnly: true,
-  secure: false, // true in production (HTTPS)
-  sameSite: "strict",
+  secure: isProduction ? true : false, // true in production (HTTPS)
+  sameSite: isProduction ? "none" : "strict",
   maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ 7 days
 };
 
