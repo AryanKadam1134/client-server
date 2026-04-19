@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { GoogleLogin } from "@react-oauth/google";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +17,7 @@ import { useAuth } from "../../context/AuthContext";
 export default function Authentication() {
   const { login } = useAuth();
 
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
 
@@ -183,6 +184,12 @@ export default function Authentication() {
           >
             {isSubmitting ? "Submitting..." : "Submit"}
           </CustomButton>
+
+          <GoogleLogin
+            onSuccess={async (credential) => {
+              console.log("Googel Auth: ", credential);
+            }}
+          />
 
           <p
             onClick={() => {

@@ -83,6 +83,8 @@ const generateAccessAndRefreshToken = async (userId, req) => {
   }
 };
 
+const googleAuth = asynchandler(async (req, res) => {});
+
 const refreshAccessToken = asynchandler(async (req, res) => {
   const cookieRefreshToken = req.cookies?.refreshToken;
 
