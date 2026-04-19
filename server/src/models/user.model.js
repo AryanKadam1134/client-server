@@ -70,6 +70,8 @@ const userSchema = new Schema(
       resource_type: String,
     },
 
+    googleId: String,
+
     sessions: [
       {
         refreshToken: {

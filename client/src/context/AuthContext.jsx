@@ -25,6 +25,29 @@ export function AuthProvider({ children }) {
     localStorage.setItem("deviceId", deviceId);
   }
 
+  const googleAuth = async (credentialResponse, rememberMe) => {
+    try {
+      const res = await apiEndpoints.googleAuth(
+        { credential: credentialResponse.credential, rememberMe },
+        {
+          headers: {
+            "x-device-id": deviceId,
+          },
+        },
+      );
+
+      const data = res.data;
+
+      if (res?.success) {
+        setUser(data?.user);
+      }
+
+      console.log("Login with Google succesfull:", data);
+    } catch (error) {
+      console.error("Error Login with Google: ", error);
+    }
+  };
+
   const login = async (payload) => {
     try {
       const res = await apiEndpoints.login(payload, {
@@ -83,7 +106,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, authLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, authLoading, googleAuth, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

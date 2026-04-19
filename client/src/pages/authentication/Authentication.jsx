@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { GoogleLogin } from "@react-oauth/google";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import FieldError from "../../components/ui/FieldError";
@@ -15,7 +15,7 @@ import { apiEndpoints } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Authentication() {
-  const { login } = useAuth();
+  const { login, googleAuth } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -25,10 +25,13 @@ export default function Authentication() {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onChange", // 🔥 important
   });
+
+  const rememberMe = useWatch({ control, name: "rememberMe" });
 
   const onSubmit = async (payload) => {
     try {
@@ -186,9 +189,9 @@ export default function Authentication() {
           </CustomButton>
 
           <GoogleLogin
-            onSuccess={async (credential) => {
-              console.log("Googel Auth: ", credential);
-            }}
+            onSuccess={(credentialResponse) =>
+              googleAuth(credentialResponse, rememberMe)
+            }
           />
 
           <p

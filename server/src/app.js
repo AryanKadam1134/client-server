@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Private
+import authRouter from "./routes/private/googleAuth.routes.js";
 import filterRoutes from "./routes/private/filter.routes.js";
 import userRouter from "./routes/private/user.routes.js";
 import socialPlatformRouter from "./routes/private/socialPlatform.routes.js";
@@ -26,6 +27,8 @@ import experienceRouter from "./routes/private/experience.routes.js";
 import educationRouter from "./routes/private/education.routes.js";
 import certificateRoutes from "./routes/private/certificate.routes.js";
 import achievementRouter from "./routes/private/achievement.routes.js";
+
+app.use("/api/admin", authRouter);
 
 app.use("/api/admin/filters", filterRoutes);
 

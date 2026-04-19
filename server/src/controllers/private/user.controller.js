@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 
 import {
   accessTokenOptions,
@@ -83,7 +84,87 @@ const generateAccessAndRefreshToken = async (userId, req) => {
   }
 };
 
-const googleAuth = asynchandler(async (req, res) => {});
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const googleAuth = asynchandler(async (req, res) => {
+  const { credential, rememberMe } = req.body;
+
+  const deviceId = req.headers["x-device-id"];
+  if (!deviceId) {
+    throw new ApiError(400, "Device ID missing");
+  }
+
+  if (!credential) {
+    throw new ApiError(400, "Google credential missing");
+  }
+
+  // ✅ Verify token from Google
+  const ticket = await client.verifyIdToken({
+    idToken: credential,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const payload = ticket.getPayload();
+
+  const { email, given_name, family_name, picture, sub } = payload;
+
+  if (!email) {
+    throw new ApiError(400, "Google account has no email");
+  }
+
+  // ✅ Check if user exists
+  let user = await User.findOne({ email });
+
+  // ✅ CASE 1: New user → Register
+  if (!user) {
+    user = await User.create({
+      firstName: given_name || "User",
+      lastName: family_name || "",
+      username: email.split("@")[0] + "_" + Date.now(), // unique username
+      email,
+      password: null, // IMPORTANT: no password
+      googleId: sub,
+      avatar: picture,
+    });
+  }
+
+  // ✅ CASE 2: Existing user but no googleId → link account
+  if (!user.googleId) {
+    user.googleId = sub;
+    await user.save({ validateBeforeSave: false });
+  }
+
+  // ✅ Generate tokens using YOUR system
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id,
+    req,
+  );
+
+  if (!accessToken || !refreshToken) {
+    throw new ApiError(503, "Couldn't generate tokens");
+  }
+
+  const loggedUser = await User.findById(user._id).select(
+    "-password -sessions",
+  );
+
+  // ✅ SAME cookie logic as your login
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie(
+      "refreshToken",
+      refreshToken,
+      rememberMe ? refreshTokenOptions : options,
+    )
+    .json(
+      new ApiRes(
+        200,
+        { user: loggedUser, accessToken, refreshToken },
+        "Google login successful!",
+      ),
+    );
+});
 
 const refreshAccessToken = asynchandler(async (req, res) => {
   const cookieRefreshToken = req.cookies?.refreshToken;
@@ -524,6 +605,7 @@ const forgotPassword = asynchandler(async (req, res) => {
 });
 
 export {
+  googleAuth,
   registerUser,
   loginUser,
   logoutUser,

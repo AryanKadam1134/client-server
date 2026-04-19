@@ -21,6 +21,8 @@ api.interceptors.response.use(
 
 export const apiEndpoints = {
   // Authentication
+  googleAuth: (body, config) => api.post(`/auth/google`, body, config),
+
   register: (body) => api.post(`/users/register`, body),
 
   login: (body, config) => api.post(`/users/login`, body, config),
