@@ -31,6 +31,10 @@ export const apiEndpoints = {
 
   logout: () => api.post(`/users/logout`),
 
+  checkPassword: () => api.get(`/users/check-password`),
+
+  changePassword: (body) => api.patch(`/users/password`, body),
+
   // User Details
   getCurrentUser: () => api.get("/users"),
 

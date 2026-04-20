@@ -5,6 +5,7 @@ import {
   deleteUserImage,
   deleteUserResume,
   getUserDetails,
+  hasPassowrd,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -36,6 +37,8 @@ userRouter.route("/register").post(
 userRouter.route("/login").post(loginUser);
 
 userRouter.route("/logout").post(verifyJWT, logoutUser);
+
+userRouter.route("/check-password").get(verifyJWT, hasPassowrd);
 
 userRouter.route("/password").patch(verifyJWT, changePassword);
 

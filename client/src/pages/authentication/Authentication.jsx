@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -52,15 +52,6 @@ export default function Authentication() {
       console.error("Login failed: ", error);
     }
   };
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      googleAuth(tokenResponse, rememberMe);
-    },
-    onError: () => {
-      console.error("Google Login Failed");
-    },
-  });
 
   return (
     <div className="min-h-screen p-6 flex items-center justify-center bg-gray-100">
@@ -197,16 +188,16 @@ export default function Authentication() {
             {isSubmitting ? "Submitting..." : "Submit"}
           </CustomButton>
 
-          <CustomButton
-            type="button"
-            text_prop="text-black"
-            bg_prop="bg-white hover:bg-gray-100"
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-full"
-            onClick={() => googleLogin()}
-          >
-            <img src="/images/google.svg" alt="google" className="w-5 h-5" />
-            Continue with Google
-          </CustomButton>
+          <GoogleLogin
+            onSuccess={(credentialResponse) =>
+              googleAuth(credentialResponse, rememberMe)
+            }
+            theme="outlined"
+            size="large"
+            shape="pill"
+            text={isLogin ? "signin_with" : "signup_with"}
+            width="100%"
+          />
 
           <p
             onClick={() => {

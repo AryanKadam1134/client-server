@@ -338,23 +338,35 @@ const logoutUser = asynchandler(async (req, res) => {
     .json(new ApiRes(204, "user logged out successfully!"));
 });
 
-const changePassword = asynchandler(async (req, res) => {
-  const { old_password, new_password } = req.body;
+const hasPassowrd = asynchandler(async (req, res) => {
+  const user = await User.findById(req.user?._id);
 
-  if (!old_password || !new_password) {
-    throw new ApiError(400, "all fields are required!");
+  if (!user?.password && user?.googleId) {
+    return res.status(200).json(new ApiRes(200, false, ""));
+  } else {
+    return res.status(200).json(new ApiRes(200, true, ""));
   }
+});
+
+const changePassword = asynchandler(async (req, res) => {
+  const { isInitializing, old_password, new_password } = req.body;
 
   const loggedUser = await User.findById(req.user?._id);
 
-  const isPasswordCorrect = await loggedUser.isPasswordCorrect(old_password);
+  if (!isInitializing) {
+    if (!old_password || !new_password) {
+      throw new ApiError(400, "all fields are required!");
+    }
 
-  if (!isPasswordCorrect) {
-    throw new ApiError(409, "invalid password!");
-  }
+    const isPasswordCorrect = await loggedUser.isPasswordCorrect(old_password);
 
-  if (new_password === old_password) {
-    throw new ApiError(409, "new password connot be same as old password!");
+    if (!isPasswordCorrect) {
+      throw new ApiError(409, "invalid password!");
+    }
+
+    if (new_password === old_password) {
+      throw new ApiError(409, "new password connot be same as old password!");
+    }
   }
 
   loggedUser.password = new_password;
@@ -609,6 +621,7 @@ export {
   registerUser,
   loginUser,
   logoutUser,
+  hasPassowrd,
   changePassword,
   updateUserDetails,
   getUserDetails,

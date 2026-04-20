@@ -36,7 +36,10 @@ import AddEditCertificate from "./pages/private/certificates/AddEditCertificate"
 import Achievements from "./pages/private/achievements/Achievements";
 import AddEditAchievement from "./pages/private/achievements/AddEditAchievement";
 
+import Settings from "./pages/private/Settings";
+
 import { useAuth } from "./context/AuthContext";
+import ChangePassword from "./pages/private/ChangePassword";
 
 function PublicRoute() {
   const { user } = useAuth();
@@ -129,7 +132,8 @@ function App() {
             <Route
               path=":certificateId/edit"
               element={<AddEditCertificate />}
-            />,
+            />
+            ,
           </Route>
 
           <Route path="/achievements" element={<CommonLayout />}>
@@ -139,6 +143,11 @@ function App() {
               path=":achievementId/edit"
               element={<AddEditAchievement />}
             />
+          </Route>
+
+          <Route path="/settings" element={<CommonLayout />}>
+            <Route index element={<Settings />} />
+            <Route path="change_password" element={<ChangePassword />} />
           </Route>
         </Route>
       </Routes>

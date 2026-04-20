@@ -11,6 +11,7 @@ import {
   Award,
   Trophy,
   LogOut,
+  Settings,
 } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
@@ -86,7 +87,7 @@ export default function SideBar({ isOpen, onClose }) {
         </div>
 
         {/* Menus */}
-        <div className="py-3 flex flex-col justify-between h-full">
+        <div className="py-3 flex flex-col gap-2 justify-between h-full">
           <div className="flex-1 flex flex-col gap-2">
             {menus.map((menu) => (
               <NavItem
@@ -97,13 +98,18 @@ export default function SideBar({ isOpen, onClose }) {
             ))}
           </div>
 
+          <NavItem
+            menu={{ name: "Settings", path: "/settings", icon: Settings }}
+            onClick={onClose} // ✅ close on select
+          />
+
           {/* Logout */}
           <button
             onClick={() => {
               logout();
               onClose(); // ✅ close on logout
             }}
-            className={`${menuStyle} text-red-500 hover:text-red-600 bg-red-100 hover:bg-red-200 rounded-sm transition-colors cursor-pointer`}
+            className={`${menuStyle} text-black hover:text-red-600 hover:bg-red-200 rounded-sm transition-colors cursor-pointer`}
           >
             <LogOut size={17} />
             <p className="text-nowrap">Logout</p>
