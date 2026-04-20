@@ -21,6 +21,8 @@ import { apiEndpoints } from "../../api";
 
 import useGenders from "../../hooks/useGenders";
 
+import { useAuth } from "../../context/AuthContext";
+
 function ResumeDropZone({
   fileInputRef,
   preview,
@@ -146,6 +148,8 @@ function ResumeDropZone({
 }
 
 export default function Dashboard() {
+  const { setUser } = useAuth();
+
   const { genders } = useGenders();
 
   const fileInputRef = useRef(null);
@@ -179,6 +183,7 @@ export default function Dashboard() {
       const data = res.data;
 
       reset(data);
+      setUser(data);
       // console.log("User Details: ", data);
     } catch (error) {
       console.error("Error fetching User Details: ", error);
