@@ -16,7 +16,7 @@ const addEducation = asynchandler(async (req, res) => {
     instituteName,
     qualification,
     description,
-    address,
+    location,
     startYear,
     endYear,
     present,
@@ -47,7 +47,7 @@ const addEducation = asynchandler(async (req, res) => {
   fields.qualification = qualification;
 
   if (description) fields.description = description;
-  if (address) fields.address = address;
+  if (location) fields.location = location;
   if (startYear) fields.startYear = startYear;
   if (endYear) fields.endYear = endYear;
   if (percentage) fields.percentage = Number(percentage);
@@ -87,7 +87,7 @@ const updateEducationDetails = asynchandler(async (req, res) => {
     instituteName,
     qualification,
     description,
-    address,
+    location,
     startYear,
     endYear,
     present,
@@ -114,7 +114,7 @@ const updateEducationDetails = asynchandler(async (req, res) => {
 
   // Can be null values
   if (description !== undefined) fields.description = description;
-  if (address !== undefined) fields.address = address;
+  if (location !== undefined) fields.location = location;
   if (startYear !== undefined) fields.startYear = startYear;
   if (endYear !== undefined) fields.endYear = endYear;
   if (percentage !== undefined) fields.percentage = Number(percentage);

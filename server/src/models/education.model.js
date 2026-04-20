@@ -16,7 +16,8 @@ const educationSchema = new Schema(
       required: true,
     },
     description: String,
-    address: String,
+
+    location: String,
 
     startYear: {
       type: Number,

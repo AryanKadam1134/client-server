@@ -76,7 +76,7 @@ export default function Certificates() {
           </div>
         ),
         getVisibility(visibilities, visibility),
-        sortOrder,
+        sortOrder === 0 ? "0" : sortOrder,
         <div className="flex items-center justify-center gap-1">
           <button
             onClick={() => navigate(`${_id}/edit`)}

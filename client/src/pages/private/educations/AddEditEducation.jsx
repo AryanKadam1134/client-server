@@ -190,18 +190,18 @@ export default function AddEditEducation() {
         <FieldError error={errors.description?.message} />
       </LabelInput>
 
-      {/* Address */}
+      {/* Location */}
       <LabelInput
-        id="address"
-        label="Address"
+        id="location"
+        label="Location"
         colSpan="col-span-12 sm:col-span-6"
       >
-        <CustomTextArea
-          id="address"
+        <CustomInput
+          id="location"
           type="text"
-          placeholder="Enter Address"
-          {...register("address")}
-          error={errors?.address}
+          placeholder="Institute Location"
+          {...register("location")}
+          error={errors?.location}
         />
       </LabelInput>
 
@@ -261,6 +261,7 @@ export default function AddEditEducation() {
         <CustomInput
           id="percentage"
           type="number"
+          step="any"
           min={0}
           max={100}
           placeholder="e.g. 81"

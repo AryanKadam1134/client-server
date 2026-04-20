@@ -332,7 +332,7 @@ export default function AddEditExperiences() {
         <CustomInput
           id="location"
           type="text"
-          placeholder="Comapany Location"
+          placeholder="Company Location"
           {...register("location")}
           error={errors?.location}
         />

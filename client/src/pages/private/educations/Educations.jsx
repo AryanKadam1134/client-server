@@ -59,7 +59,7 @@ export default function Educations() {
         instituteName,
         qualification,
         percentage || cgpa,
-        present,
+        present ? "Yes" : "No",
         <div className="flex items-center justify-center gap-1">
           <button
             onClick={() => navigate(`${_id}/edit`)}
