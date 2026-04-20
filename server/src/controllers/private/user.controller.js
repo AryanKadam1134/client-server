@@ -122,9 +122,8 @@ const googleAuth = asynchandler(async (req, res) => {
       lastName: family_name || "",
       username: email.split("@")[0] + "_" + Date.now(), // unique username
       email,
-      password: null, // IMPORTANT: no password
+      password: undefined, // IMPORTANT: no password
       googleId: sub,
-      avatar: picture,
     });
   }
 

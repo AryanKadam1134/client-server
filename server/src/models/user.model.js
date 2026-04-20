@@ -93,6 +93,10 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", async function (next) {
+  // ✅ Skip if no password (Google users)
+  if (!this.password) return;
+
+  // ✅ Skip if password not modified
   if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, 10);
