@@ -17,6 +17,7 @@ export default function Achievements() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [achievements, setAchievements] = useState([]);
 
   const fetchAchievements = async () => {
@@ -29,6 +30,8 @@ export default function Achievements() {
       console.log("User Achievements: ", data);
     } catch (error) {
       console.error("Error fetching User Achievements: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,7 +110,11 @@ export default function Achievements() {
         <Plus size={18} /> Add Achievement
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }

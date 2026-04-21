@@ -23,6 +23,7 @@ export default function Skills() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [skills, setSkills] = useState([]);
 
   const fetchSkills = async () => {
@@ -35,6 +36,8 @@ export default function Skills() {
       console.log("User Skills: ", data);
     } catch (error) {
       console.error("Error fetching User Skills: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,7 +104,11 @@ export default function Skills() {
         <Plus size={18} /> Add Skill
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }

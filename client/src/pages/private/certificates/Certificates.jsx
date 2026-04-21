@@ -17,6 +17,7 @@ export default function Certificates() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [certificates, setCertificates] = useState([]);
 
   const fetchCertificate = async () => {
@@ -29,6 +30,8 @@ export default function Certificates() {
       console.log("User Certificates: ", data);
     } catch (error) {
       console.error("Error fetching User Certificates: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,7 +108,11 @@ export default function Certificates() {
         <Plus size={18} /> Add Certificate
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }

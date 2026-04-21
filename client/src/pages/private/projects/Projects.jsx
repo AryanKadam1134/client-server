@@ -17,6 +17,7 @@ export default function Projects() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
 
   const fetchProjects = async () => {
@@ -29,6 +30,8 @@ export default function Projects() {
       console.log("User Projects: ", data);
     } catch (error) {
       console.error("Error fetching User Projects: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,7 +128,11 @@ export default function Projects() {
         <Plus size={18} /> Add Project
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }

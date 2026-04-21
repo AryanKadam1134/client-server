@@ -17,6 +17,7 @@ export default function SkillCategories() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
   const fetchSkillCategories = async () => {
@@ -29,6 +30,8 @@ export default function SkillCategories() {
       console.log("User Skill Categories: ", data);
     } catch (error) {
       console.error("Error fetching User Skill Categories: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,7 +94,11 @@ export default function SkillCategories() {
         <Plus size={18} /> Add Skill Category
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }

@@ -17,6 +17,7 @@ export default function SocialPlatforms() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [platforms, setPlatforms] = useState([]);
 
   const fetchSocialPlatforms = async () => {
@@ -29,6 +30,8 @@ export default function SocialPlatforms() {
       console.log("User Social Platforms: ", data);
     } catch (error) {
       console.error("Error fetching User Social Platforms: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,7 +96,11 @@ export default function SocialPlatforms() {
         <Plus size={18} /> Add Social Platfrom
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }

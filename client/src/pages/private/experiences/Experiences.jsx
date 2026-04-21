@@ -23,6 +23,7 @@ export default function Experiences() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([]);
 
   const fetchExperiences = async () => {
@@ -35,6 +36,8 @@ export default function Experiences() {
       console.log("User Experiences: ", data);
     } catch (error) {
       console.error("Error fetching User Experiences: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,7 +59,6 @@ export default function Experiences() {
     { label: "Sr. No." },
     { label: "Organiaztion Name" },
     { label: "Exployment Type" },
-
     { label: "Location" },
     { label: "Location Type" },
     { label: "Visibility" },
@@ -109,7 +111,11 @@ export default function Experiences() {
         <Plus size={18} /> Add Experience
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }

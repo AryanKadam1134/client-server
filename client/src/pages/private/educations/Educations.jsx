@@ -11,6 +11,7 @@ import { apiEndpoints } from "../../../api";
 export default function Educations() {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [educations, setEducations] = useState([]);
 
   const fetchEducations = async () => {
@@ -23,6 +24,8 @@ export default function Educations() {
       console.log("User Educations: ", data);
     } catch (error) {
       console.error("Error fetching User Educations: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,7 +91,11 @@ export default function Educations() {
         <Plus size={18} /> Add Education
       </CustomButton>
 
-      <Table tableHeading={tableHeading} tableBody={tableBody} />
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
     </div>
   );
 }
