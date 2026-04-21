@@ -22,6 +22,7 @@ import { apiEndpoints } from "../../api";
 import useGenders from "../../hooks/useGenders";
 
 import { useAuth } from "../../context/AuthContext";
+import { useNotify } from "../../context/NotificationContext";
 
 function ResumeDropZone({
   fileInputRef,
@@ -149,6 +150,7 @@ function ResumeDropZone({
 
 export default function Dashboard() {
   const { setUser } = useAuth();
+  const { notify } = useNotify();
 
   const { genders } = useGenders();
 
@@ -214,7 +216,9 @@ export default function Dashboard() {
 
     try {
       await apiEndpoints.updateUser(updatedData);
+
       fetchUserDetails();
+      notify.msgSuccess("Details Updated!");
     } catch (error) {
       console.error("Error updating User Details: ", error);
     }
@@ -242,6 +246,7 @@ export default function Dashboard() {
       await apiEndpoints.updateUserImage(formData);
 
       fetchUserDetails();
+      notify.msgSuccess("Profile Image Updated!");
     } catch (error) {
       console.error("Error updating image:", error);
     } finally {
@@ -257,6 +262,7 @@ export default function Dashboard() {
 
       setPreview({});
       fetchUserDetails();
+      notify.msgSuccess("Profile Image Deleted!");
     } catch (error) {
       console.error("Error deleting image:", error);
     } finally {
@@ -273,6 +279,7 @@ export default function Dashboard() {
       await apiEndpoints.updateUserResume(formData);
 
       fetchUserDetails();
+      notify.msgSuccess("Resume Updated!");
     } catch (error) {
       console.error("Error updating resume:", error);
     } finally {
@@ -288,6 +295,7 @@ export default function Dashboard() {
 
       setPreview({});
       fetchUserDetails();
+      notify.msgSuccess("Resume Updated!");
     } catch (error) {
       console.error("Error deleting resume:", error);
     } finally {

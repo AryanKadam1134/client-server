@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { apiEndpoints } from "../../api";
+
 import { useForm } from "react-hook-form";
+
 import LabelInput from "../../components/ui/LabelInput";
-import CustomInputPassword from "../../components/ui/CustomInputPassword";
 import FieldError from "../../components/ui/FieldError";
 import CustomButton from "../../components/ui/CustomButton";
+import CustomInputPassword from "../../components/ui/CustomInputPassword";
+
+import { apiEndpoints } from "../../api";
+import { useNotify } from "../../context/NotificationContext";
 
 export default function ChangePassword() {
+  const { notify } = useNotify();
+
   const [hasPassword, setHasPassword] = useState();
 
   const {
@@ -26,8 +32,9 @@ export default function ChangePassword() {
 
     try {
       await apiEndpoints.changePassword(payload);
+
       reset();
-      alert("password has resetted!");
+      notify.msgSuccess("Password Changed!");
     } catch (error) {
       console.error("Error Changing Password: ", error);
     }

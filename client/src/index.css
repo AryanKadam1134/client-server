@@ -1,6 +1,11 @@
 @import "tailwindcss";
+@import url('https://googleapis.com');
 
 body {
+  font-family: "Poppins", sans-serif;
+}
+
+.ant-message {
   font-family: "Poppins", sans-serif;
 }
 

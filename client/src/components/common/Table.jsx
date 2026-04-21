@@ -2,30 +2,62 @@ import React from "react";
 
 export default function Table({ tableHeading, tableBody }) {
   return (
-    <div className="overflow-auto w-full">
-      <table
-        className="w-full
-        [&_th]:px-2 [&_th]:py-3 [&_th]:text-center [&_th]:min-w-[100px] [&_th]:whitespace-nowrap
-        [&_td]:px-2 [&_td]:py-3 [&_td]:text-center [&_td]:min-w-[100px] [&_td]:whitespace-nowrap"
-      >
-        <thead>
-          <tr>
-            {tableHeading?.map((h, index) => (
-              <th key={h?.label || index}>{h?.label}</th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {tableBody.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row?.cells?.map((c, cellIndex) => (
-                <td key={cellIndex}>{(c ?? "-") || "-"}</td>
+    <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white">
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-gray-700">
+          {/* Header */}
+          <thead className="bg-gray-100 border-b border-gray-200">
+            <tr>
+              {tableHeading?.map((h, index) => (
+                <th
+                  key={h?.label || index}
+                  className="
+                    px-4 py-3 text-left font-medium text-gray-600
+                    whitespace-nowrap
+                  "
+                >
+                  {h?.label}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          {/* Body */}
+          <tbody className="divide-y divide-gray-100">
+            {tableBody?.length > 0 ? (
+              tableBody.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  className="
+                    hover:bg-gray-50 transition-colors
+                  "
+                >
+                  {row?.cells?.map((c, cellIndex) => (
+                    <td
+                      key={cellIndex}
+                      className="
+                        px-4 py-3 text-left
+                        whitespace-nowrap
+                      "
+                    >
+                      {c ?? "-"}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={tableHeading?.length}
+                  className="text-center py-6 text-gray-400"
+                >
+                  No data available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

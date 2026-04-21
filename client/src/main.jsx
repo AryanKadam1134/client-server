@@ -3,13 +3,25 @@ import "./index.css";
 import App from "./App.jsx";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ConfigProvider, theme } from "antd";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { NotificationsProvider } from "./context/NotificationContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <App />
-    </GoogleOAuthProvider>
-  </AuthProvider>,
+  <ConfigProvider
+    theme={{
+      token: {
+        fontFamily: "Poppins, sans-serif",
+      },
+    }}
+  >
+    <AuthProvider>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <NotificationsProvider>
+          <App />
+        </NotificationsProvider>
+      </GoogleOAuthProvider>
+    </AuthProvider>
+  </ConfigProvider>,
 );
