@@ -42,7 +42,7 @@ function NavItem({ menu, onClick }) {
           isActive
             ? "border-black font-medium text-black bg-gray-200"
             : "border-white text-gray-800 hover:text-black hover:bg-gray-200"
-        } rounded-sm transition-colors`
+        } rounded-md transition-colors`
       }
     >
       <Icon size={17} />
@@ -109,7 +109,7 @@ export default function SideBar({ isOpen, onClose }) {
               logout();
               onClose(); // ✅ close on logout
             }}
-            className={`${menuStyle} text-black hover:text-red-600 hover:bg-red-200 rounded-sm transition-colors cursor-pointer`}
+            className={`${menuStyle} text-black hover:text-red-600 hover:bg-red-200 rounded-md transition-colors cursor-pointer`}
           >
             <LogOut size={17} />
             <p className="text-nowrap">Logout</p>

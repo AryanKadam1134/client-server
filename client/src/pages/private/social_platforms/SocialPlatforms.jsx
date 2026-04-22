@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2, FilePenLine } from "lucide-react";
+import { Plus, Trash2, FilePenLine, Loader2 } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -12,11 +12,18 @@ import { apiEndpoints } from "../../../api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
+import { useNotify } from "../../../context/NotificationContext";
+import EditButton from "../../../components/ui/EditButton";
+import DeleteButton from "../../../components/ui/DeleteButton";
+
 export default function SocialPlatforms() {
+  const { notify } = useNotify();
+
   const { visibilities } = useVisibilities();
 
   const navigate = useNavigate();
 
+  const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [platforms, setPlatforms] = useState([]);
 
@@ -36,12 +43,17 @@ export default function SocialPlatforms() {
   };
 
   const deletePlatform = async (platformId) => {
+    setDeleting(true);
+
     try {
       await apiEndpoints.deleteSocialPlatform(platformId);
 
       fetchSocialPlatforms();
+      notify.msgSuccess("Platform Deleted!");
     } catch (error) {
       console.error("Error deleting Social Platform: ", error);
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -68,20 +80,13 @@ export default function SocialPlatforms() {
         link,
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),
-        <div className="flex items-center justify-center gap-1">
-          <button
-            onClick={() => navigate(`${_id}/edit`)}
-            className="p-1 text-white bg-green-500 hover:bg-green-600 rounded transition-colors cursor-pointer"
-          >
-            <FilePenLine size={18} />
-          </button>
+        <div className="flex items-center gap-1">
+          <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
-          <button
+          <DeleteButton
             onClick={() => deletePlatform(_id)}
-            className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
-          >
-            <Trash2 size={18} />
-          </button>
+            disabled={deleting}
+          />
         </div>,
       ],
     };
@@ -97,7 +102,7 @@ export default function SocialPlatforms() {
       </CustomButton>
 
       <Table
-        loading={loading}
+        loading={loading?.fetching}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

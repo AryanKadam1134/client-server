@@ -15,6 +15,8 @@ import { apiEndpoints } from "../../../api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 const SOCIAL_APPS_LIST = [
   {
     id: 61,
@@ -256,6 +258,8 @@ const SOCIAL_APPS = SOCIAL_APPS_LIST.map((app) => ({
 }));
 
 export default function AddEditSocialPlatform() {
+  const { notify } = useNotify();
+
   const { visibilities } = useVisibilities();
 
   const { platformId } = useParams();
@@ -314,15 +318,17 @@ export default function AddEditSocialPlatform() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await apiEndpoints.updateSocialPlatform(id, updatedData);
+        notify.msgSuccess("Platform Updated!");
       } else {
         res = await apiEndpoints.addSocialPlatform(payload);
+        notify.msgSuccess("Platform Added!");
       }
 
       const data = res.data;
 
       setId(data?._id);
       if (data?._id) fetchSocialPlatform();
-      console.log("Social Platform Saved: ", data);
+      // console.log("Social Platform Saved: ", data);
     } catch (error) {
       console.error("Error saving Social Platform: ", error);
     }

@@ -19,7 +19,7 @@ export default function LabelInput({
   return (
     <div
       className={`${className} ${colSpan}
-      flex ${!isCheckbox && orientation == "vertical" ? `flex-col gap-1` : `items-center gap-3 mt-5`}`}
+      flex ${!isCheckbox && orientation == "vertical" ? `flex-col gap-1.5` : `items-center gap-3 mt-5`}`}
     >
       {isCheckbox && children}
 

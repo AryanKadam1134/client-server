@@ -103,7 +103,7 @@ export default function CustomSelect({
 
       <ul
         {...getMenuProps()}
-        className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-white border border-gray-500 rounded-sm shadow-md max-h-60 overflow-y-auto ${
+        className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-white border border-gray-500 rounded-md shadow-md max-h-60 overflow-y-auto ${
           !isOpen ? "hidden" : ""
         }`}
       >

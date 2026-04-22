@@ -10,7 +10,7 @@ export default function CustomButton({
   return (
     <button
       {...props}
-      className={`shrink-0 px-5 py-2 ${text_prop} ${bg_prop} ${className} rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+      className={`shrink-0 px-5 py-2 ${text_prop} ${bg_prop} ${className} rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
     >
       {children}
     </button>

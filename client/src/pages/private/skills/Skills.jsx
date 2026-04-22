@@ -16,13 +16,20 @@ import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
 
+import { useNotify } from "../../../context/NotificationContext";
+import EditButton from "../../../components/ui/EditButton";
+import DeleteButton from "../../../components/ui/DeleteButton";
+
 export default function Skills() {
+  const { notify } = useNotify();
+
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
   const { categoriesList } = useCategoriesList();
 
   const navigate = useNavigate();
 
+  const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [skills, setSkills] = useState([]);
 
@@ -42,12 +49,16 @@ export default function Skills() {
   };
 
   const deleteSkill = async (id) => {
+    setDeleting(true);
     try {
       await apiEndpoints.deleteSkill(id);
 
       fetchSkills();
+      notify.msgSuccess("Skill Deleted!");
     } catch (error) {
       console.error("Error deleting Skill: ", error);
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -77,19 +88,9 @@ export default function Skills() {
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),
         <div className="flex items-center justify-center gap-1">
-          <button
-            onClick={() => navigate(`${_id}/edit`)}
-            className="p-1 text-white bg-green-500 hover:bg-green-600 rounded transition-colors cursor-pointer"
-          >
-            <FilePenLine size={18} />
-          </button>
+          <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
-          <button
-            onClick={() => deleteSkill(_id)}
-            className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
-          >
-            <Trash2 size={18} />
-          </button>
+          <DeleteButton onClick={() => deleteSkill(_id)} disabled={deleting} />
         </div>,
       ],
     };
