@@ -20,7 +20,11 @@ import { apiEndpoints } from "../../../api";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 export default function AddEditCertificate() {
+  const { notify } = useNotify();
+
   const { skillsList } = useSkillsList();
   const { visibilities } = useVisibilities();
 
@@ -94,8 +98,10 @@ export default function AddEditCertificate() {
         const updatedData = getUpdatedFields(payload, dirtyFields);
 
         res = await apiEndpoints.updateCertificate(id, updatedData);
+        notify.msgSuccess("Certificate Updated!");
       } else {
         res = await apiEndpoints.addCertificate(payload);
+        notify.msgSuccess("Certificate Saved!");
       }
 
       const data = res.data;
@@ -122,7 +128,7 @@ export default function AddEditCertificate() {
       await apiEndpoints.updateCertificateImage(id, formData);
 
       fetchCertificate();
-      console.log("Images uploaded successfully!");
+      notify.msgSuccess("Certificate Image Updated!");
     } catch (error) {
       console.error("Error updating Certificate Images: ", error);
     } finally {
@@ -136,7 +142,7 @@ export default function AddEditCertificate() {
       await apiEndpoints.deleteCertificateImage(id);
 
       fetchCertificate();
-      console.log("Image deleted successfully!");
+      notify.msgSuccess("Certificate Image Deleted!");
     } catch (error) {
       console.error("Error deleting Certificate Image: ", error);
     } finally {

@@ -27,7 +27,11 @@ import { apiEndpoints } from "../../../api";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCertificatesList from "../../../hooks/useCertificatesList";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 export default function AddEditAchievement() {
+  const { notify } = useNotify();
+
   const { visibilities } = useVisibilities();
   const { certificatesList } = useCertificatesList();
 
@@ -101,8 +105,10 @@ export default function AddEditAchievement() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await apiEndpoints.updateAchievemnet(id, updatedData);
+        notify.msgSuccess("Achievement Updated!");
       } else {
         res = await apiEndpoints.addAchievemnet(payload);
+        notify.msgSuccess("Achievement Saved!");
       }
 
       const data = res.data;
@@ -140,7 +146,7 @@ export default function AddEditAchievement() {
       await apiEndpoints.updateAchievementImage(id, formData);
 
       fetchAchievement();
-      console.log("Images uploaded successfully!");
+      notify.msgSuccess("Achievement Images Updated!");
     } catch (error) {
       console.error("Error updating Achievement Images: ", error);
     } finally {
@@ -155,7 +161,7 @@ export default function AddEditAchievement() {
       await apiEndpoints.deleteAchievementImage(id, imagePublicId);
 
       fetchAchievement();
-      console.log("Image deleted successfully!");
+      notify.msgSuccess("Achievement Image Deleted!");
     } catch (error) {
       console.error("Error deleting Achievement Image: ", error);
     } finally {

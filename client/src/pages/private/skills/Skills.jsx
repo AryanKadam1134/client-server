@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine } from "lucide-react";
 
 import Table from "../../../components/common/Table";
+import EditButton from "../../../components/ui/EditButton";
+import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
 
 import { getSkillLevel } from "../../../utils/getSkillLevel";
@@ -17,8 +19,6 @@ import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
 
 import { useNotify } from "../../../context/NotificationContext";
-import EditButton from "../../../components/ui/EditButton";
-import DeleteButton from "../../../components/ui/DeleteButton";
 
 export default function Skills() {
   const { notify } = useNotify();
@@ -87,7 +87,7 @@ export default function Skills() {
         getSkillLevel(skillLevels, level),
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),
-        <div className="flex items-center justify-center gap-1">
+        <div className="flex items-center gap-1">
           <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
           <DeleteButton onClick={() => deleteSkill(_id)} disabled={deleting} />

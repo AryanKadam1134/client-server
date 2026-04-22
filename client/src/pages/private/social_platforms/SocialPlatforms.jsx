@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine, Loader2 } from "lucide-react";
 
 import Table from "../../../components/common/Table";
+import EditButton from "../../../components/ui/EditButton";
+import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
 
 import { getVisibility } from "../../../utils/getVisibility";
@@ -13,8 +15,6 @@ import { apiEndpoints } from "../../../api";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/NotificationContext";
-import EditButton from "../../../components/ui/EditButton";
-import DeleteButton from "../../../components/ui/DeleteButton";
 
 export default function SocialPlatforms() {
   const { notify } = useNotify();

@@ -30,7 +30,11 @@ import useVisibilities from "../../../hooks/useVisibilities";
 import useOrganizationsList from "../../../hooks/useOrganizationsList";
 import useProjectCategoriesList from "../../../hooks/useProjectCategoriesList";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 export default function AddEditProject() {
+  const { notify } = useNotify();
+
   const { skillsList } = useSkillsList();
   const { visibilities } = useVisibilities();
   const { organizationsList } = useOrganizationsList();
@@ -108,8 +112,10 @@ export default function AddEditProject() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await apiEndpoints.updateProject(id, updatedData);
+        notify.msgSuccess("Project Updated!");
       } else {
         res = await apiEndpoints.addProject(payload);
+        notify.msgSuccess("Project Saved!");
       }
 
       const data = res.data;
@@ -129,6 +135,8 @@ export default function AddEditProject() {
       await apiEndpoints.updateProject(id, {
         coverImageIndex: idx,
       });
+
+      notify.msgSuccess("Cover Image Changed!");
     } catch (err) {
       console.error(err);
     }
@@ -147,7 +155,8 @@ export default function AddEditProject() {
       await apiEndpoints.updateProjectImage(id, formData);
 
       fetchProject();
-      console.log("Images uploaded successfully!");
+      notify.msgSuccess("Project Images Updated!");
+      // console.log("Images uploaded successfully!");
     } catch (error) {
       console.error("Error updating Project Images: ", error);
     } finally {
@@ -162,7 +171,8 @@ export default function AddEditProject() {
       await apiEndpoints.deleteProjectImage(id, imagePublicId);
 
       fetchProject();
-      console.log("Image deleted successfully!");
+      notify.msgSuccess("Project Image Deleted!");
+      // console.log("Image deleted successfully!");
     } catch (error) {
       console.error("Error deleting Project Image: ", error);
     } finally {

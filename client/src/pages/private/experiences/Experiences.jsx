@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine, ExternalLink } from "lucide-react";
 
 import Table from "../../../components/common/Table";
+import EditButton from "../../../components/ui/EditButton";
+import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
 
 import { getVisibility } from "../../../utils/getVisibility";
+import { getLocationType } from "../../../utils/getLocationType";
 import { getEmploymentType } from "../../../utils/getEmploymentType";
 
 import { apiEndpoints } from "../../../api";
@@ -14,15 +17,19 @@ import { apiEndpoints } from "../../../api";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 import useLocationTypesList from "../../../hooks/useLocationTypesList";
-import { getLocationType } from "../../../utils/getLocationType";
+
+import { useNotify } from "../../../context/NotificationContext";
 
 export default function Experiences() {
+  const { notify } = useNotify();
+
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
   const { locationTypesList } = useLocationTypesList();
 
   const navigate = useNavigate();
 
+  const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([]);
 
@@ -33,7 +40,7 @@ export default function Experiences() {
       const data = res.data;
 
       setExperiences(data);
-      console.log("User Experiences: ", data);
+      // console.log("User Experiences: ", data);
     } catch (error) {
       console.error("Error fetching User Experiences: ", error);
     } finally {
@@ -42,12 +49,17 @@ export default function Experiences() {
   };
 
   const deleteExperience = async (experienceId) => {
+    setDeleting(true);
+
     try {
       await apiEndpoints.deleteExperience(experienceId);
 
       fetchExperiences();
+      notify.msgSuccess("Experience Deleted!");
     } catch (error) {
       console.error("Error deleting Experience: ", error);
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -83,20 +95,13 @@ export default function Experiences() {
         location,
         getLocationType(locationTypesList, locationType),
         getVisibility(visibilities, visibility),
-        <div className="flex items-center justify-center gap-1">
-          <button
-            onClick={() => navigate(`${_id}/edit`)}
-            className="p-1 text-white bg-green-500 hover:bg-green-600 rounded transition-colors cursor-pointer"
-          >
-            <FilePenLine size={18} />
-          </button>
+        <div className="flex items-center gap-1">
+          <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
-          <button
+          <DeleteButton
             onClick={() => deleteExperience(_id)}
-            className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors cursor-pointer"
-          >
-            <Trash2 size={18} />
-          </button>
+            disabled={deleting}
+          />
         </div>,
       ],
     };

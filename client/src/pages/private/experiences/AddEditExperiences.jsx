@@ -23,7 +23,11 @@ import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 import useLocationTypesList from "../../../hooks/useLocationTypesList";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 export default function AddEditExperiences() {
+  const { notify } = useNotify();
+
   const { skillsList } = useSkillsList();
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
@@ -128,15 +132,17 @@ export default function AddEditExperiences() {
         updatedData.highlights = payload.highlights;
 
         res = await apiEndpoints.updateExperience(id, updatedData);
+        notify.msgSuccess("Experience Updated!");
       } else {
         res = await apiEndpoints.addExperience(payload);
+        notify.msgSuccess("Experience Saved!");
       }
 
       const data = res.data;
 
       setId(data?._id);
       if (data?._id) fetchExperience();
-      console.log("Experience Saved: ", data);
+      // console.log("Experience Saved: ", data);
     } catch (error) {
       console.error("Error saving Experience: ", error);
     }
@@ -156,7 +162,8 @@ export default function AddEditExperiences() {
       await apiEndpoints.updateOrganizationImage(id, formData);
 
       fetchExperience();
-      console.log("Images uploaded successfully!");
+      notify.msgSuccess("Organization Image Updated!");
+      // console.log("Images uploaded successfully!");
     } catch (error) {
       console.error("Error updating Experience Images: ", error);
     } finally {
@@ -170,7 +177,8 @@ export default function AddEditExperiences() {
       await apiEndpoints.deleteOrganizationImage(id);
 
       fetchExperience();
-      console.log("Image deleted successfully!");
+      notify.msgSuccess("Organization Image Deleted!");
+      // console.log("Image deleted successfully!");
     } catch (error) {
       console.error("Error deleting Organization Image: ", error);
     } finally {

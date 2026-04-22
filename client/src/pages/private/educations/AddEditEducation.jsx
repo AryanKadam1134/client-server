@@ -13,7 +13,11 @@ import CustomTextArea from "../../../components/ui/CustomTextArea";
 
 import { apiEndpoints } from "../../../api";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 export default function AddEditEducation() {
+  const { notify } = useNotify();
+
   const { educationId } = useParams();
 
   const [id, setId] = useState(educationId);
@@ -68,8 +72,10 @@ export default function AddEditEducation() {
         const updatedData = getUpdatedFields(payload, dirtyFields);
 
         res = await apiEndpoints.updateEducation(id, updatedData);
+        notify.msgSuccess("Education Updated!");
       } else {
         res = await apiEndpoints.addEducation(payload);
+        notify.msgSuccess("Education Saved!");
       }
 
       const data = res.data;
@@ -96,7 +102,7 @@ export default function AddEditEducation() {
       await apiEndpoints.updateInstituteImage(id, formData);
 
       fetchEducation();
-      console.log("Images uploaded successfully!");
+      notify.msgSuccess("Institute Image Updated!");
     } catch (error) {
       console.error("Error updating Education Images: ", error);
     } finally {
@@ -110,7 +116,7 @@ export default function AddEditEducation() {
       await apiEndpoints.deleteInstituteImage(id);
 
       fetchEducation();
-      console.log("Image deleted successfully!");
+      notify.msgSuccess("Institute Image Deleted!");
     } catch (error) {
       console.error("Error deleting Institute Image: ", error);
     } finally {

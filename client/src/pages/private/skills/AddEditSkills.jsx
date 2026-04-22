@@ -16,6 +16,8 @@ import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 const TECH_SKILLS = [
   { title: "HTML5", category: "Frontend" },
   { title: "CSS3", category: "Frontend" },
@@ -60,6 +62,8 @@ const SKILLS = TECH_SKILLS.map((app) => ({
 }));
 
 export default function AddEditSkills() {
+  const { notify } = useNotify();
+
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
   const { categoriesList } = useCategoriesList();
@@ -118,15 +122,17 @@ export default function AddEditSkills() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await apiEndpoints.updateSkill(id, updatedData);
+        notify.msgSuccess("Skill Updated!");
       } else {
         res = await apiEndpoints.addSkill(payload);
+        notify.msgSuccess("Skill Saved!");
       }
 
       const data = res.data;
 
       setId(data?._id);
       if (data?._id) fetchSkill();
-      console.log("Skill Saved: ", data);
+      // console.log("Skill Saved: ", data);
     } catch (error) {
       console.error("Error saving Skill: ", error);
     }

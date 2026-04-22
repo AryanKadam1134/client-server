@@ -13,7 +13,11 @@ import { apiEndpoints } from "../../../api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
+import { useNotify } from "../../../context/NotificationContext";
+
 export default function AddEditSkillCategory() {
+  const { notify } = useNotify();
+
   const { visibilities } = useVisibilities();
 
   const { categoryId } = useParams();
@@ -69,8 +73,10 @@ export default function AddEditSkillCategory() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await apiEndpoints.updateSkillCategory(id, updatedData);
+        notify.msgSuccess("Category Updated!");
       } else {
         res = await apiEndpoints.addSkillCategory(payload);
+        notify.msgSuccess("Category Saved!");
       }
 
       const data = res.data;
