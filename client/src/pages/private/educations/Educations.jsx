@@ -65,7 +65,7 @@ export default function Educations() {
   ];
 
   const tableBody = educations?.map((data, index) => {
-    const { _id, instituteName, qualification, percentage, cgpa, present } =
+    const { _id, instituteName, qualification, percentage, cgpa, isCurrent } =
       data;
 
     return {
@@ -74,7 +74,7 @@ export default function Educations() {
         instituteName,
         qualification,
         percentage || cgpa,
-        present ? "Yes" : "No",
+        isCurrent ? "Yes" : "No",
         <div className="flex items-center gap-1">
           <EditButton onClick={() => navigate(`${_id}/edit`)} />
 

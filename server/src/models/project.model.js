@@ -22,18 +22,18 @@ const projectSchema = new Schema(
     startDate: Date,
     endDate: Date,
 
-    present: {
+    isCurrent: {
       type: Boolean,
       default: false,
       validate: {
         validator: function (value) {
-          // If endDate exists, present must be false
+          // If endDate exists, isCurrent must be false
           if (this.endDate && value === true) {
             return false;
           }
           return true;
         },
-        message: "present must be false if endDate is provided",
+        message: "isCurrent must be false if endDate is provided",
       },
     },
 

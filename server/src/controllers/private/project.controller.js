@@ -20,7 +20,7 @@ const addProject = asynchandler(async (req, res) => {
     description,
     startDate,
     endDate,
-    present,
+    isCurrent,
     featured,
     githubLink,
     liveLink,
@@ -61,7 +61,7 @@ const addProject = asynchandler(async (req, res) => {
       ? techStack
       : JSON.parse(techStack);
 
-  if (present !== undefined) fields.present = parseBoolean(present);
+  if (isCurrent !== undefined) fields.isCurrent = parseBoolean(isCurrent);
   if (featured !== undefined) fields.featured = parseBoolean(featured);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
@@ -112,7 +112,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
     description,
     startDate,
     endDate,
-    present,
+    isCurrent,
     featured,
     githubLink,
     liveLink,
@@ -154,7 +154,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
       ? techStack
       : JSON.parse(techStack);
 
-  if (present !== undefined) fields.present = parseBoolean(present);
+  if (isCurrent !== undefined) fields.isCurrent = parseBoolean(isCurrent);
   if (featured !== undefined) fields.featured = parseBoolean(featured);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 

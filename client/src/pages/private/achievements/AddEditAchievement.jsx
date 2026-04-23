@@ -104,7 +104,7 @@ export default function AddEditAchievement() {
       let res;
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateAchievemnet(id, updatedData);
+        res = await apiEndpoints.updateAchievement(id, updatedData);
         notify.msgSuccess("Achievement Updated!");
       } else {
         res = await apiEndpoints.addAchievemnet(payload);

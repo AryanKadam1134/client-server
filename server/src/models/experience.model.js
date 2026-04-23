@@ -18,13 +18,13 @@ const positionSchema = new Schema(
       type: Date,
       validate: {
         validator: function (value) {
-          if (this.present && value) return false;
+          if (this.isCurrent && value) return false;
           return true;
         },
-        message: "endDate must be null when present is true",
+        message: "endDate must be null when isCurrent is true",
       },
     },
-    present: {
+    isCurrent: {
       type: Boolean,
       default: false,
     },
@@ -102,10 +102,10 @@ experienceSchema.pre("validate", async function () {
     throw new ApiError(400, "At least one positions is required");
   }
 
-  const presentCount = this.positions.filter((p) => p.present).length;
+  const presentCount = this.positions.filter((p) => p.isCurrent).length;
 
   if (presentCount > 1) {
-    throw new ApiError(409, "Only one positions can have present=true");
+    throw new ApiError(409, "Only one positions can have isCurrent=true");
   }
 });
 
@@ -115,7 +115,7 @@ experienceSchema.pre("save", async function () {
   let latest = null;
 
   this.positions.forEach((pos) => {
-    if (pos.present) {
+    if (pos.isCurrent) {
       latest = new Date(); // ongoing = most recent
     } else if (pos.endDate) {
       if (!latest || pos.endDate > latest) {

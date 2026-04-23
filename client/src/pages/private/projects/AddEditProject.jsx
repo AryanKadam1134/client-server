@@ -407,16 +407,16 @@ export default function AddEditProject() {
 
       {/* Present */}
       <LabelInput
-        id="present"
+        id="isCurrent"
         label="Currently working on this project"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
         <input
-          id="present"
+          id="isCurrent"
           type="checkbox"
-          {...register("present")}
-          error={errors?.present}
+          {...register("isCurrent")}
+          error={errors?.isCurrent}
         />
       </LabelInput>
 

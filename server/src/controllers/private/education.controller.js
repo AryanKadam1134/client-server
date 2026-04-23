@@ -19,7 +19,7 @@ const addEducation = asynchandler(async (req, res) => {
     location,
     startYear,
     endYear,
-    present,
+    isCurrent,
     percentage,
     cgpa,
   } = req.body;
@@ -53,7 +53,7 @@ const addEducation = asynchandler(async (req, res) => {
   if (percentage) fields.percentage = Number(percentage);
   if (cgpa) fields.cgpa = Number(cgpa);
 
-  if (present !== undefined) fields.present = parseBoolean(present);
+  if (isCurrent !== undefined) fields.isCurrent = parseBoolean(isCurrent);
 
   let uploadedInstituteImage;
 
@@ -90,7 +90,7 @@ const updateEducationDetails = asynchandler(async (req, res) => {
     location,
     startYear,
     endYear,
-    present,
+    isCurrent,
     percentage,
     cgpa,
   } = req.body;
@@ -120,7 +120,7 @@ const updateEducationDetails = asynchandler(async (req, res) => {
   if (percentage !== undefined) fields.percentage = Number(percentage);
   if (cgpa !== undefined) fields.cgpa = Number(cgpa);
 
-  if (present !== undefined) fields.present = parseBoolean(present);
+  if (isCurrent !== undefined) fields.isCurrent = parseBoolean(isCurrent);
 
   Object.assign(education, fields);
 

@@ -27,13 +27,13 @@ const educationSchema = new Schema(
       type: Number,
       validate: {
         validator: function (value) {
-          if (this.present && value) return false;
+          if (this.isCurrent && value) return false;
           return true;
         },
-        message: "endYear must be null when present is true",
+        message: "endYear must be null when isCurrent is true",
       },
     },
-    present: {
+    isCurrent: {
       type: Boolean,
       default: false,
     },
@@ -62,7 +62,7 @@ const educationSchema = new Schema(
 );
 
 educationSchema.pre("save", async function () {
-  if (this.present) {
+  if (this.isCurrent) {
     this.latestYear = new Date().getFullYear();
   } else if (this.endYear) {
     this.latestYear = this.endYear;

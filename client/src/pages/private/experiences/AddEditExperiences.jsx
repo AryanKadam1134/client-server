@@ -56,7 +56,7 @@ export default function AddEditExperiences() {
           role: "",
           startDate: "",
           endDate: "",
-          present: null,
+          isCurrent: null,
         },
       ],
       highlights: [""],
@@ -455,7 +455,7 @@ export default function AddEditExperiences() {
           <button
             type="button"
             onClick={() =>
-              append({ role: "", startDate: "", endDate: "", present: false })
+              append({ role: "", startDate: "", endDate: "", isCurrent: false })
             }
             className="hidden sm:block px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
           >
@@ -465,7 +465,7 @@ export default function AddEditExperiences() {
           <button
             type="button"
             onClick={() =>
-              append({ role: "", startDate: "", endDate: "", present: false })
+              append({ role: "", startDate: "", endDate: "", isCurrent: false })
             }
             className="block sm:hidden p-1 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
           >
@@ -533,16 +533,16 @@ export default function AddEditExperiences() {
 
                 {/* Present */}
                 <LabelInput
-                  id={`positions-${idx}.present`}
+                  id={`positions-${idx}.isCurrent`}
                   label="Currently working on this position"
                   colSpan="col-span-9 sm:col-span-4 lg:col-span-5"
                   type="checkbox"
                 >
                   <input
-                    id={`positions-${idx}.present`}
+                    id={`positions-${idx}.isCurrent`}
                     type="checkbox"
-                    {...register(`positions.${idx}.present`)}
-                    error={errors?.positions?.[idx]?.present}
+                    {...register(`positions.${idx}.isCurrent`)}
+                    error={errors?.positions?.[idx]?.isCurrent}
                   />
                 </LabelInput>
 
