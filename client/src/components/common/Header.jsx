@@ -27,7 +27,7 @@ export default function Header({ onMenuClick }) {
   return (
     <div
       className="
-        shrink-0 h-16 w-full px-5 flex items-center justify-between
+        shrink-0 h-15 w-full px-5 flex items-center justify-between
         bg-white dark:bg-[#0f0f0f]
         border-b border-gray-200 dark:border-[#272727]
         text-gray-800 dark:text-gray-100

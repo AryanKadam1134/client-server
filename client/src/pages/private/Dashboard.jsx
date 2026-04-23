@@ -583,7 +583,12 @@ export default function Dashboard() {
           id="documentUrl"
           type="text"
           placeholder="e.g. Google Drive link"
-          {...register("documentUrl", {})}
+          {...register("documentUrl", {
+            pattern: {
+              value: /^https:\/\/.+$/,
+              message: "URL must start with https://",
+            },
+          })}
           error={errors.documentUrl}
         />
       </LabelInput>
