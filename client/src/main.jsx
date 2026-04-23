@@ -7,6 +7,7 @@ import { ConfigProvider, theme } from "antd";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { NotificationsProvider } from "./context/NotificationContext.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <ConfigProvider
@@ -16,12 +17,14 @@ createRoot(document.getElementById("root")).render(
       },
     }}
   >
-    <AuthProvider>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <NotificationsProvider>
-          <App />
-        </NotificationsProvider>
-      </GoogleOAuthProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <NotificationsProvider>
+            <App />
+          </NotificationsProvider>
+        </GoogleOAuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </ConfigProvider>,
 );
