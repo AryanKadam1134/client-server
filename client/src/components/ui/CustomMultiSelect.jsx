@@ -113,7 +113,7 @@ export default function CustomMultiSelect({
           <span
             key={item.value}
             {...getSelectedItemProps({ selectedItem: item, index })}
-            className="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded text-xs"
+            className="flex items-center gap-1 dark:text-black bg-gray-200 px-2 py-1 rounded text-xs"
           >
             {item.label}
 

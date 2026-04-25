@@ -83,7 +83,7 @@ function ResumeDropZone({
           <>
             <div className="flex flex-col items-center gap-1">
               <img src="/images/pdf.svg" alt="pdf svg" className="size-8" />
-              <p className="text-xs font-medium truncate w-full">{fileName}</p>
+              <p className="text-xs font-medium truncate dark:text-gray-200 w-full">{fileName}</p>
             </div>
 
             <p className="text-gray-600 text-xs">Click to replace</p>

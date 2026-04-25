@@ -18,7 +18,7 @@ export default function CustomRadioButtons({
             {...props}
           />
 
-          <label htmlFor={option.value} className="cursor-pointer">
+          <label htmlFor={option.value} className="dark:text-white cursor-pointer">
             {option.label}
           </label>
         </div>
