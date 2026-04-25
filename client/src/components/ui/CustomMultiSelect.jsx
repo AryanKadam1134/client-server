@@ -1,13 +1,9 @@
-import { useCombobox, useMultipleSelection } from "downshift";
 import { useState } from "react";
-import { commonInputClass } from "../../constants";
+
+import { useCombobox, useMultipleSelection } from "downshift";
 import { ChevronDown, X } from "lucide-react";
 
-const errorClass = (error) => {
-  return error
-    ? "border-2 border-red-400"
-    : "border-gray-400 focus:border-transparent focus:ring focus:ring-blue-400";
-};
+import { inputClass } from "../../utils/getInputClass";
 
 export default function CustomMultiSelect({
   options = [],
@@ -108,7 +104,7 @@ export default function CustomMultiSelect({
     <div className="relative w-full">
       {/* Input + Chips */}
       <div
-        className={`${commonInputClass} ${errorClass(
+        className={`${inputClass(
           error,
         )} flex flex-wrap items-center gap-2 pr-10`}
       >

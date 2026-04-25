@@ -1,12 +1,9 @@
-import { useCombobox } from "downshift";
 import { useState } from "react";
-import { commonInputClass } from "../../constants";
+import { useCombobox } from "downshift";
+
 import { ChevronDown } from "lucide-react";
 
-const errorClass = (error) =>
-  error
-    ? "border-2 border-red-400"
-    : "border-gray-400 focus:border-transparent focus:ring focus:ring-blue-400";
+import { inputClass } from "../../utils/getInputClass";
 
 export default function CustomSelect({
   options = [],
@@ -89,7 +86,7 @@ export default function CustomSelect({
           })}
           value={selectedItem && !inputValue ? selectedItem.label : inputValue}
           placeholder={placeholder}
-          className={`${commonInputClass} ${errorClass(error)} pr-10`}
+          className={`${inputClass(error)} pr-10`}
         />
 
         <button
