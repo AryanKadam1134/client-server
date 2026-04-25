@@ -113,7 +113,7 @@ export default function CustomMultiSelect({
           <span
             key={item.value}
             {...getSelectedItemProps({ selectedItem: item, index })}
-            className="flex items-center gap-1 dark:text-black bg-gray-200 px-2 py-1 rounded text-xs"
+            className="flex items-center gap-1 text-light-text-primary dark:text-dark-bg-primary bg-light-bg-secondary dark:bg-dark-bg-tertiary px-2 py-1 rounded text-xs"
           >
             {item.label}
 
@@ -133,7 +133,7 @@ export default function CustomMultiSelect({
           {...getInputProps({
             placeholder: selectedItems.length ? "" : placeholder,
             className:
-              "flex-1 outline-none bg-transparent text-sm min-w-[80px]",
+              "flex-1 outline-none bg-transparent text-sm min-w-[80px] text-light-text-primary dark:text-dark-text-primary",
           })}
         />
       </div>
@@ -142,7 +142,7 @@ export default function CustomMultiSelect({
       <button
         type="button"
         {...getToggleButtonProps()}
-        className="absolute right-2 top-1/2 -translate-y-1/2"
+        className="absolute right-2 top-1/2 -translate-y-1/2 text-light-text-tertiary dark:text-dark-text-tertiary hover:text-light-text-primary dark:hover:text-dark-text-primary transition-colors"
       >
         <ChevronDown size={18} />
       </button>
@@ -150,7 +150,7 @@ export default function CustomMultiSelect({
       {/* Dropdown */}
       <ul
         {...getMenuProps()}
-        className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-white border border-gray-500 rounded-md shadow-md max-h-60 overflow-y-auto ${
+        className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-light-bg-primary dark:bg-dark-bg-tertiary border border-light-border-secondary dark:border-dark-border-secondary rounded-md shadow-md max-h-60 overflow-y-auto ${
           !isOpen && "hidden"
         }`}
       >
@@ -163,9 +163,17 @@ export default function CustomMultiSelect({
                 <li
                   key={item.value}
                   {...getItemProps({ item, index })}
-                  className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded
-                  ${highlightedIndex === index ? "bg-gray-200" : ""}
-                  ${isSelected ? "font-medium bg-gray-200" : ""}
+                  className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded transition-colors
+                  ${
+                    highlightedIndex === index
+                      ? "bg-light-bg-hover dark:bg-dark-bg-hover"
+                      : ""
+                  }
+                  ${
+                    isSelected
+                      ? "font-medium bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary"
+                      : "text-light-text-secondary dark:text-dark-text-secondary"
+                  }
                 `}
                 >
                   {item.label} {isSelected && "✔"}
@@ -173,7 +181,9 @@ export default function CustomMultiSelect({
               );
             })
           ) : (
-            <li className={`px-3 py-2 text-sm text-gray-500`}>No Data</li>
+            <li className={`px-3 py-2 text-sm text-light-text-tertiary dark:text-dark-text-tertiary`}>
+              No Data
+            </li>
           ))}
       </ul>
     </div>

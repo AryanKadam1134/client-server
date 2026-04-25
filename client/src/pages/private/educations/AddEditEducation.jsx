@@ -317,7 +317,7 @@ export default function AddEditEducation() {
             label="Institute Image"
             colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
           >
-            <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
+            <div className="relative group h-[120px] rounded overflow-hidden border border-light-border-primary dark:border-dark-border-primary">
               {/* Loader */}
               {imageDeleting && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">

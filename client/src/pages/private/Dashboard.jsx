@@ -69,30 +69,30 @@ function ResumeDropZone({
         onClick={() => !resumeLoading && fileInputRef.current.click()}
         className={`
           flex-1 min-h-32 flex flex-col items-center justify-center gap-3
-          border-2 border-dashed border-gray-500 hover:border-gray-600 rounded-lg cursor-pointer
+          border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary hover:border-light-border-primary dark:hover:border-dark-border-primary rounded-lg cursor-pointer
           transition-all duration-200 px-4 py-5 text-center
-          ${isDragging && "border-blue-400 bg-blue-500/10"}
-          ${!resumeLoading && "hover:bg-gray-200"}
+          ${isDragging && "border-blue-400 dark:border-blue-500 bg-blue-500/10 dark:bg-blue-950/20"}
+          ${!resumeLoading && "hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover"}
         `}
       >
         {resumeLoading ? (
           <>
-            <Loader size={24} className="text-blue-400 animate-spin" />
+            <Loader size={24} className="text-blue-500 dark:text-blue-400 animate-spin" />
           </>
         ) : hasFile ? (
           <>
             <div className="flex flex-col items-center gap-1">
               <img src="/images/pdf.svg" alt="pdf svg" className="size-8" />
-              <p className="text-xs font-medium truncate dark:text-gray-200 w-full">{fileName}</p>
+              <p className="text-xs font-medium truncate text-light-text-primary dark:text-dark-text-primary w-full">{fileName}</p>
             </div>
 
-            <p className="text-gray-600 text-xs">Click to replace</p>
+            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">Click to replace</p>
           </>
         ) : (
           <>
             <div className="flex flex-col items-center gap-1">
-              <FileText size={24} className="text-gray-500" />
-              <div className="text-gray-500 text-xs font-medium">
+              <FileText size={24} className="text-light-text-tertiary dark:text-dark-text-tertiary" />
+              <div className="text-light-text-secondary dark:text-dark-text-secondary text-xs font-medium">
                 Drop your PDF here
                 <br />
                 OR
@@ -101,7 +101,7 @@ function ResumeDropZone({
               </div>
             </div>
 
-            <p className="text-gray-600 text-xs">PDF only</p>
+            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">PDF only</p>
           </>
         )}
       </div>
@@ -329,14 +329,14 @@ export default function Dashboard() {
               `/images/icon-7797704_640.png`
             }
             alt="User Profile"
-            className="size-45 rounded-full object-contain border border-gray-400"
+            className="size-45 rounded-full object-contain border border-light-border-primary dark:border-dark-border-primary"
           />
 
           {/* Overlay */}
           {imageLoading ? (
             <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
               <div className="text-white text-sm bg-black/40 p-2 rounded-full">
-                <Loader size={20} className="text-gray-300 animate-spin" />
+                <Loader size={20} className="text-light-text-secondary dark:text-dark-text-secondary animate-spin" />
               </div>
             </div>
           ) : (
@@ -347,14 +347,14 @@ export default function Dashboard() {
               >
                 <div
                   onClick={deleteProfileImage}
-                  className="p-2 text-red-400 hover:text-red-500 bg-black/50 rounded-full cursor-pointer"
+                  className="p-2 text-red-400 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300 bg-black/50 rounded-full cursor-pointer transition-colors"
                 >
                   <Trash2 size={20} />
                 </div>
 
                 <div
                   onClick={() => imageInputRef.current.click()}
-                  className="p-2 text-blue-400 hover:text-blue-500 bg-black/50 rounded-full cursor-pointer"
+                  className="p-2 text-blue-400 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 bg-black/50 rounded-full cursor-pointer transition-colors"
                 >
                   <SquarePen size={20} />
                 </div>

@@ -54,9 +54,9 @@ export default function Authentication() {
   };
 
   return (
-    <div className="min-h-screen p-6 flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">Authentication</h2>
+    <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
+      <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-2xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
+        <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">Authentication</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="text-sm space-y-4">
           {/* First Name */}
@@ -204,7 +204,7 @@ export default function Authentication() {
               setIsLogin((prev) => !prev);
               reset();
             }}
-            className="text-blue-600 hover:text-blue-700 cursor-pointer"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer transition-colors"
           >
             {isLogin ? "Sign Up" : "Sign In"}
           </p>

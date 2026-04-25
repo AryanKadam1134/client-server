@@ -393,11 +393,11 @@ export default function AddEditExperiences() {
       </LabelInput>
 
       {/* Highlights */}
-      <div className="col-span-12 flex flex-col gap-3 p-3 w-full border border-gray-500 rounded">
+      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-sm">
         <div className="flex items-center justify-between gap-3">
-          <p className="font-medium text-[16px]">
+          <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">
             Highlights{" "}
-            <span className="font-normal">
+            <span className="font-normal text-light-text-secondary dark:text-dark-text-secondary">
               (your highlights inside the company)
             </span>
           </p>
@@ -419,7 +419,7 @@ export default function AddEditExperiences() {
           </button>
         </div>
 
-        <div className="border-b-2 border-gray-400" />
+        <div className="border-b border-light-border-primary dark:border-dark-border-primary" />
 
         {highlightFields.map((item, idx) => (
           <div
@@ -448,9 +448,9 @@ export default function AddEditExperiences() {
       </div>
 
       {/* Positions */}
-      <div className="col-span-12 flex flex-col gap-3 p-3 w-full border border-gray-500 rounded">
+      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-sm">
         <div className="flex items-center justify-between gap-3">
-          <p className="font-medium text-[16px]">Positions / Posts</p>
+          <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">Positions / Posts</p>
 
           <button
             type="button"
@@ -473,7 +473,7 @@ export default function AddEditExperiences() {
           </button>
         </div>
 
-        <div className="border-b-2 border-gray-400" />
+        <div className="border-b border-light-border-primary dark:border-dark-border-primary" />
 
         <div className="flex flex-col gap-6">
           {fields?.map((data, idx) => (
@@ -555,7 +555,7 @@ export default function AddEditExperiences() {
                 </button>
               </div>
 
-              <div className="last:hidden border-b-2 border-dashed border-gray-400"></div>
+              <div className="last:hidden border-b border-dashed border-light-border-primary dark:border-dark-border-primary"></div>
             </>
           ))}
         </div>
@@ -582,7 +582,7 @@ export default function AddEditExperiences() {
             label="Cover Image"
             colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
           >
-            <div className="relative group h-[120px] rounded overflow-hidden border border-gray-400">
+            <div className="relative group h-[120px] rounded overflow-hidden border border-light-border-primary dark:border-dark-border-primary">
               {/* Loader */}
               {imageDeleting && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">

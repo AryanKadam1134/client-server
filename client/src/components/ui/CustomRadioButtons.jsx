@@ -14,11 +14,11 @@ export default function CustomRadioButtons({
             id={option.value}
             type="radio"
             value={option.value}
-            className="accent-blue-500 cursor-pointer"
+            className="accent-blue-500 dark:accent-blue-400 cursor-pointer"
             {...props}
           />
 
-          <label htmlFor={option.value} className="dark:text-white cursor-pointer">
+          <label htmlFor={option.value} className="text-light-text-primary dark:text-dark-text-primary cursor-pointer">
             {option.label}
           </label>
         </div>

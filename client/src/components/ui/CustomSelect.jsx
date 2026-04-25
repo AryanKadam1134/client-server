@@ -92,7 +92,7 @@ export default function CustomSelect({
         <button
           type="button"
           {...getToggleButtonProps()}
-          className="absolute right-2"
+          className="absolute right-2 text-light-text-tertiary dark:text-dark-text-tertiary hover:text-light-text-primary dark:hover:text-dark-text-primary transition-colors"
         >
           <ChevronDown size={18} />
         </button>
@@ -100,7 +100,7 @@ export default function CustomSelect({
 
       <ul
         {...getMenuProps()}
-        className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-white border border-gray-500 rounded-md shadow-md max-h-60 overflow-y-auto ${
+        className={`absolute z-50 flex flex-col gap-1 mt-1 p-1 w-full bg-light-bg-primary dark:bg-dark-bg-tertiary border border-light-border-secondary dark:border-dark-border-secondary rounded-md shadow-md max-h-60 overflow-y-auto ${
           !isOpen ? "hidden" : ""
         }`}
       >
@@ -111,9 +111,17 @@ export default function CustomSelect({
               <li
                 key={item.value}
                 {...getItemProps({ item, index })}
-                className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded
-                  ${highlightedIndex === index ? "bg-gray-200" : ""}
-                  ${isSelected ? "font-medium bg-gray-200" : ""}
+                className={`px-3 py-2 flex items-center justify-between gap-1 w-full cursor-pointer text-sm rounded transition-colors
+                  ${
+                    highlightedIndex === index
+                      ? "bg-light-bg-hover dark:bg-dark-bg-hover"
+                      : ""
+                  }
+                  ${
+                    isSelected
+                      ? "font-medium bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary"
+                      : "text-light-text-secondary dark:text-dark-text-secondary"
+                  }
                 `}
               >
                 {item.label} {isSelected && "✔"}
@@ -122,7 +130,9 @@ export default function CustomSelect({
           })}
 
         {isOpen && filteredItems.length === 0 && (
-          <li className="px-3 py-2 text-sm">No results found</li>
+          <li className="px-3 py-2 text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
+            No results found
+          </li>
         )}
       </ul>
     </div>

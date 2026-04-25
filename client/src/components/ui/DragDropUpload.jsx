@@ -40,26 +40,28 @@ export default function DragDropUpload({
         onDrop={handleDrop}
         onClick={() => !loading && fileInputRef.current.click()}
         className={`
-          w-full min-h-32 flex flex-col items-center justify-center gap-3
-          border-2 border-dashed border-gray-500 rounded-lg cursor-pointer
-          transition-all duration-200 px-4 py-5 text-center
-          ${isDragging && "border-blue-400 bg-blue-500/10"}
-          ${!loading && "hover:bg-gray-200 hover:border-gray-600"}
+          w-full min-h-40 flex flex-col items-center justify-center gap-3
+          border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary rounded-lg cursor-pointer
+          transition-all duration-200 px-4 py-8 text-center
+          ${isDragging && "border-blue-400 dark:border-blue-500 bg-blue-50 dark:bg-blue-950/20"}
+          ${!loading && "hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover hover:border-light-border-primary dark:hover:border-dark-border-primary"}
           ${className}
         `}
       >
         {loading ? (
-          <Loader size={24} className="text-blue-400 animate-spin" />
+          <Loader size={24} className="text-blue-500 dark:text-blue-400 animate-spin" />
         ) : (
           <>
-            <FileText size={24} className="text-gray-500" />
+            <FileText size={28} className="text-light-text-tertiary dark:text-dark-text-tertiary" />
 
-            <div className="text-gray-500 text-xs font-medium">
-              {text}
-              <br />
-              OR
-              <br />
-              Click to browse
+            <div className="text-light-text-secondary dark:text-dark-text-secondary text-sm font-medium">
+              <p>{text}</p>
+              <p className="text-xs text-light-text-tertiary dark:text-dark-text-tertiary mt-1">
+                OR
+              </p>
+              <p className="text-xs text-light-text-tertiary dark:text-dark-text-tertiary">
+                Click to browse
+              </p>
             </div>
           </>
         )}

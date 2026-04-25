@@ -1,13 +1,13 @@
 export const inputClass = (error) => {
-  return `w-full px-3 py-2
-  text-gray-800 dark:text-gray-100
-  placeholder:text-gray-400 dark:placeholder:text-gray-600
-  bg-white dark:bg-[#181818]
-  focus:bg-gray-200 dark:focus:bg-gray-800
-  disabled:bg-gray-200 dark:disabled:bg-gray-800
-  border rounded-md shadow-md outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
+  return `w-full px-4 py-2.5
+  text-light-input-text dark:text-dark-input-text
+  placeholder:text-light-input-placeholder dark:placeholder:text-dark-input-placeholder
+  bg-light-input-bg dark:bg-dark-input-bg
+  focus:bg-light-input-bgFocus dark:focus:bg-dark-input-bgFocus
+  disabled:bg-light-input-bgDisabled dark:disabled:bg-dark-input-bgDisabled
+  border rounded-lg shadow-sm outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
     error
-      ? "border-2 border-red-400"
-      : "border-gray-400 dark:border-gray-600 focus:border-transparent focus:ring focus:ring-blue-400"
+      ? "border-2 border-light-input-error dark:border-dark-input-error shadow-sm"
+      : "border border-light-input-border dark:border-dark-input-border focus:border-transparent focus:ring-2 focus:ring-light-input-ring dark:focus:ring-dark-input-ring"
   }`;
 };

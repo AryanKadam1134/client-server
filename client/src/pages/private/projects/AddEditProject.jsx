@@ -478,7 +478,7 @@ export default function AddEditProject() {
             label="Project Cover Image"
             colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
           >
-            <div className="h-[120px] rounded overflow-hidden border border-gray-400">
+            <div className="h-[120px] rounded overflow-hidden border border-light-border-primary dark:border-dark-border-primary">
               <img
                 src={
                   projectImages?.find((_, idx) => idx == coverImageIndex)?.url
@@ -523,7 +523,7 @@ export default function AddEditProject() {
               {projectImages?.map((image, idx) => (
                 <div
                   key={image?.public_id || idx}
-                  className="relative group h-[120px] rounded overflow-hidden border border-gray-400"
+                  className="relative group h-[120px] rounded overflow-hidden border border-light-border-primary dark:border-dark-border-primary"
                 >
                   {/* Image */}
                   <img

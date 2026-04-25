@@ -6,7 +6,7 @@ export default function DeleteButton({ ...props }) {
   return (
     <button
       {...props}
-      className="p-1 text-white bg-red-500 hover:bg-red-600 rounded transition-colors enabled:cursor-pointer disabled:opacity-60 loading:cursor-progress"
+      className="p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg transition-all shadow-sm hover:shadow-md enabled:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
     >
       <Trash2 size={18} />
     </button>

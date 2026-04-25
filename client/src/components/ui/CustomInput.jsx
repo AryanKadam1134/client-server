@@ -20,7 +20,7 @@ export default function CustomInput({ error, className = "", type, ...props }) {
         <button
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-light-text-tertiary dark:text-dark-text-tertiary hover:text-light-text-primary dark:hover:text-dark-text-primary transition-colors"
         >
           {showPassword ? "🙈" : "👁️"}
         </button>

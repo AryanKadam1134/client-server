@@ -1,7 +1,9 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
 
-
+* {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: "Poppins", sans-serif;
@@ -9,6 +11,11 @@ body {
 
 .ant-message {
   font-family: "Poppins", sans-serif;
+}
+
+/* Smooth transitions for theme switching */
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* EXPANDED: normal left-aligned layout */
@@ -23,4 +30,21 @@ body {
   padding: 9px 0;
   gap: 0;
   justify-content: center;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-light-bg-secondary dark:bg-dark-bg-tertiary;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-light-border-secondary dark:bg-dark-border-secondary rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-light-border-primary dark:bg-dark-border-primary;
 }

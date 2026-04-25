@@ -362,7 +362,7 @@ export default function AddEditSocialPlatform() {
 
           <div className="hidden sm:block col-span-6" />
 
-          <div className="col-span-12 border-b-2 border-dashed border-gray-500" />
+          <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
         </>
       )}
 

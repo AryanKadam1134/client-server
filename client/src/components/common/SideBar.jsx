@@ -29,7 +29,7 @@ const menus = [
 ];
 
 const menuStyle =
-  "px-3 py-2 flex items-center gap-2.5 text-[13.5px] min-w-45 rounded-md transition-all duration-200";
+  "px-3 py-2.5 flex items-center gap-2.5 text-sm min-w-45 rounded-lg transition-all duration-200";
 
 function NavItem({ menu, onClick }) {
   const Icon = menu.icon;
@@ -42,8 +42,8 @@ function NavItem({ menu, onClick }) {
         `${menuStyle}
         ${
           isActive
-            ? "bg-gray-200 text-black dark:bg-[#272727] dark:text-white"
-            : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-[#1f1f1f] dark:hover:text-white"
+            ? "bg-light-bg-hover dark:bg-dark-bg-tertiary text-light-text-primary dark:text-dark-text-primary font-medium"
+            : "text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover hover:text-light-text-primary dark:hover:text-dark-text-primary"
         }
         `
       }
@@ -75,19 +75,19 @@ export default function SideBar({ isOpen, onClose }) {
       <div
         className={`
           fixed md:static top-0 left-0 z-50 h-full w-64
-          bg-white dark:bg-[#0f0f0f]
+          bg-light-bg-primary dark:bg-dark-bg-primary
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0
           flex flex-col px-2.5
-          border-r border-gray-200 dark:border-[#272727]
+          border-r border-light-border-primary dark:border-dark-border-primary
         `}
       >
         {/* Header */}
-        <div className="shrink-0 h-15 flex items-center border-b border-gray-200 dark:border-[#272727]">
+        <div className="shrink-0 h-16 flex items-center border-b border-light-border-primary dark:border-dark-border-primary">
           <div className="flex items-center gap-2.5">
-            <div className="p-4 bg-gray-300 dark:bg-[#272727] rounded-full"></div>
-            <p className="text-nowrap text-md font-medium text-gray-800 dark:text-white">
+            <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary rounded-full"></div>
+            <p className="text-nowrap text-md font-medium text-light-text-primary dark:text-dark-text-primary">
               Portfolio SAAS
             </p>
           </div>
@@ -114,8 +114,8 @@ export default function SideBar({ isOpen, onClose }) {
             }}
             className={`
               ${menuStyle}
-              text-gray-700 hover:text-red-600 hover:bg-red-100
-              dark:text-gray-300 dark:hover:text-red-500 dark:hover:bg-[#2a1515]
+              text-red-600 hover:text-red-700 hover:bg-red-50
+              dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950 dark:hover:bg-opacity-30
               cursor-pointer
             `}
           >

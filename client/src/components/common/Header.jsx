@@ -27,10 +27,10 @@ export default function Header({ onMenuClick }) {
   return (
     <div
       className="
-        shrink-0 h-15 w-full px-5 flex items-center justify-between
-        bg-white dark:bg-[#0f0f0f]
-        border-b border-gray-200 dark:border-[#272727]
-        text-gray-800 dark:text-gray-100
+        shrink-0 h-16 w-full px-5 sm:px-8 flex items-center justify-between
+        bg-light-bg-primary dark:bg-dark-bg-primary
+        border-b border-light-border-primary dark:border-dark-border-primary
+        text-light-text-primary dark:text-dark-text-primary
         shadow-sm z-10
       "
     >
@@ -38,8 +38,8 @@ export default function Header({ onMenuClick }) {
       <button
         onClick={onMenuClick}
         className="
-            md:hidden p-2 rounded-full
-            hover:bg-gray-100 dark:hover:bg-[#272727]
+            md:hidden p-2 rounded-lg
+            hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover
             transition
           "
       >
@@ -59,21 +59,21 @@ export default function Header({ onMenuClick }) {
         <div className="flex items-center gap-3">
           {/* Text */}
           <div className="hidden sm:flex flex-col items-end text-xs leading-tight">
-            <p className="font-medium">
+            <p className="font-semibold">
               {user?.firstName} {user?.lastName}
             </p>
 
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-light-text-secondary dark:text-dark-text-secondary">
               {dayName}, {dateNum}
             </p>
           </div>
 
           {/* Avatar */}
-          <div className="relative rounded-full overflow-hidden">
+          <div className="relative rounded-full overflow-hidden border-2 border-light-border-primary dark:border-dark-border-primary">
             <img
               src={user?.image?.url}
               alt="User"
-              className="size-9 object-contain"
+              className="size-10 object-contain"
             />
           </div>
         </div>
