@@ -19,7 +19,7 @@ export default function CustomInputPassword({ error, className, ...props }) {
       <button
         type="button"
         onClick={() => setShowPassword((prev) => !prev)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black dark:hover:text-gray-100 cursor-pointer"
       >
         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
       </button>

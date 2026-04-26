@@ -56,9 +56,14 @@ export default function Authentication() {
   return (
     <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-2xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
-        <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">Authentication</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">
+          Portfolio SAAS
+        </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="text-sm space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 text-sm"
+        >
           {/* First Name */}
           {!isLogin && (
             <LabelInput id="firstName" label="First Name" required>
@@ -145,7 +150,18 @@ export default function Authentication() {
           )}
 
           {/* Password */}
-          <LabelInput id="password" label="Password" required>
+          <LabelInput
+            id="password"
+            label="Password"
+            attachment={
+              isLogin && (
+                <p className="text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
+                  Forgot Password?
+                </p>
+              )
+            }
+            required
+          >
             <CustomInputPassword
               id="password"
               placeholder="password"
@@ -188,6 +204,12 @@ export default function Authentication() {
             {isSubmitting ? "Submitting..." : "Submit"}
           </CustomButton>
 
+          <div className="flex items-center gap-3 text-xs">
+            <p className="flex-1 border-b border-light-input-border dark:border-dark-input-border"></p>
+            <p className="text-gray-400">OR</p>
+            <p className="flex-1 border-b border-light-input-border dark:border-dark-input-border"></p>
+          </div>
+
           <GoogleLogin
             onSuccess={(credentialResponse) =>
               googleAuth(credentialResponse, rememberMe)
@@ -199,14 +221,19 @@ export default function Authentication() {
             width="100%"
           />
 
-          <p
-            onClick={() => {
-              setIsLogin((prev) => !prev);
-              reset();
-            }}
-            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer transition-colors"
-          >
-            {isLogin ? "Sign Up" : "Sign In"}
+          <p className="mt-2 text-center text-xs text-light-text-primary dark:text-dark-text-primary">
+            {isLogin
+              ? "Don't have an account yet? "
+              : "Already have an account? "}
+            <span
+              onClick={() => {
+                setIsLogin((prev) => !prev);
+                reset();
+              }}
+              className="text-blue-500 hover:text-blue-600 cursor-pointer transition-colors"
+            >
+              {isLogin ? "Sign Up" : "Sign In"}
+            </span>
           </p>
         </form>
       </div>
