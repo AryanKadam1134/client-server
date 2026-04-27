@@ -18,13 +18,13 @@ createRoot(document.getElementById("root")).render(
     }}
   >
     <ThemeProvider>
-      <AuthProvider>
-        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-          <NotificationsProvider>
+      <NotificationsProvider>
+        <AuthProvider>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <App />
-          </NotificationsProvider>
-        </GoogleOAuthProvider>
-      </AuthProvider>
+          </GoogleOAuthProvider>
+        </AuthProvider>
+      </NotificationsProvider>
     </ThemeProvider>
   </ConfigProvider>,
 );

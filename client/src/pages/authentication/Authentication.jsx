@@ -13,9 +13,11 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 import { apiEndpoints } from "../../api";
 
 import { useAuth } from "../../context/AuthContext";
+import { useNotify } from "../../context/NotificationContext";
 
 export default function Authentication() {
-  const { login, googleAuth } = useAuth();
+  const { error, setError, login, googleAuth } = useAuth();
+  const { notify } = useNotify();
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -34,22 +36,24 @@ export default function Authentication() {
   const rememberMe = useWatch({ control, name: "rememberMe" });
 
   const onSubmit = async (payload) => {
-    try {
-      if (isLogin) {
-        await login(payload);
-
-        navigate("/details");
-      } else {
+    if (isLogin) {
+      await login(payload);
+      navigate("/details");
+    } else {
+      try {
         const res = await apiEndpoints.register(payload);
 
         const data = res?.data;
 
         reset();
         setIsLogin(true);
+        notify.msgSuccess("Account Created Successfully!");
         console.log("User Registered: ", data);
+      } catch (error) {
+        console.error("Login failed: ", error);
+        notify.msgError("Registration Failed!");
+        setError(error?.message);
       }
-    } catch (error) {
-      console.error("Login failed: ", error);
     }
   };
 
@@ -183,6 +187,8 @@ export default function Authentication() {
             {!isLogin && <FieldError error={errors.password?.message} />}
           </LabelInput>
 
+          {error && <p className="text-center text-sm text-red-400">{error}</p>}
+
           {/* Remember Me */}
           {isLogin && (
             <LabelInput id="rememberMe" label="Remember Me?" type="checkbox">
@@ -227,7 +233,10 @@ export default function Authentication() {
               : "Already have an account? "}
             <span
               onClick={() => {
-                setIsLogin((prev) => !prev);
+                setIsLogin((prev) => {
+                  setError(null);
+                  return !prev;
+                });
                 reset();
               }}
               className="text-blue-500 hover:text-blue-600 cursor-pointer transition-colors"

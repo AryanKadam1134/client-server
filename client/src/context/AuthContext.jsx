@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { apiEndpoints } from "../api";
+import { useNotify } from "./NotificationContext";
 
 const AuthContext = createContext();
 
@@ -15,6 +16,9 @@ export const useAuth = () => {
 };
 
 export function AuthProvider({ children }) {
+  const { notify } = useNotify();
+
+  const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -62,9 +66,11 @@ export function AuthProvider({ children }) {
         setUser(data?.user);
       }
 
-      console.log("Login succesfull:", data);
+      // console.log("Login succesfull:", data);
     } catch (error) {
       console.error("Error while login: ", error);
+      notify.msgError("Login failed!");
+      setError(error?.message);
     } finally {
       setAuthLoading(false);
     }
@@ -107,7 +113,16 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, authLoading, googleAuth, login, setUser, logout }}
+      value={{
+        error,
+        setError,
+        user,
+        authLoading,
+        googleAuth,
+        login,
+        setUser,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
