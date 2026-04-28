@@ -48,6 +48,8 @@ export const apiEndpoints = {
 
   deleteUserResume: () => api.delete("/users/resume"),
 
+  deleteUser: () => api.delete("/users"),
+
   // Social Platfroms
   addSocialPlatform: (body) => api.post(`/socialPlatforms`, body),
 

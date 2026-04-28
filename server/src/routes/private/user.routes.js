@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  deleteUser,
   deleteUserImage,
   deleteUserResume,
   getUserDetails,
@@ -15,21 +16,24 @@ import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const userRouter = Router();
 
-userRouter.route("/check-password").get(verifyJWT, hasPassowrd);
+userRouter.use(verifyJWT);
+
+userRouter.route("/check-password").get(hasPassowrd);
 
 userRouter
   .route("/")
-  .get(verifyJWT, getUserDetails)
-  .patch(verifyJWT, updateUserDetails);
+  .get(getUserDetails)
+  .patch(updateUserDetails)
+  .delete(deleteUser);
 
 userRouter
   .route("/image")
-  .patch(verifyJWT, upload.single("image"), updateUserImage)
-  .delete(verifyJWT, deleteUserImage);
+  .patch(upload.single("image"), updateUserImage)
+  .delete(deleteUserImage);
 
 userRouter
   .route("/resume")
-  .patch(verifyJWT, upload.single("resumeOrCv"), updateUserResume)
-  .delete(verifyJWT, deleteUserResume);
+  .patch(upload.single("resumeOrCv"), updateUserResume)
+  .delete(deleteUserResume);
 
 export default userRouter;

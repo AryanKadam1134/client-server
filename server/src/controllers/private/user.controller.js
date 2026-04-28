@@ -8,6 +8,14 @@ import {
 } from "../../constants.js";
 
 import { User } from "../../models/user.model.js";
+import { Skill } from "../../models/skill.model.js";
+import { Project } from "../../models/project.model.js";
+import { Education } from "../../models/education.model.js";
+import { Experience } from "../../models/experience.model.js";
+import { Certificate } from "../../models/certificate.model.js";
+import { Achievement } from "../../models/achievement.model.js";
+import { SkillCategory } from "../../models/skillCategory.model.js";
+import { SocialPlatform } from "../../models/socialPlatform.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
@@ -242,6 +250,48 @@ const deleteUserResume = asynchandler(async (req, res) => {
     .json(new ApiRes(200, updatedUser, "resumeOrCv deleted successfully!"));
 });
 
+const deleteUser = asynchandler(async (req, res) => {
+  const loggedUser = req.user;
+
+  const loggedUserId = loggedUser?._id;
+
+  await SocialPlatform.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await Skill.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await SkillCategory.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await Project.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await Experience.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await Education.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await Certificate.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await Achievement.deleteMany({
+    owner: loggedUserId,
+  });
+
+  await User.findByIdAndDelete(loggedUserId);
+
+  return res.status(204);
+});
+
 export {
   hasPassowrd,
   updateUserDetails,
@@ -250,4 +300,5 @@ export {
   updateUserResume,
   deleteUserImage,
   deleteUserResume,
+  deleteUser,
 };

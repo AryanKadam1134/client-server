@@ -8,6 +8,6 @@ export const inputClass = (error) => {
   border rounded-lg shadow-sm outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
     error
       ? "border-2 border-light-input-error dark:border-dark-input-error shadow-sm"
-      : "border border-light-input-border dark:border-dark-input-border focus:border-transparent focus:ring-2 focus:ring-light-input-ring dark:focus:ring-dark-input-ring"
+      : "border border-light-input-border dark:border-dark-input-border focus:border-transparent focus:ring focus:ring-light-input-ring dark:focus:ring-dark-input-ring"
   }`;
 };
