@@ -23,19 +23,19 @@ export const apiEndpoints = {
   // Authentication
   googleAuth: (body, config) => api.post(`/auth/google`, body, config),
 
-  register: (body) => api.post(`/users/register`, body),
+  register: (body) => api.post(`/auth/register`, body),
 
-  login: (body, config) => api.post(`/users/login`, body, config),
+  login: (body, config) => api.post(`/auth/login`, body, config),
 
-  restoreSession: (config) => api.post(`/users/restoreSession`, {}, config),
+  logout: () => api.post(`/auth/logout`),
 
-  logout: () => api.post(`/users/logout`),
+  restoreSession: (config) => api.post(`/auth/restoreSession`, {}, config),
 
-  checkPassword: () => api.get(`/users/check-password`),
-
-  changePassword: (body) => api.patch(`/users/password`, body),
+  changePassword: (body) => api.patch(`/auth/password`, body),
 
   // User Details
+  checkPassword: () => api.get(`/users/check-password`),
+
   getCurrentUser: () => api.get("/users"),
 
   updateUser: (body) => api.patch("/users", body),
