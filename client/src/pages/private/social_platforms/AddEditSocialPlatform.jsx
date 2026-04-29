@@ -376,9 +376,17 @@ export default function AddEditSocialPlatform() {
         <CustomInput
           id="name"
           type="text"
-          placeholder="e.g. Github"
+          placeholder="e.g., GitHub, LinkedIn, Twitter"
           {...register("name", {
-            required: "Platform Name is required!",
+            required: "Platform name is required!",
+            minLength: {
+              value: 2,
+              message: "Platform name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 50,
+              message: "Platform name must not exceed 50 characters",
+            },
           })}
           error={errors?.name}
         />
@@ -407,11 +415,11 @@ export default function AddEditSocialPlatform() {
         <CustomInput
           id="link"
           type="text"
-          placeholder="Platform Link"
+          placeholder="https://github.com/username or your profile URL"
           {...register("link", {
-            required: "Platform Link is required!",
+            required: "Platform link is required!",
             pattern: {
-              value: /^https:\/\/.+$/,
+              value: /^(https:\/\/.+)?$/,
               message: "URL must start with https://",
             },
           })}
@@ -424,14 +432,14 @@ export default function AddEditSocialPlatform() {
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
-        label="Sort Order"
+        label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder="Sort Order"
+          placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />

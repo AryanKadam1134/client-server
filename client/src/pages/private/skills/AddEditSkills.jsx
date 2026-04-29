@@ -180,9 +180,17 @@ export default function AddEditSkills() {
         <CustomInput
           id="name"
           type="text"
-          placeholder="e.g. HTML"
+          placeholder="e.g., React, Python, UI Design"
           {...register("name", {
-            required: "Skill Name is required!",
+            required: "Skill name is required!",
+            minLength: {
+              value: 2,
+              message: "Skill name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 50,
+              message: "Skill name must not exceed 50 characters",
+            },
           })}
           error={errors?.name}
         />
@@ -242,14 +250,14 @@ export default function AddEditSkills() {
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
-        label="Sort Order"
+        label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder="Sort Order"
+          placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />

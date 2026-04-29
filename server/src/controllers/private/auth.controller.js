@@ -338,23 +338,28 @@ const logoutUser = asynchandler(async (req, res) => {
 });
 
 const changePassword = asynchandler(async (req, res) => {
-  const { isInitializing, old_password, new_password } = req.body;
+  const { isInitializing, old_password, new_password, confirm_password } = req.body;
 
   const loggedUser = await User.findById(req.user?._id);
 
   if (!isInitializing) {
-    if (!old_password || !new_password) {
-      throw new ApiError(400, "all fields are required!");
+    if (!old_password || !new_password || !confirm_password) {
+      throw new ApiError(400, "All fields are required!");
+    }
+
+    // Validate password confirmation match
+    if (new_password !== confirm_password) {
+      throw new ApiError(400, "Passwords do not match! Please ensure new password and confirm password are the same.");
     }
 
     const isPasswordCorrect = await loggedUser.isPasswordCorrect(old_password);
 
     if (!isPasswordCorrect) {
-      throw new ApiError(409, "invalid password!");
+      throw new ApiError(409, "Invalid current password!");
     }
 
     if (new_password === old_password) {
-      throw new ApiError(409, "new password connot be same as old password!");
+      throw new ApiError(409, "New password cannot be the same as old password!");
     }
   }
 
@@ -374,8 +379,8 @@ const changePassword = asynchandler(async (req, res) => {
   }
 
   return res
-    .status(204)
-    .json(new ApiRes(204, null, "password changed successfully!"));
+    .status(200)
+    .json(new ApiRes(200, null, "Password changed successfully!"));
 });
 
 export {

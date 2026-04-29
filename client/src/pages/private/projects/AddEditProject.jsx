@@ -54,6 +54,7 @@ export default function AddEditProject() {
     reset,
     formState: { errors, isSubmitting, dirtyFields },
     setValue,
+    watch,
   } = useForm({
     defaultValues: {
       sortOrder: 0,
@@ -67,6 +68,8 @@ export default function AddEditProject() {
   const coverImageIndex = useWatch({ control, name: "coverImageIndex" });
   const githubLink = useWatch({ control, name: "githubLink" });
   const liveLink = useWatch({ control, name: "liveLink" });
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
 
   const formatDate = (date) => {
     return date ? dayjs(date).format("YYYY-MM-DD") : "";
@@ -200,9 +203,17 @@ export default function AddEditProject() {
         <CustomInput
           id="title"
           type="text"
-          placeholder="Project Name"
+          placeholder="Enter project name"
           {...register("title", {
-            required: "Project Name is required!",
+            required: "Project name is required!",
+            minLength: {
+              value: 2,
+              message: "Project name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Project name must not exceed 100 characters",
+            },
           })}
           error={errors?.title}
         />
@@ -251,10 +262,10 @@ export default function AddEditProject() {
         <CustomInput
           id="liveLink"
           type="text"
-          placeholder="Live URL"
+          placeholder="https://example.com"
           {...register("liveLink", {
             pattern: {
-              value: /^https:\/\/.+$/,
+              value: /^(https:\/\/.+)?$/,
               message: "URL must start with https://",
             },
           })}
@@ -265,7 +276,7 @@ export default function AddEditProject() {
       {/* Github Link */}
       <LabelInput
         id="githubLink"
-        label="Github Link"
+        label="GitHub Link"
         colSpan="col-span-12 sm:col-span-6"
         attachment={
           githubLink && (
@@ -282,10 +293,10 @@ export default function AddEditProject() {
         <CustomInput
           id="githubLink"
           type="text"
-          placeholder="Repository Link"
+          placeholder="https://github.com/username/repo"
           {...register("githubLink", {
             pattern: {
-              value: /^https:\/\/.+$/,
+              value: /^(https:\/\/.+)?$/,
               message: "URL must start with https://",
             },
           })}
@@ -302,11 +313,11 @@ export default function AddEditProject() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder="Enter Description"
+          placeholder="Describe your project, its goals, and key features..."
           {...register("description", {
             maxLength: {
               value: 1000,
-              message: "Max 1000 characters allowed!",
+              message: "Description must not exceed 1000 characters",
             },
           })}
           error={errors?.description}
@@ -386,9 +397,15 @@ export default function AddEditProject() {
       >
         <CustomDatePicker
           id="startDate"
-          placeholder="Select Date"
+          placeholder="YYYY-MM-DD"
           {...register("startDate", {
-            required: "Start Date is required!",
+            required: "Start date is required!",
+            validate: (value) => {
+              if (endDate && value && dayjs(value).isAfter(dayjs(endDate))) {
+                return "Start date cannot be after end date";
+              }
+              return true;
+            },
           })}
           error={errors?.startDate}
         />
@@ -404,16 +421,25 @@ export default function AddEditProject() {
       >
         <CustomDatePicker
           id="endDate"
-          placeholder="Select Date"
-          {...register("endDate")}
+          placeholder="YYYY-MM-DD (leave blank if current)"
+          {...register("endDate", {
+            validate: (value) => {
+              if (value && startDate && dayjs(value).isBefore(dayjs(startDate))) {
+                return "End date cannot be before start date";
+              }
+              return true;
+            },
+          })}
           error={errors?.endDate}
         />
+
+        <FieldError error={errors.endDate?.message} />
       </LabelInput>
 
       {/* Present */}
       <LabelInput
         id="isCurrent"
-        label="Currently working on this project"
+        label="Currently working"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
@@ -428,14 +454,14 @@ export default function AddEditProject() {
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
-        label="Sort Order"
+        label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder="Sort Order"
+          placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />

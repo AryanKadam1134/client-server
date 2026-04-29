@@ -394,9 +394,17 @@ export default function Dashboard() {
         <CustomInput
           id="firstName"
           type="text"
-          placeholder="First Name"
+          placeholder="Enter your first name"
           {...register("firstName", {
-            required: "First Name is required!",
+            required: "First name is required!",
+            minLength: {
+              value: 2,
+              message: "First name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 50,
+              message: "First name must not exceed 50 characters",
+            },
           })}
           error={errors.firstName}
         />
@@ -413,7 +421,7 @@ export default function Dashboard() {
         <CustomInput
           id="middleName"
           type="text"
-          placeholder="Middle Name"
+          placeholder="Enter middle name (optional)"
           {...register("middleName", {})}
           error={errors.middleName}
         />
@@ -428,8 +436,13 @@ export default function Dashboard() {
         <CustomInput
           id="lastName"
           type="text"
-          placeholder="Last Name"
-          {...register("lastName")}
+          placeholder="Enter your last name"
+          {...register("lastName", {
+            maxLength: {
+              value: 50,
+              message: "Last name must not exceed 50 characters",
+            },
+          })}
           error={errors.lastName}
         />
       </LabelInput>
@@ -444,9 +457,21 @@ export default function Dashboard() {
         <CustomInput
           id="username"
           type="text"
-          placeholder="username"
+          placeholder="Enter a unique username"
           {...register("username", {
-            required: "username is required!",
+            required: "Username is required!",
+            minLength: {
+              value: 3,
+              message: "Username must be at least 3 characters",
+            },
+            maxLength: {
+              value: 30,
+              message: "Username must not exceed 30 characters",
+            },
+            pattern: {
+              value: /^[a-zA-Z0-9_-]+$/,
+              message: "Username can only contain letters, numbers, hyphens, and underscores",
+            },
           })}
           error={errors.username}
         />
@@ -468,14 +493,20 @@ export default function Dashboard() {
       >
         <CustomInput
           id="email"
-          type="text"
-          placeholder="email"
+          type="email"
+          placeholder="your.email@example.com"
           {...register("email", {
-            required: "email is required!",
+            required: "Email is required!",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Please enter a valid email address",
+            },
           })}
           disabled
           error={errors.email}
         />
+
+        <FieldError error={errors.email?.message} />
       </LabelInput>
 
       {/* Mobile No. */}
@@ -488,11 +519,13 @@ export default function Dashboard() {
         <CustomInput
           id="mobileNo"
           type="tel"
-          placeholder="mobile no."
+          placeholder="Enter 10-digit phone number"
           {...register("mobileNo", {
-            required: "Mobile No. is required!",
-            minLength: 10,
-            maxLength: 10,
+            required: "Mobile number is required!",
+            pattern: {
+              value: /^[0-9]{10}$/,
+              message: "Mobile number must be exactly 10 digits",
+            },
           })}
           error={errors.mobileNo}
         />
@@ -543,16 +576,19 @@ export default function Dashboard() {
       {/* Headline */}
       <LabelInput
         id="headline"
-        label="Headline"
+        label="Professional Headline"
         colSpan="row-span-3 col-span-12 lg:col-span-3"
       >
         <CustomTextArea
           id="headline"
           type="textarea"
-          placeholder="Headline"
+          placeholder="e.g., Full Stack Developer | React & Node.js Expert"
           className="h-full min-h-37.5"
           {...register("headline", {
-            maxLength: 100,
+            maxLength: {
+              value: 100,
+              message: "Headline must not exceed 100 characters",
+            },
           })}
           error={errors.headline}
         />
@@ -563,18 +599,18 @@ export default function Dashboard() {
       {/* About */}
       <LabelInput
         id="about"
-        label="About"
+        label="About You"
         colSpan="row-span-3 col-span-12 lg:col-span-6"
       >
         <CustomTextArea
           id="about"
           type="textarea"
-          placeholder="About"
+          placeholder="Tell us about yourself, your experience, and what you're passionate about..."
           className="h-full min-h-37.5"
           {...register("about", {
             maxLength: {
               value: 1000,
-              message: "Max 1000 characters allowed!",
+              message: "About section must not exceed 1000 characters",
             },
           })}
           error={errors.about}
@@ -586,17 +622,17 @@ export default function Dashboard() {
       {/* Resume Link */}
       <LabelInput
         id="documentUrl"
-        label="Resume Link (Optional)"
+        label="Resume Link"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         className="order-[99] lg:order-0"
       >
         <CustomInput
           id="documentUrl"
           type="text"
-          placeholder="e.g. Google Drive link"
+          placeholder="https://drive.google.com/... (optional)"
           {...register("documentUrl", {
             pattern: {
-              value: /^https:\/\/.+$/,
+              value: /^(https:\/\/.+)?$/,
               message: "URL must start with https://",
             },
           })}
@@ -613,8 +649,13 @@ export default function Dashboard() {
         <CustomInput
           id="city"
           type="text"
-          placeholder="e.g. Google Drive link"
-          {...register("location.city", {})}
+          placeholder="Enter your city"
+          {...register("location.city", {
+            maxLength: {
+              value: 50,
+              message: "City name must not exceed 50 characters",
+            },
+          })}
           error={errors.location?.city}
         />
       </LabelInput>
@@ -622,14 +663,19 @@ export default function Dashboard() {
       {/* State */}
       <LabelInput
         id="state"
-        label="State"
+        label="State / Province"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
       >
         <CustomInput
           id="state"
           type="text"
-          placeholder="e.g. Google Drive link"
-          {...register("location.state", {})}
+          placeholder="Enter your state or province"
+          {...register("location.state", {
+            maxLength: {
+              value: 50,
+              message: "State name must not exceed 50 characters",
+            },
+          })}
           error={errors.location?.state}
         />
       </LabelInput>
@@ -643,8 +689,13 @@ export default function Dashboard() {
         <CustomInput
           id="country"
           type="text"
-          placeholder="e.g. Google Drive link"
-          {...register("location.country", {})}
+          placeholder="Enter your country"
+          {...register("location.country", {
+            maxLength: {
+              value: 50,
+              message: "Country name must not exceed 50 characters",
+            },
+          })}
           error={errors.location?.country}
         />
       </LabelInput>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import LabelInput from "../../components/ui/LabelInput";
 import FieldError from "../../components/ui/FieldError";
@@ -19,22 +19,22 @@ export default function ChangePassword() {
     register,
     handleSubmit,
     reset,
+    control,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onChange", // 🔥 important
   });
 
-  const changePassword = async (payload) => {
-    if (payload?.new_password !== payload?.confirm_password) {
-      alert("confirm password is incorret!");
-      return;
-    }
+  // Watch password fields for real-time validation
+  const newPassword = watch("new_password");
 
+  const changePassword = async (payload) => {
     try {
       await apiEndpoints.changePassword(payload);
 
       reset();
-      notify.msgSuccess("Password Changed!");
+      notify.msgSuccess("Password changed successfully!");
     } catch (error) {
       console.error("Error Changing Password: ", error);
     }
@@ -66,22 +66,22 @@ export default function ChangePassword() {
       {hasPassword && (
         <LabelInput
           id="old_password"
-          label="Old Password"
+          label="Current Password"
           colSpan="col-span-12 sm:col-span-6"
           required
         >
           <CustomInputPassword
             id="old_password"
-            placeholder="Enter"
+            placeholder="Enter your current password"
             {...register("old_password", {
-              required: "old password is required!",
+              required: "Current password is required!",
               minLength: {
                 value: 8,
-                message: "Minimum 6 characters",
+                message: "Password must be at least 8 characters",
               },
               maxLength: {
                 value: 16,
-                message: "Maximum 16 characters",
+                message: "Password must not exceed 16 characters",
               },
             })}
             className="pr-10"
@@ -101,16 +101,16 @@ export default function ChangePassword() {
       >
         <CustomInputPassword
           id="new_password"
-          placeholder="Enter"
+          placeholder="Create a new password"
           {...register("new_password", {
-            required: "new password is required!",
+            required: "New password is required!",
             minLength: {
               value: 8,
-              message: "Minimum 6 characters",
+              message: "Password must be at least 8 characters",
             },
             maxLength: {
               value: 16,
-              message: "Maximum 16 characters",
+              message: "Password must not exceed 16 characters",
             },
           })}
           className="pr-10"
@@ -123,22 +123,28 @@ export default function ChangePassword() {
       {/* Confirm Password */}
       <LabelInput
         id="confirm_password"
-        label="Old Password"
+        label="Confirm New Password"
         colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInputPassword
           id="confirm_password"
-          placeholder="Enter"
+          placeholder="Re-enter your new password"
           {...register("confirm_password", {
-            required: "confirm_password is required!",
+            required: "Please confirm your password!",
             minLength: {
               value: 8,
-              message: "Minimum 6 characters",
+              message: "Password must be at least 8 characters",
             },
             maxLength: {
               value: 16,
-              message: "Maximum 16 characters",
+              message: "Password must not exceed 16 characters",
+            },
+            validate: (value) => {
+              if (value !== newPassword) {
+                return "Passwords do not match!";
+              }
+              return true;
             },
           })}
           className="pr-10"

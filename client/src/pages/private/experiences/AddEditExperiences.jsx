@@ -207,9 +207,17 @@ export default function AddEditExperiences() {
         <CustomInput
           id="organization"
           type="text"
-          placeholder="Company Name"
+          placeholder="Enter company name"
           {...register("organization", {
-            required: "Organization Name is required!",
+            required: "Organization name is required!",
+            minLength: {
+              value: 2,
+              message: "Organization name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Organization name must not exceed 100 characters",
+            },
           })}
           error={errors?.organization}
         />
@@ -227,15 +235,15 @@ export default function AddEditExperiences() {
         <Controller
           name="employmentType"
           control={control}
-          rules={{ required: "Employment Type is required!" }}
+          rules={{ required: "Employment type is required!" }}
           render={({ field }) => (
             <CustomSelect
               id="employmentType"
-              placeholder="e.g. Full Time, Part Time"
+              placeholder="Select: Full-time, Part-time, Contract, Freelance"
               options={employmentTypes}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.employmentType} // send value to hook form
+              error={errors?.employmentType}
             />
           )}
         />
@@ -252,8 +260,13 @@ export default function AddEditExperiences() {
         <CustomInput
           id="organizationSize"
           type="text"
-          placeholder="e.g. 10-20"
-          {...register("organizationSize")}
+          placeholder="e.g., 50-100 employees"
+          {...register("organizationSize", {
+            maxLength: {
+              value: 50,
+              message: "Organization size must not exceed 50 characters",
+            },
+          })}
           error={errors?.organizationSize}
         />
       </LabelInput>
@@ -261,7 +274,7 @@ export default function AddEditExperiences() {
       {/* Website */}
       <LabelInput
         id="organizationWebsite"
-        label="Company's Website"
+        label="Company Website"
         colSpan="col-span-12 sm:col-span-6"
         attachment={
           organizationWebsite && (
@@ -278,10 +291,10 @@ export default function AddEditExperiences() {
         <CustomInput
           id="organizationWebsite"
           type="text"
-          placeholder="Company Website"
+          placeholder="https://example.com"
           {...register("organizationWebsite", {
             pattern: {
-              value: /^https:\/\/.+$/,
+              value: /^(https:\/\/.+)?$/,
               message: "URL must start with https://",
             },
           })}
@@ -298,11 +311,11 @@ export default function AddEditExperiences() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder="Enter Description"
+          placeholder="Describe your role, responsibilities, and key achievements..."
           {...register("description", {
             maxLength: {
               value: 1000,
-              message: "Max 1000 characters allowed!",
+              message: "Description must not exceed 1000 characters",
             },
           })}
           error={errors?.description}
@@ -323,10 +336,10 @@ export default function AddEditExperiences() {
           render={({ field }) => (
             <CustomMultiSelect
               id="techStack"
-              placeholder="Select Tech Stack"
+              placeholder="Select technologies used"
               options={skillsList}
               value={field.value}
-              onChange={field.onChange} // send value to hook form
+              onChange={field.onChange}
             />
           )}
         />
@@ -341,8 +354,13 @@ export default function AddEditExperiences() {
         <CustomInput
           id="location"
           type="text"
-          placeholder="Company Location"
-          {...register("location")}
+          placeholder="e.g., San Francisco, CA"
+          {...register("location", {
+            maxLength: {
+              value: 100,
+              message: "Location must not exceed 100 characters",
+            },
+          })}
           error={errors?.location}
         />
       </LabelInput>

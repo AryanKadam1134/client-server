@@ -41,6 +41,7 @@ export default function AddEditCertificate() {
     control,
     reset,
     formState: { errors, isSubmitting, dirtyFields },
+    watch,
   } = useForm({
     defaultValues: {
       sortOrder: 0,
@@ -52,6 +53,8 @@ export default function AddEditCertificate() {
 
   const credentialUrl = useWatch({ control, name: "credentialUrl" });
   const certificateImage = useWatch({ control, name: "certificateImage" });
+  const issueDate = watch("issueDate");
+  const expiryDate = watch("expiryDate");
 
   const formatDate = (date) => {
     return date ? dayjs(date).format("YYYY-MM-DD") : "";
@@ -170,9 +173,17 @@ export default function AddEditCertificate() {
         <CustomInput
           id="title"
           type="text"
-          placeholder="Certificate Name"
+          placeholder="Enter certificate name"
           {...register("title", {
-            required: "Certificate Name is required!",
+            required: "Certificate name is required!",
+            minLength: {
+              value: 2,
+              message: "Certificate name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Certificate name must not exceed 100 characters",
+            },
           })}
           error={errors?.title}
         />
@@ -190,9 +201,17 @@ export default function AddEditCertificate() {
         <CustomInput
           id="issuer"
           type="text"
-          placeholder="Certificate Issuer's Name"
+          placeholder="Organization or institution name"
           {...register("issuer", {
-            required: "Issuer is required!",
+            required: "Issuer name is required!",
+            minLength: {
+              value: 2,
+              message: "Issuer name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Issuer name must not exceed 100 characters",
+            },
           })}
           error={errors?.issuer}
         />
@@ -203,14 +222,19 @@ export default function AddEditCertificate() {
       {/* Credential Id */}
       <LabelInput
         id="credentialId"
-        label="Credential Id"
+        label="Credential ID"
         colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="credentialId"
           type="text"
-          placeholder="Credential Id (if any)"
-          {...register("credentialId")}
+          placeholder="e.g., ABC123XYZ (optional)"
+          {...register("credentialId", {
+            maxLength: {
+              value: 50,
+              message: "Credential ID must not exceed 50 characters",
+            },
+          })}
           error={errors?.credentialId}
         />
       </LabelInput>
@@ -235,10 +259,10 @@ export default function AddEditCertificate() {
         <CustomInput
           id="credentialUrl"
           type="text"
-          placeholder="Drive Link or Other"
+          placeholder="https://example.com/certificate (optional)"
           {...register("credentialUrl", {
             pattern: {
-              value: /^https:\/\/.+$/,
+              value: /^(https:\/\/.+)?$/,
               message: "URL must start with https://",
             },
           })}
@@ -255,11 +279,11 @@ export default function AddEditCertificate() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder="About this certificate"
+          placeholder="Describe what you learned or achieved with this certificate..."
           {...register("description", {
             maxLength: {
               value: 1000,
-              message: "Max 1000 characters allowed!",
+              message: "Description must not exceed 1000 characters",
             },
           })}
           error={errors?.description}
@@ -280,10 +304,10 @@ export default function AddEditCertificate() {
           render={({ field }) => (
             <CustomMultiSelect
               id="skills"
-              placeholder="Select Skills"
+              placeholder="Select skills learned"
               options={skillsList}
               value={field.value}
-              onChange={field.onChange} // send value to hook form
+              onChange={field.onChange}
             />
           )}
         />
@@ -298,9 +322,15 @@ export default function AddEditCertificate() {
       >
         <CustomDatePicker
           id="issueDate"
-          placeholder="Select Date"
+          placeholder="YYYY-MM-DD"
           {...register("issueDate", {
-            required: "Issue Date is required!",
+            required: "Issue date is required!",
+            validate: (value) => {
+              if (expiryDate && value && dayjs(value).isAfter(dayjs(expiryDate))) {
+                return "Issue date cannot be after expiry date";
+              }
+              return true;
+            },
           })}
           error={errors?.issueDate}
         />
@@ -316,10 +346,19 @@ export default function AddEditCertificate() {
       >
         <CustomDatePicker
           id="expiryDate"
-          placeholder="Select Date"
-          {...register("expiryDate")}
+          placeholder="YYYY-MM-DD (leave blank if no expiry)"
+          {...register("expiryDate", {
+            validate: (value) => {
+              if (value && issueDate && dayjs(value).isBefore(dayjs(issueDate))) {
+                return "Expiry date cannot be before issue date";
+              }
+              return true;
+            },
+          })}
           error={errors?.expiryDate}
         />
+
+        <FieldError error={errors.expiryDate?.message} />
       </LabelInput>
 
       {/* Featured */}
@@ -345,14 +384,14 @@ export default function AddEditCertificate() {
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
-        label="Sort Order"
+        label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder="Sort Order"
+          placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />

@@ -189,9 +189,17 @@ export default function AddEditAchievement() {
         <CustomInput
           id="title"
           type="text"
-          placeholder="Achievement Name"
+          placeholder="Enter achievement name"
           {...register("title", {
-            required: "Achievement Name is required!",
+            required: "Achievement name is required!",
+            minLength: {
+              value: 2,
+              message: "Achievement name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Achievement name must not exceed 100 characters",
+            },
           })}
           error={errors?.title}
         />
@@ -209,9 +217,17 @@ export default function AddEditAchievement() {
         <CustomInput
           id="issuer"
           type="text"
-          placeholder="Issuer's Name"
+          placeholder="Organization or person name"
           {...register("issuer", {
             required: "Issuer is required!",
+            minLength: {
+              value: 2,
+              message: "Issuer name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Issuer name must not exceed 100 characters",
+            },
           })}
           error={errors?.issuer}
         />
@@ -260,7 +276,7 @@ export default function AddEditAchievement() {
         <CustomInput
           id="link"
           type="text"
-          placeholder="Event Link or Blog Link"
+          placeholder="https://example.com (optional)"
           {...register("link", {
             pattern: {
               value: /^https:\/\/.+$/,
@@ -280,7 +296,7 @@ export default function AddEditAchievement() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder="About this Achievement"
+          placeholder="Describe your achievement and why it matters..."
           {...register("description", {
             maxLength: {
               value: 1000,

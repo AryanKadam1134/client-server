@@ -109,9 +109,17 @@ export default function AddEditSkillCategory() {
         <CustomInput
           id="name"
           type="text"
-          placeholder="Category Name"
+          placeholder="e.g., Frontend, Backend, DevOps"
           {...register("name", {
-            required: "Category Name is required!",
+            required: "Category name is required!",
+            minLength: {
+              value: 2,
+              message: "Category name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 50,
+              message: "Category name must not exceed 50 characters",
+            },
           })}
           error={errors?.name}
         />
@@ -122,14 +130,14 @@ export default function AddEditSkillCategory() {
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"
-        label="Sort Order"
+        label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="sortOrder"
           type="number"
           min={0}
-          placeholder="Sort Order"
+          placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
           error={errors?.sortOrder}
         />

@@ -31,9 +31,12 @@ export default function AddEditEducation() {
     control,
     reset,
     formState: { errors, isSubmitting, dirtyFields },
+    watch,
   } = useForm({ mode: "onChange" });
 
   const instituteImage = useWatch({ control, name: "instituteImage" });
+  const startYear = watch("startYear");
+  const endYear = watch("endYear");
 
   const getUpdatedFields = (data, dirtyFields) => {
     const updated = {};
@@ -144,9 +147,17 @@ export default function AddEditEducation() {
         <CustomInput
           id="instituteName"
           type="text"
-          placeholder="School / College Name"
+          placeholder="Enter institute name"
           {...register("instituteName", {
-            required: "Institute Name is required!",
+            required: "Institute name is required!",
+            minLength: {
+              value: 2,
+              message: "Institute name must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Institute name must not exceed 100 characters",
+            },
           })}
           error={errors?.instituteName}
         />
@@ -157,16 +168,24 @@ export default function AddEditEducation() {
       {/* Qualification */}
       <LabelInput
         id="qualification"
-        label="Qualification"
+        label="Degree / Field of Study"
         colSpan="col-span-12 sm:col-span-6"
         required
       >
         <CustomInput
           id="qualification"
           type="text"
-          placeholder="Degree / Field"
+          placeholder="e.g., Bachelor of Science in Computer Science"
           {...register("qualification", {
-            required: "Qualification is required!",
+            required: "Degree is required!",
+            minLength: {
+              value: 2,
+              message: "Degree must be at least 2 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Degree must not exceed 100 characters",
+            },
           })}
           error={errors?.qualification}
         />
@@ -183,11 +202,11 @@ export default function AddEditEducation() {
         <CustomTextArea
           id="description"
           type="text"
-          placeholder="Enter Description"
+          placeholder="Describe your education, coursework, achievements..."
           {...register("description", {
             maxLength: {
               value: 1000,
-              message: "Max 1000 characters allowed!",
+              message: "Description must not exceed 1000 characters",
             },
           })}
           error={errors?.description}
@@ -205,8 +224,13 @@ export default function AddEditEducation() {
         <CustomInput
           id="location"
           type="text"
-          placeholder="Institute Location"
-          {...register("location")}
+          placeholder="e.g., San Francisco, CA"
+          {...register("location", {
+            maxLength: {
+              value: 100,
+              message: "Location must not exceed 100 characters",
+            },
+          })}
           error={errors?.location}
         />
       </LabelInput>
@@ -216,16 +240,27 @@ export default function AddEditEducation() {
         id="startYear"
         label="Start Year"
         colSpan="col-span-12 sm:col-span-6"
+        required
       >
         <CustomInput
           id="startYear"
           type="number"
-          placeholder="e.g. 2021"
+          placeholder="e.g., 2018"
           {...register("startYear", {
-            required: "Start Year is required!",
+            required: "Start year is required!",
+            min: {
+              value: 1900,
+              message: "Start year must be 1900 or later",
+            },
+            max: {
+              value: new Date().getFullYear(),
+              message: `Start year cannot be in the future`,
+            },
           })}
           error={errors?.startYear}
         />
+
+        <FieldError error={errors.startYear?.message} />
       </LabelInput>
 
       {/* End Year */}
@@ -237,16 +272,33 @@ export default function AddEditEducation() {
         <CustomInput
           id="endYear"
           type="number"
-          placeholder="e.g. 2025"
-          {...register("endYear")}
+          placeholder="e.g., 2022 (leave blank if current)"
+          {...register("endYear", {
+            min: {
+              value: 1900,
+              message: "End year must be 1900 or later",
+            },
+            max: {
+              value: new Date().getFullYear() + 10,
+              message: "End year cannot be more than 10 years in the future",
+            },
+            validate: (value) => {
+              if (value && startYear && Number(value) < Number(startYear)) {
+                return "End year cannot be before start year";
+              }
+              return true;
+            },
+          })}
           error={errors?.endYear}
         />
+
+        <FieldError error={errors.endYear?.message} />
       </LabelInput>
 
       {/* Present */}
       <LabelInput
         id="isCurrent"
-        label="Present"
+        label="Currently studying here"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
@@ -261,22 +313,30 @@ export default function AddEditEducation() {
       {/* Percentage */}
       <LabelInput
         id="percentage"
-        label="Percentage"
+        label="Percentage / Grade"
         colSpan="col-span-12 sm:col-span-6"
       >
         <CustomInput
           id="percentage"
           type="number"
-          step="any"
+          step="0.01"
           min={0}
           max={100}
-          placeholder="e.g. 81"
+          placeholder="e.g., 85.5"
           {...register("percentage", {
-            min: 0,
-            max: 100,
+            min: {
+              value: 0,
+              message: "Percentage cannot be less than 0",
+            },
+            max: {
+              value: 100,
+              message: "Percentage cannot be more than 100",
+            },
           })}
           error={errors?.percentage}
         />
+
+        <FieldError error={errors.percentage?.message} />
       </LabelInput>
 
       {/* CGPA */}
@@ -284,16 +344,24 @@ export default function AddEditEducation() {
         <CustomInput
           id="cgpa"
           type="number"
-          step="any"
+          step="0.01"
           min={0}
           max={10}
-          placeholder="e.g. 8.1"
+          placeholder="e.g., 8.5"
           {...register("cgpa", {
-            min: 0,
-            max: 10,
+            min: {
+              value: 0,
+              message: "CGPA cannot be less than 0",
+            },
+            max: {
+              value: 10,
+              message: "CGPA cannot be more than 10",
+            },
           })}
           error={errors?.cgpa}
         />
+
+        <FieldError error={errors.cgpa?.message} />
       </LabelInput>
 
       {id && (
