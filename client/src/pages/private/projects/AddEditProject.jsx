@@ -363,6 +363,11 @@ export default function AddEditProject() {
         label="Featured"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
+        attachment={
+          <p className="font-normal text-xs opacity-80">
+            Helps in filtering the projects
+          </p>
+        }
       >
         <input
           id="featured"

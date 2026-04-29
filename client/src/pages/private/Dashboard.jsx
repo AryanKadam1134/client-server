@@ -77,21 +77,31 @@ function ResumeDropZone({
       >
         {resumeLoading ? (
           <>
-            <Loader size={24} className="text-blue-500 dark:text-blue-400 animate-spin" />
+            <Loader
+              size={24}
+              className="text-blue-500 dark:text-blue-400 animate-spin"
+            />
           </>
         ) : hasFile ? (
           <>
             <div className="flex flex-col items-center gap-1">
               <img src="/images/pdf.svg" alt="pdf svg" className="size-8" />
-              <p className="text-xs font-medium truncate text-light-text-primary dark:text-dark-text-primary w-full">{fileName}</p>
+              <p className="text-xs font-medium truncate text-light-text-primary dark:text-dark-text-primary w-full">
+                {fileName}
+              </p>
             </div>
 
-            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">Click to replace</p>
+            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">
+              Click to replace
+            </p>
           </>
         ) : (
           <>
             <div className="flex flex-col items-center gap-1">
-              <FileText size={24} className="text-light-text-tertiary dark:text-dark-text-tertiary" />
+              <FileText
+                size={24}
+                className="text-light-text-tertiary dark:text-dark-text-tertiary"
+              />
               <div className="text-light-text-secondary dark:text-dark-text-secondary text-xs font-medium">
                 Drop your PDF here
                 <br />
@@ -101,7 +111,9 @@ function ResumeDropZone({
               </div>
             </div>
 
-            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">PDF only</p>
+            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">
+              PDF only
+            </p>
           </>
         )}
       </div>
@@ -323,11 +335,7 @@ export default function Dashboard() {
         <div className="relative">
           {/* Image */}
           <img
-            src={
-              preview?.image ||
-              profileImage?.url ||
-              `/images/icon-7797704_640.png`
-            }
+            src={preview?.image || profileImage?.url || `/images/profile.png`}
             alt="User Profile"
             className="size-45 rounded-full object-contain border border-light-border-primary dark:border-dark-border-primary"
           />
@@ -336,7 +344,10 @@ export default function Dashboard() {
           {imageLoading ? (
             <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
               <div className="text-white text-sm bg-black/40 p-2 rounded-full">
-                <Loader size={20} className="text-light-text-secondary dark:text-dark-text-secondary animate-spin" />
+                <Loader
+                  size={20}
+                  className="text-light-text-secondary dark:text-dark-text-secondary animate-spin"
+                />
               </div>
             </div>
           ) : (

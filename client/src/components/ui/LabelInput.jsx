@@ -25,13 +25,15 @@ export default function LabelInput({
 
       <label
         htmlFor={id}
-        className={`flex items-center justify-between font-medium text-sm text-light-text-primary dark:text-dark-text-primary
+        className={`flex ${isCheckbox ? "flex-col" : "flex-row items-center"} justify-between font-medium text-sm text-light-text-primary dark:text-dark-text-primary
         ${bold && `font-semibold`}
         ${!isCheckbox && `whitespace-nowrap`}`}
       >
         <p>
           {label}
-          {required && <span className="text-red-600 dark:text-red-500"> *</span>}
+          {required && (
+            <span className="text-red-600 dark:text-red-500"> *</span>
+          )}
           {orientation == "horizontal" && " :"}
 
           {isFile && <div className="mt-1">{children}</div>}

@@ -328,6 +328,11 @@ export default function AddEditCertificate() {
         label="Featured"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
+        attachment={
+          <p className="font-normal text-xs opacity-80">
+            Helps in filtering the certificates
+          </p>
+        }
       >
         <input
           id="featured"

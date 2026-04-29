@@ -71,7 +71,7 @@ export default function Header({ onMenuClick }) {
           {/* Avatar */}
           <div className="relative rounded-full overflow-hidden border-2 border-light-border-primary dark:border-dark-border-primary">
             <img
-              src={user?.image?.url}
+              src={user?.image?.url || `/images/profile.png`}
               alt="User"
               className="size-10 object-contain"
             />
