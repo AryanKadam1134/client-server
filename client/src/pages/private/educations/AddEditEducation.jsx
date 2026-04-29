@@ -298,7 +298,6 @@ export default function AddEditEducation() {
 
       {id && (
         <>
-          {" "}
           {/* Upload Institute Image  */}
           <LabelInput
             id="upload"
@@ -312,6 +311,7 @@ export default function AddEditEducation() {
               onChange={(files) => updateInstituteImage(files)}
             />
           </LabelInput>
+
           {/* Institute Image */}
           <LabelInput
             label="Institute Image"

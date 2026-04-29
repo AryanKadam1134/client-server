@@ -252,44 +252,91 @@ const deleteUserResume = asynchandler(async (req, res) => {
 
 const deleteUser = asynchandler(async (req, res) => {
   const loggedUser = req.user;
-
   const loggedUserId = loggedUser?._id;
 
-  await SocialPlatform.deleteMany({
-    owner: loggedUserId,
+  const publicIds = [];
+
+  // Delete all related documents without images
+  await SocialPlatform.deleteMany({ owner: loggedUserId });
+  await Skill.deleteMany({ owner: loggedUserId });
+  await SkillCategory.deleteMany({ owner: loggedUserId });
+
+  // Find documents with images before deleting (to collect image public IDs)
+  const experiences = await Experience.find({ owner: loggedUserId });
+  const educations = await Education.find({ owner: loggedUserId });
+  const certificates = await Certificate.find({ owner: loggedUserId });
+  const projects = await Project.find({ owner: loggedUserId });
+  const achievements = await Achievement.find({ owner: loggedUserId });
+
+  // Now delete all documents from database
+  await Experience.deleteMany({ owner: loggedUserId });
+  await Education.deleteMany({ owner: loggedUserId });
+  await Certificate.deleteMany({ owner: loggedUserId });
+  await Project.deleteMany({ owner: loggedUserId });
+  await Achievement.deleteMany({ owner: loggedUserId });
+
+  // Collect all public IDs for Cloudinary deletion
+  experiences?.forEach((exp) => {
+    if (exp?.organizationImage?.public_id) {
+      publicIds.push(exp.organizationImage);
+    }
   });
 
-  await Skill.deleteMany({
-    owner: loggedUserId,
+  educations?.forEach((edu) => {
+    if (edu?.instituteImage?.public_id) {
+      publicIds.push(edu.instituteImage);
+    }
   });
 
-  await SkillCategory.deleteMany({
-    owner: loggedUserId,
+  certificates?.forEach((cert) => {
+    if (cert?.certificateImage?.public_id) {
+      publicIds.push(cert.certificateImage);
+    }
   });
 
-  await Project.deleteMany({
-    owner: loggedUserId,
+  projects?.forEach((pro) => {
+    if (pro?.projectImages && Array.isArray(pro.projectImages)) {
+      pro.projectImages.forEach((img) => {
+        if (img?.public_id) {
+          publicIds.push(img);
+        }
+      });
+    }
   });
 
-  await Experience.deleteMany({
-    owner: loggedUserId,
+  achievements?.forEach((ach) => {
+    if (ach?.achievementImages && Array.isArray(ach.achievementImages)) {
+      ach.achievementImages.forEach((img) => {
+        if (img?.public_id) {
+          publicIds.push(img);
+        }
+      });
+    }
   });
 
-  await Education.deleteMany({
-    owner: loggedUserId,
-  });
+  // Add user's profile image and resume
+  if (loggedUser?.image?.public_id) {
+    publicIds.push(loggedUser.image);
+  }
 
-  await Certificate.deleteMany({
-    owner: loggedUserId,
-  });
+  if (loggedUser?.resumeOrCv?.public_id) {
+    publicIds.push(loggedUser.resumeOrCv);
+  }
 
-  await Achievement.deleteMany({
-    owner: loggedUserId,
-  });
+  // Delete all files from Cloudinary
+  try {
+    await Promise.all(publicIds.map((image) => deleteFromCloudinary(image)));
+  } catch (error) {
+    console.error("Error deleting files from Cloudinary:", error);
+    // Continue with user deletion even if Cloudinary deletion fails
+  }
 
+  // Finally, delete the user document from database
   await User.findByIdAndDelete(loggedUserId);
 
-  return res.status(204);
+  return res
+    .status(200)
+    .json(new ApiRes(200, null, "user account deleted successfully!"));
 });
 
 export {

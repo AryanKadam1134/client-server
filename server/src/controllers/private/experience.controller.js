@@ -21,6 +21,7 @@ const addExperience = asynchandler(async (req, res) => {
     organizationSize,
     organizationWebsite,
     location,
+    locationType,
     positions,
     highlights,
     techStack,
@@ -49,6 +50,7 @@ const addExperience = asynchandler(async (req, res) => {
   if (organizationSize) fields.organizationSize = organizationSize;
   if (organizationWebsite) fields.organizationWebsite = organizationWebsite;
   if (location) fields.location = location;
+  if (locationType) fields.locationType = locationType;
   if (visibility) fields.visibility = visibility;
 
   if (positions?.length > 0)
