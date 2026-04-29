@@ -148,7 +148,7 @@ export default function AddEditSkills() {
       onSubmit={handleSubmit(addUpdateSkill)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
-      {!skillId && (
+      {!id && (
         <>
           <LabelInput
             id="popular"

@@ -344,7 +344,7 @@ export default function AddEditSocialPlatform() {
       onSubmit={handleSubmit(addUpdatePlatform)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
-      {!platformId && (
+      {!id && (
         <>
           <LabelInput
             id="popular"

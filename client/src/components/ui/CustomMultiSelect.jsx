@@ -10,7 +10,8 @@ export default function CustomMultiSelect({
   value = [],
   onChange,
   error,
-  placeholder = "Select...",
+  placeholder,
+  ...props
 }) {
   // ✅ map value -> objects
   const selectedItems = options.filter((opt) => value.includes(opt.value));
@@ -113,7 +114,7 @@ export default function CustomMultiSelect({
           <span
             key={item.value}
             {...getSelectedItemProps({ selectedItem: item, index })}
-            className="flex items-center gap-1 text-light-text-primary dark:text-dark-bg-primary bg-light-bg-secondary dark:bg-dark-bg-tertiary px-2 py-1 rounded text-xs"
+            className="flex items-center gap-1 text-light-text-primary dark:text-light-bg-primary bg-light-bg-secondary dark:bg-dark-bg-tertiary px-2 py-1 rounded text-xs"
           >
             {item.label}
 
@@ -135,6 +136,7 @@ export default function CustomMultiSelect({
             className:
               "flex-1 outline-none bg-transparent text-sm min-w-[80px] text-light-text-primary dark:text-dark-text-primary",
           })}
+          {...props}
         />
       </div>
 
@@ -181,7 +183,9 @@ export default function CustomMultiSelect({
               );
             })
           ) : (
-            <li className={`px-3 py-2 text-sm text-light-text-tertiary dark:text-dark-text-tertiary`}>
+            <li
+              className={`px-3 py-2 text-sm text-light-text-tertiary dark:text-dark-text-tertiary`}
+            >
               No Data
             </li>
           ))}

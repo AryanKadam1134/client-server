@@ -10,7 +10,7 @@ export default function CustomSelect({
   error,
   value,
   onChange,
-  placeholder = "Select...",
+  ...props
 }) {
   const [inputValue, setInputValue] = useState("");
   const selectedItem = options.find((opt) => opt.value === value) || null;
@@ -63,8 +63,15 @@ export default function CustomSelect({
     },
 
     onInputValueChange: ({ inputValue: newVal }) => {
-      // 🔥 Ignore Downshift trying to set the label as inputValue after selection
       if (newVal === selectedItem?.label) return;
+
+      // 🔥 If user starts typing while an item is selected, clear selection and input
+      if (selectedItem && newVal) {
+        onChange(null);
+        setInputValue(""); // 🔥 reset instead of carrying over typed char
+        return;
+      }
+
       setInputValue(newVal || "");
     },
   });
@@ -84,8 +91,8 @@ export default function CustomSelect({
               }
             },
           })}
+          {...props}
           value={selectedItem && !inputValue ? selectedItem.label : inputValue}
-          placeholder={placeholder}
           className={`${inputClass(error)} pr-10`}
         />
 
