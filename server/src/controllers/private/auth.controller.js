@@ -63,7 +63,7 @@ const generateAccessAndRefreshToken = async (userId, req) => {
     // ✅ CASE 2: New device
     else {
       if (user.sessions.length >= 5) {
-        throw new ApiError(403, "Maximum devices limit reached (5)");
+        throw new ApiError(429, "Maximum devices limit reached (5)");
       }
 
       user.sessions.push({
@@ -80,7 +80,7 @@ const generateAccessAndRefreshToken = async (userId, req) => {
     return { accessToken, refreshToken };
   } catch (error) {
     console.error("Error Generating Access or Refresh Token: ", error);
-    throw new ApiError(501, "Couldn't generate Refresh token and Access token");
+    throw new ApiError(500, "Couldn't generate Refresh token and Access token");
   }
 };
 
@@ -140,7 +140,7 @@ const googleAuth = asynchandler(async (req, res) => {
   );
 
   if (!accessToken || !refreshToken) {
-    throw new ApiError(503, "Couldn't generate tokens");
+    throw new ApiError(500, "Couldn't generate tokens");
   }
 
   const loggedUser = await User.findById(user._id).select(
@@ -193,7 +193,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
   const session = loggedUser.sessions.find((s) => s.deviceId === deviceId);
 
   if (!session) {
-    throw new ApiError(419, "session expired!");
+    throw new ApiError(401, "session expired!");
   }
 
   const rememberMe = session.rememberMe;
@@ -355,11 +355,11 @@ const changePassword = asynchandler(async (req, res) => {
     const isPasswordCorrect = await loggedUser.isPasswordCorrect(old_password);
 
     if (!isPasswordCorrect) {
-      throw new ApiError(409, "Invalid current password!");
+      throw new ApiError(401, "Invalid current password!");
     }
 
     if (new_password === old_password) {
-      throw new ApiError(409, "New password cannot be the same as old password!");
+      throw new ApiError(400, "New password cannot be the same as old password!");
     }
   }
 

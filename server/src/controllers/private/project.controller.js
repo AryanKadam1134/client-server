@@ -195,7 +195,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
   const newImages = req.files;
 
   if (project?.projectImages?.length + newImages?.length > 5) {
-    throw new ApiError(409, "maximum 5 project images are allowed");
+    throw new ApiError(400, "maximum 5 project images are allowed");
   }
 
   const uploadedProjectImages = await Promise.all(

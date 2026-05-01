@@ -179,7 +179,7 @@ const updateAchievementImages = asynchandler(async (req, res) => {
   const newImages = req.files;
 
   if (achievement?.achievementImages?.length + newImages?.length > 5) {
-    throw new ApiError(409, "maximum 5 achievement images are allowed");
+    throw new ApiError(400, "maximum 5 achievement images are allowed");
   }
 
   const uploadedAchievementImages = await Promise.all(
