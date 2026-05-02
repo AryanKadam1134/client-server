@@ -18,8 +18,12 @@ export default function CustomRadioButtons({
             {...props}
           />
 
-          <label htmlFor={option.value} className="text-light-text-primary dark:text-dark-text-primary cursor-pointer">
+          <label
+            htmlFor={option.value}
+            className="text-light-text-primary dark:text-dark-text-primary cursor-pointer"
+          >
             {option.label}
+            <span className="mt-1">{error}</span>
           </label>
         </div>
       ))}
