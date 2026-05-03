@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Menu } from "lucide-react";
+import { Menu, Moon, SunDim } from "lucide-react";
 import { Switch } from "antd";
 
 import { useAuth } from "../../context/AuthContext";
@@ -23,6 +23,8 @@ export default function Header({ onMenuClick }) {
   ];
   const dayName = dayNames[now.getDay()];
   const dateNum = now.getDate();
+
+  const isDark = theme === "dark";
 
   return (
     <div
@@ -49,11 +51,20 @@ export default function Header({ onMenuClick }) {
       {/* RIGHT SECTION */}
       <div className="flex items-center gap-6 ml-auto">
         {/* Theme Toggle */}
-        <Switch
-          checked={theme === "dark"}
-          size="small"
-          onChange={toggleTheme}
-        />
+        <button
+          onClick={toggleTheme}
+          aria-label="Toggle dark mode"
+          aria-pressed={isDark}
+          className={`relative w-[34px] h-[18px] rounded-full transition-all duration-300 cursor-pointer
+          ${isDark ? "bg-zinc-800 border-zinc-600" : "bg-zinc-200 border-zinc-300"}`}
+        >
+          <span
+            className={`absolute top-[1px] left-[1px] p-0.5 rounded-full flex items-center justify-center shadow-sm transition-all duration-300
+            ${isDark ? "translate-x-[16px] bg-zinc-900 text-violet-400" : "translate-x-0 bg-white text-amber-400"}`}
+          >
+            {isDark ? <Moon size={12} /> : <SunDim size={12} />}
+          </span>
+        </button>
 
         {/* User Section */}
         <div className="flex items-center gap-3">
