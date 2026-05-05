@@ -40,7 +40,7 @@ export default function Header({ onMenuClick }) {
       <button
         onClick={onMenuClick}
         className="
-            md:hidden p-2 rounded-lg
+            md:hidden p-2 rounded-md
             hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover
             transition
           "

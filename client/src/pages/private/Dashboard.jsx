@@ -69,7 +69,7 @@ function ResumeDropZone({
         onClick={() => !resumeLoading && fileInputRef.current.click()}
         className={`
           flex-1 min-h-32 flex flex-col items-center justify-center gap-3
-          border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary hover:border-light-border-primary dark:hover:border-dark-border-primary rounded-lg cursor-pointer
+          border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary hover:border-light-border-primary dark:hover:border-dark-border-primary rounded-md cursor-pointer
           transition-all duration-200 px-4 py-5 text-center
           ${isDragging && "border-blue-400 dark:border-blue-500 bg-blue-500/10 dark:bg-blue-950/20"}
           ${!resumeLoading && "hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover"}

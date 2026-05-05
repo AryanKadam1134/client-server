@@ -27,18 +27,18 @@ export default function Settings() {
       <div className="space-y-4">
         <div
           onClick={() => navigate("change_password")}
-          className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md"
+          className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md"
         >
           Change Password
         </div>
 
-        <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md">
+        <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md">
           Change Email
         </div>
 
         <div
           onClick={deleteUser}
-          className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-lg cursor-pointer transition-all shadow-sm hover:shadow-md"
+          className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md"
         >
           {deleting ? "Deleting..." : "Delete Account"}
         </div>

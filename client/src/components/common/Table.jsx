@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Table({ tableHeading, tableBody, loading }) {
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-light-border-primary dark:border-dark-border-primary bg-light-bg-primary dark:bg-dark-bg-tertiary shadow-sm">
+    <div className="w-full overflow-hidden rounded-md border border-light-border-primary dark:border-dark-border-primary bg-light-bg-primary dark:bg-dark-bg-tertiary shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-light-text-primary dark:text-dark-text-primary">
           {/* Header */}

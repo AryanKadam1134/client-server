@@ -412,7 +412,7 @@ export default function AddEditExperiences() {
       </LabelInput>
 
       {/* Highlights */}
-      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-sm">
+      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-md shadow-sm">
         <div className="flex items-center justify-between gap-3">
           <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">
             Highlights{" "}
@@ -467,7 +467,7 @@ export default function AddEditExperiences() {
       </div>
 
       {/* Positions */}
-      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-sm">
+      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-md shadow-sm">
         <div className="flex items-center justify-between gap-3">
           <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">
             Positions / Posts

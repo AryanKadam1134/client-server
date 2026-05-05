@@ -26,7 +26,7 @@ Comprehensive UI improvements across the entire project to make it look more imp
 ### 1. **Better Form Sections** 📝
 - Form containers now have subtle backgrounds with shadows
 - Improved padding: `p-4` instead of `p-3` for better spacing
-- Added `rounded-lg` for modern rounded corners
+- Added `rounded-md` for modern rounded corners
 - Added `shadow-sm` for depth
 - Better visual hierarchy with proper borders
 
@@ -37,14 +37,14 @@ Comprehensive UI improvements across the entire project to make it look more imp
 
 **After:**
 ```html
-<div className="bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-sm p-4">
+<div className="bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-md shadow-sm p-4">
 ```
 
 ### 2. **Enhanced Button Styling** 🔘
 - Increased padding: `py-2.5` instead of `py-2`
 - Added font weight: `font-medium`
 - Enhanced shadows: `shadow-sm` with `hover:shadow-md`
-- Better rounded corners: `rounded-lg`
+- Better rounded corners: `rounded-md`
 - Smooth transitions for all states
 
 **CustomButton**, **DeleteButton**, **EditButton** all improved with:
@@ -55,7 +55,7 @@ Comprehensive UI improvements across the entire project to make it look more imp
 ### 3. **Input Field Improvements** 📥
 - Increased padding: `py-2.5` and `px-4` for better touch targets
 - Changed from `shadow-md` to `shadow-sm` for subtlety
-- Updated border radius: `rounded-lg` for modern look
+- Updated border radius: `rounded-md` for modern look
 - Improved focus states with smoother transitions
 
 ### 4. **Header Component** 🎯
@@ -74,7 +74,7 @@ Comprehensive UI improvements across the entire project to make it look more imp
 
 ### 6. **Sidebar Improvements** 🗂️
 - Updated menu item padding: `py-2.5` for better spacing
-- Changed border radius: `rounded-lg` for modern look
+- Changed border radius: `rounded-md` for modern look
 - Better text sizing: `text-sm` instead of `text-[13.5px]`
 
 ### 7. **Drag & Drop Upload** 📤
