@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 
 import { GoogleLogin } from "@react-oauth/google";
-import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useForm, useWatch } from "react-hook-form";
+import { LockKeyholeOpen, Mail } from "lucide-react";
 
 import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
@@ -74,7 +75,7 @@ export default function Authentication() {
               <CustomInput
                 id="firstName"
                 type="text"
-                placeholder="First Name"
+                placeholder="Jhon"
                 {...register("firstName", {
                   required: "First Name is required!",
                 })}
@@ -91,7 +92,7 @@ export default function Authentication() {
               <CustomInput
                 id="lastName"
                 type="text"
-                placeholder="Last Name"
+                placeholder="Doe"
                 {...register("lastName")}
                 error={errors.lastName}
               />
@@ -121,7 +122,7 @@ export default function Authentication() {
               <CustomInput
                 id="userCredential"
                 type="text"
-                placeholder="username or email"
+                placeholder="username / email"
                 {...register("userCredential", {
                   required: "username or email is required!",
                 })}
@@ -138,7 +139,8 @@ export default function Authentication() {
               <CustomInput
                 id="email"
                 type="email"
-                placeholder="email"
+                icon={Mail}
+                placeholder="example@gmail.com"
                 {...register("email", {
                   required: "email is required!",
                   pattern: {
@@ -168,7 +170,8 @@ export default function Authentication() {
           >
             <CustomInputPassword
               id="password"
-              placeholder="password"
+              icon={LockKeyholeOpen}
+              placeholder="••••••••"
               {...register("password", {
                 required: "password is required!",
                 minLength: {

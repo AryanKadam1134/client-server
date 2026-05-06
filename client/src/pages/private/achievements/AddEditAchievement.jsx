@@ -10,6 +10,8 @@ import {
   ChevronRight,
   Image,
   ExternalLink,
+  Link,
+  Calendar,
 } from "lucide-react";
 
 import FieldError from "../../../components/ui/FieldError";
@@ -276,6 +278,7 @@ export default function AddEditAchievement() {
         <CustomInput
           id="link"
           type="text"
+          icon={Link}
           placeholder="https://example.com (optional)"
           {...register("link", {
             pattern: {
@@ -318,6 +321,7 @@ export default function AddEditAchievement() {
       >
         <CustomDatePicker
           id="date"
+          icon={Calendar}
           placeholder="Select Date"
           {...register("date", {
             required: "Date is required!",

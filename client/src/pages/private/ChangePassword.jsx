@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { LockKeyholeOpen } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
 import FieldError from "../../components/ui/FieldError";
@@ -19,7 +20,6 @@ export default function ChangePassword() {
     register,
     handleSubmit,
     reset,
-    control,
     watch,
     formState: { errors, isSubmitting },
   } = useForm({
@@ -72,6 +72,7 @@ export default function ChangePassword() {
         >
           <CustomInputPassword
             id="old_password"
+            icon={LockKeyholeOpen}
             placeholder="Enter your current password"
             {...register("old_password", {
               required: "Current password is required!",
@@ -101,6 +102,7 @@ export default function ChangePassword() {
       >
         <CustomInputPassword
           id="new_password"
+          icon={LockKeyholeOpen}
           placeholder="Create a new password"
           {...register("new_password", {
             required: "New password is required!",
@@ -129,6 +131,7 @@ export default function ChangePassword() {
       >
         <CustomInputPassword
           id="confirm_password"
+          icon={LockKeyholeOpen}
           placeholder="Re-enter your new password"
           {...register("confirm_password", {
             required: "Please confirm your password!",

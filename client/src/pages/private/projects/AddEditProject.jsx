@@ -10,6 +10,8 @@ import {
   ChevronRight,
   Image,
   ExternalLink,
+  Link,
+  Calendar,
 } from "lucide-react";
 
 import FieldError from "../../../components/ui/FieldError";
@@ -262,6 +264,7 @@ export default function AddEditProject() {
         <CustomInput
           id="liveLink"
           type="text"
+          icon={Link}
           placeholder="https://example.com"
           {...register("liveLink", {
             pattern: {
@@ -293,6 +296,7 @@ export default function AddEditProject() {
         <CustomInput
           id="githubLink"
           type="text"
+          icon={Link}
           placeholder="https://github.com/username/repo"
           {...register("githubLink", {
             pattern: {
@@ -397,6 +401,7 @@ export default function AddEditProject() {
       >
         <CustomDatePicker
           id="startDate"
+          icon={Calendar}
           placeholder="YYYY-MM-DD"
           {...register("startDate", {
             required: "Start date is required!",
@@ -421,10 +426,15 @@ export default function AddEditProject() {
       >
         <CustomDatePicker
           id="endDate"
+          icon={Calendar}
           placeholder="YYYY-MM-DD (leave blank if current)"
           {...register("endDate", {
             validate: (value) => {
-              if (value && startDate && dayjs(value).isBefore(dayjs(startDate))) {
+              if (
+                value &&
+                startDate &&
+                dayjs(value).isBefore(dayjs(startDate))
+              ) {
                 return "End date cannot be before start date";
               }
               return true;

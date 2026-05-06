@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Link } from "lucide-react";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -415,6 +415,7 @@ export default function AddEditSocialPlatform() {
         <CustomInput
           id="link"
           type="text"
+          icon={Link}
           placeholder="https://github.com/username or your profile URL"
           {...register("link", {
             required: "Platform link is required!",

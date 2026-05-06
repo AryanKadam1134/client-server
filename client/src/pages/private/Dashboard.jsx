@@ -8,6 +8,9 @@ import {
   Trash2,
   FilePenLine,
   Edit,
+  Mail,
+  Phone,
+  Link
 } from "lucide-react";
 
 import FieldError from "../../components/ui/FieldError";
@@ -470,7 +473,8 @@ export default function Dashboard() {
             },
             pattern: {
               value: /^[a-zA-Z0-9_-]+$/,
-              message: "Username can only contain letters, numbers, hyphens, and underscores",
+              message:
+                "Username can only contain letters, numbers, hyphens, and underscores",
             },
           })}
           error={errors.username}
@@ -494,6 +498,7 @@ export default function Dashboard() {
         <CustomInput
           id="email"
           type="email"
+          icon={Mail}
           placeholder="your.email@example.com"
           {...register("email", {
             required: "Email is required!",
@@ -519,6 +524,7 @@ export default function Dashboard() {
         <CustomInput
           id="mobileNo"
           type="tel"
+          icon={Phone}
           placeholder="Enter 10-digit phone number"
           {...register("mobileNo", {
             required: "Mobile number is required!",
@@ -629,6 +635,7 @@ export default function Dashboard() {
         <CustomInput
           id="documentUrl"
           type="text"
+          icon={Link}
           placeholder="https://drive.google.com/... (optional)"
           {...register("documentUrl", {
             pattern: {

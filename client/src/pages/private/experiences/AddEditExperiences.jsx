@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
-import { Trash2, Loader, ExternalLink, Plus } from "lucide-react";
+import { Trash2, Loader, ExternalLink, Plus, Link, Calendar } from "lucide-react";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -291,6 +291,7 @@ export default function AddEditExperiences() {
         <CustomInput
           id="organizationWebsite"
           type="text"
+          icon={Link}
           placeholder="https://example.com"
           {...register("organizationWebsite", {
             pattern: {
@@ -527,6 +528,7 @@ export default function AddEditExperiences() {
                 >
                   <CustomDatePicker
                     id={`positions-${idx}.startDate`}
+                    icon={Calendar}
                     placeholder="Select Date"
                     {...register(`positions.${idx}.startDate`, {
                       required: "Start Date is required!",
@@ -542,6 +544,7 @@ export default function AddEditExperiences() {
                 {/* End Date */}
                 <LabelInput
                   id={`positions-${idx}.endDate`}
+                  icon={Calendar}
                   label="End Date"
                   colSpan="col-span-12 sm:col-span-6"
                 >

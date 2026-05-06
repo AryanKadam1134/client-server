@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Trash2, Loader, ExternalLink } from "lucide-react";
+import { Trash2, Loader, ExternalLink, Link, Calendar } from "lucide-react";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -259,6 +259,7 @@ export default function AddEditCertificate() {
         <CustomInput
           id="credentialUrl"
           type="text"
+          icon={Link}
           placeholder="https://example.com/certificate (optional)"
           {...register("credentialUrl", {
             pattern: {
@@ -322,11 +323,16 @@ export default function AddEditCertificate() {
       >
         <CustomDatePicker
           id="issueDate"
+          icon={Calendar}
           placeholder="YYYY-MM-DD"
           {...register("issueDate", {
             required: "Issue date is required!",
             validate: (value) => {
-              if (expiryDate && value && dayjs(value).isAfter(dayjs(expiryDate))) {
+              if (
+                expiryDate &&
+                value &&
+                dayjs(value).isAfter(dayjs(expiryDate))
+              ) {
                 return "Issue date cannot be after expiry date";
               }
               return true;
@@ -346,10 +352,15 @@ export default function AddEditCertificate() {
       >
         <CustomDatePicker
           id="expiryDate"
+          icon={Calendar}
           placeholder="YYYY-MM-DD (leave blank if no expiry)"
           {...register("expiryDate", {
             validate: (value) => {
-              if (value && issueDate && dayjs(value).isBefore(dayjs(issueDate))) {
+              if (
+                value &&
+                issueDate &&
+                dayjs(value).isBefore(dayjs(issueDate))
+              ) {
                 return "Expiry date cannot be before issue date";
               }
               return true;
