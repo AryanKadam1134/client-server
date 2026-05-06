@@ -71,6 +71,9 @@ const userSchema = new Schema(
 
     googleId: String,
 
+    otp: Number,
+    otpExpiryDate: Date,
+
     sessions: [
       {
         refreshToken: {

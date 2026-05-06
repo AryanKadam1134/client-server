@@ -1,4 +1,4 @@
-const passwordChangedTemplate = (user) => {
+export const passwordChangedTemplate = (user) => {
   return `<div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
       <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px;">
         <h2 style="color: #1f2937;">Password Updated Successfully</h2>
@@ -29,5 +29,3 @@ const passwordChangedTemplate = (user) => {
       </div>
     </div>`;
 };
-
-export default passwordChangedTemplate;

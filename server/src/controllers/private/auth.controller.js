@@ -17,7 +17,8 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
-import passwordChangedTemplate from "../../utils/emailTemplates/passwordChanged.js";
+import { passwordChangedTemplate } from "../../utils/emailTemplates/passwordChanged.js";
+import { resetPasswordOTPTemplate } from "../../utils/emailTemplates/otpSentTemplate.js";
 
 const generateAccessAndRefreshToken = async (userId, req) => {
   if (!userId) return;
@@ -338,7 +339,8 @@ const logoutUser = asynchandler(async (req, res) => {
 });
 
 const changePassword = asynchandler(async (req, res) => {
-  const { isInitializing, old_password, new_password, confirm_password } = req.body;
+  const { isInitializing, old_password, new_password, confirm_password } =
+    req.body;
 
   const loggedUser = await User.findById(req.user?._id);
 
@@ -349,7 +351,10 @@ const changePassword = asynchandler(async (req, res) => {
 
     // Validate password confirmation match
     if (new_password !== confirm_password) {
-      throw new ApiError(400, "Passwords do not match! Please ensure new password and confirm password are the same.");
+      throw new ApiError(
+        400,
+        "Passwords do not match! Please ensure new password and confirm password are the same.",
+      );
     }
 
     const isPasswordCorrect = await loggedUser.isPasswordCorrect(old_password);
@@ -359,12 +364,14 @@ const changePassword = asynchandler(async (req, res) => {
     }
 
     if (new_password === old_password) {
-      throw new ApiError(400, "New password cannot be the same as old password!");
+      throw new ApiError(
+        400,
+        "New password cannot be the same as old password!",
+      );
     }
   }
 
   loggedUser.password = new_password;
-
   await loggedUser.save({ validateBeforeSave: false });
 
   // Fail safe
@@ -383,6 +390,85 @@ const changePassword = asynchandler(async (req, res) => {
     .json(new ApiRes(200, null, "Password changed successfully!"));
 });
 
+const forgotPassword = asynchandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new ApiError(400, "email is required!");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(404, "user not found!");
+  }
+
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  user.otp = otp;
+  user.otpExpiryDate = Date.now() + 10 * 60 * 1000;
+  await user.save();
+
+  // Fail safe
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: "Reset Password OTP",
+      html: resetPasswordOTPTemplate(user, otp),
+    });
+  } catch (error) {
+    console.error("Error sending mail in changePassword: ", error);
+  }
+
+  return res.status(200).json(new ApiRes(200, null, "OTP sent to your email!"));
+});
+
+const verifyOTP = asynchandler(async (req, res) => {
+  const { email, otp } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user.otp !== otp || user.otpExpiryDate < Date.now()) {
+    throw new ApiError(400, "Invalid or expired OTP!");
+  }
+
+  return res.status(200).json(new ApiRes(200, null, "OTP verified!"));
+});
+
+const resetPassword = asynchandler(async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!newPassword) {
+    throw new ApiError(400, "newPassword is required!");
+  }
+
+  const user = User.findOne({ email });
+
+  const isPasswordCorrect = await user.isPasswordCorrect(newPassword);
+
+  if (isPasswordCorrect) {
+    throw new ApiError(409, "new password cannot be same as old password!");
+  }
+
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  // Fail safe
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: "Your Password Was Changed Successfully 🔐",
+      html: passwordChangedTemplate(user),
+    });
+  } catch (error) {
+    console.error("Error sending mail in changePassword: ", error);
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, null, "Password changed successfully!"));
+});
+
 export {
   googleAuth,
   registerUser,
@@ -390,4 +476,7 @@ export {
   logoutUser,
   refreshAccessToken,
   changePassword,
+  forgotPassword,
+  verifyOTP,
+  resetPassword,
 };

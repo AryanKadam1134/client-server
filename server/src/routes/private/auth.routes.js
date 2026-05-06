@@ -7,6 +7,9 @@ import {
   refreshAccessToken,
   registerUser,
   googleAuth,
+  forgotPassword,
+  verifyOTP,
+  resetPassword,
 } from "../../controllers/private/auth.controller.js";
 
 import { upload } from "../../middlewares/multer.middleware.js";
@@ -35,6 +38,12 @@ authRouter.route("/login").post(loginUser);
 authRouter.route("/logout").post(verifyJWT, logoutUser);
 
 authRouter.route("/password").patch(verifyJWT, changePassword);
+
+authRouter.route("/forgot-password").post(forgotPassword);
+
+authRouter.route("/verify-otp").post(verifyOTP);
+
+authRouter.route("/reset-password").patch(resetPassword);
 
 authRouter.route("/restoreSession").post(refreshAccessToken);
 
