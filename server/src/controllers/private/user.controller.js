@@ -25,7 +25,6 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
-import passwordChangedTemplate from "../../utils/emailTemplates/passwordChanged.js";
 
 const hasPassowrd = asynchandler(async (req, res) => {
   const user = await User.findById(req.user?._id);

@@ -40,6 +40,8 @@ import Settings from "./pages/private/Settings";
 
 import { useAuth } from "./context/AuthContext";
 import ChangePassword from "./pages/private/ChangePassword";
+import ForogtPassword from "./pages/authentication/ForogtPassword";
+import ResetPassword from "./pages/authentication/ResetPassword";
 
 function PublicRoute() {
   const { user } = useAuth();
@@ -81,6 +83,8 @@ function App() {
         {/* 🔓 Public Route (only if NOT logged in) */}
         <Route element={<PublicRoute />}>
           <Route path="/auth" element={<Authentication />} />
+          <Route path="/forgot-password" element={<ForogtPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
 
         {/* 🔐 Protected Route */}

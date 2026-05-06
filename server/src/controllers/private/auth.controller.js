@@ -428,7 +428,7 @@ const verifyOTP = asynchandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  if (user.otp !== otp || user.otpExpiryDate < Date.now()) {
+  if (user.otp !== Number(otp) || user.otpExpiryDate < Date.now()) {
     throw new ApiError(400, "Invalid or expired OTP!");
   }
 
@@ -436,21 +436,25 @@ const verifyOTP = asynchandler(async (req, res) => {
 });
 
 const resetPassword = asynchandler(async (req, res) => {
-  const { email, newPassword } = req.body;
+  const { email, new_password, confirm_password } = req.body;
 
-  if (!newPassword) {
-    throw new ApiError(400, "newPassword is required!");
+  if (!new_password || !confirm_password) {
+    throw new ApiError(400, "new password is required!");
   }
 
-  const user = User.findOne({ email });
+  if (new_password !== confirm_password) {
+    throw new ApiError(400, "password do not match!");
+  }
 
-  const isPasswordCorrect = await user.isPasswordCorrect(newPassword);
+  const user = await User.findOne({ email });
+
+  const isPasswordCorrect = await user.isPasswordCorrect(new_password);
 
   if (isPasswordCorrect) {
     throw new ApiError(409, "new password cannot be same as old password!");
   }
 
-  user.password = newPassword;
+  user.password = new_password;
   await user.save({ validateBeforeSave: false });
 
   // Fail safe

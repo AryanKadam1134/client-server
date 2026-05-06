@@ -161,7 +161,10 @@ export default function Authentication() {
             label="Password"
             attachment={
               isLogin && (
-                <p className="text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
+                <p
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+                >
                   Forgot Password?
                 </p>
               )

@@ -33,6 +33,13 @@ export const apiEndpoints = {
 
   changePassword: (body) => api.patch(`/auth/password`, body),
 
+  // Forgot Passowrd
+  forgotPassword: (body) => api.post(`/auth/forgot-password`, body),
+
+  verifyOTP: (body) => api.post(`/auth/verify-otp`, body),
+
+  resetPassword: (body) => api.patch(`/auth/reset-password`, body),
+
   // User Details
   checkPassword: () => api.get(`/users/check-password`),
 

@@ -1,0 +1,141 @@
+import React, { useState } from "react";
+
+import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+import { LockKeyholeOpen, Mail } from "lucide-react";
+
+import FieldError from "../../components/ui/FieldError";
+import LabelInput from "../../components/ui/LabelInput";
+import CustomInput from "../../components/ui/CustomInput";
+import CustomButton from "../../components/ui/CustomButton";
+import CustomInputPassword from "../../components/ui/CustomInputPassword";
+
+import { apiEndpoints } from "../../api";
+
+import { useNotify } from "../../context/NotificationContext";
+
+export default function ResetPassword() {
+  const { notify } = useNotify();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email;
+
+  const [error, setError] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: { email },
+    mode: "onChange", // 🔥 important
+  });
+
+  const newPassword = watch("new_password");
+
+  const onSubmit = async (payload) => {
+    try {
+      const res = await apiEndpoints.resetPassword(payload);
+
+      setError(null);
+      navigate("/auth");
+      notify.msgSuccess(res?.message);
+    } catch (error) {
+      console.error("Reset Password failed: ", error);
+      notify.msgError(error?.message);
+      setError(error?.message);
+    }
+  };
+
+  return (
+    <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
+      <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-2xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
+        <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">
+          Reset Passowrd
+        </h2>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 text-sm"
+        >
+          {/* New Password */}
+          <LabelInput
+            id="new_password"
+            label="New Password"
+            colSpan="col-span-12 sm:col-span-6"
+            required
+          >
+            <CustomInputPassword
+              id="new_password"
+              icon={LockKeyholeOpen}
+              placeholder="Create a new password"
+              {...register("new_password", {
+                required: "New password is required!",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters",
+                },
+                maxLength: {
+                  value: 16,
+                  message: "Password must not exceed 16 characters",
+                },
+              })}
+              className="pr-10"
+              error={errors.new_password}
+            />
+
+            <FieldError error={errors.new_password?.message} />
+          </LabelInput>
+
+          {/* Confirm Password */}
+          <LabelInput
+            id="confirm_password"
+            label="Confirm New Password"
+            colSpan="col-span-12 sm:col-span-6"
+            required
+          >
+            <CustomInputPassword
+              id="confirm_password"
+              icon={LockKeyholeOpen}
+              placeholder="Re-enter your new password"
+              {...register("confirm_password", {
+                required: "Please confirm your password!",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters",
+                },
+                maxLength: {
+                  value: 16,
+                  message: "Password must not exceed 16 characters",
+                },
+                validate: (value) => {
+                  if (value !== newPassword) {
+                    return "Passwords do not match!";
+                  }
+                  return true;
+                },
+              })}
+              className="pr-10"
+              error={errors.confirm_password}
+            />
+
+            <FieldError error={errors.confirm_password?.message} />
+          </LabelInput>
+
+          {error && <p className="text-center text-sm text-red-400">{error}</p>}
+
+          {/* Submit */}
+          <CustomButton
+            type="submit"
+            className="w-full"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </CustomButton>
+        </form>
+      </div>
+    </div>
+  );
+}
