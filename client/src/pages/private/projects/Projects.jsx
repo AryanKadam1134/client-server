@@ -88,26 +88,22 @@ export default function Projects() {
         index + 1,
         title,
         liveLink && (
-          <div className="flex justify-center">
-            <a
-              href={`${liveLink}`}
-              target="_blank"
-              className="text-blue-500 hover:text-blue-600"
-            >
-              <ExternalLink size={18} />
-            </a>
-          </div>
+          <a
+            href={`${liveLink}`}
+            target="_blank"
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <ExternalLink size={18} />
+          </a>
         ),
         githubLink && (
-          <div className="flex justify-center">
-            <a
-              href={`${githubLink}`}
-              target="_blank"
-              className="text-blue-500 hover:text-blue-600"
-            >
-              <ExternalLink size={18} />
-            </a>
-          </div>
+          <a
+            href={`${githubLink}`}
+            target="_blank"
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <ExternalLink size={18} />
+          </a>
         ),
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),

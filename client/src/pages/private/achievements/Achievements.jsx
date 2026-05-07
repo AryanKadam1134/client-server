@@ -81,15 +81,13 @@ export default function Achievements() {
         title,
         issuer,
         link && (
-          <div className="flex justify-center">
-            <a
-              href={`${link}`}
-              target="_blank"
-              className="text-blue-500 hover:text-blue-600"
-            >
-              <ExternalLink size={18} />
-            </a>
-          </div>
+          <a
+            href={`${link}`}
+            target="_blank"
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <ExternalLink size={18} />
+          </a>
         ),
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2, FilePenLine, Loader2 } from "lucide-react";
+import { Plus, Trash2, FilePenLine, Loader2, ExternalLink } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import EditButton from "../../../components/ui/EditButton";
@@ -77,7 +77,15 @@ export default function SocialPlatforms() {
       cells: [
         index + 1,
         name,
-        link,
+        link && (
+          <a
+            href={`${link}`}
+            target="_blank"
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <ExternalLink size={18} />
+          </a>
+        ),
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),
         <div className="flex items-center gap-1">

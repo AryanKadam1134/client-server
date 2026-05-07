@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 
 import Authentication from "./pages/authentication/Authentication";
+import ResetPassword from "./pages/authentication/ResetPassword";
+import ForogtPassword from "./pages/authentication/ForogtPassword";
 
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/private/Dashboard";
@@ -37,14 +39,20 @@ import Achievements from "./pages/private/achievements/Achievements";
 import AddEditAchievement from "./pages/private/achievements/AddEditAchievement";
 
 import Settings from "./pages/private/Settings";
+import ChangePassword from "./pages/private/ChangePassword";
 
 import { useAuth } from "./context/AuthContext";
-import ChangePassword from "./pages/private/ChangePassword";
-import ForogtPassword from "./pages/authentication/ForogtPassword";
-import ResetPassword from "./pages/authentication/ResetPassword";
 
 function PublicRoute() {
-  const { user } = useAuth();
+  const { user, authLoading } = useAuth();
+
+  if (authLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center text-lg font-semibold">
+        Restoring Session...
+      </div>
+    );
+  }
 
   // ❌ If logged in → redirect to details
   return user ? <Navigate to="/details" replace /> : <Outlet />;

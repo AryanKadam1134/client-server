@@ -374,16 +374,14 @@ const changePassword = asynchandler(async (req, res) => {
   loggedUser.password = new_password;
   await loggedUser.save({ validateBeforeSave: false });
 
-  // Fail safe
-  try {
-    await sendEmail({
-      to: loggedUser.email,
-      subject: "Your Password Was Changed Successfully 🔐",
-      html: passwordChangedTemplate(loggedUser),
-    });
-  } catch (error) {
-    console.error("Error sending mail in changePassword: ", error);
-  }
+  // Send email in background (don't await)
+  sendEmail({
+    to: loggedUser.email,
+    subject: "Your Password Was Changed Successfully 🔐",
+    html: passwordChangedTemplate(loggedUser),
+  }).catch((error) => {
+    console.error("Background: Error sending mail in changePassword:", error.message);
+  });
 
   return res
     .status(200)
@@ -409,16 +407,14 @@ const forgotPassword = asynchandler(async (req, res) => {
   user.otpExpiryDate = Date.now() + 10 * 60 * 1000;
   await user.save();
 
-  // Fail safe
-  try {
-    await sendEmail({
-      to: user.email,
-      subject: "Reset Password OTP",
-      html: resetPasswordOTPTemplate(user, otp),
-    });
-  } catch (error) {
-    console.error("Error sending mail in changePassword: ", error);
-  }
+  // Send email in background (don't await)
+  sendEmail({
+    to: user.email,
+    subject: "Reset Password OTP",
+    html: resetPasswordOTPTemplate(user, otp),
+  }).catch((error) => {
+    console.error("Background: Error sending OTP email:", error.message);
+  });
 
   return res.status(200).json(new ApiRes(200, null, "OTP sent to your email!"));
 });
@@ -457,16 +453,14 @@ const resetPassword = asynchandler(async (req, res) => {
   user.password = new_password;
   await user.save({ validateBeforeSave: false });
 
-  // Fail safe
-  try {
-    await sendEmail({
-      to: user.email,
-      subject: "Your Password Was Changed Successfully 🔐",
-      html: passwordChangedTemplate(user),
-    });
-  } catch (error) {
-    console.error("Error sending mail in changePassword: ", error);
-  }
+  // Send email in background (don't await)
+  sendEmail({
+    to: user.email,
+    subject: "Your Password Was Changed Successfully 🔐",
+    html: passwordChangedTemplate(user),
+  }).catch((error) => {
+    console.error("Background: Error sending password reset email:", error.message);
+  });
 
   return res
     .status(200)

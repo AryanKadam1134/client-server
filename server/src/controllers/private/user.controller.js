@@ -19,7 +19,6 @@ import { SocialPlatform } from "../../models/socialPlatform.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import sendEmail from "../../utils/mailShooter.js";
 import asynchandler from "../../utils/asynchandler.js";
 import {
   uploadToCloudinary,

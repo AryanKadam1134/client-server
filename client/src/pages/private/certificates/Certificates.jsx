@@ -80,15 +80,13 @@ export default function Certificates() {
         title,
         issuer,
         credentialUrl && (
-          <div className="flex justify-center">
-            <a
-              href={`${credentialUrl}`}
-              target="_blank"
-              className="text-blue-500 hover:text-blue-600"
-            >
-              <ExternalLink size={18} />
-            </a>
-          </div>
+          <a
+            href={`${credentialUrl}`}
+            target="_blank"
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <ExternalLink size={18} />
+          </a>
         ),
         getVisibility(visibilities, visibility),
         sortOrder === 0 ? "0" : sortOrder,
