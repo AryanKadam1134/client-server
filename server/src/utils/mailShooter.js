@@ -6,12 +6,12 @@ const transporter = nodemailer.createTransport({
     user: process.env.SHOOTER_EMAIL,
     pass: process.env.SHOOTER_PASS, // App password
   },
-  connectionTimeout: 5000, // 5 seconds
-  socketTimeout: 5000, // 5 seconds
+  connectionTimeout: 15000, // 15 seconds (increased)
+  socketTimeout: 15000, // 15 seconds (increased)
 });
 
 // Promise with timeout wrapper
-const sendEmailWithTimeout = (promise, timeoutMs = 3000) => {
+const sendEmailWithTimeout = (promise, timeoutMs = 20000) => {
   return Promise.race([
     promise,
     new Promise((_, reject) =>
@@ -32,7 +32,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
   try {
     const info = await sendEmailWithTimeout(
       transporter.sendMail(mailOptions),
-      3000 // 3 second timeout
+      20000 // 20 second timeout
     );
     console.log("Email sent:", info.messageId);
   } catch (error) {
