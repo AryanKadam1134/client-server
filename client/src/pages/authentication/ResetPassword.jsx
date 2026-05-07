@@ -132,7 +132,7 @@ export default function ResetPassword() {
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isSubmitting ? "Saving..." : "Save"}
           </CustomButton>
         </form>
       </div>

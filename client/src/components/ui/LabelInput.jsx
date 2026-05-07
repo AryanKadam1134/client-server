@@ -19,13 +19,13 @@ export default function LabelInput({
   return (
     <div
       className={`${className} ${colSpan}
-      flex ${!isCheckbox && orientation == "vertical" ? `flex-col gap-2` : `items-center gap-3 mt-5`}`}
+      flex ${!isCheckbox && orientation == "vertical" ? `flex-col gap-1.5` : `items-center gap-3 mt-5`}`}
     >
       {isCheckbox && children}
 
       <label
         htmlFor={id}
-        className={`flex ${isCheckbox ? "flex-col" : "flex-row items-center"} justify-between font-medium text-sm text-light-text-primary dark:text-dark-text-primary
+        className={`flex ${isCheckbox ? "flex-col" : "flex-row items-center"} justify-between font-medium text-[13px] text-light-text-primary dark:text-dark-text-primary
         ${bold && `font-semibold`}
         ${!isCheckbox && `whitespace-nowrap`}`}
       >

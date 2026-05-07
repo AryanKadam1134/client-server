@@ -109,7 +109,13 @@ export default function ForogtPassword() {
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isOtp
+              ? isSubmitting
+                ? "Verifying..."
+                : "Verifying OTP"
+              : isSubmitting
+                ? "Sending..."
+                : "Send OTP"}
           </CustomButton>
         </form>
       </div>
