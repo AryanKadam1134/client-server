@@ -11,14 +11,18 @@ import { User } from "../../models/user.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import sendEmail from "../../utils/mailShooter.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { shootEmail } from "../../utils/resendMailShooter.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
 import { passwordChangedTemplate } from "../../utils/emailTemplates/passwordChanged.js";
 import { resetPasswordOTPTemplate } from "../../utils/emailTemplates/otpSentTemplate.js";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const shooterEmail = process.env.SHOOTER_EMAIL;
 
 const generateAccessAndRefreshToken = async (userId, req) => {
   if (!userId) return;
@@ -84,8 +88,6 @@ const generateAccessAndRefreshToken = async (userId, req) => {
     throw new ApiError(500, "Couldn't generate Refresh token and Access token");
   }
 };
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const googleAuth = asynchandler(async (req, res) => {
   const { credential, rememberMe } = req.body;
@@ -375,12 +377,15 @@ const changePassword = asynchandler(async (req, res) => {
   await loggedUser.save({ validateBeforeSave: false });
 
   // Send email in background (don't await)
-  sendEmail({
+  shootEmail({
     to: loggedUser.email,
     subject: "Your Password Was Changed Successfully 🔐",
     html: passwordChangedTemplate(loggedUser),
   }).catch((error) => {
-    console.error("Background: Error sending mail in changePassword:", error.message);
+    console.error(
+      "Background: Error sending mail in changePassword:",
+      error.message,
+    );
   });
 
   return res
@@ -408,7 +413,7 @@ const forgotPassword = asynchandler(async (req, res) => {
   await user.save();
 
   // Send email in background (don't await)
-  sendEmail({
+  shootEmail({
     to: user.email,
     subject: "Reset Password OTP",
     html: resetPasswordOTPTemplate(user, otp),
@@ -454,12 +459,15 @@ const resetPassword = asynchandler(async (req, res) => {
   await user.save({ validateBeforeSave: false });
 
   // Send email in background (don't await)
-  sendEmail({
+  shootEmail({
     to: user.email,
     subject: "Your Password Was Changed Successfully 🔐",
     html: passwordChangedTemplate(user),
   }).catch((error) => {
-    console.error("Background: Error sending password reset email:", error.message);
+    console.error(
+      "Background: Error sending password reset email:",
+      error.message,
+    );
   });
 
   return res
