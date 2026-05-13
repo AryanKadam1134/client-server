@@ -64,7 +64,7 @@ export default function AddEditEducation() {
       reset(data);
       console.log("Education: ", data);
     } catch (error) {
-      console.error("Error fetching Education: ", error);
+      notify.msgError(error?.message || "Failed to fetch education");
     }
   };
 
@@ -87,7 +87,7 @@ export default function AddEditEducation() {
       if (data?._id) fetchEducation();
       console.log("Education Saved: ", data);
     } catch (error) {
-      console.error("Error saving Education: ", error);
+      notify.msgError(error?.message || "Failed to save education");
     }
   };
 
@@ -107,7 +107,7 @@ export default function AddEditEducation() {
       fetchEducation();
       notify.msgSuccess("Institute Image Updated!");
     } catch (error) {
-      console.error("Error updating Education Images: ", error);
+      notify.msgError(error?.message || "Failed to update institute image");
     } finally {
       setImagesUploading(false);
     }
@@ -121,7 +121,7 @@ export default function AddEditEducation() {
       fetchEducation();
       notify.msgSuccess("Institute Image Deleted!");
     } catch (error) {
-      console.error("Error deleting Institute Image: ", error);
+      notify.msgError(error?.message || "Failed to delete institute image");
     } finally {
       setImageDeleting(false);
     }

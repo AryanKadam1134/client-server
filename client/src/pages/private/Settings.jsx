@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { apiEndpoints } from "../../api";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useNotify } from "../../context/NotificationContext";
 
 export default function Settings() {
   const { setUser } = useAuth();
+  const { notify } = useNotify();
   const navigate = useNavigate();
 
   const [deleting, setDeleting] = useState(false);
@@ -16,7 +18,7 @@ export default function Settings() {
       await apiEndpoints.deleteUser();
       setUser(null);
     } catch (error) {
-      console.error("Error deleting Account: ", error);
+      notify.msgError(error?.message || "Failed to delete account");
     } finally {
       setDeleting(false);
     }

@@ -97,7 +97,7 @@ export default function AddEditAchievement() {
       });
       console.log("Achievement: ", data);
     } catch (error) {
-      console.error("Error fetching Achievement: ", error);
+      notify.msgError(error?.message || "Failed to fetch achievement");
     }
   };
 
@@ -119,7 +119,7 @@ export default function AddEditAchievement() {
       if (data?._id) fetchAchievement();
       console.log("Achievement Saved: ", data);
     } catch (error) {
-      console.error("Error saving Achievement: ", error);
+      notify.msgError(error?.message || "Failed to save achievement");
     }
   };
 
@@ -131,7 +131,7 @@ export default function AddEditAchievement() {
         coverImageIndex: idx,
       });
     } catch (err) {
-      console.error(err);
+      notify.msgError(err?.message || "Failed to update cover image");
     }
   };
 
@@ -150,7 +150,7 @@ export default function AddEditAchievement() {
       fetchAchievement();
       notify.msgSuccess("Achievement Images Updated!");
     } catch (error) {
-      console.error("Error updating Achievement Images: ", error);
+      notify.msgError(error?.message || "Failed to update achievement images");
     } finally {
       setImagesUploading(false);
     }
@@ -165,7 +165,7 @@ export default function AddEditAchievement() {
       fetchAchievement();
       notify.msgSuccess("Achievement Image Deleted!");
     } catch (error) {
-      console.error("Error deleting Achievement Image: ", error);
+      notify.msgError(error?.message || "Failed to delete achievement image");
     } finally {
       setImageDeleting(null);
     }

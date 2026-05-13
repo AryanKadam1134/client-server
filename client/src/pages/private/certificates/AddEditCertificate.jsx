@@ -90,7 +90,7 @@ export default function AddEditCertificate() {
       });
       console.log("Certificate: ", data);
     } catch (error) {
-      console.error("Error fetching Certificate: ", error);
+      notify.msgError(error?.message || "Failed to fetch certificate");
     }
   };
 
@@ -113,7 +113,7 @@ export default function AddEditCertificate() {
       if (data?._id) fetchCertificate();
       console.log("Certificate Saved: ", data);
     } catch (error) {
-      console.error("Error saving Certificate: ", error);
+      notify.msgError(error?.message || "Failed to save certificate");
     }
   };
 
@@ -133,7 +133,7 @@ export default function AddEditCertificate() {
       fetchCertificate();
       notify.msgSuccess("Certificate Image Updated!");
     } catch (error) {
-      console.error("Error updating Certificate Images: ", error);
+      notify.msgError(error?.message || "Failed to update certificate image");
     } finally {
       setImagesUploading(false);
     }
@@ -147,7 +147,7 @@ export default function AddEditCertificate() {
       fetchCertificate();
       notify.msgSuccess("Certificate Image Deleted!");
     } catch (error) {
-      console.error("Error deleting Certificate Image: ", error);
+      notify.msgError(error?.message || "Failed to delete certificate image");
     } finally {
       setImageDeleting(false);
     }

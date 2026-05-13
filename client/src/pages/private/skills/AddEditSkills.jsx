@@ -113,6 +113,7 @@ export default function AddEditSkills() {
       console.log("Skill: ", data);
     } catch (error) {
       console.error("Error fetching Skill: ", error);
+      notify.msgError(error?.message || "Failed to load skill details");
     }
   };
 
@@ -135,6 +136,7 @@ export default function AddEditSkills() {
       // console.log("Skill Saved: ", data);
     } catch (error) {
       console.error("Error saving Skill: ", error);
+      notify.msgError(error?.message || "Failed to save skill");
     }
   };
 

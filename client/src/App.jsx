@@ -1,10 +1,11 @@
 import React from "react";
+
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
   Outlet,
+  Navigate,
 } from "react-router-dom";
 
 import Authentication from "./pages/authentication/Authentication";
@@ -145,7 +146,6 @@ function App() {
               path=":certificateId/edit"
               element={<AddEditCertificate />}
             />
-            ,
           </Route>
 
           <Route path="/achievements" element={<CommonLayout />}>

@@ -36,7 +36,7 @@ export default function ChangePassword() {
       reset();
       notify.msgSuccess("Password changed successfully!");
     } catch (error) {
-      console.error("Error Changing Password: ", error);
+      notify.msgError(error?.message || "Failed to change password");
     }
   };
 
@@ -50,7 +50,7 @@ export default function ChangePassword() {
         reset({ isInitializing: !data });
         setHasPassword(data);
       } catch (error) {
-        console.error("Error checking password: ", error);
+        notify.msgError(error?.message || "Failed to check password");
       }
     };
 

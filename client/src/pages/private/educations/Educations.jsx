@@ -30,7 +30,7 @@ export default function Educations() {
       setEducations(data);
       console.log("User Educations: ", data);
     } catch (error) {
-      console.error("Error fetching User Educations: ", error);
+      notify.msgError(error?.message || "Failed to fetch educations");
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ export default function Educations() {
       fetchEducations();
       notify.msgSuccess("Education Deleted!");
     } catch (error) {
-      console.error("Error deleting Educations: ", error);
+      notify.msgError(error?.message || "Failed to delete education");
     } finally {
       setDeleting(false);
     }

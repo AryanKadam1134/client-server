@@ -37,6 +37,7 @@ export default function Projects() {
       console.log("User Projects: ", data);
     } catch (error) {
       console.error("Error fetching User Projects: ", error);
+      notify.msgError(error?.message || "Failed to load projects");
     } finally {
       setLoading(false);
     }
@@ -52,6 +53,7 @@ export default function Projects() {
       notify.msgSuccess("Project Deleted!");
     } catch (error) {
       console.error("Error deleting Project: ", error);
+      notify.msgError(error?.message || "Failed to delete project");
     } finally {
       setDeleting(false);
     }

@@ -36,7 +36,7 @@ export default function SocialPlatforms() {
       setPlatforms(data);
       console.log("User Social Platforms: ", data);
     } catch (error) {
-      console.error("Error fetching User Social Platforms: ", error);
+      notify.msgError(error?.message || "Failed to fetch social platforms");
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export default function SocialPlatforms() {
       fetchSocialPlatforms();
       notify.msgSuccess("Platform Deleted!");
     } catch (error) {
-      console.error("Error deleting Social Platform: ", error);
+      notify.msgError(error?.message || "Failed to delete social platform");
     } finally {
       setDeleting(false);
     }

@@ -308,7 +308,7 @@ export default function AddEditSocialPlatform() {
       reset(data);
       console.log("Social Platform: ", data);
     } catch (error) {
-      console.error("Error fetching Social Platform: ", error);
+      notify.msgError(error?.message || "Failed to fetch social platform");
     }
   };
 
@@ -330,7 +330,7 @@ export default function AddEditSocialPlatform() {
       if (data?._id) fetchSocialPlatform();
       // console.log("Social Platform Saved: ", data);
     } catch (error) {
-      console.error("Error saving Social Platform: ", error);
+      notify.msgError(error?.message || "Failed to save social platform");
     }
   };
 

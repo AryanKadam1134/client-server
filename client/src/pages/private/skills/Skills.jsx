@@ -43,6 +43,7 @@ export default function Skills() {
       console.log("User Skills: ", data);
     } catch (error) {
       console.error("Error fetching User Skills: ", error);
+      notify.msgError(error?.message || "Failed to load skills");
     } finally {
       setLoading(false);
     }
@@ -57,6 +58,7 @@ export default function Skills() {
       notify.msgSuccess("Skill Deleted!");
     } catch (error) {
       console.error("Error deleting Skill: ", error);
+      notify.msgError(error?.message || "Failed to delete skill");
     } finally {
       setDeleting(false);
     }

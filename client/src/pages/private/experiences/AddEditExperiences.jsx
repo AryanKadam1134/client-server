@@ -120,7 +120,7 @@ export default function AddEditExperiences() {
       });
       console.log("Experience: ", data);
     } catch (error) {
-      console.error("Error fetching Experience: ", error);
+      notify.msgError(error?.message || "Failed to fetch experience");
     }
   };
 
@@ -145,7 +145,7 @@ export default function AddEditExperiences() {
       if (data?._id) fetchExperience();
       // console.log("Experience Saved: ", data);
     } catch (error) {
-      console.error("Error saving Experience: ", error);
+      notify.msgError(error?.message || "Failed to save experience");
     }
   };
 
@@ -166,7 +166,7 @@ export default function AddEditExperiences() {
       notify.msgSuccess("Organization Image Updated!");
       // console.log("Images uploaded successfully!");
     } catch (error) {
-      console.error("Error updating Experience Images: ", error);
+      notify.msgError(error?.message || "Failed to update organization image");
     } finally {
       setImagesUploading(false);
     }
@@ -181,7 +181,7 @@ export default function AddEditExperiences() {
       notify.msgSuccess("Organization Image Deleted!");
       // console.log("Image deleted successfully!");
     } catch (error) {
-      console.error("Error deleting Organization Image: ", error);
+      notify.msgError(error?.message || "Failed to delete organization image");
     } finally {
       setImageDeleting(false);
     }

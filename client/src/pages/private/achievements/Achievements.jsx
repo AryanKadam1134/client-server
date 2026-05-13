@@ -36,7 +36,7 @@ export default function Achievements() {
       setAchievements(data);
       console.log("User Achievements: ", data);
     } catch (error) {
-      console.error("Error fetching User Achievements: ", error);
+      notify.msgError(error?.message || "Failed to fetch achievements");
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export default function Achievements() {
       fetchAchievements();
       notify.msgSuccess("Achievement Deleted!");
     } catch (error) {
-      console.error("Error deleting Achievement: ", error);
+      notify.msgError(error?.message || "Failed to delete achievement");
     } finally {
       setDeleting(false);
     }

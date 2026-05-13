@@ -108,6 +108,7 @@ export default function AddEditProject() {
       console.log("Project: ", data);
     } catch (error) {
       console.error("Error fetching Project: ", error);
+      notify.msgError(error?.message || "Failed to load project details");
     }
   };
 
@@ -130,6 +131,7 @@ export default function AddEditProject() {
       console.log("Project Saved: ", data);
     } catch (error) {
       console.error("Error saving Project: ", error);
+      notify.msgError(error?.message || "Failed to save project");
     }
   };
 
@@ -144,6 +146,7 @@ export default function AddEditProject() {
       notify.msgSuccess("Cover Image Changed!");
     } catch (err) {
       console.error(err);
+      notify.msgError(err?.message || "Failed to change cover image");
     }
   };
 
@@ -164,6 +167,7 @@ export default function AddEditProject() {
       // console.log("Images uploaded successfully!");
     } catch (error) {
       console.error("Error updating Project Images: ", error);
+      notify.msgError(error?.message || "Failed to upload project images");
     } finally {
       setImagesUploading(false);
     }
@@ -180,6 +184,7 @@ export default function AddEditProject() {
       // console.log("Image deleted successfully!");
     } catch (error) {
       console.error("Error deleting Project Image: ", error);
+      notify.msgError(error?.message || "Failed to delete project image");
     } finally {
       setImageDeleting(null);
     }

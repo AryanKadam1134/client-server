@@ -63,7 +63,7 @@ export default function AddEditSkillCategory() {
       reset(data);
       console.log("Skill Category: ", data);
     } catch (error) {
-      console.error("Error fetching Skill Category: ", error);
+      notify.msgError(error?.message || "Failed to fetch skill category");
     }
   };
 
@@ -85,7 +85,7 @@ export default function AddEditSkillCategory() {
       if (data?._id) fetchSkillCategory();
       console.log("Skill Category Saved: ", data);
     } catch (error) {
-      console.error("Error saving Skill Category: ", error);
+      notify.msgError(error?.message || "Failed to save skill category");
     }
   };
 

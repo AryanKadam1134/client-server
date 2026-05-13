@@ -36,7 +36,7 @@ export default function Certificates() {
       setCertificates(data);
       console.log("User Certificates: ", data);
     } catch (error) {
-      console.error("Error fetching User Certificates: ", error);
+      notify.msgError(error?.message || "Failed to fetch certificates");
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export default function Certificates() {
       fetchCertificate();
       notify.msgSuccess("Certificate Deleted!");
     } catch (error) {
-      console.error("Error deleting Certificates: ", error);
+      notify.msgError(error?.message || "Failed to delete certificate");
     } finally {
       setDeleting(false);
     }

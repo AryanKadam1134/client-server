@@ -42,7 +42,7 @@ export default function Experiences() {
       setExperiences(data);
       // console.log("User Experiences: ", data);
     } catch (error) {
-      console.error("Error fetching User Experiences: ", error);
+      notify.msgError(error?.message || "Failed to fetch experiences");
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ export default function Experiences() {
       fetchExperiences();
       notify.msgSuccess("Experience Deleted!");
     } catch (error) {
-      console.error("Error deleting Experience: ", error);
+      notify.msgError(error?.message || "Failed to delete experience");
     } finally {
       setDeleting(false);
     }

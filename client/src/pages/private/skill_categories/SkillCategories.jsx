@@ -36,7 +36,7 @@ export default function SkillCategories() {
       setCategories(data);
       console.log("User Skill Categories: ", data);
     } catch (error) {
-      console.error("Error fetching User Skill Categories: ", error);
+      notify.msgError(error?.message || "Failed to fetch skill categories");
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export default function SkillCategories() {
       fetchSkillCategories();
       notify.msgSuccess("Category Deleted!");
     } catch (error) {
-      console.error("Error deleting Skill Category: ", error);
+      notify.msgError(error?.message || "Failed to delete skill category");
     } finally {
       setDeleting(false);
     }
