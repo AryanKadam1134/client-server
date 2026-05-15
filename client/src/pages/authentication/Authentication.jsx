@@ -62,7 +62,7 @@ export default function Authentication() {
     <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-2xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
         <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">
-          Portfolio SAAS
+          Profilo
         </h2>
 
         <form

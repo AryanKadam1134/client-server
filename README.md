@@ -1,4 +1,4 @@
-# 🚀 Portfolio SAAS
+# 🚀 Profilo
 
 > A modern, real-time portfolio management platform with public APIs to showcase your professional profile using just your username.
 
@@ -29,7 +29,7 @@
 
 ## 🎯 Overview
 
-**Portfolio SAAS** is a comprehensive portfolio management platform that empowers professionals to build and maintain their online presence. The platform provides:
+**Profilo** is a comprehensive portfolio management platform that empowers professionals to build and maintain their online presence. The platform provides:
 
 - **Real-time Portfolio Management**: Create and update your portfolio sections instantly
 - **Public APIs**: Share your portfolio with others using public endpoints (username-based access)
@@ -37,7 +37,7 @@
 - **Professional Design**: Modern UI with light/dark mode support
 - **Secure Authentication**: Email/password and Google OAuth integration
 
-Whether you're a developer, designer, or any professional, Portfolio SAAS makes it easy to showcase your work and manage your online presence.
+Whether you're a developer, designer, or any professional, Profilo makes it easy to showcase your work and manage your online presence.
 
 ---
 

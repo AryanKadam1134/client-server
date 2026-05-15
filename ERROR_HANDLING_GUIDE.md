@@ -2,7 +2,7 @@
 
 ## Quick Reference
 
-This guide explains how error handling with notifications is implemented throughout the Portfolio SAAS project.
+This guide explains how error handling with notifications is implemented throughout the Profilo project.
 
 ## The Pattern
 

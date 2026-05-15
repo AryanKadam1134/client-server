@@ -88,7 +88,7 @@ export default function SideBar({ isOpen, onClose }) {
           <div className="flex items-center gap-2.5">
             <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary rounded-full"></div>
             <p className="text-nowrap text-md font-medium text-light-text-primary dark:text-dark-text-primary">
-              Portfolio SAAS
+              Profilo
             </p>
           </div>
         </div>
