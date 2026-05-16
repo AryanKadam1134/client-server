@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   BrowserRouter as Router,
@@ -84,6 +84,27 @@ function CommonLayout() {
 }
 
 function App() {
+  useEffect(() => {
+    const favicon = document.getElementById("favicon");
+    const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const updateFavicon = (e) => {
+      if (e.matches) {
+        favicon.href = "/images/favicon_white.png";
+      } else {
+        favicon.href = "/images/favicon_black.png";
+      }
+    };
+
+    // Run once on load
+    updateFavicon(darkModeQuery);
+
+    // Listen for system theme changes
+    darkModeQuery.addEventListener("change", updateFavicon);
+
+    return () => darkModeQuery.removeEventListener("change", updateFavicon);
+  }, []);
+
   return (
     <Router>
       <Routes>

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const menus = [
   { name: "User Details", path: "/details", icon: User },
@@ -56,6 +57,12 @@ function NavItem({ menu, onClick }) {
 
 export default function SideBar({ isOpen, onClose }) {
   const { logout } = useAuth();
+  const { theme } = useTheme();
+
+  const logo = {
+    light: "/images/profilo_logo_black.png",
+    dark: "/images/profilo_logo_white.png",
+  };
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
@@ -86,7 +93,12 @@ export default function SideBar({ isOpen, onClose }) {
         {/* Header */}
         <div className="shrink-0 h-16 flex items-center border-b border-light-border-primary dark:border-dark-border-primary">
           <div className="flex items-center gap-2.5">
-            <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary rounded-full"></div>
+            <img
+              src={logo[theme]}
+              alt="Profilo Logo"
+              className="ml-3 size-9 rounded-full"
+            />
+
             <p className="text-nowrap text-md font-medium text-light-text-primary dark:text-dark-text-primary">
               Profilo
             </p>
