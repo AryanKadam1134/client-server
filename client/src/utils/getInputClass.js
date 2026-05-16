@@ -1,7 +1,7 @@
 export const inputClass = (error) => {
   return `w-full px-4 py-2.5
   text-light-input-text dark:text-dark-input-text
-  placeholder:text-light-input-placeholder dark:placeholder:text-dark-input-placeholder
+  placeholder:text-light-input-placeholder/60 dark:placeholder:text-dark-input-placeholder/60
   bg-light-input-bg dark:bg-dark-input-bg
   focus:bg-light-input-bgFocus dark:focus:bg-dark-input-bgFocus
   disabled:bg-light-input-bgDisabled dark:disabled:bg-dark-input-bgDisabled

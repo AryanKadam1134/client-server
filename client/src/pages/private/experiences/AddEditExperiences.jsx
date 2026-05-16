@@ -3,7 +3,14 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
-import { Trash2, Loader, ExternalLink, Plus, Link, Calendar } from "lucide-react";
+import {
+  Trash2,
+  Loader,
+  ExternalLink,
+  Plus,
+  Link,
+  Calendar,
+} from "lucide-react";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -413,8 +420,8 @@ export default function AddEditExperiences() {
       </LabelInput>
 
       {/* Highlights */}
-      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-md shadow-sm">
-        <div className="flex items-center justify-between gap-3">
+      <div className="col-span-12 flex flex-col gap-4 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary divide-y divide-light-border-primary dark:divide-dark-border-primary rounded-md shadow-sm">
+        <div className="pb-4 flex items-center justify-between gap-3">
           <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">
             Highlights{" "}
             <span className="font-normal text-light-text-secondary dark:text-dark-text-secondary">
@@ -439,12 +446,10 @@ export default function AddEditExperiences() {
           </button>
         </div>
 
-        <div className="border-b border-light-border-primary dark:border-dark-border-primary" />
-
         {highlightFields.map((item, idx) => (
           <div
             key={item.id}
-            className="flex items-center justify-between gap-6"
+            className="pb-4 flex items-center justify-between gap-6"
           >
             <div className="w-full">
               <CustomInput
@@ -459,7 +464,7 @@ export default function AddEditExperiences() {
             <button
               type="button"
               onClick={() => removeHighlight(idx)}
-              className="p-2 bg-red-500 text-white rounded"
+              className="p-2 bg-red-500 text-white rounded cursor-pointer"
             >
               <Trash2 size={16} />
             </button>
@@ -468,8 +473,8 @@ export default function AddEditExperiences() {
       </div>
 
       {/* Positions */}
-      <div className="col-span-12 flex flex-col gap-3 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-md shadow-sm">
-        <div className="flex items-center justify-between gap-3">
+      <div className="col-span-12 flex flex-col gap-4 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary divide-y divide-light-border-primary dark:divide-dark-border-primary rounded-md shadow-sm">
+        <div className="pb-4 flex items-center justify-between gap-3">
           <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">
             Positions / Posts
           </p>
@@ -495,95 +500,86 @@ export default function AddEditExperiences() {
           </button>
         </div>
 
-        <div className="border-b border-light-border-primary dark:border-dark-border-primary" />
+        {fields?.map((data, idx) => (
+          <div key={data?.role || idx} className="pb-4 grid grid-cols-12 gap-6">
+            {/* Role */}
+            <LabelInput
+              id={`positions-${idx}.role`}
+              label="Role"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+            >
+              <CustomInput
+                id={`positions-${idx}.role`}
+                placeholder="Job Role"
+                {...register(`positions.${idx}.role`, {
+                  required: "Role is required!",
+                })}
+                error={errors?.positions?.[idx]?.role}
+              />
 
-        <div className="flex flex-col gap-6">
-          {fields?.map((data, idx) => (
-            <>
-              <div key={data?.role || idx} className="grid grid-cols-12 gap-6">
-                <LabelInput
-                  id={`positions-${idx}.role`}
-                  label="Role"
-                  colSpan="col-span-12 sm:col-span-6"
-                  required
-                >
-                  <CustomInput
-                    id={`positions-${idx}.role`}
-                    placeholder="Job Role"
-                    {...register(`positions.${idx}.role`, {
-                      required: "Role is required!",
-                    })}
-                    error={errors?.positions?.[idx]?.role}
-                  />
+              <FieldError error={errors.positions?.[idx]?.role?.message} />
+            </LabelInput>
 
-                  <FieldError error={errors.positions?.[idx]?.role?.message} />
-                </LabelInput>
+            {/* Start Date */}
+            <LabelInput
+              id={`positions-${idx}.startDate`}
+              label="Start Date"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+            >
+              <CustomDatePicker
+                id={`positions-${idx}.startDate`}
+                icon={Calendar}
+                placeholder="Select Date"
+                {...register(`positions.${idx}.startDate`, {
+                  required: "Start Date is required!",
+                })}
+                error={errors?.positions?.[idx]?.startDate}
+              />
 
-                {/* Start Date */}
-                <LabelInput
-                  id={`positions-${idx}.startDate`}
-                  label="Start Date"
-                  colSpan="col-span-12 sm:col-span-6"
-                  required
-                >
-                  <CustomDatePicker
-                    id={`positions-${idx}.startDate`}
-                    icon={Calendar}
-                    placeholder="Select Date"
-                    {...register(`positions.${idx}.startDate`, {
-                      required: "Start Date is required!",
-                    })}
-                    error={errors?.positions?.[idx]?.startDate}
-                  />
+              <FieldError error={errors.positions?.[idx]?.startDate?.message} />
+            </LabelInput>
 
-                  <FieldError
-                    error={errors.positions?.[idx]?.startDate?.message}
-                  />
-                </LabelInput>
+            {/* End Date */}
+            <LabelInput
+              id={`positions-${idx}.endDate`}
+              icon={Calendar}
+              label="End Date"
+              colSpan="col-span-12 sm:col-span-6"
+            >
+              <CustomDatePicker
+                id={`positions-${idx}.endDate`}
+                placeholder="Select Date"
+                {...register(`positions.${idx}.endDate`)}
+                error={errors?.positions?.[idx]?.endDate}
+              />
+            </LabelInput>
 
-                {/* End Date */}
-                <LabelInput
-                  id={`positions-${idx}.endDate`}
-                  icon={Calendar}
-                  label="End Date"
-                  colSpan="col-span-12 sm:col-span-6"
-                >
-                  <CustomDatePicker
-                    id={`positions-${idx}.endDate`}
-                    placeholder="Select Date"
-                    {...register(`positions.${idx}.endDate`)}
-                    error={errors?.positions?.[idx]?.endDate}
-                  />
-                </LabelInput>
+            {/* Present */}
+            <LabelInput
+              id={`positions-${idx}.isCurrent`}
+              label="Currently working on this position"
+              colSpan="col-span-9 sm:col-span-4 lg:col-span-5"
+              type="checkbox"
+            >
+              <input
+                id={`positions-${idx}.isCurrent`}
+                type="checkbox"
+                {...register(`positions.${idx}.isCurrent`)}
+                error={errors?.positions?.[idx]?.isCurrent}
+              />
+            </LabelInput>
 
-                {/* Present */}
-                <LabelInput
-                  id={`positions-${idx}.isCurrent`}
-                  label="Currently working on this position"
-                  colSpan="col-span-9 sm:col-span-4 lg:col-span-5"
-                  type="checkbox"
-                >
-                  <input
-                    id={`positions-${idx}.isCurrent`}
-                    type="checkbox"
-                    {...register(`positions.${idx}.isCurrent`)}
-                    error={errors?.positions?.[idx]?.isCurrent}
-                  />
-                </LabelInput>
-
-                <button
-                  type="button"
-                  onClick={() => remove(idx)}
-                  className="w-fit h-fit self-center col-span-3 sm:col-span-2 lg:col-span-1 p-2 bg-red-500 text-white rounded"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-
-              <div className="last:hidden border-b border-dashed border-light-border-primary dark:border-dark-border-primary"></div>
-            </>
-          ))}
-        </div>
+            <button
+              type="button"
+              onClick={() => remove(idx)}
+              className="w-fit h-fit self-center col-span-3 sm:col-span-2 lg:col-span-1 p-2 bg-red-500 text-white rounded cursor-pointer"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        ))}
       </div>
 
       {id && (
