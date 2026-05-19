@@ -6,9 +6,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ConfigProvider } from "antd";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
-import { NotificationsProvider } from "./context/NotificationContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { PopupProvider } from "./context/PopupContext.jsx";
+import { NotificationsProvider } from "./context/NotificationContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <ConfigProvider

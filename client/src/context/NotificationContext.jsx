@@ -4,7 +4,15 @@ import { notification, message as antdMessage } from "antd";
 
 const NotificationContext = createContext(null);
 
-export const useNotify = () => useContext(NotificationContext);
+export const useNotify = () => {
+  const context = useContext(NotificationContext);
+
+  if (!context) {
+    throw new Error("useNotify must be used within an NotificationsProvider");
+  }
+
+  return context;
+};
 
 export function NotificationsProvider({ children }) {
   // Ant Design Notification
