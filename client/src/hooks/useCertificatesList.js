@@ -13,7 +13,7 @@ export default function useCertificatesList() {
       const data = res.data;
 
       setCertificatesList(data);
-      console.log("Ceritficates List: ", data);
+      // console.log("Ceritficates List: ", data);
     } catch (error) {
       console.error("Error fetching Ceritficates List: ", error);
     } finally {

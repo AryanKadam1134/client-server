@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine, ExternalLink } from "lucide-react";
 
 import Table from "../../../components/common/Table";
+import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -19,9 +20,11 @@ import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 import useLocationTypesList from "../../../hooks/useLocationTypesList";
 
 import { useNotify } from "../../../context/NotificationContext";
+import { usePopup } from "../../../context/PopupContext";
 
 export default function Experiences() {
   const { notify } = useNotify();
+  const { openPopupWindow, closePopupWindow } = usePopup();
 
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
@@ -55,12 +58,22 @@ export default function Experiences() {
       await apiEndpoints.deleteExperience(experienceId);
 
       fetchExperiences();
+      closePopupWindow();
       notify.msgSuccess("Experience Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete experience");
     } finally {
       setDeleting(false);
     }
+  };
+
+  const deleteExperiencePopup = (_id) => {
+    openPopupWindow(
+      <Trash2 strokeWidth={3} />,
+      "Delete Experience",
+      <DeleteItemPopup func={() => deleteExperience(_id)} />,
+      "bg-red-500",
+    );
   };
 
   useEffect(() => {
@@ -99,7 +112,7 @@ export default function Experiences() {
           <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
           <DeleteButton
-            onClick={() => deleteExperience(_id)}
+            onClick={() => deleteExperiencePopup(_id)}
             disabled={deleting}
           />
         </div>,

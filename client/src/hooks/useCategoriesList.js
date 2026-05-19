@@ -13,7 +13,7 @@ export default function useCategoriesList() {
       const data = res.data;
 
       setCategoriesList(data);
-      console.log("Skill Categories Filter: ", data);
+      // console.log("Skill Categories Filter: ", data);
     } catch (error) {
       console.error("Error fetching Skill Categories: ", error);
     } finally {

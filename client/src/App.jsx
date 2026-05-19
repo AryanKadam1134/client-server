@@ -41,18 +41,37 @@ import AddEditAchievement from "./pages/private/achievements/AddEditAchievement"
 
 import Settings from "./pages/private/Settings";
 import ChangePassword from "./pages/private/ChangePassword";
+import PopupWindow from "./components/common/PopupWindow";
 
 import { useAuth } from "./context/AuthContext";
+import { usePopup } from "./context/PopupContext";
+
+function SessionLoader() {
+  return (
+    <div className="h-screen flex items-center justify-center font-semibold text-lg text-light-text-primary dark:text-dark-text-primary bg-light-bg-primary dark:bg-dark-bg-tertiary">
+      Restoring Session...
+    </div>
+  );
+}
+
+// Popup Layout to open popup on any screen
+function PopupLayout() {
+  const { isPopupWindow } = usePopup();
+
+  return (
+    <>
+      {isPopupWindow && <PopupWindow />}
+
+      <Outlet />
+    </>
+  );
+}
 
 function PublicRoute() {
   const { user, authLoading } = useAuth();
 
   if (authLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center text-lg font-semibold">
-        Restoring Session...
-      </div>
-    );
+    return <SessionLoader />;
   }
 
   // ❌ If logged in → redirect to details
@@ -63,11 +82,7 @@ function ProtectedRoute() {
   const { user, authLoading } = useAuth();
 
   if (authLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center text-lg font-semibold">
-        Restoring Session...
-      </div>
-    );
+    return <SessionLoader />;
   }
 
   return user ? (
@@ -108,79 +123,87 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/details" />} />
+        <Route element={<PopupLayout />}>
+          <Route path="/" element={<Navigate to="/details" />} />
 
-        {/* 🔓 Public Route (only if NOT logged in) */}
-        <Route element={<PublicRoute />}>
-          <Route path="/auth" element={<Authentication />} />
-          <Route path="/forgot-password" element={<ForogtPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-        </Route>
-
-        {/* 🔐 Protected Route */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/details" element={<Dashboard />} />
-
-          <Route path="/social" element={<CommonLayout />}>
-            <Route index element={<SocialPlatforms />} />
-            <Route path="add" element={<AddEditSocialPlatform />} />
-            <Route
-              path=":platformId/edit"
-              element={<AddEditSocialPlatform />}
-            />
+          {/* 🔓 Public Route (only if NOT logged in) */}
+          <Route element={<PublicRoute />}>
+            <Route path="/auth" element={<Authentication />} />
+            <Route path="/forgot-password" element={<ForogtPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Route>
 
-          <Route path="/skills" element={<CommonLayout />}>
-            <Route index element={<Skills />} />
-            <Route path="add" element={<AddEditSkills />} />
-            <Route path=":skillId/edit" element={<AddEditSkills />} />
-          </Route>
+          {/* 🔐 Protected Route */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/details" element={<Dashboard />} />
 
-          <Route path="/skill-categories" element={<CommonLayout />}>
-            <Route index element={<SkillCategories />} />
-            <Route path="add" element={<AddEditSkillCategory />} />
-            <Route path=":categoryId/edit" element={<AddEditSkillCategory />} />
-          </Route>
+            <Route path="/social" element={<CommonLayout />}>
+              <Route index element={<SocialPlatforms />} />
+              <Route path="add" element={<AddEditSocialPlatform />} />
+              <Route
+                path=":platformId/edit"
+                element={<AddEditSocialPlatform />}
+              />
+            </Route>
 
-          <Route path="/projects" element={<CommonLayout />}>
-            <Route index element={<Projects />} />
-            <Route path="add" element={<AddEditProject />} />
-            <Route path=":projectId/edit" element={<AddEditProject />} />
-          </Route>
+            <Route path="/skills" element={<CommonLayout />}>
+              <Route index element={<Skills />} />
+              <Route path="add" element={<AddEditSkills />} />
+              <Route path=":skillId/edit" element={<AddEditSkills />} />
+            </Route>
 
-          <Route path="/experiences" element={<CommonLayout />}>
-            <Route index element={<Experiences />} />
-            <Route path="add" element={<AddEditExperiences />} />
-            <Route path=":experienceId/edit" element={<AddEditExperiences />} />
-          </Route>
+            <Route path="/skill-categories" element={<CommonLayout />}>
+              <Route index element={<SkillCategories />} />
+              <Route path="add" element={<AddEditSkillCategory />} />
+              <Route
+                path=":categoryId/edit"
+                element={<AddEditSkillCategory />}
+              />
+            </Route>
 
-          <Route path="/educations" element={<CommonLayout />}>
-            <Route index element={<Educations />} />
-            <Route path="add" element={<AddEditEducation />} />
-            <Route path=":educationId/edit" element={<AddEditEducation />} />
-          </Route>
+            <Route path="/projects" element={<CommonLayout />}>
+              <Route index element={<Projects />} />
+              <Route path="add" element={<AddEditProject />} />
+              <Route path=":projectId/edit" element={<AddEditProject />} />
+            </Route>
 
-          <Route path="/certificates" element={<CommonLayout />}>
-            <Route index element={<Certificates />} />
-            <Route path="add" element={<AddEditCertificate />} />
-            <Route
-              path=":certificateId/edit"
-              element={<AddEditCertificate />}
-            />
-          </Route>
+            <Route path="/experiences" element={<CommonLayout />}>
+              <Route index element={<Experiences />} />
+              <Route path="add" element={<AddEditExperiences />} />
+              <Route
+                path=":experienceId/edit"
+                element={<AddEditExperiences />}
+              />
+            </Route>
 
-          <Route path="/achievements" element={<CommonLayout />}>
-            <Route index element={<Achievements />} />
-            <Route path="add" element={<AddEditAchievement />} />
-            <Route
-              path=":achievementId/edit"
-              element={<AddEditAchievement />}
-            />
-          </Route>
+            <Route path="/educations" element={<CommonLayout />}>
+              <Route index element={<Educations />} />
+              <Route path="add" element={<AddEditEducation />} />
+              <Route path=":educationId/edit" element={<AddEditEducation />} />
+            </Route>
 
-          <Route path="/settings" element={<CommonLayout />}>
-            <Route index element={<Settings />} />
-            <Route path="change_password" element={<ChangePassword />} />
+            <Route path="/certificates" element={<CommonLayout />}>
+              <Route index element={<Certificates />} />
+              <Route path="add" element={<AddEditCertificate />} />
+              <Route
+                path=":certificateId/edit"
+                element={<AddEditCertificate />}
+              />
+            </Route>
+
+            <Route path="/achievements" element={<CommonLayout />}>
+              <Route index element={<Achievements />} />
+              <Route path="add" element={<AddEditAchievement />} />
+              <Route
+                path=":achievementId/edit"
+                element={<AddEditAchievement />}
+              />
+            </Route>
+
+            <Route path="/settings" element={<CommonLayout />}>
+              <Route index element={<Settings />} />
+              <Route path="change_password" element={<ChangePassword />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

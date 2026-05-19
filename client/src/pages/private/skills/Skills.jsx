@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine } from "lucide-react";
 
 import Table from "../../../components/common/Table";
+import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -19,9 +20,11 @@ import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
 
 import { useNotify } from "../../../context/NotificationContext";
+import { usePopup } from "../../../context/PopupContext";
 
 export default function Skills() {
   const { notify } = useNotify();
+  const { openPopupWindow, closePopupWindow } = usePopup();
 
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
@@ -55,6 +58,7 @@ export default function Skills() {
       await apiEndpoints.deleteSkill(id);
 
       fetchSkills();
+      closePopupWindow();
       notify.msgSuccess("Skill Deleted!");
     } catch (error) {
       console.error("Error deleting Skill: ", error);
@@ -62,6 +66,15 @@ export default function Skills() {
     } finally {
       setDeleting(false);
     }
+  };
+
+  const deleteSkillPopup = (_id) => {
+    openPopupWindow(
+      <Trash2 strokeWidth={3} />,
+      "Delete Skill",
+      <DeleteItemPopup func={() => deleteSkill(_id)} />,
+      "bg-red-500",
+    );
   };
 
   useEffect(() => {
@@ -92,7 +105,7 @@ export default function Skills() {
         <div className="flex items-center gap-1">
           <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
-          <DeleteButton onClick={() => deleteSkill(_id)} disabled={deleting} />
+          <DeleteButton onClick={() => deleteSkillPopup(_id)} disabled={deleting} />
         </div>,
       ],
     };

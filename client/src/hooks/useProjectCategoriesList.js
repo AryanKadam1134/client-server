@@ -13,7 +13,7 @@ export default function useProjectCategoriesList() {
       const data = res.data;
 
       setProjectCategoriesList(data);
-      console.log("Project Categories List: ", data);
+      // console.log("Project Categories List: ", data);
     } catch (error) {
       console.error("Error fetching Project Categories List: ", error);
     } finally {

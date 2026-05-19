@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine } from "lucide-react";
 
 import Table from "../../../components/common/Table";
+import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -15,9 +16,11 @@ import { apiEndpoints } from "../../../api";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/NotificationContext";
+import { usePopup } from "../../../context/PopupContext";
 
 export default function SkillCategories() {
   const { notify } = useNotify();
+  const { openPopupWindow, closePopupWindow } = usePopup();
 
   const { visibilities } = useVisibilities();
 
@@ -49,12 +52,22 @@ export default function SkillCategories() {
       await apiEndpoints.deleteSkillCategory(categoryId);
 
       fetchSkillCategories();
+      closePopupWindow();
       notify.msgSuccess("Category Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete skill category");
     } finally {
       setDeleting(false);
     }
+  };
+
+  const deleteSkillCategoryPopup = (_id) => {
+    openPopupWindow(
+      <Trash2 strokeWidth={3} />,
+      "Delete Skill Category",
+      <DeleteItemPopup func={() => deleteSkillCategory(_id)} />,
+      "bg-red-500",
+    );
   };
 
   useEffect(() => {
@@ -82,7 +95,7 @@ export default function SkillCategories() {
           <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
           <DeleteButton
-            onClick={() => deleteSkillCategory(_id)}
+            onClick={() => deleteSkillCategoryPopup(_id)}
             disabled={deleting}
           />
         </div>,

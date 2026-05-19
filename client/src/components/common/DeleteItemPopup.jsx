@@ -1,0 +1,16 @@
+import React from "react";
+import CustomButton from "../ui/CustomButton";
+
+export default function DeleteItemPopup({ func }) {
+  return (
+    <div className="flex flex-col gap-5 w-full">
+      <div className="text-sm text-light-text-primary dark:text-dark-text-primary">
+        Are you sure you want to delete this Item?
+      </div>
+
+      <CustomButton onClick={func} variant="red" className="w-fit self-end text-sm">
+        Delete
+      </CustomButton>
+    </div>
+  );
+}

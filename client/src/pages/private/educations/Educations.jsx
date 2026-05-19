@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, FilePenLine, ExternalLink } from "lucide-react";
 
 import Table from "../../../components/common/Table";
+import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -11,9 +12,11 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { apiEndpoints } from "../../../api";
 
 import { useNotify } from "../../../context/NotificationContext";
+import { usePopup } from "../../../context/PopupContext";
 
 export default function Educations() {
   const { notify } = useNotify();
+  const { openPopupWindow, closePopupWindow } = usePopup();
 
   const navigate = useNavigate();
 
@@ -43,12 +46,22 @@ export default function Educations() {
       await apiEndpoints.deleteEducation(educationId);
 
       fetchEducations();
+      closePopupWindow();
       notify.msgSuccess("Education Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete education");
     } finally {
       setDeleting(false);
     }
+  };
+
+  const deleteEducationPopup = (_id) => {
+    openPopupWindow(
+      <Trash2 strokeWidth={3} />,
+      "Delete Education",
+      <DeleteItemPopup func={() => deleteEducation(_id)} />,
+      "bg-red-500",
+    );
   };
 
   useEffect(() => {
@@ -79,7 +92,7 @@ export default function Educations() {
           <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
           <DeleteButton
-            onClick={() => deleteEducation(_id)}
+            onClick={() => deleteEducationPopup(_id)}
             disabled={deleting}
           />
         </div>,

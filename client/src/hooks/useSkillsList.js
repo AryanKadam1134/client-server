@@ -13,7 +13,7 @@ export default function useSkillsList() {
       const data = res.data;
 
       setSkillsList(data);
-      console.log("Skills List: ", data);
+      // console.log("Skills List: ", data);
     } catch (error) {
       console.error("Error fetching Skills List: ", error);
     } finally {

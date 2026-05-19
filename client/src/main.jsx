@@ -3,11 +3,12 @@ import "./index.css";
 import App from "./App.jsx";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider } from "antd";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { NotificationsProvider } from "./context/NotificationContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
+import { PopupProvider } from "./context/PopupContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <ConfigProvider
@@ -19,11 +20,15 @@ createRoot(document.getElementById("root")).render(
   >
     <ThemeProvider>
       <NotificationsProvider>
-        <AuthProvider>
-          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-            <App />
-          </GoogleOAuthProvider>
-        </AuthProvider>
+        <PopupProvider>
+          <AuthProvider>
+            <GoogleOAuthProvider
+              clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+            >
+              <App />
+            </GoogleOAuthProvider>
+          </AuthProvider>
+        </PopupProvider>
       </NotificationsProvider>
     </ThemeProvider>
   </ConfigProvider>,

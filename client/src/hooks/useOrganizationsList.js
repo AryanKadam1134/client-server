@@ -13,7 +13,7 @@ export default function useOrganizationsList() {
       const data = res.data;
 
       setOrganizationsList(data);
-      console.log("Organizations List: ", data);
+      // console.log("Organizations List: ", data);
     } catch (error) {
       console.error("Error fetching Organizations List: ", error);
     } finally {
