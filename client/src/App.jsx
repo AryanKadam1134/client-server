@@ -54,7 +54,6 @@ function SessionLoader() {
   );
 }
 
-// Popup Layout to open popup on any screen
 function PopupLayout() {
   const { isPopupWindow } = usePopup();
 
@@ -123,6 +122,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Popup Layout (to open popups anywhere) */}
         <Route element={<PopupLayout />}>
           <Route path="/" element={<Navigate to="/details" />} />
 

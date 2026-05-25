@@ -3,6 +3,7 @@ import { SocialPlatform } from "../../models/socialPlatform.model.js";
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
+import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const manageSocialPlatforms = asynchandler(async (req, res) => {
   const { platforms } = req.body;
@@ -167,17 +168,33 @@ const getSocialPlatform = asynchandler(async (req, res) => {
 });
 
 const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
-  const platforms = await SocialPlatform.find({
-    owner: req.user?._id,
-  }).sort({ sortOrder: 1 });
+  const { page, limit } = req.query;
 
-  if (platforms?.length <= 0) {
+  const skip = (page - 1) * limit;
+
+  // const platforms = await SocialPlatform.find({
+  //   owner: req.user?._id,
+  // }).sort({ sortOrder: 1 });
+
+  const paginatedPlatforms = await paginateQuery({
+    model: SocialPlatform,
+    page,
+    limit,
+    filter: {
+      owner: req.user?._id,
+    },
+    sort: { sortOrder: 1 },
+  });
+
+  if (paginatedPlatforms?.length <= 0) {
     return res.status(200).json(new ApiRes(200, [], "no platforms found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, platforms, "platforms fetched successfully!"));
+    .json(
+      new ApiRes(200, paginatedPlatforms, "platforms fetched successfully!"),
+    );
 });
 
 export {

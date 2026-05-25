@@ -11,6 +11,7 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
+import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addAchievement = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -311,41 +312,25 @@ const getAchievement = asynchandler(async (req, res) => {
 });
 
 const getAllAchievement = asynchandler(async (req, res) => {
-  const achievements = await Achievement.aggregate([
-    {
-      $match: {
-        owner: new mongoose.Types.ObjectId(req.user?._id),
-      },
-    },
-    {
-      $lookup: {
-        from: "certificates",
-        localField: "certificateId",
-        foreignField: "_id",
-        as: "certificateDetails",
-      },
-    },
-    {
-      $addFields: {
-        certificateDetails: {
-          $first: "$certificateDetails",
-        },
-      },
-    },
-    {
-      $sort: {
-        sortOrder: 1,
-      },
-    },
-  ]);
+  const { page, limit } = req.query;
 
-  if (achievements?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no achievements found!"));
+  const paginatedAchievements = await paginateQuery({
+    model: Achievement,
+    page,
+    limit,
+    filter: {
+      owner: req.user?._id,
+    },
+    sort: { sortOrder: 1 },
+  });
+
+  if (paginatedAchievements?.data?.length === 0) {
+    return res.status(200).json(new ApiRes(200, paginatedAchievements, "no achievements found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, achievements, "achievements fetched successfully!"));
+    .json(new ApiRes(200, paginatedAchievements, "achievements fetched successfully!"));
 });
 
 export {

@@ -10,6 +10,7 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
+import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addExperience = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -278,36 +279,25 @@ const getExperience = asynchandler(async (req, res) => {
 });
 
 const getAllExperiences = asynchandler(async (req, res) => {
-  const experiences = await Experience.aggregate([
-    {
-      $match: {
-        owner: new mongoose.Types.ObjectId(req.user?._id),
-      },
-    },
-    {
-      $sort: { latestDate: -1 },
-    },
-    {
-      $lookup: {
-        from: "skills",
-        localField: "techStack",
-        foreignField: "_id",
-        as: "techStack",
-      },
-    },
-  ]);
+  const { page, limit } = req.query;
 
-  if (experiences?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no experiences found!"));
-  }
-
-  experiences.forEach((exp) => {
-    exp.positions = sortPositionsByDate(exp.positions);
+  const paginatedExperiences = await paginateQuery({
+    model: Experience,
+    page,
+    limit,
+    filter: {
+      owner: req.user?._id,
+    },
+    sort: { sortOrder: 1 },
   });
+
+  if (paginatedExperiences?.data?.length === 0) {
+    return res.status(200).json(new ApiRes(200, paginatedExperiences, "no experiences found!"));
+  }
 
   return res
     .status(200)
-    .json(new ApiRes(200, experiences, "experiences fetched successfully!"));
+    .json(new ApiRes(200, paginatedExperiences, "experiences fetched successfully!"));
 });
 
 export {

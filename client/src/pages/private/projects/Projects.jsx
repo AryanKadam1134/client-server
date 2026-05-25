@@ -21,8 +21,10 @@ import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
+import Pagination from "../../../components/ui/Pagination";
 
 import { getVisibility } from "../../../utils/getVisibility";
+import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
@@ -41,17 +43,23 @@ export default function Projects() {
 
   const [switchView, setSwitchView] = useState(false);
 
+  const [params, setParams] = useState({
+    page: 1,
+  });
+
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchProjects = async () => {
     try {
-      const res = await apiEndpoints.getProjects();
+      const res = await apiEndpoints.getProjects(params);
 
       const data = res.data;
 
-      setProjects(data);
+      setProjects(data?.data);
+      setPagination(data?.pagination);
       console.log("User Projects: ", data);
     } catch (error) {
       console.error("Error fetching User Projects: ", error);
@@ -89,7 +97,7 @@ export default function Projects() {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [params?.page]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -115,7 +123,7 @@ export default function Projects() {
 
     return {
       cells: [
-        index + 1,
+        calculateSerialNumber(pagination?.page, index, pagination?.limit),
         title,
         liveLink && (
           <a
@@ -187,23 +195,43 @@ export default function Projects() {
       </div>
 
       {switchView ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-           {projects?.map((data) => (
-            <ProjectCard
-              key={data._id}
-              project={data}
-              onEdit={() => navigate(`${data._id}/edit`)}
-              onDelete={() => deleteProjectPopup(data._id)}
-              isDeleting={deleting}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {projects?.map((data) => (
+              <ProjectCard
+                key={data._id}
+                project={data}
+                onEdit={() => navigate(`${data._id}/edit`)}
+                onDelete={() => deleteProjectPopup(data._id)}
+                isDeleting={deleting}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={pagination?.page}
+            totalPages={pagination?.totalPages}
+            onPageChange={(page) =>
+              setParams((prev) => ({ ...prev, page: page }))
+            }
+          />
+        </>
       ) : (
-        <Table
-          loading={loading}
-          tableHeading={tableHeading}
-          tableBody={tableBody}
-        />
+        <>
+          <Table
+            loading={loading}
+            tableHeading={tableHeading}
+            tableBody={tableBody}
+          />
+
+          <Pagination
+            currentPage={pagination?.page}
+            totalPages={pagination?.totalPages}
+            onPageChange={(page) =>
+              setParams((prev) => ({ ...prev, page: page }))
+            }
+          />
+        </>
       )}
     </div>
   );

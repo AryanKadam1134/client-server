@@ -8,6 +8,9 @@ import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
+import Pagination from "../../../components/ui/Pagination";
+
+import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
@@ -20,17 +23,23 @@ export default function Educations() {
 
   const navigate = useNavigate();
 
+  const [params, setParams] = useState({
+    page: 1,
+  });
+
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [educations, setEducations] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchEducations = async () => {
     try {
-      const res = await apiEndpoints.getEducations();
+      const res = await apiEndpoints.getEducations(params);
 
       const data = res.data;
 
-      setEducations(data);
+      setEducations(data?.data);
+      setPagination(data?.pagination);
       console.log("User Educations: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch educations");
@@ -66,7 +75,7 @@ export default function Educations() {
 
   useEffect(() => {
     fetchEducations();
-  }, []);
+  }, [params?.page]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -83,7 +92,7 @@ export default function Educations() {
 
     return {
       cells: [
-        index + 1,
+        calculateSerialNumber(pagination?.page, index, pagination?.limit),
         instituteName,
         qualification,
         percentage || cgpa,
@@ -113,6 +122,12 @@ export default function Educations() {
         loading={loading}
         tableHeading={tableHeading}
         tableBody={tableBody}
+      />
+
+      <Pagination
+        currentPage={pagination?.page}
+        totalPages={pagination?.totalPages}
+        onPageChange={(page) => setParams((prev) => ({ ...prev, page: page }))}
       />
     </div>
   );

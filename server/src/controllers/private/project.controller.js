@@ -11,6 +11,7 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
+import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addProject = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -311,49 +312,25 @@ const getProject = asynchandler(async (req, res) => {
 });
 
 const getAllProjects = asynchandler(async (req, res) => {
-  const projects = await Project.aggregate([
-    {
-      $match: {
-        owner: new mongoose.Types.ObjectId(req.user?._id),
-      },
-    },
-    {
-      $lookup: {
-        from: "skills",
-        localField: "techStack",
-        foreignField: "_id",
-        as: "techStack",
-      },
-    },
-    {
-      $lookup: {
-        from: "experiences",
-        localField: "organizationId",
-        foreignField: "_id",
-        as: "organizationDetails",
-      },
-    },
-    {
-      $addFields: {
-        organizationDetails: {
-          $first: "$organizationDetails",
-        },
-      },
-    },
-    {
-      $sort: {
-        sortOrder: 1,
-      },
-    },
-  ]);
+  const { page, limit } = req.query;
 
-  if (projects?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no projects found!"));
+  const paginatedProjects = await paginateQuery({
+    model: Project,
+    page,
+    limit,
+    filter: {
+      owner: req.user?._id,
+    },
+    sort: { sortOrder: 1 },
+  });
+
+  if (paginatedProjects?.data?.length === 0) {
+    return res.status(200).json(new ApiRes(200, paginatedProjects, "no projects found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, projects, "projects fetched successfully!"));
+    .json(new ApiRes(200, paginatedProjects, "projects fetched successfully!"));
 });
 
 export {

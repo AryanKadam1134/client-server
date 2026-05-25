@@ -7,6 +7,7 @@ import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
+import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addSkill = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -132,41 +133,26 @@ const getSkill = asynchandler(async (req, res) => {
 });
 
 const getAllSkillWithCategory = asynchandler(async (req, res) => {
-  const skills = await Skill.aggregate([
-    {
-      $match: {
-        owner: new mongoose.Types.ObjectId(req.user?._id),
-      },
-    },
-    {
-      $lookup: {
-        from: "skillcategories",
-        localField: "categoryId",
-        foreignField: "_id",
-        as: "category",
-      },
-    },
-    {
-      $addFields: {
-        category: {
-          $first: "$category",
-        },
-      },
-    },
-    {
-      $sort: {
-        sortOrder: 1,
-      },
-    },
-  ]);
+  const { page, limit } = req.query;
 
-  if (skills?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no skills found!"));
+  const paginatedSkills = await paginateQuery({
+    model: Skill,
+    page,
+    limit,
+    filter: {
+      owner: req.user?._id,
+    },
+    sort: { sortOrder: 1 },
+    populate: "categoryId",
+  });
+
+  if (paginatedSkills?.data?.length === 0) {
+    return res.status(200).json(new ApiRes(200, paginatedSkills, "no skills found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, skills, "skills fetched successfully!"));
+    .json(new ApiRes(200, paginatedSkills, "skills fetched successfully!"));
 });
 
 export {

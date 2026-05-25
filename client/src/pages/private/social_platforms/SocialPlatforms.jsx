@@ -18,6 +18,7 @@ import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/NotificationContext";
 import { usePopup } from "../../../context/PopupContext";
+import Pagination from "../../../components/ui/Pagination";
 
 export default function SocialPlatforms() {
   const { notify } = useNotify();
@@ -27,17 +28,23 @@ export default function SocialPlatforms() {
 
   const navigate = useNavigate();
 
+  const [params, setParams] = useState({
+    page: 1,
+  });
+
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [platforms, setPlatforms] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchSocialPlatforms = async () => {
     try {
-      const res = await apiEndpoints.getSocialPlatforms();
+      const res = await apiEndpoints.getSocialPlatforms(params);
 
       const data = res.data;
 
-      setPlatforms(data);
+      setPlatforms(data?.data);
+      setPagination(data?.pagination);
       console.log("User Social Platforms: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch social platforms");
@@ -73,7 +80,7 @@ export default function SocialPlatforms() {
 
   useEffect(() => {
     fetchSocialPlatforms();
-  }, []);
+  }, [params?.page]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -127,6 +134,12 @@ export default function SocialPlatforms() {
         loading={loading?.fetching}
         tableHeading={tableHeading}
         tableBody={tableBody}
+      />
+
+      <Pagination
+        currentPage={pagination?.page}
+        totalPages={pagination?.totalPages}
+        onPageChange={(page) => setParams((prev) => ({ ...prev, page: page }))}
       />
     </div>
   );

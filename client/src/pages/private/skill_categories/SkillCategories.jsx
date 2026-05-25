@@ -8,8 +8,10 @@ import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
+import Pagination from "../../../components/ui/Pagination";
 
 import { getVisibility } from "../../../utils/getVisibility";
+import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
@@ -26,17 +28,23 @@ export default function SkillCategories() {
 
   const navigate = useNavigate();
 
+  const [params, setParams] = useState({
+    page: 1,
+  });
+
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchSkillCategories = async () => {
     try {
-      const res = await apiEndpoints.getSkillCategories();
+      const res = await apiEndpoints.getSkillCategories(params);
 
       const data = res.data;
 
-      setCategories(data);
+      setCategories(data?.data);
+      setPagination(data?.pagination);
       console.log("User Skill Categories: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch skill categories");
@@ -72,7 +80,7 @@ export default function SkillCategories() {
 
   useEffect(() => {
     fetchSkillCategories();
-  }, []);
+  }, [params?.page]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -87,7 +95,7 @@ export default function SkillCategories() {
 
     return {
       cells: [
-        index + 1,
+        calculateSerialNumber(pagination?.page, index, pagination?.limit),
         name,
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),
@@ -116,6 +124,12 @@ export default function SkillCategories() {
         loading={loading}
         tableHeading={tableHeading}
         tableBody={tableBody}
+      />
+
+      <Pagination
+        currentPage={pagination?.page}
+        totalPages={pagination?.totalPages}
+        onPageChange={(page) => setParams((prev) => ({ ...prev, page: page }))}
       />
     </div>
   );

@@ -8,6 +8,7 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
+import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addEducation = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -238,17 +239,25 @@ const getEducation = asynchandler(async (req, res) => {
 });
 
 const getAllEducations = asynchandler(async (req, res) => {
-  const educations = await Education.find({ owner: req.user?._id }).sort({
-    latestYear: -1,
+  const { page, limit } = req.query;
+
+  const paginatedEducations = await paginateQuery({
+    model: Education,
+    page,
+    limit,
+    filter: {
+      owner: req.user?._id,
+    },
+    sort: { sortOrder: 1 },
   });
 
-  if (educations?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no educations found!"));
+  if (paginatedEducations?.data?.length === 0) {
+    return res.status(200).json(new ApiRes(200, paginatedEducations, "no educations found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, educations, "educations fetched successfully!"));
+    .json(new ApiRes(200, paginatedEducations, "educations fetched successfully!"));
 });
 
 export {

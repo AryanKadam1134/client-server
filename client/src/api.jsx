@@ -66,7 +66,7 @@ export const apiEndpoints = {
 
   getSocialPlatform: (platformId) => api.get(`/socialPlatforms/${platformId}`),
 
-  getSocialPlatforms: () => api.get(`/socialPlatforms`),
+  getSocialPlatforms: (params) => api.get(`/socialPlatforms`, { params }),
 
   // Skills
   addSkill: (body) => api.post(`/skills`, body),
@@ -77,7 +77,7 @@ export const apiEndpoints = {
 
   getSkill: (skillId) => api.get(`/skills/${skillId}`),
 
-  getSkills: () => api.get(`/skills`),
+  getSkills: (params) => api.get(`/skills`, { params }),
 
   // Skill Categories
   addSkillCategory: (body) => api.post(`/skillCategories`, body),
@@ -90,7 +90,7 @@ export const apiEndpoints = {
 
   getSkillCategory: (categoryId) => api.get(`/skillCategories/${categoryId}`),
 
-  getSkillCategories: () => api.get(`/skillCategories`),
+  getSkillCategories: (params) => api.get(`/skillCategories`, { params }),
 
   // Projects
   addProject: (body) => api.post(`/projects`, body),
@@ -107,7 +107,7 @@ export const apiEndpoints = {
 
   getProject: (projectId) => api.get(`/projects/${projectId}`),
 
-  getProjects: () => api.get(`/projects`),
+  getProjects: (params) => api.get(`/projects`, { params }),
 
   // Experiences
   addExperience: (body) => api.post(`/experiences`, body),
@@ -126,7 +126,7 @@ export const apiEndpoints = {
 
   getExperience: (experienceId) => api.get(`/experiences/${experienceId}`),
 
-  getExperiences: () => api.get(`/experiences`),
+  getExperiences: (params) => api.get(`/experiences`, { params }),
 
   // Educations
   addEducation: (body) => api.post(`/educations`, body),
@@ -144,7 +144,7 @@ export const apiEndpoints = {
 
   getEducation: (educationId) => api.get(`/educations/${educationId}`),
 
-  getEducations: () => api.get(`/educations`),
+  getEducations: (params) => api.get(`/educations`, { params }),
 
   // Certificates
   addCertificate: (body) => api.post(`/certificates`, body),
@@ -163,7 +163,7 @@ export const apiEndpoints = {
 
   getCertificate: (certificateId) => api.get(`/certificates/${certificateId}`),
 
-  getCertificates: () => api.get(`/certificates`),
+  getCertificates: (params) => api.get(`/certificates`, { params }),
 
   // Achievements
   addAchievement: (body) => api.post(`/achievements`, body),
@@ -184,7 +184,7 @@ export const apiEndpoints = {
 
   getAchievement: (achievementId) => api.get(`/achievements/${achievementId}`),
 
-  getAchievements: () => api.get(`/achievements`),
+  getAchievements: (params) => api.get(`/achievements`, { params }),
 
   // Filters
   getSkillCategoriesList: () => api.get(`/filters/skill-categories`),

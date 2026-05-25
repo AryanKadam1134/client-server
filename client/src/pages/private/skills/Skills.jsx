@@ -8,10 +8,12 @@ import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
+import Pagination from "../../../components/ui/Pagination";
 
 import { getSkillLevel } from "../../../utils/getSkillLevel";
 import { getVisibility } from "../../../utils/getVisibility";
 import { getCategoryName } from "../../../utils/getCategoryName";
+import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
@@ -32,17 +34,23 @@ export default function Skills() {
 
   const navigate = useNavigate();
 
+  const [params, setParams] = useState({
+    page: 1,
+  });
+
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [skills, setSkills] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchSkills = async () => {
     try {
-      const res = await apiEndpoints.getSkills();
+      const res = await apiEndpoints.getSkills(params);
 
       const data = res.data;
 
-      setSkills(data);
+      setSkills(data?.data);
+      setPagination(data?.pagination);
       console.log("User Skills: ", data);
     } catch (error) {
       console.error("Error fetching User Skills: ", error);
@@ -79,7 +87,7 @@ export default function Skills() {
 
   useEffect(() => {
     fetchSkills();
-  }, []);
+  }, [params?.page]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -96,7 +104,7 @@ export default function Skills() {
 
     return {
       cells: [
-        index + 1,
+        calculateSerialNumber(pagination?.page, index, pagination?.limit),
         name,
         getCategoryName(categoriesList, categoryId),
         getSkillLevel(skillLevels, level),
@@ -124,6 +132,12 @@ export default function Skills() {
         loading={loading}
         tableHeading={tableHeading}
         tableBody={tableBody}
+      />
+
+      <Pagination
+        currentPage={pagination?.page}
+        totalPages={pagination?.totalPages}
+        onPageChange={(page) => setParams((prev) => ({ ...prev, page: page }))}
       />
     </div>
   );

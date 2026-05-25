@@ -8,10 +8,12 @@ import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
+import Pagination from "../../../components/ui/Pagination";
 
 import { getVisibility } from "../../../utils/getVisibility";
 import { getLocationType } from "../../../utils/getLocationType";
 import { getEmploymentType } from "../../../utils/getEmploymentType";
+import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
@@ -32,17 +34,23 @@ export default function Experiences() {
 
   const navigate = useNavigate();
 
+  const [params, setParams] = useState({
+    page: 1,
+  });
+
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchExperiences = async () => {
     try {
-      const res = await apiEndpoints.getExperiences();
+      const res = await apiEndpoints.getExperiences(params);
 
       const data = res.data;
 
-      setExperiences(data);
+      setExperiences(data?.data);
+      setPagination(data?.pagination);
       // console.log("User Experiences: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch experiences");
@@ -78,7 +86,7 @@ export default function Experiences() {
 
   useEffect(() => {
     fetchExperiences();
-  }, []);
+  }, [params?.page]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -102,7 +110,7 @@ export default function Experiences() {
 
     return {
       cells: [
-        index + 1,
+        calculateSerialNumber(pagination?.page, index, pagination?.limit),
         organization,
         getEmploymentType(employmentTypes, employmentType),
         location,
@@ -133,6 +141,12 @@ export default function Experiences() {
         loading={loading}
         tableHeading={tableHeading}
         tableBody={tableBody}
+      />
+
+      <Pagination
+        currentPage={pagination?.page}
+        totalPages={pagination?.totalPages}
+        onPageChange={(page) => setParams((prev) => ({ ...prev, page: page }))}
       />
     </div>
   );

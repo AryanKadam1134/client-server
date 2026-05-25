@@ -8,8 +8,10 @@ import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 import EditButton from "../../../components/ui/EditButton";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
+import Pagination from "../../../components/ui/Pagination";
 
 import { getVisibility } from "../../../utils/getVisibility";
+import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
@@ -26,17 +28,23 @@ export default function Certificates() {
 
   const navigate = useNavigate();
 
+  const [params, setParams] = useState({
+    page: 1,
+  });
+
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [certificates, setCertificates] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchCertificate = async () => {
     try {
-      const res = await apiEndpoints.getCertificates();
+      const res = await apiEndpoints.getCertificates(params);
 
       const data = res.data;
 
-      setCertificates(data);
+      setCertificates(data?.data);
+      setPagination(data?.pagination);
       console.log("User Certificates: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch certificates");
@@ -72,7 +80,7 @@ export default function Certificates() {
 
   useEffect(() => {
     fetchCertificate();
-  }, []);
+  }, [params?.page]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -89,7 +97,7 @@ export default function Certificates() {
 
     return {
       cells: [
-        index + 1,
+        calculateSerialNumber(pagination?.page, index, pagination?.limit),
         title,
         issuer,
         credentialUrl && (
@@ -128,6 +136,12 @@ export default function Certificates() {
         loading={loading}
         tableHeading={tableHeading}
         tableBody={tableBody}
+      />
+
+      <Pagination
+        currentPage={pagination?.page}
+        totalPages={pagination?.totalPages}
+        onPageChange={(page) => setParams((prev) => ({ ...prev, page: page }))}
       />
     </div>
   );

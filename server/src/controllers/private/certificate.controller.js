@@ -10,6 +10,7 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
+import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addCertificate = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -295,36 +296,27 @@ const getCertificate = asynchandler(async (req, res) => {
 });
 
 const getAllCertificates = asynchandler(async (req, res) => {
-  const certificates = await Certificate.aggregate([
-    {
-      $match: {
-        owner: new mongoose.Types.ObjectId(req.user?._id),
-      },
-    },
-    {
-      $lookup: {
-        from: "skills",
-        foreignField: "_id",
-        localField: "skills",
-        as: "skills",
-      },
-    },
-    {
-      $sort: {
-        sortOrder: 1,
-      },
-    },
-  ]);
+  const { page, limit } = req.query;
 
-  if (certificates?.length === 0) {
+  const paginatedCertificates = await paginateQuery({
+    model: Certificate,
+    page,
+    limit,
+    filter: {
+      owner: req.user?._id,
+    },
+    sort: { sortOrder: 1 },
+  });
+
+  if (paginatedCertificates?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, certificates, "no certificates found!"));
+      .json(new ApiRes(200, paginatedCertificates, "no certificates found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, certificates, "certificates fetched successfully!"));
+    .json(new ApiRes(200, paginatedCertificates, "certificates fetched successfully!"));
 });
 
 export {
