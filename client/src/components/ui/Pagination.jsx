@@ -21,10 +21,11 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const pageNumbers = [];
   for (let i = startPage; i <= endPage; i++) pageNumbers.push(i);
 
-  const buttonBaseClasses = "px-3 py-1.5 rounded-md transition-colors font-medium";
+  const buttonBaseClasses =
+    "px-3 py-1.5 rounded-md transition-colors font-medium";
   const inactiveButtonClasses = `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover cursor-pointer`;
   const disabledButtonClasses = `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-tertiary dark:text-dark-text-tertiary opacity-50 cursor-not-allowed`;
-  const activeButtonClasses = `${buttonBaseClasses} bg-[#EC6D2E] text-white hover:bg-[#D85C1F]`;
+  const activeButtonClasses = `${buttonBaseClasses} bg-blue-500 hover:bg-blue-600`;
   const navButtonClasses = (isDisabled) =>
     isDisabled
       ? disabledButtonClasses
@@ -63,7 +64,9 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         <button
           key={num}
           onClick={() => onPageChange(num)}
-          className={currentPage === num ? activeButtonClasses : inactiveButtonClasses}
+          className={
+            currentPage === num ? activeButtonClasses : inactiveButtonClasses
+          }
           title={`Go to page ${num}`}
         >
           {num}

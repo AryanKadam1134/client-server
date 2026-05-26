@@ -75,7 +75,7 @@ export default function Authentication() {
               <CustomInput
                 id="firstName"
                 type="text"
-                placeholder="Jhon"
+                placeholder="John"
                 {...register("firstName", {
                   required: "First Name is required!",
                 })}

@@ -7,10 +7,12 @@ import Table from "../../../components/common/Table";
 import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 
 import EditButton from "../../../components/ui/EditButton";
+import Pagination from "../../../components/ui/Pagination";
 import DeleteButton from "../../../components/ui/DeleteButton";
 import CustomButton from "../../../components/ui/CustomButton";
 
 import { getVisibility } from "../../../utils/getVisibility";
+import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
@@ -18,7 +20,6 @@ import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/NotificationContext";
 import { usePopup } from "../../../context/PopupContext";
-import Pagination from "../../../components/ui/Pagination";
 
 export default function SocialPlatforms() {
   const { notify } = useNotify();
@@ -96,7 +97,7 @@ export default function SocialPlatforms() {
 
     return {
       cells: [
-        index + 1,
+        calculateSerialNumber(pagination?.page, index, pagination?.limit),
         name,
         link && (
           <a
