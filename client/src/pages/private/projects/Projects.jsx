@@ -41,8 +41,6 @@ export default function Projects() {
 
   const navigate = useNavigate();
 
-  const [switchView, setSwitchView] = useState(false);
-
   const [params, setParams] = useState({
     page: 1,
   });
@@ -160,79 +158,24 @@ export default function Projects() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setSwitchView(false)}
-            className={`p-2 rounded-md transition-all ${
-              !switchView
-                ? "bg-light-bg-secondary dark:bg-dark-bg-tertiary text-light-text-primary dark:text-dark-text-primary"
-                : "text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover"
-            }`}
-            title="Table View"
-          >
-            <List size={20} />
-          </button>
-          <button
-            onClick={() => setSwitchView(true)}
-            className={`p-2 rounded-md transition-all ${
-              switchView
-                ? "bg-light-bg-secondary dark:bg-dark-bg-tertiary text-light-text-primary dark:text-dark-text-primary"
-                : "text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover"
-            }`}
-            title="Card View"
-          >
-            <Grid3x3 size={20} />
-          </button>
-        </div>
+      <CustomButton
+        onClick={() => navigate("add")}
+        className="self-end flex items-center gap-2"
+      >
+        <Plus size={18} /> Add Project
+      </CustomButton>
 
-        <CustomButton
-          onClick={() => navigate("add")}
-          className="self-end flex items-center gap-2"
-        >
-          <Plus size={18} /> Add Project
-        </CustomButton>
-      </div>
+      <Table
+        loading={loading}
+        tableHeading={tableHeading}
+        tableBody={tableBody}
+      />
 
-      {switchView ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {projects?.map((data) => (
-              <ProjectCard
-                key={data._id}
-                project={data}
-                onEdit={() => navigate(`${data._id}/edit`)}
-                onDelete={() => deleteProjectPopup(data._id)}
-                isDeleting={deleting}
-              />
-            ))}
-          </div>
-
-          <Pagination
-            currentPage={pagination?.page}
-            totalPages={pagination?.totalPages}
-            onPageChange={(page) =>
-              setParams((prev) => ({ ...prev, page: page }))
-            }
-          />
-        </>
-      ) : (
-        <>
-          <Table
-            loading={loading}
-            tableHeading={tableHeading}
-            tableBody={tableBody}
-          />
-
-          <Pagination
-            currentPage={pagination?.page}
-            totalPages={pagination?.totalPages}
-            onPageChange={(page) =>
-              setParams((prev) => ({ ...prev, page: page }))
-            }
-          />
-        </>
-      )}
+      <Pagination
+        currentPage={pagination?.page}
+        totalPages={pagination?.totalPages}
+        onPageChange={(page) => setParams((prev) => ({ ...prev, page: page }))}
+      />
     </div>
   );
 }
@@ -344,7 +287,7 @@ function ProjectCard({ project, onEdit, onDelete, isDeleting }) {
               <span className="text-xs hidden sm:inline">Live</span>
             </a>
           )}
-          
+
           {githubLink && (
             <a
               href={githubLink}
