@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
+import { paginateAggregate } from "../../utils/paginatedAggregate.js";
 
 import { Skill } from "../../models/skill.model.js";
 import { Project } from "../../models/project.model.js";
@@ -111,7 +112,7 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
 });
 
 const getProjects = asynchandler(async (req, res) => {
-  const { featured = "all" } = req.query;
+  const { featured = "all", page, limit } = req.query;
 
   const fields = {
     owner: new mongoose.Types.ObjectId(req.user?._id),
@@ -120,7 +121,7 @@ const getProjects = asynchandler(async (req, res) => {
 
   if (featured !== "all") fields.featured = featured === "true";
 
-  const projects = await Project.aggregate([
+  const pipeline = [
     {
       $match: fields,
     },
@@ -152,19 +153,32 @@ const getProjects = asynchandler(async (req, res) => {
         sortOrder: 1,
       },
     },
-  ]);
+  ];
 
-  if (projects?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no projects found!"));
+  const paginatedProjects = await paginateAggregate({
+    model: Project,
+    pipeline,
+    page,
+    limit,
+  });
+
+  if (paginatedProjects?.data?.length === 0) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedProjects, "no projects found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, projects, "projects fetched successfully!"));
+    .json(
+      new ApiRes(200, paginatedProjects, "projects fetched successfully!"),
+    );
 });
 
 const getExperiences = asynchandler(async (req, res) => {
-  const experiences = await Experience.aggregate([
+  const { page, limit } = req.query;
+
+  const pipeline = [
     {
       $match: {
         owner: new mongoose.Types.ObjectId(req.user?._id),
@@ -182,37 +196,68 @@ const getExperiences = asynchandler(async (req, res) => {
         as: "techStack",
       },
     },
-  ]);
+  ];
 
-  if (experiences?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no experiences found!"));
+  const paginatedExperiences = await paginateAggregate({
+    model: Experience,
+    pipeline,
+    page,
+    limit,
+  });
+
+  if (paginatedExperiences?.data?.length === 0) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedExperiences, "no experiences found!"));
   }
 
-  experiences.forEach((exp) => {
+  paginatedExperiences.data.forEach((exp) => {
     exp.position = sortPositionsByDate(exp.position);
   });
 
   return res
     .status(200)
-    .json(new ApiRes(200, experiences, "experiences fetched successfully!"));
+    .json(
+      new ApiRes(200, paginatedExperiences, "experiences fetched successfully!"),
+    );
 });
 
 const getEducations = asynchandler(async (req, res) => {
-  const educations = await Education.find({
-    owner: req.user?._id,
-  }).sort({ latestYear: 1 });
+  const { page, limit } = req.query;
 
-  if (educations?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no educations found!"));
+  const pipeline = [
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $sort: { latestYear: 1 },
+    },
+  ];
+
+  const paginatedEducations = await paginateAggregate({
+    model: Education,
+    pipeline,
+    page,
+    limit,
+  });
+
+  if (paginatedEducations?.data?.length === 0) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedEducations, "no educations found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, educations, "educations fetched successfully!"));
+    .json(
+      new ApiRes(200, paginatedEducations, "educations fetched successfully!"),
+    );
 });
 
 const getCertificates = asynchandler(async (req, res) => {
-  const { featured = "all" } = req.query;
+  const { featured = "all", page, limit } = req.query;
 
   const fields = {
     owner: new mongoose.Types.ObjectId(req.user?._id),
@@ -221,7 +266,7 @@ const getCertificates = asynchandler(async (req, res) => {
 
   if (featured !== "all") fields.featured = featured === "true";
 
-  const certificates = await Certificate.aggregate([
+  const pipeline = [
     {
       $match: fields,
     },
@@ -238,19 +283,34 @@ const getCertificates = asynchandler(async (req, res) => {
         sortOrder: 1,
       },
     },
-  ]);
+  ];
 
-  if (certificates?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no certificates found!"));
+  const paginatedCertificates = await paginateAggregate({
+    model: Certificate,
+    pipeline,
+    page,
+    limit,
+  });
+
+  if (paginatedCertificates?.data?.length === 0) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedCertificates, "no certificates found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, certificates, "certificates fetched successfully!"));
+    .json(
+      new ApiRes(
+        200,
+        paginatedCertificates,
+        "certificates fetched successfully!",
+      ),
+    );
 });
 
 const getAchievements = asynchandler(async (req, res) => {
-  const { featured = "all" } = req.query;
+  const { featured = "all", page, limit } = req.query;
 
   const fields = {
     owner: new mongoose.Types.ObjectId(req.user?._id),
@@ -259,7 +319,7 @@ const getAchievements = asynchandler(async (req, res) => {
 
   if (featured !== "all") fields.featured = featured === "true";
 
-  const achievements = await Achievement.aggregate([
+  const pipeline = [
     {
       $match: fields,
     },
@@ -283,15 +343,30 @@ const getAchievements = asynchandler(async (req, res) => {
         sortOrder: 1,
       },
     },
-  ]);
+  ];
 
-  if (achievements?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no achievements found!"));
+  const paginatedAchievements = await paginateAggregate({
+    model: Achievement,
+    pipeline,
+    page,
+    limit,
+  });
+
+  if (paginatedAchievements?.data?.length === 0) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedAchievements, "no achievements found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, achievements, "achievements fetched successfully!"));
+    .json(
+      new ApiRes(
+        200,
+        paginatedAchievements,
+        "achievements fetched successfully!",
+      ),
+    );
 });
 
 export {
