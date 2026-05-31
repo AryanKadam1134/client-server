@@ -4,15 +4,17 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  }),
-);
+// CORS Configs
+const privateCors = cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+});
+
+const publicCors = cors({
+  origin: "*",
+});
 
 app.use(express.json());
-
 app.use(cookieParser());
 
 // Private
@@ -28,31 +30,23 @@ import educationRouter from "./routes/private/education.routes.js";
 import certificateRoutes from "./routes/private/certificate.routes.js";
 import achievementRouter from "./routes/private/achievement.routes.js";
 
+app.use("/api/admin", privateCors);
+
 app.use("/api/admin/auth", authRouter);
-
 app.use("/api/admin/filters", filterRoutes);
-
 app.use("/api/admin/users", userRouter);
-
 app.use("/api/admin/socialPlatforms", socialPlatformRouter);
-
 app.use("/api/admin/skillCategories", skillCategoryRouter);
-
 app.use("/api/admin/skills", skillRouter);
-
 app.use("/api/admin/projects", projectRouter);
-
 app.use("/api/admin/experiences", experienceRouter);
-
 app.use("/api/admin/educations", educationRouter);
-
 app.use("/api/admin/certificates", certificateRoutes);
-
 app.use("/api/admin/achievements", achievementRouter);
 
 // Public
 import portfolioRouter from "./routes/public/portfolio.routes.js";
 
-app.use("/api/portfolio", portfolioRouter);
+app.use("/api/portfolio", publicCors, portfolioRouter);
 
 export default app;

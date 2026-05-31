@@ -237,6 +237,28 @@ npm run preview
 
 All endpoints use the base URL: `http://localhost:5000/api/portfolio/:username`
 
+#### Public API Integration Prompt (Copy/Paste)
+
+If you want to integrate these public APIs in your own portfolio project using an AI assistant, copy **PUBLIC_API_GUIDE.md** into your project and use the following prompt:
+
+```
+You are integrating with Profilo's public portfolio API. Use the attached PUBLIC_API_GUIDE.md as the source of truth.
+
+Goal:
+- Build a data layer that fetches public portfolio data by username.
+- Base URL: https://server-ze3s.onrender.com/api/portfolio/:username
+
+Implement:
+- Fetchers for details, social platforms, skills, categories, projects, experiences, educations, certificates, achievements.
+- Pagination for projects, experiences, educations, certificates, and achievements (page & limit).
+- Featured filter for projects/certificates/achievements where supported.
+
+Requirements:
+- Follow the JSON structures exactly as documented.
+- Provide types/interfaces for the response shapes.
+- Show example usage in a React component (or the framework used in this project).
+```
+
 #### Get User Details
 ```
 GET /api/portfolio/:username/details
