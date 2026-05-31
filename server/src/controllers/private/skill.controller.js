@@ -12,7 +12,7 @@ import { paginateQuery } from "../../utils/paginatedQuery.js";
 const addSkill = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
 
-  const { name, description, categoryId, level, visibility, sortOrder } =
+  const { name, description, categoryId, level, url, visibility, sortOrder } =
     req.body;
 
   if (!name) {
@@ -35,6 +35,7 @@ const addSkill = asynchandler(async (req, res) => {
   if (visibility) fields.visibility = visibility;
 
   // Can be null values
+  if (url !== undefined) fields.url = url;
   if (description !== undefined) fields.description = description;
 
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
@@ -63,7 +64,7 @@ const addSkill = asynchandler(async (req, res) => {
 const updateSkill = asynchandler(async (req, res) => {
   const skill = req.skill;
 
-  const { name, description, categoryId, level, visibility, sortOrder } =
+  const { name, description, categoryId, level, url, visibility, sortOrder } =
     req.body;
 
   if (name) {
@@ -85,6 +86,7 @@ const updateSkill = asynchandler(async (req, res) => {
   if (visibility) fields.visibility = visibility;
 
   // Can be null values
+  if (url !== undefined) fields.url = url;
   if (description !== undefined) fields.description = description;
 
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
@@ -147,7 +149,9 @@ const getAllSkillWithCategory = asynchandler(async (req, res) => {
   });
 
   if (paginatedSkills?.data?.length === 0) {
-    return res.status(200).json(new ApiRes(200, paginatedSkills, "no skills found!"));
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedSkills, "no skills found!"));
   }
 
   return res

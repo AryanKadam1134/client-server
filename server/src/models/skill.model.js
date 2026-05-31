@@ -19,6 +19,8 @@ const skillSchema = new Schema(
     },
     description: String,
 
+    url: String,
+
     level: {
       type: String,
       enum: SKILL_LEVEL.map((s) => s.value),

@@ -222,6 +222,24 @@ export default function AddEditSkills() {
         />
       </LabelInput>
 
+      {/* Skill URL */}
+      <LabelInput
+        id="url"
+        label="Logo URL"
+        colSpan="col-span-12 sm:col-span-6"
+        required
+      >
+        <CustomInput
+          id="url"
+          type="text"
+          placeholder="/images/react_light.svg"
+          {...register("url")}
+          error={errors?.url}
+        />
+
+        <FieldError error={errors.url?.message} />
+      </LabelInput>
+
       {/* Skill Level */}
       <LabelInput
         id="level"
