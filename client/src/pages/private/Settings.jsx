@@ -34,9 +34,9 @@ export default function Settings() {
           Change Password
         </div>
 
-        <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md">
+        {/* <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md">
           Change Email
-        </div>
+        </div> */}
 
         <div
           onClick={deleteUser}

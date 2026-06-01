@@ -19,7 +19,7 @@ const skillSchema = new Schema(
     },
     description: String,
 
-    url: String,
+    logoUrl: String,
 
     level: {
       type: String,

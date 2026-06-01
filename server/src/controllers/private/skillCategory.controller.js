@@ -10,7 +10,7 @@ import { paginateQuery } from "../../utils/paginatedQuery.js";
 const addSkillCategory = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
 
-  const { name, visibility, sortOrder } = req.body;
+  const { name, logoUrl, visibility, sortOrder } = req.body;
 
   if (!name) {
     throw new ApiError(400, "name is required!");
@@ -29,6 +29,8 @@ const addSkillCategory = asynchandler(async (req, res) => {
 
   fields.name = name;
   if (visibility) fields.visibility = visibility;
+
+  if (logoUrl !== undefined) fields.logoUrl = logoUrl;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
   const newCategory = await SkillCategory.create({
@@ -44,7 +46,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
 const updateSkillCategory = asynchandler(async (req, res) => {
   const category = req.category;
 
-  const { name, visibility, sortOrder } = req.body;
+  const { name, logoUrl, visibility, sortOrder } = req.body;
 
   if (name) {
     const sameCategoryName = await SkillCategory.findOne({
@@ -62,6 +64,8 @@ const updateSkillCategory = asynchandler(async (req, res) => {
 
   if (name) fields.name = name;
   if (visibility) fields.visibility = visibility;
+
+  if (logoUrl !== undefined) fields.logoUrl = logoUrl;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   if (Object.keys(fields).length === 0) {
@@ -109,12 +113,16 @@ const getAllCategoryWiseSkills = asynchandler(async (req, res) => {
   });
 
   if (paginatedCategories?.data?.length === 0) {
-    return res.status(200).json(new ApiRes(200, paginatedCategories, "no categories found!"));
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedCategories, "no categories found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedCategories, "categories fetched successfully!"));
+    .json(
+      new ApiRes(200, paginatedCategories, "categories fetched successfully!"),
+    );
 });
 
 export {

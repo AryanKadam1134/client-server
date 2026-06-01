@@ -127,6 +127,24 @@ export default function AddEditSkillCategory() {
         <FieldError error={errors.name?.message} />
       </LabelInput>
 
+      {/* Category Logo URL */}
+      <LabelInput
+        id="logoUrl"
+        label="Logo URL"
+        colSpan="col-span-12 sm:col-span-6"
+        required
+      >
+        <CustomInput
+          id="logoUrl"
+          type="text"
+          placeholder="e.g. /images/frontend.svg"
+          {...register("logoUrl")}
+          error={errors?.logoUrl}
+        />
+
+        <FieldError error={errors.logoUrl?.message} />
+      </LabelInput>
+
       {/* Sort Order */}
       <LabelInput
         id="sortOrder"

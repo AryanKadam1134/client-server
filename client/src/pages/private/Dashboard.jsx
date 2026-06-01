@@ -493,11 +493,11 @@ export default function Dashboard() {
       <LabelInput
         id="email"
         label="Email"
-        attachment={
-          <div className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
-            <Edit size={13} /> <p>Update Email</p>
-          </div>
-        }
+        // attachment={
+        //   <div className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
+        //     <Edit size={13} /> <p>Update Email</p>
+        //   </div>
+        // }
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
       >

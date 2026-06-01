@@ -9,6 +9,7 @@ import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { apiEndpoints } from "../../api";
+
 import { useNotify } from "../../context/NotificationContext";
 
 export default function ChangePassword() {

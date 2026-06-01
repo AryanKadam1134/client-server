@@ -14,6 +14,9 @@ const skillCategorySchema = new Schema(
       required: true,
       unique: true,
     },
+
+    logoUrl: String,
+
     visibility: {
       type: String,
       enum: VISIBILITY.map((v) => v.value),

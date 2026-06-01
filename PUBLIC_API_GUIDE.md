@@ -134,6 +134,7 @@ Returns public skills with their category details.
     "_id": "ObjectId",
     "owner": "ObjectId",
     "name": "string",
+    "logoUrl": "string | null",
     "description": "string | null",
     "level": "basic | intermediate | advance",
     "visibility": "public",
@@ -143,6 +144,7 @@ Returns public skills with their category details.
       "_id": "ObjectId",
       "owner": "ObjectId",
       "name": "string",
+      "logoUrl": "string | null",
       "visibility": "public | private",
       "sortOrder": "number",
       "createdAt": "ISO date",
@@ -151,6 +153,17 @@ Returns public skills with their category details.
   }
 ]
 ```
+
+**Why `logoUrl` matters**
+
+`logoUrl` helps you render skill and category icons. It supports multiple patterns depending on how you store assets:
+
+1. `logoUrl = "react.svg"`  
+   `src={`/images/${skill?.logoUrl}`}`
+2. `logoUrl = "/images/react.svg"`  
+   `src={skill?.logoUrl}`
+3. `logoUrl = "https://logo.example.com/react.svg"`  
+   `src={skill?.logoUrl}`
 
 ---
 
@@ -165,6 +178,7 @@ Returns public skill categories with their public skills.
     "_id": "ObjectId",
     "owner": "ObjectId",
     "name": "string",
+    "logoUrl": "string | null",
     "visibility": "public",
     "sortOrder": "number",
     "skills": [
@@ -172,6 +186,7 @@ Returns public skill categories with their public skills.
         "_id": "ObjectId",
         "owner": "ObjectId",
         "name": "string",
+        "logoUrl": "string | null",
         "description": "string | null",
         "level": "basic | intermediate | advance",
         "visibility": "public",
