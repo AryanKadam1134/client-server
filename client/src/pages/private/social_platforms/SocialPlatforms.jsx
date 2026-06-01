@@ -132,7 +132,7 @@ export default function SocialPlatforms() {
       </CustomButton>
 
       <Table
-        loading={loading?.fetching}
+        loading={loading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />
