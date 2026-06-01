@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { AlertTriangle } from "lucide-react";
 
 import { apiEndpoints } from "../../api";
 
 import { useAuth } from "../../context/AuthContext";
 import { useNotify } from "../../context/NotificationContext";
+import { usePopup } from "../../context/PopupContext";
+import DeleteUserPopup from "../../components/common/DeleteUserPopup";
 
 export default function Settings() {
   const { setUser } = useAuth();
   const { notify } = useNotify();
+  const { openPopupWindow, closePopupWindow } = usePopup();
 
   const navigate = useNavigate();
 
@@ -20,11 +24,21 @@ export default function Settings() {
     try {
       await apiEndpoints.deleteUser();
       setUser(null);
+      closePopupWindow();
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete account");
     } finally {
       setDeleting(false);
     }
+  };
+
+  const openDeleteConfirmation = () => {
+    openPopupWindow(
+      <AlertTriangle size={24} className="text-red-500" />,
+      "Delete Account",
+      <DeleteUserPopup onConfirm={deleteUser} isDeleting={deleting} />,
+      "bg-red-500"
+    );
   };
 
   return (
@@ -42,10 +56,10 @@ export default function Settings() {
         </div> */}
 
         <div
-          onClick={deleteUser}
+          onClick={openDeleteConfirmation}
           className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md"
         >
-          {deleting ? "Deleting..." : "Delete Account"}
+          Delete Account
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ Use these **public** endpoints to fetch a user's portfolio data by username. No 
 The public API is hosted at:
 
 ```
-https://server-ze3s.onrender.com/api/portfolio/:username
+https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username
 ```
 
 Replace `:username` with the portfolio owner's username.
@@ -41,7 +41,7 @@ On error, the server responds with:
 
 ```js
 const username = "john_doe";
-const base = "https://server-ze3s.onrender.com/api/portfolio";
+const base = "https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio";
 
 const res = await fetch(`${base}/${username}/details`);
 const json = await res.json();
@@ -53,7 +53,7 @@ console.log(json.data);
 ```js
 // Fetch only featured projects
 const res = await fetch(
-  "https://server-ze3s.onrender.com/api/portfolio/john_doe/projects?featured=true",
+  "https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/john_doe/projects?featured=true",
 );
 const json = await res.json();
 console.log(json.data);
@@ -63,7 +63,7 @@ console.log(json.data);
 
 ## Endpoints
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/details`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/details`
 
 Returns the user's public profile details.
 
@@ -104,7 +104,7 @@ Returns the user's public profile details.
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/social-platforms`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/social-platforms`
 
 Returns public social platforms sorted by `sortOrder`.
 
@@ -139,7 +139,7 @@ Returns public social platforms sorted by `sortOrder`.
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/skills`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/skills`
 
 Returns public skills with their category details.
 
@@ -184,7 +184,7 @@ Returns public skills with their category details.
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/categories`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/categories`
 
 Returns public skill categories with their public skills.
 
@@ -218,7 +218,7 @@ Returns public skill categories with their public skills.
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/projects`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/projects`
 
 Returns public projects. You can filter by featured and paginate:
 
@@ -287,7 +287,7 @@ Returns public projects. You can filter by featured and paginate:
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/experiences`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/experiences`
 
 Returns public work experiences with tech stack expanded. Supports pagination:
 
@@ -347,7 +347,7 @@ Returns public work experiences with tech stack expanded. Supports pagination:
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/educations`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/educations`
 
 Returns education entries for the user. Supports pagination:
 
@@ -393,7 +393,7 @@ Returns education entries for the user. Supports pagination:
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/certificates`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/certificates`
 
 Returns public certificates. You can filter by featured and paginate:
 
@@ -446,7 +446,7 @@ Returns public certificates. You can filter by featured and paginate:
 
 ---
 
-### GET `https://server-ze3s.onrender.com/api/portfolio/:username/achievements`
+### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/achievements`
 
 Returns public achievements. You can filter by featured and paginate:
 
