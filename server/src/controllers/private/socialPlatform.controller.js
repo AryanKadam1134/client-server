@@ -58,7 +58,7 @@ const manageSocialPlatforms = asynchandler(async (req, res) => {
 const addSocialPlatform = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
 
-  const { name, link, visibility, sortOrder } = req.body;
+  const { name, logoUrl, link, visibility, sortOrder } = req.body;
 
   if (!name) {
     throw new ApiError(400, "name is required!");
@@ -81,6 +81,7 @@ const addSocialPlatform = asynchandler(async (req, res) => {
 
   fields.name = name;
   fields.link = link;
+  if (logoUrl !== undefined) fields.logoUrl = logoUrl;
   if (visibility) fields.visibility = visibility;
   if (typeof sortOrder == "number") fields.sortOrder = sortOrder;
 
@@ -103,7 +104,7 @@ const addSocialPlatform = asynchandler(async (req, res) => {
 const updateSocialPlatform = asynchandler(async (req, res) => {
   const socialPlatform = req.socialPlatform;
 
-  const { name, link, visibility, sortOrder } = req.body;
+  const { name, logoUrl, link, visibility, sortOrder } = req.body;
 
   if (name) {
     const samePlatformName = await SocialPlatform.findOne({
@@ -121,6 +122,7 @@ const updateSocialPlatform = asynchandler(async (req, res) => {
 
   if (name) fields.name = name;
   if (link) fields.link = link;
+  if (logoUrl !== undefined) fields.logoUrl = logoUrl;
   if (visibility) fields.visibility = visibility;
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 

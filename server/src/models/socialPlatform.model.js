@@ -13,6 +13,9 @@ const socialPlatformSchema = new Schema(
       type: String,
       required: true,
     },
+
+    logoUrl: String,
+
     link: {
       type: String,
       required: true,

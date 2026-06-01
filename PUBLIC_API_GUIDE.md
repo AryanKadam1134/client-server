@@ -52,7 +52,9 @@ console.log(json.data);
 
 ```js
 // Fetch only featured projects
-const res = await fetch("https://server-ze3s.onrender.com/api/portfolio/john_doe/projects?featured=true");
+const res = await fetch(
+  "https://server-ze3s.onrender.com/api/portfolio/john_doe/projects?featured=true",
+);
 const json = await res.json();
 console.log(json.data);
 ```
@@ -66,6 +68,7 @@ console.log(json.data);
 Returns the user's public profile details.
 
 **`data` shape:**
+
 ```json
 {
   "_id": "ObjectId",
@@ -106,12 +109,14 @@ Returns the user's public profile details.
 Returns public social platforms sorted by `sortOrder`.
 
 **`data` shape:**
+
 ```json
 [
   {
     "_id": "ObjectId",
     "owner": "ObjectId",
     "name": "string",
+    "logoUrl": "string | null",
     "link": "string (URL)",
     "visibility": "public",
     "sortOrder": "number",
@@ -121,6 +126,17 @@ Returns public social platforms sorted by `sortOrder`.
 ]
 ```
 
+**Why `logoUrl` matters**
+
+`logoUrl` helps you render platform icons. It supports multiple patterns depending on how you store assets:
+
+1. `logoUrl = "github.svg"`  
+   `src={`/images/${platform?.logoUrl}`}`
+2. `logoUrl = "/images/github.svg"`  
+   `src={platform?.logoUrl}`
+3. `logoUrl = "https://logo.example.com/github.svg"`  
+   `src={platform?.logoUrl}`
+
 ---
 
 ### GET `https://server-ze3s.onrender.com/api/portfolio/:username/skills`
@@ -128,6 +144,7 @@ Returns public social platforms sorted by `sortOrder`.
 Returns public skills with their category details.
 
 **`data` shape:**
+
 ```json
 [
   {
@@ -172,6 +189,7 @@ Returns public skills with their category details.
 Returns public skill categories with their public skills.
 
 **`data` shape:**
+
 ```json
 [
   {
@@ -210,6 +228,7 @@ Returns public projects. You can filter by featured and paginate:
 ```
 
 **`data` shape:**
+
 ```json
 {
   "data": [
@@ -277,6 +296,7 @@ Returns public work experiences with tech stack expanded. Supports pagination:
 ```
 
 **`data` shape:**
+
 ```json
 {
   "data": [
@@ -336,6 +356,7 @@ Returns education entries for the user. Supports pagination:
 ```
 
 **`data` shape:**
+
 ```json
 {
   "data": [
@@ -382,6 +403,7 @@ Returns public certificates. You can filter by featured and paginate:
 ```
 
 **`data` shape:**
+
 ```json
 {
   "data": [
@@ -434,6 +456,7 @@ Returns public achievements. You can filter by featured and paginate:
 ```
 
 **`data` shape:**
+
 ```json
 {
   "data": [

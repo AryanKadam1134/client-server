@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+
 import { apiEndpoints } from "../../api";
-import { useState } from "react";
+
 import { useAuth } from "../../context/AuthContext";
 import { useNotify } from "../../context/NotificationContext";
 
 export default function Settings() {
   const { setUser } = useAuth();
   const { notify } = useNotify();
+
   const navigate = useNavigate();
 
   const [deleting, setDeleting] = useState(false);

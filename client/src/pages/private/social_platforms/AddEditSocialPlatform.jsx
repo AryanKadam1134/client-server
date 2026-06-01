@@ -380,7 +380,7 @@ export default function AddEditSocialPlatform() {
           {...register("name", {
             required: "Platform name is required!",
             minLength: {
-              value: 2,
+              value: 1,
               message: "Platform name must be at least 2 characters",
             },
             maxLength: {
@@ -392,6 +392,24 @@ export default function AddEditSocialPlatform() {
         />
 
         <FieldError error={errors.name?.message} />
+      </LabelInput>
+
+      {/* Logo URL */}
+      <LabelInput
+        id="logoUrl"
+        label="Logo URL"
+        colSpan="col-span-12 sm:col-span-6"
+        required
+      >
+        <CustomInput
+          id="logoUrl"
+          type="text"
+          placeholder="e.g., /images/github.svg"
+          {...register("logoUrl")}
+          error={errors?.logoUrl}
+        />
+
+        <FieldError error={errors.logoUrl?.message} />
       </LabelInput>
 
       {/* Platform Link */}
