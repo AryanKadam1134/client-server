@@ -327,7 +327,6 @@ export default function AddEditSocialPlatform() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchSocialPlatform();
       // console.log("Social Platform Saved: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to save social platform");
@@ -399,7 +398,6 @@ export default function AddEditSocialPlatform() {
         id="logoUrl"
         label="Logo URL"
         colSpan="col-span-12 sm:col-span-6"
-        required
       >
         <CustomInput
           id="logoUrl"

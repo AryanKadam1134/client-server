@@ -82,8 +82,7 @@ export default function AddEditSkillCategory() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchSkillCategory();
-      console.log("Skill Category Saved: ", data);
+      // console.log("Skill Category Saved: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to save skill category");
     }
@@ -132,7 +131,6 @@ export default function AddEditSkillCategory() {
         id="logoUrl"
         label="Logo URL"
         colSpan="col-span-12 sm:col-span-6"
-        required
       >
         <CustomInput
           id="logoUrl"

@@ -149,7 +149,6 @@ export default function AddEditExperiences() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchExperience();
       // console.log("Experience Saved: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to save experience");

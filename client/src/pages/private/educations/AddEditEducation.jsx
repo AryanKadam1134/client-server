@@ -36,7 +36,6 @@ export default function AddEditEducation() {
 
   const instituteImage = useWatch({ control, name: "instituteImage" });
   const startYear = watch("startYear");
-  const endYear = watch("endYear");
 
   const getUpdatedFields = (data, dirtyFields) => {
     const updated = {};
@@ -84,8 +83,7 @@ export default function AddEditEducation() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchEducation();
-      console.log("Education Saved: ", data);
+      // console.log("Education Saved: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to save education");
     }

@@ -110,8 +110,7 @@ export default function AddEditCertificate() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchCertificate();
-      console.log("Certificate Saved: ", data);
+      // console.log("Certificate Saved: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to save certificate");
     }

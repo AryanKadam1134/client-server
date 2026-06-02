@@ -116,8 +116,7 @@ export default function AddEditAchievement() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchAchievement();
-      console.log("Achievement Saved: ", data);
+      // console.log("Achievement Saved: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to save achievement");
     }

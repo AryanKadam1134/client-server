@@ -127,8 +127,7 @@ export default function AddEditProject() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchProject();
-      console.log("Project Saved: ", data);
+      // console.log("Project Saved: ", data);
     } catch (error) {
       console.error("Error saving Project: ", error);
       notify.msgError(error?.message || "Failed to save project");

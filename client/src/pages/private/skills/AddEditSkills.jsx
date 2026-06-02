@@ -132,7 +132,6 @@ export default function AddEditSkills() {
       const data = res.data;
 
       setId(data?._id);
-      if (data?._id) fetchSkill();
       // console.log("Skill Saved: ", data);
     } catch (error) {
       console.error("Error saving Skill: ", error);
@@ -227,7 +226,6 @@ export default function AddEditSkills() {
         id="logoUrl"
         label="Logo URL"
         colSpan="col-span-12 sm:col-span-6"
-        required
       >
         <CustomInput
           id="logoUrl"
