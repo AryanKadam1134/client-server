@@ -109,7 +109,7 @@ export default function AddEditAchievement() {
         res = await apiEndpoints.updateAchievement(id, updatedData);
         notify.msgSuccess("Achievement Updated!");
       } else {
-        res = await apiEndpoints.addAchievemnet(payload);
+        res = await apiEndpoints.addAchievement(payload);
         notify.msgSuccess("Achievement Saved!");
       }
 
