@@ -1,14 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2, FilePenLine } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
-import EditButton from "../../../components/ui/EditButton";
-import DeleteButton from "../../../components/ui/DeleteButton";
-import CustomButton from "../../../components/ui/CustomButton";
+
 import Pagination from "../../../components/ui/Pagination";
+import CustomButton from "../../../components/ui/CustomButton";
+import ActionButton from "../../../components/ui/ActionButton";
 
 import { getSkillLevel } from "../../../utils/getSkillLevel";
 import { getVisibility } from "../../../utils/getVisibility";
@@ -19,8 +19,8 @@ import { apiEndpoints } from "../../../api";
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { useNotify } from "../../../context/NotificationContext";
 import { usePopup } from "../../../context/PopupContext";
+import { useNotify } from "../../../context/NotificationContext";
 
 export default function Skills() {
   const { notify } = useNotify();
@@ -28,7 +28,6 @@ export default function Skills() {
 
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
-
 
   const navigate = useNavigate();
 
@@ -98,8 +97,7 @@ export default function Skills() {
   ];
 
   const tableBody = skills?.map((data, index) => {
-    const { _id, name, category, level, sortOrder, visibility } =
-      data;
+    const { _id, name, category, level, sortOrder, visibility } = data;
 
     return {
       cells: [
@@ -110,9 +108,14 @@ export default function Skills() {
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),
         <div className="flex items-center gap-1">
-          <EditButton onClick={() => navigate(`${_id}/edit`)} />
+          <ActionButton
+            variant="edit"
+            onClick={() => navigate(`${_id}/edit`)}
+            disabled={deleting}
+          />
 
-          <DeleteButton
+          <ActionButton
+            variant="delete"
             onClick={() => deleteSkillPopup(_id)}
             disabled={deleting}
           />

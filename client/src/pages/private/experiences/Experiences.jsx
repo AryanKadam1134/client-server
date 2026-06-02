@@ -1,14 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2, FilePenLine, ExternalLink } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
-import EditButton from "../../../components/ui/EditButton";
-import DeleteButton from "../../../components/ui/DeleteButton";
-import CustomButton from "../../../components/ui/CustomButton";
+
 import Pagination from "../../../components/ui/Pagination";
+import ActionButton from "../../../components/ui/ActionButton";
+import CustomButton from "../../../components/ui/CustomButton";
 
 import { getVisibility } from "../../../utils/getVisibility";
 import { getLocationType } from "../../../utils/getLocationType";
@@ -21,8 +21,8 @@ import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 import useLocationTypesList from "../../../hooks/useLocationTypesList";
 
-import { useNotify } from "../../../context/NotificationContext";
 import { usePopup } from "../../../context/PopupContext";
+import { useNotify } from "../../../context/NotificationContext";
 
 export default function Experiences() {
   const { notify } = useNotify();
@@ -117,9 +117,14 @@ export default function Experiences() {
         getLocationType(locationTypesList, locationType),
         getVisibility(visibilities, visibility),
         <div className="flex items-center gap-1">
-          <EditButton onClick={() => navigate(`${_id}/edit`)} />
+          <ActionButton
+            variant="edit"
+            onClick={() => navigate(`${_id}/edit`)}
+            disabled={deleting}
+          />
 
-          <DeleteButton
+          <ActionButton
+            variant="delete"
             onClick={() => deleteExperiencePopup(_id)}
             disabled={deleting}
           />
