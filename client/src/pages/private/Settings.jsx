@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertTriangle } from "lucide-react";
 
+import DeleteUserPopup from "../../components/common/DeleteUserPopup";
+
 import { apiEndpoints } from "../../api";
 
-import { useAuth } from "../../context/AuthContext";
 import { useNotify } from "../../context/NotificationContext";
 import { usePopup } from "../../context/PopupContext";
-import DeleteUserPopup from "../../components/common/DeleteUserPopup";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Settings() {
   const { setUser } = useAuth();
@@ -37,7 +38,7 @@ export default function Settings() {
       <AlertTriangle size={24} className="text-red-500" />,
       "Delete Account",
       <DeleteUserPopup onConfirm={deleteUser} isDeleting={deleting} />,
-      "bg-red-500"
+      "bg-red-500",
     );
   };
 

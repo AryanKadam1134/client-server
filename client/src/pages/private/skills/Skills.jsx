@@ -12,14 +12,12 @@ import Pagination from "../../../components/ui/Pagination";
 
 import { getSkillLevel } from "../../../utils/getSkillLevel";
 import { getVisibility } from "../../../utils/getVisibility";
-import { getCategoryName } from "../../../utils/getCategoryName";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { apiEndpoints } from "../../../api";
 
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
-import useCategoriesList from "../../../hooks/useCategoriesList";
 
 import { useNotify } from "../../../context/NotificationContext";
 import { usePopup } from "../../../context/PopupContext";
@@ -30,7 +28,7 @@ export default function Skills() {
 
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
-  const { categoriesList } = useCategoriesList();
+
 
   const navigate = useNavigate();
 
@@ -100,20 +98,24 @@ export default function Skills() {
   ];
 
   const tableBody = skills?.map((data, index) => {
-    const { _id, name, categoryId, level, sortOrder, visibility } = data;
+    const { _id, name, category, level, sortOrder, visibility } =
+      data;
 
     return {
       cells: [
         calculateSerialNumber(pagination?.page, index, pagination?.limit),
         name,
-        getCategoryName(categoriesList, categoryId),
+        category?.name,
         getSkillLevel(skillLevels, level),
         sortOrder === 0 ? "0" : sortOrder,
         getVisibility(visibilities, visibility),
         <div className="flex items-center gap-1">
           <EditButton onClick={() => navigate(`${_id}/edit`)} />
 
-          <DeleteButton onClick={() => deleteSkillPopup(_id)} disabled={deleting} />
+          <DeleteButton
+            onClick={() => deleteSkillPopup(_id)}
+            disabled={deleting}
+          />
         </div>,
       ],
     };

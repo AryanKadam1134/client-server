@@ -7,7 +7,7 @@ import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
-import { paginateQuery } from "../../utils/paginatedQuery.js";
+import { paginateAggregate } from "../../utils/paginatedAggregate.js";
 
 const addSkill = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -137,15 +137,37 @@ const getSkill = asynchandler(async (req, res) => {
 const getAllSkillWithCategory = asynchandler(async (req, res) => {
   const { page, limit } = req.query;
 
-  const paginatedSkills = await paginateQuery({
+  const paginatedSkills = await paginateAggregate({
     model: Skill,
+    pipeline: [
+      {
+        $match: {
+          owner: new mongoose.Types.ObjectId(req.user?._id),
+        },
+      },
+      {
+        $lookup: {
+          from: "skillcategories",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $addFields: {
+          category: {
+            $first: "$category",
+          },
+        },
+      },
+      {
+        $sort: {
+          sortOrder: 1,
+        },
+      },
+    ],
     page,
     limit,
-    filter: {
-      owner: req.user?._id,
-    },
-    sort: { sortOrder: 1 },
-    populate: "categoryId",
   });
 
   if (paginatedSkills?.data?.length === 0) {
