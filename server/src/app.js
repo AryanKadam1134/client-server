@@ -30,6 +30,17 @@ import educationRouter from "./routes/private/education.routes.js";
 import certificateRoutes from "./routes/private/certificate.routes.js";
 import achievementRouter from "./routes/private/achievement.routes.js";
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Portfolio SaaS API Running",
+  });
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 app.use("/api/admin", privateCors);
 
 app.use("/api/admin/auth", authRouter);
