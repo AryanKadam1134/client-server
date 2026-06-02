@@ -8,7 +8,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 
   const maxPageButtons = screens.md ? 10 : screens.sm ? 5 : 3;
 
-  if (totalPages <= 1) return null;
+  if (!totalPages || totalPages <= 1) return null;
 
   let startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
   let endPage = startPage + maxPageButtons - 1;
