@@ -8,6 +8,7 @@ import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
+import ActionButton from "../../../components/ui/ActionButton";
 import DragDropUpload from "../../../components/ui/DragDropUpload";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 
@@ -399,13 +400,13 @@ export default function AddEditEducation() {
 
               {/* Delete Button (Hover Only) */}
               {instituteImage?.url && (
-                <button
+                <ActionButton
                   type="button"
+                  variant="red"
+                  icon={Trash2}
                   onClick={deleteInstituteImage}
-                  className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
-                >
-                  <Trash2 size={18} />
-                </button>
+                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100"
+                />
               )}
             </div>
           </LabelInput>

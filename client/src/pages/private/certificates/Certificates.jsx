@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { ExternalLink, Plus, Trash2 } from "lucide-react";
+import { ExternalLink, FilePenLine, Plus, Trash2 } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
@@ -113,13 +113,15 @@ export default function Certificates() {
         sortOrder === 0 ? "0" : sortOrder,
         <div className="flex items-center gap-1">
           <ActionButton
-            variant="edit"
+            icon={FilePenLine}
+            variant="green"
             onClick={() => navigate(`${_id}/edit`)}
             disabled={deleting}
           />
 
           <ActionButton
-            variant="delete"
+            icon={Trash2}
+            variant="red"
             onClick={() => deleteCertificatePopup(_id)}
             disabled={deleting}
           />

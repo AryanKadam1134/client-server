@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2 } from "lucide-react";
+import { FilePenLine, Plus, Trash2 } from "lucide-react";
 
 import Table from "../../../components/common/Table";
 import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
@@ -118,13 +118,15 @@ export default function Experiences() {
         getVisibility(visibilities, visibility),
         <div className="flex items-center gap-1">
           <ActionButton
-            variant="edit"
+            icon={FilePenLine}
+            variant="green"
             onClick={() => navigate(`${_id}/edit`)}
             disabled={deleting}
           />
 
           <ActionButton
-            variant="delete"
+            icon={Trash2}
+            variant="red"
             onClick={() => deleteExperiencePopup(_id)}
             disabled={deleting}
           />

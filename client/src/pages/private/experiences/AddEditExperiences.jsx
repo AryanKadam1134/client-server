@@ -16,6 +16,7 @@ import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
+import ActionButton from "../../../components/ui/ActionButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import DragDropUpload from "../../../components/ui/DragDropUpload";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
@@ -88,6 +89,14 @@ export default function AddEditExperiences() {
     control,
     name: "organizationWebsite",
   });
+
+  const handleAppendHighlight = () => {
+    appendHighlight("");
+  };
+
+  const handleAppendRole = () => {
+    append({ role: "", startDate: "", endDate: "", isCurrent: false });
+  };
 
   const formatDate = (date) => {
     return date ? dayjs(date).format("YYYY-MM-DD") : "";
@@ -428,21 +437,22 @@ export default function AddEditExperiences() {
             </span>
           </p>
 
-          <button
+          <CustomButton
             type="button"
-            onClick={() => appendHighlight("")}
-            className="hidden sm:block px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
+            variant="green"
+            onClick={handleAppendHighlight}
+            className="hidden sm:block"
           >
             Add Highlight
-          </button>
+          </CustomButton>
 
-          <button
+          <ActionButton
             type="button"
-            onClick={() => appendHighlight("")}
-            className="block sm:hidden p-1 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
-          >
-            <Plus />
-          </button>
+            variant="green"
+            icon={Plus}
+            onClick={handleAppendHighlight}
+            className="block sm:hidden"
+          />
         </div>
 
         {highlightFields.map((item, idx) => (
@@ -460,13 +470,12 @@ export default function AddEditExperiences() {
               />
             </div>
 
-            <button
+            <ActionButton
               type="button"
+              variant="red"
+              icon={Trash2}
               onClick={() => removeHighlight(idx)}
-              className="p-2 bg-red-500 text-white rounded cursor-pointer"
-            >
-              <Trash2 size={16} />
-            </button>
+            />
           </div>
         ))}
       </div>
@@ -478,25 +487,22 @@ export default function AddEditExperiences() {
             Positions / Posts
           </p>
 
-          <button
+          <CustomButton
             type="button"
-            onClick={() =>
-              append({ role: "", startDate: "", endDate: "", isCurrent: false })
-            }
-            className="hidden sm:block px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
+            variant="green"
+            onClick={handleAppendRole}
+            className="hidden sm:block"
           >
             Add Position
-          </button>
+          </CustomButton>
 
-          <button
+          <ActionButton
             type="button"
-            onClick={() =>
-              append({ role: "", startDate: "", endDate: "", isCurrent: false })
-            }
-            className="block sm:hidden p-1 bg-green-500 hover:bg-green-600 text-white rounded cursor-pointer transition-all"
-          >
-            <Plus />
-          </button>
+            variant="green"
+            icon={Plus}
+            onClick={handleAppendRole}
+            className="block sm:hidden"
+          />
         </div>
 
         {fields?.map((data, idx) => (
@@ -570,20 +576,19 @@ export default function AddEditExperiences() {
               />
             </LabelInput>
 
-            <button
+            <ActionButton
               type="button"
+              variant="red"
+              icon={Trash2}
               onClick={() => remove(idx)}
-              className="w-fit h-fit self-center col-span-3 sm:col-span-2 lg:col-span-1 p-2 bg-red-500 text-white rounded cursor-pointer"
-            >
-              <Trash2 size={16} />
-            </button>
+              className="w-fit h-fit self-center col-span-3 sm:col-span-2 lg:col-span-1"
+            />
           </div>
         ))}
       </div>
 
       {id && (
         <>
-          {" "}
           {/* Upload Image  */}
           <LabelInput
             id="upload"
@@ -597,6 +602,7 @@ export default function AddEditExperiences() {
               onChange={(files) => updateOrganizationImage(files)}
             />
           </LabelInput>
+
           {/* Cover Image */}
           <LabelInput
             label="Cover Image"
@@ -617,13 +623,13 @@ export default function AddEditExperiences() {
               />
 
               {/* Delete Button (Hover Only) */}
-              <button
+              <ActionButton
                 type="button"
+                variant="red"
+                icon={Trash2}
                 onClick={deleteOrganizationImage}
-                className="absolute top-2 right-2 p-1 rounded bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 cursor-pointer"
-              >
-                <Trash2 size={18} />
-              </button>
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              />
             </div>
           </LabelInput>
         </>

@@ -2,6 +2,8 @@ import React from "react";
 
 import { ChevronLeft, ChevronRight, Image, Loader, Trash2 } from "lucide-react";
 
+import ActionButton from "../ui/ActionButton";
+
 function ScrollButton({ icon, scroll, className = "" }) {
   const Icon = icon;
 
@@ -82,25 +84,25 @@ export default function ImageGallery({
 
               {/* Set as Cover Button (Hover Only) */}
               {!isCoverImage && (
-                <button
+                <ActionButton
                   type="button"
-                  onClick={() => handleCoverChange(idx)}
-                  className="absolute top-2 left-2 p-2 rounded-md bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary text-light-text-primary dark:text-dark-text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-green-500 hover:text-white hover:border-green-500 cursor-pointer shadow-sm hover:shadow-md"
                   title="Set as cover image"
-                >
-                  <Image size={18} />
-                </button>
+                  variant="green"
+                  icon={Image}
+                  onClick={() => handleCoverChange(idx)}
+                  className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                />
               )}
 
               {/* Delete Button (Hover Only) */}
-              <button
+              <ActionButton
                 type="button"
-                onClick={() => deleteImage(public_id)}
-                className="absolute top-2 right-2 p-2 rounded-md bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary text-light-text-primary dark:text-dark-text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer shadow-sm hover:shadow-md"
                 title="Delete image"
-              >
-                <Trash2 size={18} />
-              </button>
+                variant="red"
+                icon={Trash2}
+                onClick={() => deleteImage(public_id)}
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              />
             </div>
           );
         })}
