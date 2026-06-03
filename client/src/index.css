@@ -15,7 +15,9 @@ body {
 
 /* Smooth transitions for theme switching */
 html {
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 /* EXPANDED: normal left-aligned layout */
@@ -49,4 +51,14 @@ html {
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-light-border-primary dark:bg-dark-border-primary;
   }
+}
+
+/* Hide scrollbar while keeping scroll functionality */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }

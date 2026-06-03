@@ -217,6 +217,17 @@ Returns public skill categories with their public skills.
 ]
 ```
 
+**Why `logoUrl` matters**
+
+`logoUrl` helps you render category icons. It supports multiple patterns depending on how you store assets:
+
+1. `logoUrl = "frontend.svg"`  
+   `src={`/images/${category?.logoUrl}`}`
+2. `logoUrl = "/images/frontend.svg"`  
+   `src={category?.logoUrl}`
+3. `logoUrl = "https://logo.example.com/frontend.svg"`  
+   `src={category?.logoUrl}`
+
 ---
 
 ### GET `https://portfolio-saas-production-5ae8.up.railway.app/api/portfolio/:username/projects`

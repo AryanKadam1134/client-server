@@ -1,0 +1,110 @@
+import React from "react";
+
+import { ChevronLeft, ChevronRight, Image, Loader, Trash2 } from "lucide-react";
+
+function ScrollButton({ icon, scroll, className = "" }) {
+  const Icon = icon;
+
+  return (
+    <button
+      type="button"
+      onClick={() =>
+        document
+          .getElementById("image-gallery-scroll")
+          ?.scrollBy({ left: scroll, behavior: "smooth" })
+      }
+      className={`${className} hidden sm:flex absolute top-1/2 -translate-y-1/2 z-10 p-2
+        bg-light-bg-secondary dark:bg-dark-bg-tertiary
+        hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover
+        border border-light-border-primary dark:border-dark-border-primary
+        text-light-text-primary dark:text-dark-text-primary
+        rounded-full cursor-pointer transition-all shadow-md hover:shadow-lg`}
+    >
+      <Icon size={20} />
+    </button>
+  );
+}
+
+export default function ImageGallery({
+  images,
+  coverImageIndex,
+  imageDeletingId,
+  handleCoverChange,
+  deleteImage,
+  className = "",
+}) {
+  return (
+    <div className={`relative flex items-center h-full ${className}`}>
+      {/* Scroll Buttons */}
+      <ScrollButton className="left-2" icon={ChevronLeft} scroll={-300} />
+
+      <ScrollButton className="right-2" icon={ChevronRight} scroll={300} />
+
+      {/* Image Container */}
+      <div
+        id="image-gallery-scroll"
+        className="hide-scrollbar flex gap-4 overflow-x-auto scroll-smooth px-1 py-2"
+      >
+        {images?.map((image, idx) => {
+          const { public_id, url } = image;
+          const isCoverImage = idx === coverImageIndex;
+
+          return (
+            <div
+              key={public_id || idx}
+              className={`relative group h-[140px] w-auto shrink-0 rounded-md overflow-hidden transition-all ${
+                isCoverImage
+                  ? "ring-1 ring-green-500 border-0 shadow-md"
+                  : "border border-light-border-primary dark:border-dark-border-primary hover:shadow-md"
+              } bg-light-bg-secondary dark:bg-dark-bg-secondary`}
+            >
+              {/* Image */}
+              <img
+                src={url}
+                alt="gallery image"
+                className="w-full h-full object-cover"
+              />
+
+              {/* Loader */}
+              {imageDeletingId === public_id && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                  <Loader size={28} className="animate-spin text-white" />
+                </div>
+              )}
+
+              {/* Cover Badge */}
+              {isCoverImage && (
+                <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-green-500 text-white text-xs font-semibold flex items-center gap-1">
+                  <Image size={14} />
+                  Cover
+                </div>
+              )}
+
+              {/* Set as Cover Button (Hover Only) */}
+              {!isCoverImage && (
+                <button
+                  type="button"
+                  onClick={() => handleCoverChange(idx)}
+                  className="absolute top-2 left-2 p-2 rounded-md bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary text-light-text-primary dark:text-dark-text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-green-500 hover:text-white hover:border-green-500 cursor-pointer shadow-sm hover:shadow-md"
+                  title="Set as cover image"
+                >
+                  <Image size={18} />
+                </button>
+              )}
+
+              {/* Delete Button (Hover Only) */}
+              <button
+                type="button"
+                onClick={() => deleteImage(public_id)}
+                className="absolute top-2 right-2 p-2 rounded-md bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary text-light-text-primary dark:text-dark-text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer shadow-sm hover:shadow-md"
+                title="Delete image"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
