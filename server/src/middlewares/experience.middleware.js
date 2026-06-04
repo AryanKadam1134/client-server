@@ -13,11 +13,11 @@ export const getExperienceById = asynchandler(async (req, res, next) => {
   const experienceExists = await Experience.findById(experienceId);
 
   if (!experienceExists) {
-    throw new ApiError(404, "experience not found!");
+    throw new ApiError(404, "Experience not found!");
   }
 
   if (experienceExists.owner.toString() !== req.user?._id.toString()) {
-    throw new ApiError(403, "unauthorized!");
+    throw new ApiError(403, "Unauthorized!");
   }
 
   req.experience = experienceExists;

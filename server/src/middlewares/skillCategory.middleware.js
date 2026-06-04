@@ -13,11 +13,11 @@ export const getCategoryById = asynchandler(async (req, res, next) => {
   const categoryExists = await SkillCategory.findById(categoryId);
 
   if (!categoryExists) {
-    throw new ApiError(404, "category not found!");
+    throw new ApiError(404, "Category not found!");
   }
 
   if (categoryExists.owner.toString() !== req.user?._id.toString()) {
-    throw new ApiError(403, "unauthorized!");
+    throw new ApiError(403, "Unauthorized!");
   }
 
   req.category = categoryExists;

@@ -71,7 +71,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
   if (documentUrl !== undefined) fields.documentUrl = documentUrl;
 
   if (Object.keys(fields).length === 0) {
-    throw new ApiError(400, "no fields provided to update!");
+    throw new ApiError(400, "No fields provided to update!");
   }
 
   // Check if user exists if username or email is provided
@@ -84,7 +84,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
     if (userExists) {
       throw new ApiError(
         409,
-        "user already exists with similar username or email",
+        "User already exists with similar username or email",
       );
     }
   }
@@ -116,13 +116,13 @@ const updateUserImage = asynchandler(async (req, res) => {
   const userImageLocalPath = req.file?.path;
 
   if (!userImageLocalPath) {
-    throw new ApiError(400, "missing image file path!");
+    throw new ApiError(400, "Missing image file path!");
   }
 
   const updatedImage = await uploadToCloudinary(userImageLocalPath);
 
   if (!updatedImage?.secure_url) {
-    throw new ApiError(500, "error while updating image on cloudinary!");
+    throw new ApiError(500, "Error while updating image on cloudinary!");
   }
 
   const updatedUser = await User.findByIdAndUpdate(
@@ -160,13 +160,13 @@ const updateUserResume = asynchandler(async (req, res) => {
   const userResumeLocalPath = req.file?.path;
 
   if (!userResumeLocalPath) {
-    throw new ApiError(400, "missing resumeOrCv file path!");
+    throw new ApiError(400, "Missing resumeOrCv file path!");
   }
 
   const updatedResume = await uploadToCloudinary(userResumeLocalPath);
 
   if (!updatedResume?.secure_url) {
-    throw new ApiError(500, "error while updating resume on cloudinary!");
+    throw new ApiError(500, "Error while updating resume on cloudinary!");
   }
 
   const updatedUser = await User.findByIdAndUpdate(

@@ -39,20 +39,23 @@ export default function DragDropUpload({
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         onClick={() => !loading && fileInputRef.current.click()}
-        className={`
-          w-full min-h-40 flex flex-col items-center justify-center gap-3
-          border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary rounded-md cursor-pointer
-          transition-all duration-200 px-4 py-8 text-center
-          ${isDragging && "border-blue-400 dark:border-blue-500 bg-blue-50 dark:bg-blue-950/20"}
-          ${!loading && "hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover hover:border-light-border-primary dark:hover:border-dark-border-primary"}
-          ${className}
-        `}
+        className={`w-full px-4 py-6 flex flex-col items-center justify-center gap-3
+        text-center border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary
+        ${isDragging && "bg-blue-50 dark:bg-blue-950/20 border-blue-400 dark:border-blue-500"}
+        ${!loading && "hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-hover"}
+        ${className} rounded-md cursor-pointer transition-all duration-200`}
       >
         {loading ? (
-          <Loader size={24} className="text-blue-500 dark:text-blue-400 animate-spin" />
+          <Loader
+            size={24}
+            className="text-blue-500 dark:text-blue-400 animate-spin"
+          />
         ) : (
           <>
-            <FileText size={28} className="text-light-text-tertiary dark:text-dark-text-tertiary" />
+            <FileText
+              size={24}
+              className="text-light-text-tertiary dark:text-dark-text-tertiary"
+            />
 
             <div className="text-light-text-secondary dark:text-dark-text-secondary text-sm font-medium">
               <p>{text}</p>

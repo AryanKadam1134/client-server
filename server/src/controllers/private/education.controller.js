@@ -26,11 +26,11 @@ const addEducation = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!instituteName) {
-    throw new ApiError(400, "instituteName is required!");
+    throw new ApiError(400, "InstituteName is required!");
   }
 
   if (!qualification) {
-    throw new ApiError(400, "qualification is required!");
+    throw new ApiError(400, "Qualification is required!");
   }
 
   const educationExists = await Education.findOne({
@@ -39,7 +39,7 @@ const addEducation = asynchandler(async (req, res) => {
   });
 
   if (educationExists) {
-    throw new ApiError(409, "education already exists!");
+    throw new ApiError(409, "Education already exists!");
   }
 
   const fields = {};
@@ -104,7 +104,7 @@ const updateEducationDetails = asynchandler(async (req, res) => {
     });
 
     if (sameInstituteName) {
-      throw new ApiError(409, "institute name already exists!");
+      throw new ApiError(409, "Institute name already exists!");
     }
   }
 
@@ -138,7 +138,7 @@ const updateInstituteImage = asynchandler(async (req, res) => {
   const instituteImage = req.file?.path;
 
   if (!instituteImage) {
-    throw new ApiError(400, "missing image file path!");
+    throw new ApiError(400, "Missing image file path!");
   }
 
   const updatedImage = await uploadToCloudinary(instituteImage);
@@ -146,7 +146,7 @@ const updateInstituteImage = asynchandler(async (req, res) => {
   if (!updatedImage?.secure_url) {
     throw new ApiError(
       500,
-      "error while updating instituteImage on cloudinary!",
+      "Error while updating instituteImage on cloudinary!",
     );
   }
 

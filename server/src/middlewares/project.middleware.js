@@ -13,11 +13,11 @@ export const getProjectById = asynchandler(async (req, res, next) => {
   const projectExists = await Project.findById(projectId);
 
   if (!projectExists) {
-    throw new ApiError(404, "project not found!");
+    throw new ApiError(404, "Project not found!");
   }
 
   if (projectExists.owner.toString() !== req.user?._id.toString()) {
-    throw new ApiError(403, "unauthorized!");
+    throw new ApiError(403, "Unauthorized!");
   }
 
   req.project = projectExists;

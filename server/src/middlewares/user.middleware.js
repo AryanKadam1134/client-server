@@ -8,7 +8,7 @@ export const findUserByUsername = asynchandler(async (req, res, next) => {
   }).select("-password -sessions");
 
   if (!user) {
-    throw new ApiError(404, "user not found!");
+    throw new ApiError(404, "User not found!");
   }
 
   req.user = user;

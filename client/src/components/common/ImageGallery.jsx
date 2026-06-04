@@ -36,76 +36,78 @@ export default function ImageGallery({
   className = "",
 }) {
   return (
-    <div className={`relative flex items-center h-full ${className}`}>
-      {/* Scroll Buttons */}
-      <ScrollButton className="left-2" icon={ChevronLeft} scroll={-300} />
+    <div className={`h-full flex items-end ${className}`}>
+      <div className="relative">
+        {/* Scroll Buttons */}
+        <ScrollButton className="left-2" icon={ChevronLeft} scroll={-300} />
 
-      <ScrollButton className="right-2" icon={ChevronRight} scroll={300} />
+        <ScrollButton className="right-2" icon={ChevronRight} scroll={300} />
 
-      {/* Image Container */}
-      <div
-        id="image-gallery-scroll"
-        className="hide-scrollbar flex gap-4 overflow-x-auto scroll-smooth px-1 py-2"
-      >
-        {images?.map((image, idx) => {
-          const { public_id, url } = image;
-          const isCoverImage = idx === coverImageIndex;
+        {/* Image Container */}
+        <div
+          id="image-gallery-scroll"
+          className="hide-scrollbar flex gap-4 overflow-x-auto scroll-smooth px-1 py-2"
+        >
+          {images?.map((image, idx) => {
+            const { public_id, url } = image;
+            const isCoverImage = idx === coverImageIndex;
 
-          return (
-            <div
-              key={public_id || idx}
-              className={`relative group h-[140px] w-auto shrink-0 rounded-md overflow-hidden transition-all ${
-                isCoverImage
-                  ? "ring-1 ring-green-500 border-0 shadow-md"
-                  : "border border-light-border-primary dark:border-dark-border-primary hover:shadow-md"
-              } bg-light-bg-secondary dark:bg-dark-bg-secondary`}
-            >
-              {/* Image */}
-              <img
-                src={url}
-                alt="gallery image"
-                className="w-full h-full object-cover"
-              />
+            return (
+              <div
+                key={public_id || idx}
+                className={`relative group h-[140px] w-auto shrink-0 rounded-md overflow-hidden transition-all ${
+                  isCoverImage
+                    ? "ring-1 ring-green-500 border-0 shadow-md"
+                    : "border border-light-border-primary dark:border-dark-border-primary hover:shadow-md"
+                } bg-light-bg-secondary dark:bg-dark-bg-secondary`}
+              >
+                {/* Image */}
+                <img
+                  src={url}
+                  alt="gallery image"
+                  className="w-full h-full object-cover"
+                />
 
-              {/* Loader */}
-              {imageDeletingId === public_id && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                  <Loader size={28} className="animate-spin text-white" />
-                </div>
-              )}
+                {/* Loader */}
+                {imageDeletingId === public_id && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <Loader size={28} className="animate-spin text-white" />
+                  </div>
+                )}
 
-              {/* Cover Badge */}
-              {isCoverImage && (
-                <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-green-500 text-white text-xs font-semibold flex items-center gap-1">
-                  <Image size={14} />
-                  Cover
-                </div>
-              )}
+                {/* Cover Badge */}
+                {isCoverImage && (
+                  <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-green-500 text-white text-xs font-semibold flex items-center gap-1">
+                    <Image size={14} />
+                    Cover
+                  </div>
+                )}
 
-              {/* Set as Cover Button (Hover Only) */}
-              {!isCoverImage && (
+                {/* Set as Cover Button (Hover Only) */}
+                {!isCoverImage && (
+                  <ActionButton
+                    type="button"
+                    title="Set as cover image"
+                    variant="green"
+                    icon={Image}
+                    onClick={() => handleCoverChange(idx)}
+                    className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  />
+                )}
+
+                {/* Delete Button (Hover Only) */}
                 <ActionButton
                   type="button"
-                  title="Set as cover image"
-                  variant="green"
-                  icon={Image}
-                  onClick={() => handleCoverChange(idx)}
-                  className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Delete image"
+                  variant="red"
+                  icon={Trash2}
+                  onClick={() => deleteImage(public_id)}
+                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                 />
-              )}
-
-              {/* Delete Button (Hover Only) */}
-              <ActionButton
-                type="button"
-                title="Delete image"
-                variant="red"
-                icon={Trash2}
-                onClick={() => deleteImage(public_id)}
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-              />
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

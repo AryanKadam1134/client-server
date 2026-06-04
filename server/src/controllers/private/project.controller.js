@@ -33,7 +33,7 @@ const addProject = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!title) {
-    throw new ApiError(400, "title is required!");
+    throw new ApiError(400, "Title is required!");
   }
 
   const projectExists = await Project.findOne({
@@ -42,7 +42,7 @@ const addProject = asynchandler(async (req, res) => {
   });
 
   if (projectExists) {
-    throw new ApiError(409, "project name already exists!");
+    throw new ApiError(409, "Project name already exists!");
   }
 
   const fields = {};
@@ -71,7 +71,7 @@ const addProject = asynchandler(async (req, res) => {
     const organizationExists = await Experience.findById(organizationId);
 
     if (!organizationExists) {
-      throw new ApiError(404, "organization not found!");
+      throw new ApiError(404, "Organization not found!");
     }
 
     fields.organizationId = organizationId;
@@ -102,7 +102,7 @@ const addProject = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiRes(201, createdProject, "project created successfully!"));
+    .json(new ApiRes(201, createdProject, "Project created successfully!"));
 });
 
 const updateProjectDetails = asynchandler(async (req, res) => {
@@ -133,7 +133,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
     });
 
     if (sameProjectName) {
-      throw new ApiError(409, "project name already exists!");
+      throw new ApiError(409, "Project name already exists!");
     }
   }
 
@@ -165,7 +165,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
 
     // if null do not throw error
     if (organizationId && !organizationExists) {
-      throw new ApiError(404, "organization not found!");
+      throw new ApiError(404, "Organization not found!");
     }
 
     fields.organizationId = organizationId;
@@ -187,7 +187,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, updatedProject, "project updated successfully!"));
+    .json(new ApiRes(200, updatedProject, "Project updated successfully!"));
 });
 
 const updateProjectImages = asynchandler(async (req, res) => {
@@ -196,7 +196,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
   const newImages = req.files;
 
   if (project?.projectImages?.length + newImages?.length > 5) {
-    throw new ApiError(400, "maximum 5 project images are allowed");
+    throw new ApiError(400, "Maximum 5 project images are allowed");
   }
 
   const uploadedProjectImages = await Promise.all(
@@ -204,7 +204,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
   );
 
   if (uploadedProjectImages?.length === 0) {
-    throw new ApiError(502, "upload failed!");
+    throw new ApiError(502, "Upload failed!");
   }
 
   const formattedImages = uploadedProjectImages?.map((image) => ({
@@ -228,7 +228,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiRes(200, updatedProject, "project images updated successfully!"),
+      new ApiRes(200, updatedProject, "Project images updated successfully!"),
     );
 });
 
@@ -248,7 +248,7 @@ const deleteProject = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, null, "project deleted successfully!"));
+    .json(new ApiRes(200, null, "Project deleted successfully!"));
 });
 
 const deleteProjectImage = asynchandler(async (req, res) => {
@@ -302,13 +302,13 @@ const deleteProjectImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, project, "project image deleted successfully!"));
+    .json(new ApiRes(200, project, "Project image deleted successfully!"));
 });
 
 const getProject = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiRes(200, req.project, "project fetched successfully!"));
+    .json(new ApiRes(200, req.project, "Project fetched successfully!"));
 });
 
 const getAllProjects = asynchandler(async (req, res) => {
@@ -325,12 +325,12 @@ const getAllProjects = asynchandler(async (req, res) => {
   });
 
   if (paginatedProjects?.data?.length === 0) {
-    return res.status(200).json(new ApiRes(200, paginatedProjects, "no projects found!"));
+    return res.status(200).json(new ApiRes(200, paginatedProjects, "No projects found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedProjects, "projects fetched successfully!"));
+    .json(new ApiRes(200, paginatedProjects, "Projects fetched successfully!"));
 });
 
 export {

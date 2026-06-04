@@ -16,7 +16,7 @@ const addSkill = asynchandler(async (req, res) => {
     req.body;
 
   if (!name) {
-    throw new ApiError(400, "name is required!");
+    throw new ApiError(400, "Name is required!");
   }
 
   const skillExists = await Skill.findOne({
@@ -25,7 +25,7 @@ const addSkill = asynchandler(async (req, res) => {
   });
 
   if (skillExists) {
-    throw new ApiError(409, "skill already exists!");
+    throw new ApiError(409, "Skill already exists!");
   }
 
   const fields = {};
@@ -45,7 +45,7 @@ const addSkill = asynchandler(async (req, res) => {
     const categoryExists = await SkillCategory.findById(categoryId);
 
     if (!categoryExists) {
-      throw new ApiError(404, "category not found!");
+      throw new ApiError(404, "Category not found!");
     }
 
     fields.categoryId = categoryId;
@@ -58,7 +58,7 @@ const addSkill = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiRes(201, newSkill, "skill added successfully!"));
+    .json(new ApiRes(201, newSkill, "Skill added successfully!"));
 });
 
 const updateSkill = asynchandler(async (req, res) => {
@@ -75,7 +75,7 @@ const updateSkill = asynchandler(async (req, res) => {
     });
 
     if (sameSkillName) {
-      throw new ApiError(409, "skill name already exists!");
+      throw new ApiError(409, "Skill name already exists!");
     }
   }
 
@@ -97,14 +97,14 @@ const updateSkill = asynchandler(async (req, res) => {
 
     // if null do not throw error
     if (categoryId && !categoryExists) {
-      throw new ApiError(404, "category not found!");
+      throw new ApiError(404, "Category not found!");
     }
 
     fields.categoryId = categoryId;
   }
 
   if (Object.keys(fields).length === 0) {
-    throw new ApiError(400, "no fields provided to update!");
+    throw new ApiError(400, "No fields provided to update!");
   }
 
   const updatedSkill = await Skill.findByIdAndUpdate(

@@ -13,11 +13,11 @@ export const getSocialPlatformById = asynchandler(async (req, res, next) => {
   const platformExists = await SocialPlatform.findById(platformId);
 
   if (!platformExists) {
-    throw new ApiError(404, "platform not found!");
+    throw new ApiError(404, "Platform not found!");
   }
 
   if (platformExists.owner.toString() !== req.user?._id.toString()) {
-    throw new ApiError(403, "unauthorized!");
+    throw new ApiError(403, "Unauthorized!");
   }
 
   req.socialPlatform = platformExists;

@@ -30,7 +30,7 @@ const addExperience = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!organization) {
-    throw new ApiError(400, "organization is required!");
+    throw new ApiError(400, "Organization is required!");
   }
 
   const oragnizationExists = await Experience.findOne({
@@ -39,7 +39,7 @@ const addExperience = asynchandler(async (req, res) => {
   });
 
   if (oragnizationExists) {
-    throw new ApiError(409, "organization name already exists!");
+    throw new ApiError(409, "Organization name already exists!");
   }
 
   const fields = {};
@@ -121,7 +121,7 @@ const updateExperience = asynchandler(async (req, res) => {
     });
 
     if (sameOrganizationName) {
-      throw new ApiError(409, "organization name already exists!");
+      throw new ApiError(409, "Organization name already exists!");
     }
   }
 
@@ -163,7 +163,7 @@ const updateExperience = asynchandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiRes(200, updatedExperience, "experience updated successfully!"),
+      new ApiRes(200, updatedExperience, "Experience updated successfully!"),
     );
 });
 
@@ -173,13 +173,13 @@ const updateOrganizationImage = asynchandler(async (req, res) => {
   const organizationImage = req.file?.path;
 
   if (!organizationImage) {
-    throw new ApiError(400, "missing image file path!");
+    throw new ApiError(400, "Missing image file path!");
   }
 
   const updatedImage = await uploadToCloudinary(organizationImage);
 
   if (!updatedImage?.secure_url) {
-    throw new ApiError(500, "error while updating image on cloudinary!");
+    throw new ApiError(500, "Error while updating image on cloudinary!");
   }
 
   const updatedExperience = await Experience.findByIdAndUpdate(
@@ -236,7 +236,7 @@ const deleteExperience = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, null, "experience deleted successfully!"));
+    .json(new ApiRes(200, null, "Experience deleted successfully!"));
 });
 
 const deleteOrganiaztionImage = asynchandler(async (req, res) => {

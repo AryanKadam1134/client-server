@@ -190,13 +190,13 @@ const refreshAccessToken = asynchandler(async (req, res) => {
   const loggedUser = await User.findById(decodedToken?._id);
 
   if (!loggedUser) {
-    throw new ApiError(404, "user not found!");
+    throw new ApiError(404, "User not found!");
   }
 
   const session = loggedUser.sessions.find((s) => s.deviceId === deviceId);
 
   if (!session) {
-    throw new ApiError(401, "session expired!");
+    throw new ApiError(401, "Session expired!");
   }
 
   const rememberMe = session.rememberMe;
@@ -208,7 +208,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
   );
 
   if (!accessToken || !refreshToken) {
-    throw new ApiError(503, "couldn't generate access or refresh token!");
+    throw new ApiError(503, "Couldn't generate access or refresh token!");
   }
 
   const user = await User.findById(loggedUser._id).select(
@@ -240,7 +240,7 @@ const registerUser = asynchandler(async (req, res) => {
       (field) => typeof field == "string" && field?.trim() == "",
     )
   ) {
-    throw new ApiError(400, "all fields are required!");
+    throw new ApiError(400, "All fields are required!");
   }
 
   const userExists = await User.findOne({
@@ -271,11 +271,11 @@ const loginUser = asynchandler(async (req, res) => {
   const { userCredential, password, rememberMe } = req.body;
 
   if (!userCredential) {
-    throw new ApiError(400, "username or email is required!");
+    throw new ApiError(400, "Username or email is required!");
   }
 
   if (!password) {
-    throw new ApiError(400, "password is required!");
+    throw new ApiError(400, "Password is required!");
   }
 
   const userExist = await User.findOne({
@@ -283,13 +283,13 @@ const loginUser = asynchandler(async (req, res) => {
   });
 
   if (!userExist) {
-    throw new ApiError(404, "user not found!");
+    throw new ApiError(404, "User not found!");
   }
 
   const isPasswordCorrect = await userExist.isPasswordCorrect(password);
 
   if (!isPasswordCorrect) {
-    throw new ApiError(401, "invalid password!");
+    throw new ApiError(401, "Invalid password!");
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -298,7 +298,7 @@ const loginUser = asynchandler(async (req, res) => {
   );
 
   if (!accessToken || !refreshToken) {
-    throw new ApiError(503, "couldn't generate access or refresh token!");
+    throw new ApiError(503, "Couldn't generate access or refresh token!");
   }
 
   const loggedUser = await User.findById(userExist?._id).select(
@@ -306,7 +306,7 @@ const loginUser = asynchandler(async (req, res) => {
   );
 
   if (!loggedUser) {
-    throw new ApiError(500, "error logging in user!");
+    throw new ApiError(500, "Error logging in user!");
   }
 
   return res
@@ -397,13 +397,13 @@ const forgotPassword = asynchandler(async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
-    throw new ApiError(400, "email is required!");
+    throw new ApiError(400, "Email is required!");
   }
 
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new ApiError(404, "user not found!");
+    throw new ApiError(404, "User not found!");
   }
 
   const otp = Math.floor(100000 + Math.random() * 900000);
@@ -440,11 +440,11 @@ const resetPassword = asynchandler(async (req, res) => {
   const { email, new_password, confirm_password } = req.body;
 
   if (!new_password || !confirm_password) {
-    throw new ApiError(400, "new password is required!");
+    throw new ApiError(400, "New password is required!");
   }
 
   if (new_password !== confirm_password) {
-    throw new ApiError(400, "password do not match!");
+    throw new ApiError(400, "Password do not match!");
   }
 
   const user = await User.findOne({ email });
@@ -452,7 +452,7 @@ const resetPassword = asynchandler(async (req, res) => {
   const isPasswordCorrect = await user.isPasswordCorrect(new_password);
 
   if (isPasswordCorrect) {
-    throw new ApiError(409, "new password cannot be same as old password!");
+    throw new ApiError(409, "New password cannot be same as old password!");
   }
 
   user.password = new_password;

@@ -58,13 +58,4 @@ const certificateSchema = new Schema(
   { timestamps: true },
 );
 
-certificateSchema.pre("validate", async function () {
-  if (!this.credentialUrl && !this.certificateImage?.url) {
-    throw new ApiError(
-      500,
-      "Either credential URL or certificate image is required",
-    );
-  }
-});
-
 export const Certificate = model("Certificate", certificateSchema);

@@ -13,11 +13,11 @@ export const getCertificateById = asynchandler(async (req, res, next) => {
   const certificateExists = await Certificate.findById(certificateId);
 
   if (!certificateExists) {
-    throw new ApiError(404, "certificate not found!");
+    throw new ApiError(404, "Certificate not found!");
   }
 
   if (certificateExists.owner.toString() !== req.user?._id.toString()) {
-    throw new ApiError(403, "unauthorized!");
+    throw new ApiError(403, "Unauthorized!");
   }
 
   req.certificate = certificateExists;

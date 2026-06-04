@@ -13,7 +13,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
   const { name, logoUrl, visibility, sortOrder } = req.body;
 
   if (!name) {
-    throw new ApiError(400, "name is required!");
+    throw new ApiError(400, "Name is required!");
   }
 
   const category = await SkillCategory.findOne({
@@ -22,7 +22,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
   });
 
   if (category) {
-    throw new ApiError(409, "category name already exists!");
+    throw new ApiError(409, "Category name already exists!");
   }
 
   const fields = {};
@@ -56,7 +56,7 @@ const updateSkillCategory = asynchandler(async (req, res) => {
     });
 
     if (sameCategoryName) {
-      throw new ApiError(409, "category name already exists!");
+      throw new ApiError(409, "Category name already exists!");
     }
   }
 
@@ -69,7 +69,7 @@ const updateSkillCategory = asynchandler(async (req, res) => {
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   if (Object.keys(fields).length === 0) {
-    throw new ApiError(400, "no fields provided to update!");
+    throw new ApiError(400, "No fields provided to update!");
   }
 
   const updatedCategory = await SkillCategory.findByIdAndUpdate(

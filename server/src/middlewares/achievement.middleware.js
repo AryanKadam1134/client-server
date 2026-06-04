@@ -13,11 +13,11 @@ export const getAchievementById = asynchandler(async (req, res, next) => {
   const achievementExists = await Achievement.findById(achievementId);
 
   if (!achievementExists) {
-    throw new ApiError(404, "achievement not found!");
+    throw new ApiError(404, "Achievement not found!");
   }
 
   if (achievementExists.owner.toString() !== req.user?._id.toString()) {
-    throw new ApiError(403, "unauthorized!");
+    throw new ApiError(403, "Unauthorized!");
   }
 
   req.achievement = achievementExists;

@@ -30,11 +30,11 @@ const addCertificate = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!title) {
-    throw new ApiError(400, "title is required!");
+    throw new ApiError(400, "Title is required!");
   }
 
   if (!issuer) {
-    throw new ApiError(400, "issuer is required!");
+    throw new ApiError(400, "Issuer is required!");
   }
 
   const certificateExists = await Certificate.findOne({
@@ -43,7 +43,7 @@ const addCertificate = asynchandler(async (req, res) => {
   });
 
   if (certificateExists) {
-    throw new ApiError(409, "certificate already exists!");
+    throw new ApiError(409, "Certificate already exists!");
   }
 
   const fields = {};
@@ -70,13 +70,6 @@ const addCertificate = asynchandler(async (req, res) => {
   let uploadedCertificateImage;
 
   const certificateImage = req.file?.path;
-
-  if (!(credentialUrl || certificateImage)) {
-    throw new ApiError(
-      400,
-      "either credential URL or certificate image is required!",
-    );
-  }
 
   if (certificateImage)
     uploadedCertificateImage = await uploadToCloudinary(certificateImage);
@@ -126,7 +119,7 @@ const updateCertificate = asynchandler(async (req, res) => {
     });
 
     if (sameCertificateTitle) {
-      throw new ApiError(409, "certificate title already exists!");
+      throw new ApiError(409, "Certificate title already exists!");
     }
   }
 
@@ -151,19 +144,6 @@ const updateCertificate = asynchandler(async (req, res) => {
   if (featured !== undefined) fields.featured = parseBoolean(featured);
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
-  if (
-    !(
-      certificate?.credentialUrl ||
-      certificate?.certificateImage?.public_id ||
-      credentialUrl
-    )
-  ) {
-    throw new ApiError(
-      400,
-      "either credential URL or certificate image is required!",
-    );
-  }
-
   Object.assign(certificate, fields);
 
   const updatedCertificate = await certificate.save();
@@ -181,13 +161,13 @@ const updateCertificateImage = asynchandler(async (req, res) => {
   const certificateImage = req.file?.path;
 
   if (!certificateImage) {
-    throw new ApiError(400, "missing image file path!");
+    throw new ApiError(400, "Missing image file path!");
   }
 
   const updatedImage = await uploadToCloudinary(certificateImage);
 
   if (!updatedImage?.secure_url) {
-    throw new ApiError(500, "error while updating image on cloudinary!");
+    throw new ApiError(500, "Error while updating image on cloudinary!");
   }
 
   const updatedCertificate = await Certificate.findByIdAndUpdate(
@@ -250,13 +230,6 @@ const deleteCertificate = asynchandler(async (req, res) => {
 const deleteCertificateImage = asynchandler(async (req, res) => {
   const certificate = req.certificate;
 
-  if (!certificate?.credentialUrl) {
-    throw new ApiError(
-      400,
-      "either credential URL or certificate image is required!",
-    );
-  }
-
   const upatedCertificate = await Certificate.findByIdAndUpdate(
     certificate._id,
     {
@@ -316,7 +289,13 @@ const getAllCertificates = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedCertificates, "certificates fetched successfully!"));
+    .json(
+      new ApiRes(
+        200,
+        paginatedCertificates,
+        "certificates fetched successfully!",
+      ),
+    );
 });
 
 export {

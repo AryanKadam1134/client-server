@@ -13,11 +13,11 @@ export const getEducationById = asynchandler(async (req, res, next) => {
   const educationExists = await Education.findById(educationId);
 
   if (!educationExists) {
-    throw new ApiError(404, "education not found!");
+    throw new ApiError(404, "Education not found!");
   }
 
   if (educationExists.owner.toString() !== req.user?._id.toString()) {
-    throw new ApiError(403, "unauthorized!");
+    throw new ApiError(403, "Unauthorized!");
   }
 
   req.education = educationExists;

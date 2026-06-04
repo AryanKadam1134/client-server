@@ -61,11 +61,11 @@ const addSocialPlatform = asynchandler(async (req, res) => {
   const { name, logoUrl, link, visibility, sortOrder } = req.body;
 
   if (!name) {
-    throw new ApiError(400, "name is required!");
+    throw new ApiError(400, "Name is required!");
   }
 
   if (!link) {
-    throw new ApiError(400, "link is required!");
+    throw new ApiError(400, "Link is required!");
   }
 
   const platformExists = await SocialPlatform.findOne({
@@ -74,7 +74,7 @@ const addSocialPlatform = asynchandler(async (req, res) => {
   });
 
   if (platformExists) {
-    throw new ApiError(409, "platform name already exists!");
+    throw new ApiError(409, "Platform name already exists!");
   }
 
   const fields = {};
@@ -96,7 +96,7 @@ const addSocialPlatform = asynchandler(async (req, res) => {
       new ApiRes(
         201,
         newSocialPlatform,
-        "social platform created successfully!",
+        "Social platform created successfully!",
       ),
     );
 });
@@ -114,7 +114,7 @@ const updateSocialPlatform = asynchandler(async (req, res) => {
     });
 
     if (samePlatformName) {
-      throw new ApiError(409, "social platform name already exists!");
+      throw new ApiError(409, "Social platform name already exists!");
     }
   }
 
@@ -127,7 +127,7 @@ const updateSocialPlatform = asynchandler(async (req, res) => {
   if (sortOrder !== undefined) fields.sortOrder = Number(sortOrder);
 
   if (Object.keys(fields).length === 0) {
-    throw new ApiError(400, "no fields provided to update!");
+    throw new ApiError(400, "No fields provided to update!");
   }
 
   const updatedSocialPlatform = await SocialPlatform.findByIdAndUpdate(

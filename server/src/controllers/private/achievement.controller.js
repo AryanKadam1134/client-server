@@ -30,7 +30,7 @@ const addAchievement = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!title) {
-    throw new ApiError(400, "title is required!");
+    throw new ApiError(400, "Title is required!");
   }
 
   const achievementExists = await Achievement.findOne({
@@ -39,7 +39,7 @@ const addAchievement = asynchandler(async (req, res) => {
   });
 
   if (achievementExists) {
-    throw new ApiError(409, "achievement name already exists!");
+    throw new ApiError(409, "Achievement name already exists!");
   }
 
   const fields = {};
@@ -61,7 +61,7 @@ const addAchievement = asynchandler(async (req, res) => {
     const certificateExists = await Certificate.findById(certificateId);
 
     if (!certificateExists) {
-      throw new ApiError(404, "certificate not found!");
+      throw new ApiError(404, "Certificate not found!");
     }
 
     fields.certificateId = certificateId;
@@ -122,7 +122,7 @@ const updateAchievement = asynchandler(async (req, res) => {
     });
 
     if (sameAchievementName) {
-      throw new ApiError(409, "achievement name already exists!");
+      throw new ApiError(409, "Achievement name already exists!");
     }
   }
 
@@ -147,7 +147,7 @@ const updateAchievement = asynchandler(async (req, res) => {
 
     // if null do not throw error
     if (certificateId && !certificateExists) {
-      throw new ApiError(404, "certificate not found!");
+      throw new ApiError(404, "Certificate not found!");
     }
 
     fields.certificateId = certificateId;
@@ -180,7 +180,7 @@ const updateAchievementImages = asynchandler(async (req, res) => {
   const newImages = req.files;
 
   if (achievement?.achievementImages?.length + newImages?.length > 5) {
-    throw new ApiError(400, "maximum 5 achievement images are allowed");
+    throw new ApiError(400, "Maximum 5 achievement images are allowed");
   }
 
   const uploadedAchievementImages = await Promise.all(
@@ -188,7 +188,7 @@ const updateAchievementImages = asynchandler(async (req, res) => {
   );
 
   if (uploadedAchievementImages?.length === 0) {
-    throw new ApiError(502, "upload failed!");
+    throw new ApiError(502, "Upload failed!");
   }
 
   const formattedImages = uploadedAchievementImages?.map((image) => ({

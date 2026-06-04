@@ -11,7 +11,7 @@ export const verifyJWT = asynchandler(async (req, res, next) => {
     req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
-    throw new ApiError(401, "access token missing!");
+    throw new ApiError(401, "Access token missing!");
   }
 
   const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -21,7 +21,7 @@ export const verifyJWT = asynchandler(async (req, res, next) => {
   );
 
   if (!user) {
-    throw new ApiError(401, "user does not exists!");
+    throw new ApiError(401, "User does not exists!");
   }
 
   req.user = user;
