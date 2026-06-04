@@ -1,8 +1,14 @@
 import React from "react";
+
 import { AlertTriangle } from "lucide-react";
+
 import CustomButton from "../ui/CustomButton";
 
+import { usePopup } from "../../context/PopupContext";
+
 export default function DeleteUserPopup({ onConfirm, isDeleting }) {
+  const { closePopupWindow } = usePopup();
+
   return (
     <div className="flex flex-col gap-6 w-full">
       {/* Warning Icon & Title */}
@@ -24,10 +30,10 @@ export default function DeleteUserPopup({ onConfirm, isDeleting }) {
       {/* Warning Message */}
       <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-3">
         <p className="text-sm text-red-800 dark:text-red-300 leading-relaxed">
-          <strong>Warning:</strong> Deleting your account will permanently remove
-          all your portfolio data, including projects, experiences, education,
-          certificates, achievements, and skills. This action is irreversible and
-          cannot be recovered.
+          <strong>Warning:</strong> Deleting your account will permanently
+          remove all your portfolio data, including projects, experiences,
+          education, certificates, achievements, and skills. This action is
+          irreversible and cannot be recovered.
         </p>
       </div>
 
@@ -45,11 +51,13 @@ export default function DeleteUserPopup({ onConfirm, isDeleting }) {
       <div className="flex gap-3 justify-end">
         <CustomButton
           variant="default"
+          onClick={closePopupWindow}
           className="text-sm"
           disabled={isDeleting}
         >
           Cancel
         </CustomButton>
+
         <CustomButton
           onClick={onConfirm}
           variant="red"
