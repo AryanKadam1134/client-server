@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 import ApiRes from "../../utils/ApiRes.js";
 import asynchandler from "../../utils/asynchandler.js";
-import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
 import { paginateAggregate } from "../../utils/paginatedAggregate.js";
+import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
 
 import { Skill } from "../../models/skill.model.js";
 import { Project } from "../../models/project.model.js";

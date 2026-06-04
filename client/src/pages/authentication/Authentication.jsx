@@ -15,10 +15,17 @@ import { apiEndpoints } from "../../api";
 
 import { useAuth } from "../../context/AuthContext";
 import { useNotify } from "../../context/NotificationContext";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Authentication() {
   const { error, setError, login, googleAuth } = useAuth();
   const { notify } = useNotify();
+  const { theme } = useTheme();
+
+  const logo = {
+    light: "/images/profilo_logo_black.png",
+    dark: "/images/profilo_logo_white.png",
+  };
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -59,7 +66,13 @@ export default function Authentication() {
   };
 
   return (
-    <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
+    <div className="min-h-screen p-6 flex flex-col items-center justify-center gap-10 bg-light-bg-secondary dark:bg-dark-bg-secondary">
+      <img
+        src={logo[theme]}
+        alt="Profilo Logo"
+        className="ml-3 size-12 rounded-full"
+      />
+
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
         <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">
           Profilo
