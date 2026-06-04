@@ -182,6 +182,36 @@ export default function AddEditAchievement() {
       onSubmit={handleSubmit(addUpdateAchievement)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
+      {id && (
+        <>
+          {/* Upload Achievement Images  */}
+          <LabelInput
+            id="upload"
+            label="Upload Achievement Images"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <DragDropUpload
+              id="upload"
+              multiple
+              accept="image/*"
+              loading={imagesUploading}
+              onChange={(files) => updateAchievementImage(files)}
+            />
+          </LabelInput>
+
+          <ImageGallery
+            className="col-span-12 sm:col-span-9"
+            images={achievementImages}
+            coverImageIndex={coverImageIndex}
+            imageDeletingId={imageDeleting}
+            handleCoverChange={handleCoverChange}
+            deleteImage={deleteAchievementImage}
+          />
+
+          <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+        </>
+      )}
+
       {/* Achievement Name */}
       <LabelInput
         id="title"
@@ -390,34 +420,6 @@ export default function AddEditAchievement() {
       </LabelInput>
 
       <div className="hidden sm:block col-span-6"></div>
-
-      {id && (
-        <>
-          {/* Upload Achievement Images  */}
-          <LabelInput
-            id="upload"
-            label="Upload Achievement Images"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          >
-            <DragDropUpload
-              id="upload"
-              multiple
-              accept="image/*"
-              loading={imagesUploading}
-              onChange={(files) => updateAchievementImage(files)}
-            />
-          </LabelInput>
-
-          <ImageGallery
-            className="col-span-12 sm:col-span-9"
-            images={achievementImages}
-            coverImageIndex={coverImageIndex}
-            imageDeletingId={imageDeleting}
-            handleCoverChange={handleCoverChange}
-            deleteImage={deleteAchievementImage}
-          />
-        </>
-      )}
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
         {isSubmitting ? "Saving..." : "Save"}

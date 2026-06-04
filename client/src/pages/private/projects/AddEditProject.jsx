@@ -201,6 +201,36 @@ export default function AddEditProject() {
       onSubmit={handleSubmit(addUpdateProject)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
+      {id && (
+        <>
+          {/* Upload Project Images */}
+          <LabelInput
+            id="upload"
+            label="Upload Project Images"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <DragDropUpload
+              id="upload"
+              multiple
+              accept="image/*"
+              loading={imagesUploading}
+              onChange={(files) => updateProjectImage(files)}
+            />
+          </LabelInput>
+
+          <ImageGallery
+            className="col-span-12 sm:col-span-9"
+            images={projectImages}
+            coverImageIndex={coverImageIndex}
+            imageDeletingId={imageDeleting}
+            handleCoverChange={handleCoverChange}
+            deleteImage={deleteProjectImage}
+          />
+
+          <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+        </>
+      )}
+
       {/* Project Name */}
       <LabelInput
         id="title"
@@ -502,34 +532,6 @@ export default function AddEditProject() {
       </LabelInput>
 
       <div className="hidden sm:block col-span-6" />
-
-      {id && (
-        <>
-          {/* Upload Project Images */}
-          <LabelInput
-            id="upload"
-            label="Upload Project Images"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          >
-            <DragDropUpload
-              id="upload"
-              multiple
-              accept="image/*"
-              loading={imagesUploading}
-              onChange={(files) => updateProjectImage(files)}
-            />
-          </LabelInput>
-
-          <ImageGallery
-            className="col-span-12 sm:col-span-9"
-            images={projectImages}
-            coverImageIndex={coverImageIndex}
-            imageDeletingId={imageDeleting}
-            handleCoverChange={handleCoverChange}
-            deleteImage={deleteProjectImage}
-          />
-        </>
-      )}
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
         {isSubmitting ? "Saving..." : "Save"}

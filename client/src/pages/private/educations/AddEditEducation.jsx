@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { Trash2, Loader } from "lucide-react";
 
+import CoverImage from "../../../components/common/CoverImage";
+
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -136,6 +138,38 @@ export default function AddEditEducation() {
       onSubmit={handleSubmit(addUpdateEducation)}
       className="grid grid-cols-12 gap-6 text-sm"
     >
+      {id && (
+        <>
+          {/* Upload Institute Image  */}
+          <LabelInput
+            id="upload"
+            label="Upload Institute Image"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <DragDropUpload
+              id="upload"
+              accept="image/*"
+              loading={imagesUploading}
+              onChange={(files) => updateInstituteImage(files)}
+            />
+          </LabelInput>
+
+          {/* Institute Image */}
+          <LabelInput
+            label="Institute Image"
+            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          >
+            <CoverImage
+              image={instituteImage}
+              imageDeleting={imageDeleting}
+              deleteImage={deleteInstituteImage}
+            />
+          </LabelInput>
+
+          <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+        </>
+      )}
+
       {/* Institute Name */}
       <LabelInput
         id="instituteName"
@@ -362,56 +396,6 @@ export default function AddEditEducation() {
 
         <FieldError error={errors.cgpa?.message} />
       </LabelInput>
-
-      {id && (
-        <>
-          {/* Upload Institute Image  */}
-          <LabelInput
-            id="upload"
-            label="Upload Institute Image"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          >
-            <DragDropUpload
-              id="upload"
-              accept="image/*"
-              loading={imagesUploading}
-              onChange={(files) => updateInstituteImage(files)}
-            />
-          </LabelInput>
-
-          {/* Institute Image */}
-          <LabelInput
-            label="Institute Image"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          >
-            <div className="relative group h-[120px] rounded overflow-hidden border border-light-border-primary dark:border-dark-border-primary">
-              {/* Loader */}
-              {imageDeleting && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                  <Loader size={24} className="animate-spin text-white" />
-                </div>
-              )}
-
-              <img
-                src={instituteImage?.url}
-                alt=""
-                className="w-full h-full object-contain"
-              />
-
-              {/* Delete Button (Hover Only) */}
-              {instituteImage?.url && (
-                <ActionButton
-                  type="button"
-                  variant="red"
-                  icon={Trash2}
-                  onClick={deleteInstituteImage}
-                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100"
-                />
-              )}
-            </div>
-          </LabelInput>
-        </>
-      )}
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
         {isSubmitting ? "Saving..." : "Save"}

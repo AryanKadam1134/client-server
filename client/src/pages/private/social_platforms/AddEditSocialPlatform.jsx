@@ -359,8 +359,6 @@ export default function AddEditSocialPlatform() {
             />
           </LabelInput>
 
-          <div className="hidden sm:block col-span-6" />
-
           <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
         </>
       )}
