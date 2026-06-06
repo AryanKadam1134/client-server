@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
+
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -72,6 +74,8 @@ export default function AddEditSkills() {
 
   const [id, setId] = useState(skillId);
 
+  const [loading, setLoading] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -80,7 +84,6 @@ export default function AddEditSkills() {
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
     defaultValues: {
-      sortOrder: 0,
       visibility: "public",
     },
     mode: "onChange",
@@ -114,6 +117,8 @@ export default function AddEditSkills() {
     } catch (error) {
       console.error("Error fetching Skill: ", error);
       notify.msgError(error?.message || "Failed to load skill details");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,6 +148,10 @@ export default function AddEditSkills() {
     if (!id) return;
     fetchSkill();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={6} />;
+  }
 
   return (
     <form

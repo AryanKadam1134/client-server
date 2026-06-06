@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import CoverImage from "../../../components/common/CoverImage";
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -46,6 +47,8 @@ export default function AddEditExperiences() {
   const { experienceId } = useParams();
 
   const [id, setId] = useState(experienceId);
+
+  const [loading, setLoading] = useState(true);
 
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(false);
@@ -139,6 +142,8 @@ export default function AddEditExperiences() {
       console.log("Experience: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch experience");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -208,6 +213,10 @@ export default function AddEditExperiences() {
     if (!id) return;
     fetchExperience();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={9} />;
+  }
 
   return (
     <form

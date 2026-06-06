@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import ImageGallery from "../../../components/common/ImageGallery";
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -42,6 +43,8 @@ export default function AddEditAchievement() {
   const { achievementId } = useParams();
 
   const [id, setId] = useState(achievementId);
+
+  const [loading, setLoading] = useState(true);
 
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(null);
@@ -100,6 +103,8 @@ export default function AddEditAchievement() {
       console.log("Achievement: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch achievement");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,6 +181,10 @@ export default function AddEditAchievement() {
     if (!id) return;
     fetchAchievement();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={9} />;
+  }
 
   return (
     <form
@@ -418,8 +427,6 @@ export default function AddEditAchievement() {
 
         <FieldError error={errors.visibility?.message} />
       </LabelInput>
-
-      <div className="hidden sm:block col-span-6"></div>
 
       <CustomButton type="submit" className="col-span-12 place-self-end">
         {isSubmitting ? "Saving..." : "Save"}

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
+
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -24,6 +26,8 @@ export default function AddEditSkillCategory() {
 
   const [id, setId] = useState(categoryId);
 
+  const [loading, setLoading] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -31,7 +35,6 @@ export default function AddEditSkillCategory() {
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
     defaultValues: {
-      sortOrder: 0,
       visibility: "public",
     },
     mode: "onChange",
@@ -64,6 +67,8 @@ export default function AddEditSkillCategory() {
       console.log("Skill Category: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch skill category");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,6 +97,10 @@ export default function AddEditSkillCategory() {
     if (!id) return;
     fetchSkillCategory();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={4} />;
+  }
 
   return (
     <form

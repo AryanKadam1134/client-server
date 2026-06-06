@@ -10,8 +10,10 @@ import {
   Edit,
   Mail,
   Phone,
-  Link
+  Link,
 } from "lucide-react";
+
+import UserDetailsSkeleton from "../../components/common/UserDetailsSkeleton";
 
 import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
@@ -172,6 +174,7 @@ export default function Dashboard() {
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
 
+  const [detailsLoading, setDetailsLoading] = useState(true);
   const [imageLoading, setImageLoading] = useState(false);
   const [resumeLoading, setResumeLoading] = useState(false);
 
@@ -205,6 +208,8 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error fetching User Details: ", error);
       notify.msgError(error?.message || "Failed to load user details");
+    } finally {
+      setDetailsLoading(false);
     }
   };
 
@@ -333,6 +338,10 @@ export default function Dashboard() {
       if (preview.image) URL.revokeObjectURL(preview.image);
     };
   }, [preview.image]);
+
+  if (detailsLoading) {
+    return <UserDetailsSkeleton />;
+  }
 
   return (
     <form

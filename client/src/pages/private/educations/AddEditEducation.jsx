@@ -5,6 +5,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { Trash2, Loader } from "lucide-react";
 
 import CoverImage from "../../../components/common/CoverImage";
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -24,6 +25,8 @@ export default function AddEditEducation() {
   const { educationId } = useParams();
 
   const [id, setId] = useState(educationId);
+
+  const [loading, setLoading] = useState(true);
 
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(false);
@@ -67,6 +70,8 @@ export default function AddEditEducation() {
       console.log("Education: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch education");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,6 +137,10 @@ export default function AddEditEducation() {
     if (!id) return;
     fetchEducation();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={9} />;
+  }
 
   return (
     <form

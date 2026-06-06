@@ -6,6 +6,7 @@ import { useForm, Controller, useWatch } from "react-hook-form";
 import { Trash2, Loader, ExternalLink, Link, Calendar } from "lucide-react";
 
 import CoverImage from "../../../components/common/CoverImage";
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -34,6 +35,8 @@ export default function AddEditCertificate() {
   const { certificateId } = useParams();
 
   const [id, setId] = useState(certificateId);
+
+  const [loading, setLoading] = useState(true);
 
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(false);
@@ -94,6 +97,8 @@ export default function AddEditCertificate() {
       console.log("Certificate: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch certificate");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -159,6 +164,10 @@ export default function AddEditCertificate() {
     if (!id) return;
     fetchCertificate();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={11} />;
+  }
 
   return (
     <form

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { LockKeyholeOpen } from "lucide-react";
 
+import CommonSkeleton from "../../components/common/CommonSkeleton";
+
 import LabelInput from "../../components/ui/LabelInput";
 import FieldError from "../../components/ui/FieldError";
 import CustomButton from "../../components/ui/CustomButton";
@@ -15,6 +17,7 @@ import { useNotify } from "../../context/NotificationContext";
 export default function ChangePassword() {
   const { notify } = useNotify();
 
+  const [loading, setLoading] = useState(true);
   const [hasPassword, setHasPassword] = useState();
 
   const {
@@ -52,11 +55,17 @@ export default function ChangePassword() {
         setHasPassword(data);
       } catch (error) {
         notify.msgError(error?.message || "Failed to check password");
+      } finally {
+        setLoading(false);
       }
     };
 
     checkPassword();
   }, []);
+
+  if (loading) {
+    return <CommonSkeleton count={3} />;
+  }
 
   return (
     <form

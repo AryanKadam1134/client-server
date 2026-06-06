@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import ImageGallery from "../../../components/common/ImageGallery";
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
@@ -48,6 +49,8 @@ export default function AddEditProject() {
 
   const [id, setId] = useState(projectId);
 
+  const [loading, setLoading] = useState(true);
+
   const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(null);
 
@@ -61,7 +64,6 @@ export default function AddEditProject() {
     watch,
   } = useForm({
     defaultValues: {
-      sortOrder: 0,
       featured: true,
       visibility: "public",
     },
@@ -111,6 +113,8 @@ export default function AddEditProject() {
     } catch (error) {
       console.error("Error fetching Project: ", error);
       notify.msgError(error?.message || "Failed to load project details");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -195,6 +199,10 @@ export default function AddEditProject() {
     if (!id) return;
     fetchProject();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={13} />;
+  }
 
   return (
     <form

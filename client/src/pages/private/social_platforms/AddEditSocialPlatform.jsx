@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { ExternalLink, Link } from "lucide-react";
 
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
+
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -266,6 +268,8 @@ export default function AddEditSocialPlatform() {
 
   const [id, setId] = useState(platformId);
 
+  const [loading, setLoading] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -274,7 +278,6 @@ export default function AddEditSocialPlatform() {
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
     defaultValues: {
-      sortOrder: 0,
       visibility: "public",
     },
     mode: "onChange",
@@ -309,6 +312,8 @@ export default function AddEditSocialPlatform() {
       console.log("Social Platform: ", data);
     } catch (error) {
       notify.msgError(error?.message || "Failed to fetch social platform");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -337,6 +342,10 @@ export default function AddEditSocialPlatform() {
     if (!id) return;
     fetchSocialPlatform();
   }, [id]);
+
+  if (id && loading) {
+    return <CommonSkeleton count={5} />;
+  }
 
   return (
     <form
