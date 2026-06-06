@@ -49,14 +49,12 @@ export default function Authentication() {
       navigate("/details");
     } else {
       try {
-        const res = await apiEndpoints.register(payload);
-
-        const data = res?.data;
+        await apiEndpoints.register(payload);
 
         reset();
         setIsLogin(true);
         notify.msgSuccess("Account Created Successfully!");
-        console.log("User Registered: ", data);
+        // console.log("User Registered: ", data);
       } catch (error) {
         console.error("Login failed: ", error);
         notify.msgError("Registration Failed!");

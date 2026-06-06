@@ -159,13 +159,7 @@ const googleAuth = asynchandler(async (req, res) => {
       refreshToken,
       rememberMe ? refreshTokenOptions : options,
     )
-    .json(
-      new ApiRes(
-        200,
-        { user: loggedUser, accessToken, refreshToken },
-        "Google login successful!",
-      ),
-    );
+    .json(new ApiRes(200, { user: loggedUser }, "Google login successful!"));
 });
 
 const refreshAccessToken = asynchandler(async (req, res) => {
@@ -212,7 +206,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
   }
 
   const user = await User.findById(loggedUser._id).select(
-    "-password -sessions",
+    "-password -sessions -googleId -otp -otpExpiryDate",
   );
 
   return res
@@ -254,7 +248,7 @@ const registerUser = asynchandler(async (req, res) => {
     );
   }
 
-  const createdUser = await User.create({
+  await User.create({
     firstName,
     lastName,
     username: username?.toLowerCase(),
@@ -264,7 +258,7 @@ const registerUser = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiRes(201, createdUser, "user created successfully!"));
+    .json(new ApiRes(201, {}, "user created successfully!"));
 });
 
 const loginUser = asynchandler(async (req, res) => {
@@ -318,11 +312,7 @@ const loginUser = asynchandler(async (req, res) => {
       rememberMe ? refreshTokenOptions : options,
     )
     .json(
-      new ApiRes(
-        200,
-        { user: loggedUser, accessToken, refreshToken },
-        "user logged in successfully!",
-      ),
+      new ApiRes(200, { user: loggedUser }, "user logged in successfully!"),
     );
 });
 
