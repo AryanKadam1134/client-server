@@ -44,7 +44,7 @@ function NavItem({ menu, onClick }) {
         ${
           isActive
             ? "bg-light-bg-hover dark:bg-dark-bg-tertiary text-light-text-primary dark:text-dark-text-primary font-medium"
-            : "text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover hover:text-light-text-primary dark:hover:text-dark-text-primary"
+            : "text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover hover:text-light-text-primary dark:hover:text-dark-text-primary"
         }
         `
       }

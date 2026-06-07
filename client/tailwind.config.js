@@ -7,8 +7,8 @@ export default {
         light: {
           bg: {
             primary: "#ffffff", // Main background
-            secondary: "#f8f9fa", // Secondary background
-            tertiary: "#f0f1f3", // Tertiary background
+            secondary: "#f6f7f9", // Secondary background
+            tertiary: "#e7eaf0", // Tertiary surfaces / skeletons
             hover: "#e8eaed", // Hover state
           },
           text: {

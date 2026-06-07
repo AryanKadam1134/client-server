@@ -19,7 +19,7 @@ export default function ActionButton({
     <button
       {...props}
       className={`p-1.5 ${variants[variant]} ${className}
-      rounded-md shadow-sm hover:shadow-md transition-all
+      rounded-sm shadow-sm hover:shadow-md transition-all
       enabled:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed`}
     >
       <Icon size={18} />
