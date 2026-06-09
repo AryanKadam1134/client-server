@@ -1,6 +1,6 @@
 import React from "react";
 
-import SkeletonInput from "./SkeletonInput";
+import SkeletonInput from "../ui/SkeletonInput";
 
 export default function CommonSkeleton({ count = 2 }) {
   return (

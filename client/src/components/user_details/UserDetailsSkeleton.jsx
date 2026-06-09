@@ -1,6 +1,6 @@
 import React from "react";
 
-import SkeletonInput from "./SkeletonInput";
+import SkeletonInput from "../ui/SkeletonInput";
 
 export default function UserDetailsSkeleton() {
   return (

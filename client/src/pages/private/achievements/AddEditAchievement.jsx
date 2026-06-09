@@ -15,13 +15,13 @@ import {
 
 import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
+import DragDropUpload from "../../../components/common/DragDropUpload";
 
 import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
-import DragDropUpload from "../../../components/ui/DragDropUpload";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";

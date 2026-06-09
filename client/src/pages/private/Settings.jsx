@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertTriangle } from "lucide-react";
 
-import DeleteUserPopup from "../../components/common/DeleteUserPopup";
+import DeleteUserPopup from "../../components/settings/DeleteUserPopup";
 
 import { apiEndpoints } from "../../api";
 

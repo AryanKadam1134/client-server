@@ -13,7 +13,7 @@ import {
   Link,
 } from "lucide-react";
 
-import UserDetailsSkeleton from "../../components/common/UserDetailsSkeleton";
+import UserDetailsSkeleton from "../../components/user_details/UserDetailsSkeleton";
 
 import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";

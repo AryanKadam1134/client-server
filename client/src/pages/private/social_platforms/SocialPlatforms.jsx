@@ -3,9 +3,9 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, FilePenLine, Plus, Trash2 } from "lucide-react";
 
-import Table from "../../../components/common/Table";
 import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
 
+import Table from "../../../components/ui/Table";
 import Pagination from "../../../components/ui/Pagination";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomButton from "../../../components/ui/CustomButton";
