@@ -19,6 +19,8 @@ import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
+import { formatDate } from "../../../utils/formatDate";
+
 import { apiEndpoints } from "../../../api";
 
 import useSkillsList from "../../../hooks/useSkillsList";
@@ -61,10 +63,6 @@ export default function AddEditCertificate() {
   const certificateImage = useWatch({ control, name: "certificateImage" });
   const issueDate = watch("issueDate");
   const expiryDate = watch("expiryDate");
-
-  const formatDate = (date) => {
-    return date ? dayjs(date).format("YYYY-MM-DD") : "";
-  };
 
   const getUpdatedFields = (data, dirtyFields) => {
     const updated = {};

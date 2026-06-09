@@ -28,6 +28,8 @@ import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
+import { formatDate } from "../../../utils/formatDate";
+
 import { apiEndpoints } from "../../../api";
 
 import useSkillsList from "../../../hooks/useSkillsList";
@@ -76,10 +78,6 @@ export default function AddEditProject() {
   const liveLink = useWatch({ control, name: "liveLink" });
   const startDate = watch("startDate");
   const endDate = watch("endDate");
-
-  const formatDate = (date) => {
-    return date ? dayjs(date).format("YYYY-MM-DD") : "";
-  };
 
   const getUpdatedFields = (data, dirtyFields) => {
     const updated = {};

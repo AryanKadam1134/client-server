@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
 import {
@@ -26,6 +25,8 @@ import CustomTextArea from "../../../components/ui/CustomTextArea";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
+
+import { formatDate } from "../../../utils/formatDate";
 
 import { apiEndpoints } from "../../../api";
 
@@ -101,10 +102,6 @@ export default function AddEditExperiences() {
 
   const handleAppendRole = () => {
     append({ role: "", startDate: "", endDate: "", isCurrent: false });
-  };
-
-  const formatDate = (date) => {
-    return date ? dayjs(date).format("YYYY-MM-DD") : "";
   };
 
   const getUpdatedFields = (data, dirtyFields) => {

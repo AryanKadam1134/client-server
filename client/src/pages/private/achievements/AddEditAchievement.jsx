@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import {
@@ -26,6 +25,8 @@ import DragDropUpload from "../../../components/ui/DragDropUpload";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
+
+import { formatDate } from "../../../utils/formatDate";
 
 import { apiEndpoints } from "../../../api";
 
@@ -68,10 +69,6 @@ export default function AddEditAchievement() {
   const achievementImages = useWatch({ control, name: "achievementImages" });
   const coverImageIndex = useWatch({ control, name: "coverImageIndex" });
   const link = useWatch({ control, name: "link" });
-
-  const formatDate = (date) => {
-    return date ? dayjs(date).format("YYYY-MM-DD") : "";
-  };
 
   const getUpdatedFields = (data, dirtyFields) => {
     const updated = {};
