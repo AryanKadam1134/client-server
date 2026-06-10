@@ -30,7 +30,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDate } from "../../../utils/formatDate";
 
-import { apiEndpoints } from "../../../api";
+import { apiEndpoints } from "../../../services/api";
 
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";

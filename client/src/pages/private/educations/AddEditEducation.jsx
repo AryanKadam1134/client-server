@@ -15,7 +15,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 
-import { apiEndpoints } from "../../../api";
+import { apiEndpoints } from "../../../services/api";
 
 import { useNotify } from "../../../context/NotificationContext";
 

@@ -12,7 +12,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../api";
+import { apiEndpoints } from "../../../services/api";
 
 import { usePopup } from "../../../context/PopupContext";
 import { useNotify } from "../../../context/NotificationContext";

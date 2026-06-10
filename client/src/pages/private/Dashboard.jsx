@@ -22,7 +22,7 @@ import CustomButton from "../../components/ui/CustomButton";
 import CustomTextArea from "../../components/ui/CustomTextArea";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../api";
+import { apiEndpoints } from "../../services/api";
 
 import useGenders from "../../hooks/useGenders";
 

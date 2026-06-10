@@ -5,7 +5,7 @@ import { AlertTriangle } from "lucide-react";
 
 import DeleteUserPopup from "../../components/settings/DeleteUserPopup";
 
-import { apiEndpoints } from "../../api";
+import { apiEndpoints } from "../../services/api";
 
 import { useNotify } from "../../context/NotificationContext";
 import { usePopup } from "../../context/PopupContext";

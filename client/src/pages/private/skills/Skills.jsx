@@ -14,7 +14,7 @@ import { getSkillLevel } from "../../../utils/getSkillLevel";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../api";
+import { apiEndpoints } from "../../../services/api";
 
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";

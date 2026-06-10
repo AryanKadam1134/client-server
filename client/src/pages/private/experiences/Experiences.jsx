@@ -15,7 +15,7 @@ import { getLocationType } from "../../../utils/getLocationType";
 import { getEmploymentType } from "../../../utils/getEmploymentType";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../api";
+import { apiEndpoints } from "../../../services/api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";

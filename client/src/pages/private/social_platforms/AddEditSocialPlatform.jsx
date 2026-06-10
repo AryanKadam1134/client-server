@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../../api";
+import { apiEndpoints } from "../../../services/api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 

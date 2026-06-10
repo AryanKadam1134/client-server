@@ -10,7 +10,7 @@ import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
-import { apiEndpoints } from "../../api";
+import { apiEndpoints } from "../../services/api";
 
 import { useNotify } from "../../context/NotificationContext";
 

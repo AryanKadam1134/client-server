@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../api";
+import { apiEndpoints } from "../../../services/api";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 

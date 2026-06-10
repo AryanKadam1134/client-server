@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../api";
+import { apiEndpoints } from "../services/api";
 
 export default function useGenders() {
   const [gendersLoading, setLoading] = useState(true);
