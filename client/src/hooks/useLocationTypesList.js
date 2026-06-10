@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useLocationTypesList() {
   const [ocationTypesLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useLocationTypesList() {
 
   const fetchLocationTypes = async () => {
     try {
-      const res = await apiEndpoints.getLocationTypes();
+      const res = await filterEndpoints.getLocationTypes();
 
       const data = res.data;
 

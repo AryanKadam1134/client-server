@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { socialPlatformEndpoints } from "../../../services/socialPlatformService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -39,7 +39,7 @@ export default function SocialPlatforms() {
 
   const fetchSocialPlatforms = async () => {
     try {
-      const res = await apiEndpoints.getSocialPlatforms(params);
+      const res = await socialPlatformEndpoints.getSocialPlatforms(params);
 
       const data = res.data;
 
@@ -57,7 +57,7 @@ export default function SocialPlatforms() {
     setDeleting(true);
 
     try {
-      await apiEndpoints.deleteSocialPlatform(platformId);
+      await socialPlatformEndpoints.deleteSocialPlatform(platformId);
 
       fetchSocialPlatforms();
       closePopupWindow();

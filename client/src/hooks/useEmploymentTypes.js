@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useEmploymentTypes() {
   const [employemntTypesLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useEmploymentTypes() {
 
   const fetchEmploymentTypes = async () => {
     try {
-      const res = await apiEndpoints.getEmploymentTypes();
+      const res = await filterEndpoints.getEmploymentTypes();
 
       const data = res.data;
 

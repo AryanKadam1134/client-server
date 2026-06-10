@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
-import { apiEndpoints } from "../services/api";
+import { authEndpoints } from "../services/authService";
 
 import { useNotify } from "./NotificationContext";
 
@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
 
   const googleAuth = async (credentialResponse, rememberMe) => {
     try {
-      const res = await apiEndpoints.googleAuth(
+      const res = await authEndpoints.googleAuth(
         { credential: credentialResponse.credential, rememberMe },
         {
           headers: {
@@ -57,7 +57,7 @@ export function AuthProvider({ children }) {
 
   const login = async (payload) => {
     try {
-      const res = await apiEndpoints.login(payload, {
+      const res = await authEndpoints.login(payload, {
         headers: {
           "x-device-id": deviceId,
         },
@@ -81,7 +81,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      await apiEndpoints.logout();
+      await authEndpoints.logout();
       setUser(null);
     } catch (error) {
       console.error("Error logging out: ", error);
@@ -91,7 +91,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const res = await apiEndpoints.restoreSession({
+        const res = await authEndpoints.restoreSession({
           headers: {
             "x-device-id": deviceId,
           },

@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../../services/api";
+import { socialPlatformEndpoints } from "../../../services/socialPlatformService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -304,7 +304,7 @@ export default function AddEditSocialPlatform() {
 
   const fetchSocialPlatform = async () => {
     try {
-      const res = await apiEndpoints.getSocialPlatform(id);
+      const res = await socialPlatformEndpoints.getSocialPlatform(id);
 
       const data = res.data;
 
@@ -322,10 +322,10 @@ export default function AddEditSocialPlatform() {
       let res;
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSocialPlatform(id, updatedData);
+        res = await socialPlatformEndpoints.updateSocialPlatform(id, updatedData);
         notify.msgSuccess("Platform Updated!");
       } else {
-        res = await apiEndpoints.addSocialPlatform(payload);
+        res = await socialPlatformEndpoints.addSocialPlatform(payload);
         notify.msgSuccess("Platform Added!");
       }
 

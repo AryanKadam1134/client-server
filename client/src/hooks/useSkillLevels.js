@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useSkillLevels() {
   const [skillLevelsLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useSkillLevels() {
 
   const fetchSkillLevels = async () => {
     try {
-      const res = await apiEndpoints.getSkillLevels();
+      const res = await filterEndpoints.getSkillLevels();
 
       const data = res.data;
 

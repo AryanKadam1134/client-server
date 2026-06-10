@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { projectEndpoints } from "../../../services/projectService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -39,7 +39,7 @@ export default function Projects() {
 
   const fetchProjects = async () => {
     try {
-      const res = await apiEndpoints.getProjects(params);
+      const res = await projectEndpoints.getProjects(params);
 
       const data = res.data;
 
@@ -58,7 +58,7 @@ export default function Projects() {
     setDeleting(true);
 
     try {
-      await apiEndpoints.deleteProject(projectId);
+      await projectEndpoints.deleteProject(projectId);
 
       fetchProjects();
       closePopupWindow();

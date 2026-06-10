@@ -28,7 +28,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDate } from "../../../utils/formatDate";
 
-import { apiEndpoints } from "../../../services/api";
+import { achievementEndpoints } from "../../../services/achievementService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCertificatesList from "../../../hooks/useCertificatesList";
@@ -89,7 +89,7 @@ export default function AddEditAchievement() {
 
   const fetchAchievement = async () => {
     try {
-      const res = await apiEndpoints.getAchievement(id);
+      const res = await achievementEndpoints.getAchievement(id);
 
       const data = res.data;
 
@@ -110,10 +110,10 @@ export default function AddEditAchievement() {
       let res;
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateAchievement(id, updatedData);
+        res = await achievementEndpoints.updateAchievement(id, updatedData);
         notify.msgSuccess("Achievement Updated!");
       } else {
-        res = await apiEndpoints.addAchievement(payload);
+        res = await achievementEndpoints.addAchievement(payload);
         notify.msgSuccess("Achievement Saved!");
       }
 
@@ -130,7 +130,7 @@ export default function AddEditAchievement() {
     setValue("coverImageIndex", idx, { shouldDirty: true });
 
     try {
-      await apiEndpoints.updateAchievement(id, {
+      await achievementEndpoints.updateAchievement(id, {
         coverImageIndex: idx,
       });
     } catch (err) {
@@ -148,7 +148,7 @@ export default function AddEditAchievement() {
         formData.append("achievementImages", file);
       });
 
-      await apiEndpoints.updateAchievementImage(id, formData);
+      await achievementEndpoints.updateAchievementImage(id, formData);
 
       fetchAchievement();
       notify.msgSuccess("Achievement Images Updated!");
@@ -163,7 +163,7 @@ export default function AddEditAchievement() {
     setImageDeleting(imagePublicId);
 
     try {
-      await apiEndpoints.deleteAchievementImage(id, imagePublicId);
+      await achievementEndpoints.deleteAchievementImage(id, imagePublicId);
 
       fetchAchievement();
       notify.msgSuccess("Achievement Image Deleted!");

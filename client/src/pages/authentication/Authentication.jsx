@@ -11,16 +11,16 @@ import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
-import { apiEndpoints } from "../../services/api";
+import { authEndpoints } from "../../services/authService";
 
 import { useAuth } from "../../context/AuthContext";
-import { useNotify } from "../../context/NotificationContext";
 import { useTheme } from "../../context/ThemeContext";
+import { useNotify } from "../../context/NotificationContext";
 
 export default function Authentication() {
-  const { error, setError, login, googleAuth } = useAuth();
-  const { notify } = useNotify();
   const { theme } = useTheme();
+  const { notify } = useNotify();
+  const { error, setError, login, googleAuth } = useAuth();
 
   const logo = {
     light: "/images/profilo_logo_black.png",
@@ -49,7 +49,7 @@ export default function Authentication() {
       navigate("/details");
     } else {
       try {
-        await apiEndpoints.register(payload);
+        await authEndpoints.register(payload);
 
         reset();
         setIsLogin(true);

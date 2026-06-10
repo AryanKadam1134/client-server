@@ -12,7 +12,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { educationEndpoints } from "../../../services/educationService";
 
 import { usePopup } from "../../../context/PopupContext";
 import { useNotify } from "../../../context/NotificationContext";
@@ -34,7 +34,7 @@ export default function Educations() {
 
   const fetchEducations = async () => {
     try {
-      const res = await apiEndpoints.getEducations(params);
+      const res = await educationEndpoints.getEducations(params);
 
       const data = res.data;
 
@@ -52,7 +52,7 @@ export default function Educations() {
     setDeleting(true);
 
     try {
-      await apiEndpoints.deleteEducation(educationId);
+      await educationEndpoints.deleteEducation(educationId);
 
       fetchEducations();
       closePopupWindow();

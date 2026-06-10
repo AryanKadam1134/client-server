@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { skillCategoryEndpoints } from "../../../services/skillCategoryService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -39,7 +39,7 @@ export default function SkillCategories() {
 
   const fetchSkillCategories = async () => {
     try {
-      const res = await apiEndpoints.getSkillCategories(params);
+      const res = await skillCategoryEndpoints.getSkillCategories(params);
 
       const data = res.data;
 
@@ -57,7 +57,7 @@ export default function SkillCategories() {
     setDeleting(true);
 
     try {
-      await apiEndpoints.deleteSkillCategory(categoryId);
+      await skillCategoryEndpoints.deleteSkillCategory(categoryId);
 
       fetchSkillCategories();
       closePopupWindow();

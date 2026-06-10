@@ -22,7 +22,7 @@ import CustomButton from "../../components/ui/CustomButton";
 import CustomTextArea from "../../components/ui/CustomTextArea";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../services/api";
+import { userEndpoints } from "../../services/userService";
 
 import useGenders from "../../hooks/useGenders";
 
@@ -198,7 +198,7 @@ export default function Dashboard() {
 
   const fetchUserDetails = async () => {
     try {
-      const res = await apiEndpoints.getCurrentUser();
+      const res = await userEndpoints.getCurrentUser();
 
       const data = res.data;
 
@@ -236,7 +236,7 @@ export default function Dashboard() {
     console.log("Only Updated Fields:", updatedData);
 
     try {
-      await apiEndpoints.updateUser(updatedData);
+      await userEndpoints.updateUser(updatedData);
 
       fetchUserDetails();
       notify.msgSuccess("Details Updated!");
@@ -265,7 +265,7 @@ export default function Dashboard() {
       const formData = new FormData();
       formData.append("image", file);
 
-      await apiEndpoints.updateUserImage(formData);
+      await userEndpoints.updateUserImage(formData);
 
       fetchUserDetails();
       notify.msgSuccess("Profile Image Updated!");
@@ -281,7 +281,7 @@ export default function Dashboard() {
     setImageLoading(true);
 
     try {
-      await apiEndpoints.deleteUserImage();
+      await userEndpoints.deleteUserImage();
 
       setPreview({});
       fetchUserDetails();
@@ -300,7 +300,7 @@ export default function Dashboard() {
       const formData = new FormData();
       formData.append("resumeOrCv", file);
 
-      await apiEndpoints.updateUserResume(formData);
+      await userEndpoints.updateUserResume(formData);
 
       fetchUserDetails();
       notify.msgSuccess("Resume Updated!");
@@ -316,7 +316,7 @@ export default function Dashboard() {
     setResumeLoading(true);
 
     try {
-      await apiEndpoints.deleteUserResume();
+      await userEndpoints.deleteUserResume();
 
       setPreview({});
       fetchUserDetails();

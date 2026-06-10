@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useOrganizationsList() {
   const [organiaztionsLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useOrganizationsList() {
 
   const fetchOrganizationsList = async () => {
     try {
-      const res = await apiEndpoints.getOrganizationsList();
+      const res = await filterEndpoints.getOrganizationsList();
 
       const data = res.data;
 

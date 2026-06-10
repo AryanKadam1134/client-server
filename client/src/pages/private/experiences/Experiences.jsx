@@ -15,7 +15,7 @@ import { getLocationType } from "../../../utils/getLocationType";
 import { getEmploymentType } from "../../../utils/getEmploymentType";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { experienceEndpoints } from "../../../services/experienceService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
@@ -45,7 +45,7 @@ export default function Experiences() {
 
   const fetchExperiences = async () => {
     try {
-      const res = await apiEndpoints.getExperiences(params);
+      const res = await experienceEndpoints.getExperiences(params);
 
       const data = res.data;
 
@@ -63,7 +63,7 @@ export default function Experiences() {
     setDeleting(true);
 
     try {
-      await apiEndpoints.deleteExperience(experienceId);
+      await experienceEndpoints.deleteExperience(experienceId);
 
       fetchExperiences();
       closePopupWindow();

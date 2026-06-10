@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useCertificatesList() {
   const [certificatesListLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useCertificatesList() {
 
   const fetchCertificatesList = async () => {
     try {
-      const res = await apiEndpoints.getCertificatesList();
+      const res = await filterEndpoints.getCertificatesList();
 
       const data = res.data;
 

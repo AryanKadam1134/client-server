@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useProjectCategoriesList() {
   const [projectCategoriesLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useProjectCategoriesList() {
 
   const fetchProjectCategoriesList = async () => {
     try {
-      const res = await apiEndpoints.getProjectCategoriesList();
+      const res = await filterEndpoints.getProjectCategoriesList();
 
       const data = res.data;
 

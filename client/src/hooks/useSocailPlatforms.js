@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { socialPlatformEndpoints } from "../services/socialPlatformService";
 
 export default function useSocailPlatforms() {
   const [platformsLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useSocailPlatforms() {
 
   const fetchSocialPlatforms = async () => {
     try {
-      const res = await apiEndpoints.getSocialPlatforms();
+      const res = await socialPlatformEndpoints.getSocialPlatforms();
 
       const data = res.data;
 

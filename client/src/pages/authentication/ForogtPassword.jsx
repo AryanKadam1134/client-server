@@ -10,7 +10,7 @@ import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
-import { apiEndpoints } from "../../services/api";
+import { authEndpoints } from "../../services/authService";
 
 import { useNotify } from "../../context/NotificationContext";
 
@@ -34,10 +34,10 @@ export default function ForogtPassword() {
     try {
       let res;
       if (isOtp) {
-        res = await apiEndpoints.verifyOTP(payload);
+        res = await authEndpoints.verifyOTP(payload);
         navigate("/reset-password", { state: { email: payload?.email } });
       } else {
-        res = await apiEndpoints.forgotPassword(payload);
+        res = await authEndpoints.forgotPassword(payload);
         setIsOtp(true);
       }
 

@@ -10,7 +10,7 @@ import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
-import { apiEndpoints } from "../../services/api";
+import { authEndpoints } from "../../services/authService";
 
 import { useNotify } from "../../context/NotificationContext";
 
@@ -37,7 +37,7 @@ export default function ResetPassword() {
 
   const onSubmit = async (payload) => {
     try {
-      const res = await apiEndpoints.resetPassword(payload);
+      const res = await authEndpoints.resetPassword(payload);
 
       setError(null);
       navigate("/auth");

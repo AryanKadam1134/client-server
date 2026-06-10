@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { certificateEndpoints } from "../../../services/certificateService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -39,7 +39,7 @@ export default function Certificates() {
 
   const fetchCertificate = async () => {
     try {
-      const res = await apiEndpoints.getCertificates(params);
+      const res = await certificateEndpoints.getCertificates(params);
 
       const data = res.data;
 
@@ -57,7 +57,7 @@ export default function Certificates() {
     setDeleting(true);
 
     try {
-      await apiEndpoints.deleteCertificate(certificateId);
+      await certificateEndpoints.deleteCertificate(certificateId);
 
       fetchCertificate();
       closePopupWindow();

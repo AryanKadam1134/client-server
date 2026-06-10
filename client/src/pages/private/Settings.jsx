@@ -5,7 +5,7 @@ import { AlertTriangle } from "lucide-react";
 
 import DeleteUserPopup from "../../components/settings/DeleteUserPopup";
 
-import { apiEndpoints } from "../../services/api";
+import { userEndpoints } from "../../services/userService";
 
 import { useNotify } from "../../context/NotificationContext";
 import { usePopup } from "../../context/PopupContext";
@@ -23,7 +23,7 @@ export default function Settings() {
   const deleteUser = async () => {
     setDeleting(true);
     try {
-      await apiEndpoints.deleteUser();
+      await userEndpoints.deleteUser();
       setUser(null);
       closePopupWindow();
     } catch (error) {

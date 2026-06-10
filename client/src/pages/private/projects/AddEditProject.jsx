@@ -30,7 +30,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDate } from "../../../utils/formatDate";
 
-import { apiEndpoints } from "../../../services/api";
+import { projectEndpoints } from "../../../services/projectService";
 
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
@@ -98,7 +98,7 @@ export default function AddEditProject() {
 
   const fetchProject = async () => {
     try {
-      const res = await apiEndpoints.getProject(id);
+      const res = await projectEndpoints.getProject(id);
 
       const data = res.data;
 
@@ -121,10 +121,10 @@ export default function AddEditProject() {
       let res;
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateProject(id, updatedData);
+        res = await projectEndpoints.updateProject(id, updatedData);
         notify.msgSuccess("Project Updated!");
       } else {
-        res = await apiEndpoints.addProject(payload);
+        res = await projectEndpoints.addProject(payload);
         notify.msgSuccess("Project Saved!");
       }
 
@@ -142,7 +142,7 @@ export default function AddEditProject() {
     setValue("coverImageIndex", idx, { shouldDirty: true });
 
     try {
-      await apiEndpoints.updateProject(id, {
+      await projectEndpoints.updateProject(id, {
         coverImageIndex: idx,
       });
 
@@ -163,7 +163,7 @@ export default function AddEditProject() {
         formData.append("projectImages", file);
       });
 
-      await apiEndpoints.updateProjectImage(id, formData);
+      await projectEndpoints.updateProjectImage(id, formData);
 
       fetchProject();
       notify.msgSuccess("Project Images Updated!");
@@ -180,7 +180,7 @@ export default function AddEditProject() {
     setImageDeleting(imagePublicId);
 
     try {
-      await apiEndpoints.deleteProjectImage(id, imagePublicId);
+      await projectEndpoints.deleteProjectImage(id, imagePublicId);
 
       fetchProject();
       notify.msgSuccess("Project Image Deleted!");

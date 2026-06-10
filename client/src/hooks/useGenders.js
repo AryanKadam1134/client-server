@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useGenders() {
   const [gendersLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useGenders() {
 
   const fetchGenders = async () => {
     try {
-      const res = await apiEndpoints.getGenders();
+      const res = await filterEndpoints.getGenders();
 
       const data = res.data;
 

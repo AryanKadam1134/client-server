@@ -11,7 +11,7 @@ import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../../services/api";
+import { skillCategoryEndpoints } from "../../../services/skillCategoryService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -59,7 +59,7 @@ export default function AddEditSkillCategory() {
 
   const fetchSkillCategory = async () => {
     try {
-      const res = await apiEndpoints.getSkillCategory(id);
+      const res = await skillCategoryEndpoints.getSkillCategory(id);
 
       const data = res.data;
 
@@ -77,10 +77,10 @@ export default function AddEditSkillCategory() {
       let res;
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSkillCategory(id, updatedData);
+        res = await skillCategoryEndpoints.updateSkillCategory(id, updatedData);
         notify.msgSuccess("Category Updated!");
       } else {
-        res = await apiEndpoints.addSkillCategory(payload);
+        res = await skillCategoryEndpoints.addSkillCategory(payload);
         notify.msgSuccess("Category Saved!");
       }
 

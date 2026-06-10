@@ -28,7 +28,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDate } from "../../../utils/formatDate";
 
-import { apiEndpoints } from "../../../services/api";
+import { experienceEndpoints } from "../../../services/experienceService";
 
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
@@ -123,7 +123,7 @@ export default function AddEditExperiences() {
 
   const fetchExperience = async () => {
     try {
-      const res = await apiEndpoints.getExperience(id);
+      const res = await experienceEndpoints.getExperience(id);
 
       const data = res.data;
 
@@ -152,10 +152,10 @@ export default function AddEditExperiences() {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         updatedData.highlights = payload.highlights;
 
-        res = await apiEndpoints.updateExperience(id, updatedData);
+        res = await experienceEndpoints.updateExperience(id, updatedData);
         notify.msgSuccess("Experience Updated!");
       } else {
-        res = await apiEndpoints.addExperience(payload);
+        res = await experienceEndpoints.addExperience(payload);
         notify.msgSuccess("Experience Saved!");
       }
 
@@ -179,7 +179,7 @@ export default function AddEditExperiences() {
 
       formData.append("organizationImage", file);
 
-      await apiEndpoints.updateOrganizationImage(id, formData);
+      await experienceEndpoints.updateOrganizationImage(id, formData);
 
       fetchExperience();
       notify.msgSuccess("Organization Image Updated!");
@@ -194,7 +194,7 @@ export default function AddEditExperiences() {
   const deleteOrganizationImage = async () => {
     setImageDeleting(true);
     try {
-      await apiEndpoints.deleteOrganizationImage(id);
+      await experienceEndpoints.deleteOrganizationImage(id);
 
       fetchExperience();
       notify.msgSuccess("Organization Image Deleted!");

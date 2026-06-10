@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiEndpoints } from "../services/api";
+import { filterEndpoints } from "../services/filterService";
 
 export default function useVisibilities() {
   const [visibilitiesLoading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function useVisibilities() {
 
   const fetchVisibiities = async () => {
     try {
-      const res = await apiEndpoints.getVisibilities();
+      const res = await filterEndpoints.getVisibilities();
 
       const data = res.data;
 

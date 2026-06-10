@@ -21,7 +21,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDate } from "../../../utils/formatDate";
 
-import { apiEndpoints } from "../../../services/api";
+import { certificateEndpoints } from "../../../services/certificateService";
 
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
@@ -83,7 +83,7 @@ export default function AddEditCertificate() {
 
   const fetchCertificate = async () => {
     try {
-      const res = await apiEndpoints.getCertificate(id);
+      const res = await certificateEndpoints.getCertificate(id);
 
       const data = res.data;
 
@@ -106,10 +106,10 @@ export default function AddEditCertificate() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
 
-        res = await apiEndpoints.updateCertificate(id, updatedData);
+        res = await certificateEndpoints.updateCertificate(id, updatedData);
         notify.msgSuccess("Certificate Updated!");
       } else {
-        res = await apiEndpoints.addCertificate(payload);
+        res = await certificateEndpoints.addCertificate(payload);
         notify.msgSuccess("Certificate Saved!");
       }
 
@@ -133,7 +133,7 @@ export default function AddEditCertificate() {
 
       formData.append("certificateImage", file);
 
-      await apiEndpoints.updateCertificateImage(id, formData);
+      await certificateEndpoints.updateCertificateImage(id, formData);
 
       fetchCertificate();
       notify.msgSuccess("Certificate Image Updated!");
@@ -147,7 +147,7 @@ export default function AddEditCertificate() {
   const deleteCertificateImage = async () => {
     setImageDeleting(true);
     try {
-      await apiEndpoints.deleteCertificateImage(id);
+      await certificateEndpoints.deleteCertificateImage(id);
 
       fetchCertificate();
       notify.msgSuccess("Certificate Image Deleted!");

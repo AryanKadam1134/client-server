@@ -15,7 +15,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 
-import { apiEndpoints } from "../../../services/api";
+import { educationEndpoints } from "../../../services/educationService";
 
 import { useNotify } from "../../../context/NotificationContext";
 
@@ -62,7 +62,7 @@ export default function AddEditEducation() {
 
   const fetchEducation = async () => {
     try {
-      const res = await apiEndpoints.getEducation(id);
+      const res = await educationEndpoints.getEducation(id);
 
       const data = res.data;
 
@@ -81,10 +81,10 @@ export default function AddEditEducation() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
 
-        res = await apiEndpoints.updateEducation(id, updatedData);
+        res = await educationEndpoints.updateEducation(id, updatedData);
         notify.msgSuccess("Education Updated!");
       } else {
-        res = await apiEndpoints.addEducation(payload);
+        res = await educationEndpoints.addEducation(payload);
         notify.msgSuccess("Education Saved!");
       }
 
@@ -108,7 +108,7 @@ export default function AddEditEducation() {
 
       formData.append("instituteImage", file);
 
-      await apiEndpoints.updateInstituteImage(id, formData);
+      await educationEndpoints.updateInstituteImage(id, formData);
 
       fetchEducation();
       notify.msgSuccess("Institute Image Updated!");
@@ -122,7 +122,7 @@ export default function AddEditEducation() {
   const deleteInstituteImage = async () => {
     setImageDeleting(true);
     try {
-      await apiEndpoints.deleteInstituteImage(id);
+      await educationEndpoints.deleteInstituteImage(id);
 
       fetchEducation();
       notify.msgSuccess("Institute Image Deleted!");

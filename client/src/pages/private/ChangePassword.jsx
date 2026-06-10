@@ -10,7 +10,7 @@ import FieldError from "../../components/ui/FieldError";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
-import { apiEndpoints } from "../../services/api";
+import { authEndpoints } from "../../services/authService";
 
 import { useNotify } from "../../context/NotificationContext";
 
@@ -35,7 +35,7 @@ export default function ChangePassword() {
 
   const changePassword = async (payload) => {
     try {
-      await apiEndpoints.changePassword(payload);
+      await authEndpoints.changePassword(payload);
 
       reset();
       notify.msgSuccess("Password changed successfully!");
@@ -47,7 +47,7 @@ export default function ChangePassword() {
   useEffect(() => {
     const checkPassword = async () => {
       try {
-        const res = await apiEndpoints.checkPassword();
+        const res = await authEndpoints.checkPassword();
 
         const data = res.data;
 

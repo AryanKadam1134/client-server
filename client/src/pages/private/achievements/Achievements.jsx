@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { achievementEndpoints } from "../../../services/achievementService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -39,7 +39,7 @@ export default function Achievements() {
 
   const fetchAchievements = async () => {
     try {
-      const res = await apiEndpoints.getAchievements(params);
+      const res = await achievementEndpoints.getAchievements(params);
 
       const data = res.data;
 
@@ -57,7 +57,7 @@ export default function Achievements() {
     setDeleting(true);
 
     try {
-      await apiEndpoints.deleteAchievement(achievementId);
+      await achievementEndpoints.deleteAchievement(achievementId);
 
       fetchAchievements();
       closePopupWindow();

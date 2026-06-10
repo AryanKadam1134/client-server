@@ -14,7 +14,7 @@ import { getSkillLevel } from "../../../utils/getSkillLevel";
 import { getVisibility } from "../../../utils/getVisibility";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { apiEndpoints } from "../../../services/api";
+import { skillEndpoints } from "../../../services/skillService";
 
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
@@ -42,7 +42,7 @@ export default function Skills() {
 
   const fetchSkills = async () => {
     try {
-      const res = await apiEndpoints.getSkills(params);
+      const res = await skillEndpoints.getSkills(params);
 
       const data = res.data;
 
@@ -60,7 +60,7 @@ export default function Skills() {
   const deleteSkill = async (id) => {
     setDeleting(true);
     try {
-      await apiEndpoints.deleteSkill(id);
+      await skillEndpoints.deleteSkill(id);
 
       fetchSkills();
       closePopupWindow();

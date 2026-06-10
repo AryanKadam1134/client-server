@@ -12,7 +12,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { apiEndpoints } from "../../../services/api";
+import { skillEndpoints } from "../../../services/skillService";
 
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
@@ -108,7 +108,7 @@ export default function AddEditSkills() {
 
   const fetchSkill = async () => {
     try {
-      const res = await apiEndpoints.getSkill(id);
+      const res = await skillEndpoints.getSkill(id);
 
       const data = res.data;
 
@@ -127,10 +127,10 @@ export default function AddEditSkills() {
       let res;
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await apiEndpoints.updateSkill(id, updatedData);
+        res = await skillEndpoints.updateSkill(id, updatedData);
         notify.msgSuccess("Skill Updated!");
       } else {
-        res = await apiEndpoints.addSkill(payload);
+        res = await skillEndpoints.addSkill(payload);
         notify.msgSuccess("Skill Saved!");
       }
 
