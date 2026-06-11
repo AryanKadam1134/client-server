@@ -17,6 +17,7 @@ import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
+import { welcomeUser } from "../../utils/emailTemplates/welcomeUser.js";
 import { passwordChangedTemplate } from "../../utils/emailTemplates/passwordChanged.js";
 import { resetPasswordOTPTemplate } from "../../utils/emailTemplates/otpSentTemplate.js";
 
@@ -127,6 +128,18 @@ const googleAuth = asynchandler(async (req, res) => {
       email,
       password: undefined, // IMPORTANT: no password
       googleId: sub,
+    });
+
+    // Send email in background (don't await)
+    shootEmail({
+      to: user.email,
+      subject: "Welcome to Portfolio SaaS",
+      html: welcomeUser(user),
+    }).catch((error) => {
+      console.error(
+        "Background: Error sending mail in googleAuth:",
+        error.message,
+      );
     });
   }
 
@@ -248,12 +261,24 @@ const registerUser = asynchandler(async (req, res) => {
     );
   }
 
-  await User.create({
+  const newUser = await User.create({
     firstName,
     lastName,
     username: username?.toLowerCase(),
     email,
     password,
+  });
+
+  // Send email in background (don't await)
+  shootEmail({
+    to: newUser.email,
+    subject: "Welcome to Portfolio SaaS",
+    html: welcomeUser(newUser),
+  }).catch((error) => {
+    console.error(
+      "Background: Error sending mail in registerUser:",
+      error.message,
+    );
   });
 
   return res
