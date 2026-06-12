@@ -45,8 +45,8 @@ export default function Authentication() {
 
   const onSubmit = async (payload) => {
     if (isLogin) {
-      await login(payload);
-      navigate("/details");
+      const success = await login(payload);
+      if (success) navigate("/details");
     } else {
       try {
         await authEndpoints.register(payload);

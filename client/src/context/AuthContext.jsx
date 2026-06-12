@@ -62,12 +62,15 @@ export function AuthProvider({ children }) {
           "x-device-id": deviceId,
         },
       });
-
       const data = res.data;
+      const success = res.success;
 
-      if (res?.success) {
+      if (success) {
         setUser(data?.user);
       }
+
+      setError(null);
+      return success;
 
       // console.log("Login succesfull:", data);
     } catch (error) {
