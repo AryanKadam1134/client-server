@@ -26,8 +26,8 @@ import { userEndpoints } from "../../services/userService";
 
 import useGenders from "../../hooks/useGenders";
 
-import { useAuth } from "../../context/AuthContext";
-import { useNotify } from "../../context/NotificationContext";
+import { useAuth } from "../../context/auth/useAuth";
+import { useNotify } from "../../context/notification/useNotify";
 
 function ResumeDropZone({
   fileInputRef,
@@ -732,3 +732,4 @@ export default function Dashboard() {
     </form>
   );
 }
+

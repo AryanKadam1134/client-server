@@ -4,7 +4,7 @@ import { AlertTriangle } from "lucide-react";
 
 import CustomButton from "../ui/CustomButton";
 
-import { usePopup } from "../../context/PopupContext";
+import { usePopup } from "../../context/popup/usePopup";
 
 export default function DeleteUserPopup({ onConfirm, isDeleting }) {
   const { closePopupWindow } = usePopup();
@@ -70,3 +70,4 @@ export default function DeleteUserPopup({ onConfirm, isDeleting }) {
     </div>
   );
 }
+

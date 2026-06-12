@@ -15,7 +15,7 @@ import { skillCategoryEndpoints } from "../../../services/skillCategoryService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { useNotify } from "../../../context/NotificationContext";
+import { useNotify } from "../../../context/notification/useNotify";
 
 export default function AddEditSkillCategory() {
   const { notify } = useNotify();
@@ -192,3 +192,4 @@ export default function AddEditSkillCategory() {
     </form>
   );
 }
+

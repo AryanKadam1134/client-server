@@ -17,7 +17,7 @@ import { socialPlatformEndpoints } from "../../../services/socialPlatformService
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { useNotify } from "../../../context/NotificationContext";
+import { useNotify } from "../../../context/notification/useNotify";
 
 const SOCIAL_APPS_LIST = [
   {
@@ -495,3 +495,4 @@ export default function AddEditSocialPlatform() {
     </form>
   );
 }
+

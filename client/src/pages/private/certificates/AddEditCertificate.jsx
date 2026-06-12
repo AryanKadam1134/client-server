@@ -26,7 +26,7 @@ import { certificateEndpoints } from "../../../services/certificateService";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { useNotify } from "../../../context/NotificationContext";
+import { useNotify } from "../../../context/notification/useNotify";
 
 export default function AddEditCertificate() {
   const { notify } = useNotify();
@@ -475,3 +475,4 @@ export default function AddEditCertificate() {
     </form>
   );
 }
+

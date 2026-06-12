@@ -14,8 +14,8 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { educationEndpoints } from "../../../services/educationService";
 
-import { usePopup } from "../../../context/PopupContext";
-import { useNotify } from "../../../context/NotificationContext";
+import { usePopup } from "../../../context/popup/usePopup";
+import { useNotify } from "../../../context/notification/useNotify";
 
 export default function Educations() {
   const { notify } = useNotify();
@@ -139,3 +139,4 @@ export default function Educations() {
     </div>
   );
 }
+

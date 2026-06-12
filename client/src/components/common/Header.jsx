@@ -3,8 +3,8 @@ import React from "react";
 import { Menu, Moon, SunDim } from "lucide-react";
 import { Switch } from "antd";
 
-import { useAuth } from "../../context/AuthContext";
-import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/auth/useAuth";
+import { useTheme } from "../../context/theme/useTheme";
 
 export default function Header({ onMenuClick }) {
   const { user } = useAuth();
@@ -92,3 +92,4 @@ export default function Header({ onMenuClick }) {
     </div>
   );
 }
+

@@ -18,7 +18,7 @@ import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
 
-import { useNotify } from "../../../context/NotificationContext";
+import { useNotify } from "../../../context/notification/useNotify";
 
 const TECH_SKILLS = [
   { title: "HTML5", category: "Frontend" },
@@ -314,3 +314,4 @@ export default function AddEditSkills() {
     </form>
   );
 }
+

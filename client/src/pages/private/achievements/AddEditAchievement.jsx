@@ -33,7 +33,7 @@ import { achievementEndpoints } from "../../../services/achievementService";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCertificatesList from "../../../hooks/useCertificatesList";
 
-import { useNotify } from "../../../context/NotificationContext";
+import { useNotify } from "../../../context/notification/useNotify";
 
 export default function AddEditAchievement() {
   const { notify } = useNotify();
@@ -431,3 +431,4 @@ export default function AddEditAchievement() {
     </form>
   );
 }
+

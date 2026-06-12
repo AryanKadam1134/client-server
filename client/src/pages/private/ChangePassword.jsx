@@ -12,7 +12,7 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { authEndpoints } from "../../services/authService";
 
-import { useNotify } from "../../context/NotificationContext";
+import { useNotify } from "../../context/notification/useNotify";
 
 export default function ChangePassword() {
   const { notify } = useNotify();
@@ -173,3 +173,4 @@ export default function ChangePassword() {
     </form>
   );
 }
+

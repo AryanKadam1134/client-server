@@ -1,18 +1,10 @@
-import { createContext, useContext, useState } from "react";
-import { Grid, Tag } from "antd";
+import { useState } from "react";
+
+import { Grid } from "antd";
+
+import { PopupContext } from "./usePopup";
+
 const { useBreakpoint } = Grid;
-
-const PopupContext = createContext();
-
-export const usePopup = () => {
-  const context = useContext(PopupContext);
-
-  if (!context) {
-    throw new Error("usePopup must be used within an PopupProvider");
-  }
-
-  return context;
-};
 
 export const PopupProvider = ({ children }) => {
   // Screen

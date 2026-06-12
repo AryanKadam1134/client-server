@@ -43,8 +43,8 @@ import Settings from "./pages/private/Settings";
 import ChangePassword from "./pages/private/ChangePassword";
 import PopupWindow from "./components/common/PopupWindow";
 
-import { useAuth } from "./context/AuthContext";
-import { usePopup } from "./context/PopupContext";
+import { useAuth } from "./context/auth/useAuth";
+import { usePopup } from "./context/popup/usePopup";
 
 function SessionLoader() {
   return (
@@ -212,3 +212,4 @@ function App() {
 }
 
 export default App;
+

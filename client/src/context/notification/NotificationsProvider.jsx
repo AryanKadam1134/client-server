@@ -1,18 +1,6 @@
-import React, { createContext, useContext } from "react";
+import { message as antdMessage, notification } from "antd";
 
-import { notification, message as antdMessage } from "antd";
-
-const NotificationContext = createContext(null);
-
-export const useNotify = () => {
-  const context = useContext(NotificationContext);
-
-  if (!context) {
-    throw new Error("useNotify must be used within an NotificationsProvider");
-  }
-
-  return context;
-};
+import { NotificationContext } from "./useNotify";
 
 export function NotificationsProvider({ children }) {
   // Ant Design Notification

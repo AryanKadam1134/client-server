@@ -19,8 +19,8 @@ import { skillEndpoints } from "../../../services/skillService";
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { usePopup } from "../../../context/PopupContext";
-import { useNotify } from "../../../context/NotificationContext";
+import { usePopup } from "../../../context/popup/usePopup";
+import { useNotify } from "../../../context/notification/useNotify";
 
 export default function Skills() {
   const { notify } = useNotify();
@@ -149,3 +149,4 @@ export default function Skills() {
     </div>
   );
 }
+

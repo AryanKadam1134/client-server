@@ -5,10 +5,10 @@ import App from "./App.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ConfigProvider } from "antd";
 
-import { AuthProvider } from "./context/AuthContext.jsx";
-import { ThemeProvider } from "./context/ThemeContext.jsx";
-import { PopupProvider } from "./context/PopupContext.jsx";
-import { NotificationsProvider } from "./context/NotificationContext.jsx";
+import { AuthProvider } from "./context/auth/AuthProvider.jsx";
+import { NotificationsProvider } from "./context/notification/NotificationsProvider.jsx";
+import { PopupProvider } from "./context/popup/PopupProvider.jsx";
+import { ThemeProvider } from "./context/theme/ThemeProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <ConfigProvider

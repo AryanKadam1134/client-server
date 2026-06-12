@@ -37,7 +37,7 @@ import useVisibilities from "../../../hooks/useVisibilities";
 import useOrganizationsList from "../../../hooks/useOrganizationsList";
 import useProjectCategoriesList from "../../../hooks/useProjectCategoriesList";
 
-import { useNotify } from "../../../context/NotificationContext";
+import { useNotify } from "../../../context/notification/useNotify";
 
 export default function AddEditProject() {
   const { notify } = useNotify();
@@ -545,3 +545,4 @@ export default function AddEditProject() {
     </form>
   );
 }
+

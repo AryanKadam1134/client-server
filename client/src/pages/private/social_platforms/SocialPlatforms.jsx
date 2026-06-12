@@ -17,8 +17,8 @@ import { socialPlatformEndpoints } from "../../../services/socialPlatformService
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { usePopup } from "../../../context/PopupContext";
-import { useNotify } from "../../../context/NotificationContext";
+import { usePopup } from "../../../context/popup/usePopup";
+import { useNotify } from "../../../context/notification/useNotify";
 
 export default function SocialPlatforms() {
   const { notify } = useNotify();
@@ -151,3 +151,4 @@ export default function SocialPlatforms() {
     </div>
   );
 }
+

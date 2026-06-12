@@ -13,9 +13,9 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { authEndpoints } from "../../services/authService";
 
-import { useAuth } from "../../context/AuthContext";
-import { useTheme } from "../../context/ThemeContext";
-import { useNotify } from "../../context/NotificationContext";
+import { useAuth } from "../../context/auth/useAuth";
+import { useTheme } from "../../context/theme/useTheme";
+import { useNotify } from "../../context/notification/useNotify";
 
 export default function Authentication() {
   const { theme } = useTheme();
@@ -266,3 +266,4 @@ export default function Authentication() {
     </div>
   );
 }
+

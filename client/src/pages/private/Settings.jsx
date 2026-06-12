@@ -7,9 +7,9 @@ import DeleteUserPopup from "../../components/settings/DeleteUserPopup";
 
 import { userEndpoints } from "../../services/userService";
 
-import { useNotify } from "../../context/NotificationContext";
-import { usePopup } from "../../context/PopupContext";
-import { useAuth } from "../../context/AuthContext";
+import { useNotify } from "../../context/notification/useNotify";
+import { usePopup } from "../../context/popup/usePopup";
+import { useAuth } from "../../context/auth/useAuth";
 
 export default function Settings() {
   const { setUser } = useAuth();
@@ -66,3 +66,4 @@ export default function Settings() {
     </div>
   );
 }
+

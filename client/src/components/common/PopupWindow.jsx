@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { X } from "lucide-react";
 
-import { usePopup } from "../../context/PopupContext";
+import { usePopup } from "../../context/popup/usePopup";
 
 export default function PopupWindow() {
   // <!---------------------------------------- (Context) --------------------------------------------!>
@@ -55,3 +55,4 @@ export default function PopupWindow() {
     </div>
   );
 }
+

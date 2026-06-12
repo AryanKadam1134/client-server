@@ -2,7 +2,7 @@ import React from "react";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { usePopup } from "../../context/PopupContext";
+import { usePopup } from "../../context/popup/usePopup";
 
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const { screens } = usePopup();
@@ -102,3 +102,4 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
     </div>
   );
 }
+

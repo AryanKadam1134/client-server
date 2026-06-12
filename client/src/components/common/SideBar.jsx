@@ -14,8 +14,8 @@ import {
   Settings,
 } from "lucide-react";
 
-import { useAuth } from "../../context/AuthContext";
-import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/auth/useAuth";
+import { useTheme } from "../../context/theme/useTheme";
 
 const menus = [
   { name: "User Details", path: "/details", icon: User },
@@ -139,3 +139,4 @@ export default function SideBar({ isOpen, onClose }) {
     </>
   );
 }
+

@@ -1,22 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
-import { authEndpoints } from "../services/authService";
+import { authEndpoints } from "../../services/authService";
 
-import { useNotify } from "./NotificationContext";
+import { AuthContext } from "./useAuth";
 
-const AuthContext = createContext();
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-
-  return context;
-};
+import { useNotify } from "../notification/useNotify";
 
 export function AuthProvider({ children }) {
   const { notify } = useNotify();
@@ -25,12 +15,16 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  let deviceId = localStorage.getItem("deviceId");
+  const [deviceId] = useState(() => {
+    let storedDeviceId = localStorage.getItem("deviceId");
 
-  if (!deviceId) {
-    deviceId = uuidv4();
-    localStorage.setItem("deviceId", deviceId);
-  }
+    if (!storedDeviceId) {
+      storedDeviceId = uuidv4();
+      localStorage.setItem("deviceId", storedDeviceId);
+    }
+
+    return storedDeviceId;
+  });
 
   const googleAuth = async (credentialResponse, rememberMe) => {
     try {
@@ -115,7 +109,7 @@ export function AuthProvider({ children }) {
     };
 
     restoreSession();
-  }, []);
+  }, [deviceId]);
 
   return (
     <AuthContext.Provider
