@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, LockKeyholeOpen, Trash2 } from "lucide-react";
 
 import DeleteUserPopup from "../../components/settings/DeleteUserPopup";
 
 import { userEndpoints } from "../../services/userService";
 
-import { useNotify } from "../../context/notification/useNotify";
-import { usePopup } from "../../context/popup/usePopup";
 import { useAuth } from "../../context/auth/useAuth";
+import { usePopup } from "../../context/popup/usePopup";
+import { useNotify } from "../../context/notification/useNotify";
 
 export default function Settings() {
   const { setUser } = useAuth();
@@ -35,7 +35,7 @@ export default function Settings() {
 
   const openDeleteConfirmation = () => {
     openPopupWindow(
-      <AlertTriangle size={24} className="text-red-500" />,
+      <Trash2 size={24} />,
       "Delete Account",
       <DeleteUserPopup onConfirm={deleteUser} isDeleting={deleting} />,
       "bg-red-500",
@@ -44,26 +44,34 @@ export default function Settings() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <div className="space-y-4">
-        <div
-          onClick={() => navigate("change_password")}
-          className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md"
-        >
-          Change Password
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {[
+          {
+            name: "Change Password",
+            icon: LockKeyholeOpen,
+            onClick: () => navigate("change_password"),
+          },
+          {
+            name: "Delete Account",
+            icon: Trash2,
+            onClick: openDeleteConfirmation,
+          },
+        ].map(({ name, icon, onClick }, idx) => {
+          const Icon = icon;
 
-        {/* <div className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md">
-          Change Email
-        </div> */}
-
-        <div
-          onClick={openDeleteConfirmation}
-          className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md"
-        >
-          Delete Account
-        </div>
+          return (
+            <div
+              key={name || idx}
+              onClick={onClick}
+              className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md"
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={18} /> {name}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
-
