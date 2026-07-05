@@ -6,6 +6,8 @@ import { Switch } from "antd";
 import { useAuth } from "../../context/auth/useAuth";
 import { useTheme } from "../../context/theme/useTheme";
 
+import defaultProfileImage from "../../assets/profile.png";
+
 export default function Header({ onMenuClick }) {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -82,7 +84,7 @@ export default function Header({ onMenuClick }) {
           {/* Avatar */}
           <div className="relative rounded-full overflow-hidden border-2 border-light-border-primary dark:border-dark-border-primary">
             <img
-              src={user?.image?.url || `/images/profile.png`}
+              src={user?.image?.url || defaultProfileImage}
               alt="User"
               className="size-10 object-contain"
             />
@@ -92,4 +94,3 @@ export default function Header({ onMenuClick }) {
     </div>
   );
 }
-

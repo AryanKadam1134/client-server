@@ -17,6 +17,9 @@ import {
 import { useAuth } from "../../context/auth/useAuth";
 import { useTheme } from "../../context/theme/useTheme";
 
+import profiloLogoBlack from "../../assets/profilo_logo_black.png";
+import profiloLogoWhite from "../../assets/profilo_logo_white.png";
+
 const menus = [
   { name: "User Details", path: "/details", icon: User },
   { name: "Social Platforms", path: "/social", icon: Share2 },
@@ -60,8 +63,8 @@ export default function SideBar({ isOpen, onClose }) {
   const { theme } = useTheme();
 
   const logo = {
-    light: "/images/profilo_logo_black.png",
-    dark: "/images/profilo_logo_white.png",
+    light: profiloLogoBlack,
+    dark: profiloLogoWhite,
   };
 
   useEffect(() => {
@@ -139,4 +142,3 @@ export default function SideBar({ isOpen, onClose }) {
     </>
   );
 }
-

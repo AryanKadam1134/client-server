@@ -104,9 +104,9 @@ function App() {
 
     const updateFavicon = (e) => {
       if (e.matches) {
-        favicon.href = "/images/favicon_white.png";
+        favicon.href = "/favicon_white.png";
       } else {
-        favicon.href = "/images/favicon_black.png";
+        favicon.href = "/favicon_black.png";
       }
     };
 
@@ -212,4 +212,3 @@ function App() {
 }
 
 export default App;
-

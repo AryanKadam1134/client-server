@@ -17,14 +17,17 @@ import { useAuth } from "../../context/auth/useAuth";
 import { useTheme } from "../../context/theme/useTheme";
 import { useNotify } from "../../context/notification/useNotify";
 
+import profiloLogoBlack from "../../assets/profilo_logo_black.png";
+import profiloLogoWhite from "../../assets/profilo_logo_white.png";
+
 export default function Authentication() {
   const { theme } = useTheme();
   const { notify } = useNotify();
   const { error, setError, login, googleAuth } = useAuth();
 
   const logo = {
-    light: "/images/profilo_logo_black.png",
-    dark: "/images/profilo_logo_white.png",
+    light: profiloLogoBlack,
+    dark: profiloLogoWhite,
   };
 
   const [isLogin, setIsLogin] = useState(true);
@@ -266,4 +269,3 @@ export default function Authentication() {
     </div>
   );
 }
-

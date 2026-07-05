@@ -29,6 +29,9 @@ import useGenders from "../../hooks/useGenders";
 import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";
 
+import pdfLogo from "../../assets/pdf.svg";
+import defaultProfileImage from "../../assets/profile.png";
+
 function ResumeDropZone({
   fileInputRef,
   preview,
@@ -90,7 +93,7 @@ function ResumeDropZone({
         ) : hasFile ? (
           <>
             <div className="flex flex-col items-center gap-1">
-              <img src="/images/pdf.svg" alt="pdf svg" className="size-8" />
+              <img src={pdfLogo} alt="pdf svg" className="size-8" />
               <p className="text-xs font-medium truncate text-light-text-primary dark:text-dark-text-primary w-full">
                 {fileName}
               </p>
@@ -353,7 +356,7 @@ export default function Dashboard() {
         <div className="relative">
           {/* Image */}
           <img
-            src={preview?.image || profileImage?.url || `/images/profile.png`}
+            src={preview?.image || profileImage?.url || defaultProfileImage}
             alt="User Profile"
             className="size-45 rounded-full object-contain border border-light-border-primary dark:border-dark-border-primary"
           />
