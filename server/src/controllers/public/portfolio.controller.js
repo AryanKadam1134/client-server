@@ -14,6 +14,47 @@ import { Achievement } from "../../models/achievement.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import { SocialPlatform } from "../../models/socialPlatform.model.js";
 
+const getProfileSummary = asynchandler(async (req, res) => {
+  const commonQuery = { owner: req.user?._id };
+
+  const findQuery = { ...commonQuery, visibility: "public" };
+
+  const [
+    socialPlatforms,
+    projects,
+    skillCategories,
+    skills,
+    experiences,
+    certificates,
+    achievements,
+    educations,
+  ] = await Promise.all([
+    SocialPlatform.find(findQuery),
+    Project.find(findQuery),
+    SkillCategory.find(findQuery),
+    Skill.find(findQuery),
+    Experience.find(findQuery),
+    Certificate.find(findQuery),
+    Achievement.find(findQuery),
+    Education.find(commonQuery),
+  ]);
+
+  const summary = {
+    socialPlatforms: socialPlatforms?.length,
+    projects: projects?.length,
+    skillCategories: skillCategories?.length,
+    skills: skills?.length,
+    experiences: experiences?.length,
+    certificates: certificates?.length,
+    achievements: achievements?.length,
+    educations: educations?.length,
+  };
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, summary, "summary fetched successfully!"));
+});
+
 const getUserByUsername = asynchandler(async (req, res) => {
   return res
     .status(200)
@@ -170,9 +211,7 @@ const getProjects = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, paginatedProjects, "projects fetched successfully!"),
-    );
+    .json(new ApiRes(200, paginatedProjects, "projects fetched successfully!"));
 });
 
 const getExperiences = asynchandler(async (req, res) => {
@@ -218,7 +257,11 @@ const getExperiences = asynchandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiRes(200, paginatedExperiences, "experiences fetched successfully!"),
+      new ApiRes(
+        200,
+        paginatedExperiences,
+        "experiences fetched successfully!",
+      ),
     );
 });
 
@@ -370,6 +413,7 @@ const getAchievements = asynchandler(async (req, res) => {
 });
 
 export {
+  getProfileSummary,
   getUserByUsername,
   getUserSocialPlatforms,
   getSkillWithCategory,

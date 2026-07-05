@@ -7,6 +7,7 @@ import {
   getCertificates,
   getEducations,
   getExperiences,
+  getProfileSummary,
   getProjects,
   getSkillWithCategory,
   getUserByUsername,
@@ -14,6 +15,10 @@ import {
 } from "../../controllers/public/portfolio.controller.js";
 
 const portfolioRouter = Router();
+
+portfolioRouter
+  .route("/:username/summary")
+  .get(findUserByUsername, getProfileSummary);
 
 portfolioRouter
   .route("/:username/details")
