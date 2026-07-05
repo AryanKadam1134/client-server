@@ -627,10 +627,13 @@ export default function AddEditExperiences() {
         ))}
       </div>
 
-      <CustomButton type="submit" className="col-span-12 place-self-end">
+      <CustomButton
+        type="submit"
+        className="col-span-12 place-self-end"
+        disabled={isSubmitting}
+      >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
     </form>
   );
 }
-

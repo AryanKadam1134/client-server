@@ -5,16 +5,10 @@ import { X } from "lucide-react";
 import { usePopup } from "../../context/popup/usePopup";
 
 export default function PopupWindow() {
-  // <!---------------------------------------- (Context) --------------------------------------------!>
   const { isPopupWindow, popupContent, closePopupWindow } = usePopup();
 
-  // <!---------------------------------- (States & Variables) ---------------------------------------!>
-  const title = popupContent?.title;
-  const icon = popupContent?.icon;
-  const content = popupContent?.renderContent;
-  const className = popupContent?.className;
+  const { title, icon, renderContent, className } = popupContent || {};
 
-  // <!---------------------------------------- (Effects) --------------------------------------------!>
   useEffect(() => {
     if (isPopupWindow) {
       document.body.style.overflow = "hidden";
@@ -49,10 +43,9 @@ export default function PopupWindow() {
 
         {/* Scrollable Content */}
         <div className="place-items-center overflow-y-auto px-5 py-4 hide-scrollbar w-auto bg-light-bg-primary dark:bg-dark-bg-tertiary">
-          {content}
+          {renderContent}
         </div>
       </div>
     </div>
   );
 }
-

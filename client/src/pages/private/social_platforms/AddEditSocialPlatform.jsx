@@ -322,7 +322,10 @@ export default function AddEditSocialPlatform() {
       let res;
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await socialPlatformEndpoints.updateSocialPlatform(id, updatedData);
+        res = await socialPlatformEndpoints.updateSocialPlatform(
+          id,
+          updatedData,
+        );
         notify.msgSuccess("Platform Updated!");
       } else {
         res = await socialPlatformEndpoints.addSocialPlatform(payload);
@@ -489,10 +492,13 @@ export default function AddEditSocialPlatform() {
         <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
-      <CustomButton type="submit" className="col-span-12 place-self-end">
+      <CustomButton
+        type="submit"
+        className="col-span-12 place-self-end"
+        disabled={isSubmitting}
+      >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
     </form>
   );
 }
-
