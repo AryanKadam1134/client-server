@@ -17,11 +17,11 @@ import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
+import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
@@ -240,10 +240,8 @@ export default function AddEditAchievement() {
               message: "Achievement name must not exceed 100 characters",
             },
           })}
-          error={errors?.title}
+          error={errors?.title?.message}
         />
-
-        <FieldError error={errors.title?.message} />
       </LabelInput>
 
       {/* Issuer */}
@@ -268,10 +266,8 @@ export default function AddEditAchievement() {
               message: "Issuer name must not exceed 100 characters",
             },
           })}
-          error={errors?.issuer}
+          error={errors?.issuer?.message}
         />
-
-        <FieldError error={errors.issuer?.message} />
       </LabelInput>
 
       {/* Attached Certificate */}
@@ -290,6 +286,7 @@ export default function AddEditAchievement() {
               options={certificatesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
+              error={errors?.certificateId?.message}
             />
           )}
         />
@@ -323,7 +320,7 @@ export default function AddEditAchievement() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.link}
+          error={errors?.link?.message}
         />
       </LabelInput>
 
@@ -343,10 +340,8 @@ export default function AddEditAchievement() {
               message: "Max 1000 characters allowed!",
             },
           })}
-          error={errors?.description}
+          error={errors?.description?.message}
         />
-
-        <FieldError error={errors.description?.message} />
       </LabelInput>
 
       {/* Date */}
@@ -363,10 +358,8 @@ export default function AddEditAchievement() {
           {...register("date", {
             required: "Date is required!",
           })}
-          error={errors?.date}
+          error={errors?.date?.message}
         />
-
-        <FieldError error={errors.data?.message} />
       </LabelInput>
 
       {/* Featured */}
@@ -381,11 +374,10 @@ export default function AddEditAchievement() {
           </p>
         }
       >
-        <input
+        <CustomCheckbox
           id="featured"
-          type="checkbox"
           {...register("featured")}
-          error={errors?.featured}
+          error={errors?.featured?.message}
         />
       </LabelInput>
 
@@ -401,7 +393,7 @@ export default function AddEditAchievement() {
           min={0}
           placeholder="Sort Order"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder}
+          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -419,10 +411,8 @@ export default function AddEditAchievement() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility}
+          error={errors?.visibility?.message}
         />
-
-        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       <CustomButton

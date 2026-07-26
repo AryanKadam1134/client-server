@@ -6,7 +6,6 @@ import { LockKeyholeOpen } from "lucide-react";
 import CommonSkeleton from "../../components/common/CommonSkeleton";
 
 import LabelInput from "../../components/ui/LabelInput";
-import FieldError from "../../components/ui/FieldError";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
@@ -96,10 +95,8 @@ export default function ChangePassword() {
               },
             })}
             className="pr-10"
-            error={errors.old_password}
+            error={errors?.old_password?.message}
           />
-
-          <FieldError error={errors.old_password?.message} />
         </LabelInput>
       )}
 
@@ -126,10 +123,8 @@ export default function ChangePassword() {
             },
           })}
           className="pr-10"
-          error={errors.new_password}
+          error={errors?.new_password?.message}
         />
-
-        <FieldError error={errors.new_password?.message} />
       </LabelInput>
 
       {/* Confirm Password */}
@@ -161,10 +156,8 @@ export default function ChangePassword() {
             },
           })}
           className="pr-10"
-          error={errors.confirm_password}
+          error={errors?.confirm_password?.message}
         />
-
-        <FieldError error={errors.confirm_password?.message} />
       </LabelInput>
 
       <CustomButton

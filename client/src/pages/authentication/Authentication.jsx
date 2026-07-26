@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { LockKeyholeOpen, Mail } from "lucide-react";
 
-import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
+import CustomCheckbox from "../../components/ui/CustomCheckbox";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { authEndpoints } from "../../services/authService";
@@ -93,10 +93,8 @@ export default function Authentication() {
                 {...register("firstName", {
                   required: "First Name is required!",
                 })}
-                error={errors.firstName}
+                error={errors?.firstName?.message}
               />
-
-              <FieldError error={errors.firstName?.message} />
             </LabelInput>
           )}
 
@@ -108,7 +106,7 @@ export default function Authentication() {
                 type="text"
                 placeholder="Doe"
                 {...register("lastName")}
-                error={errors.lastName}
+                error={errors?.lastName?.message}
               />
             </LabelInput>
           )}
@@ -123,10 +121,8 @@ export default function Authentication() {
                 {...register("username", {
                   required: "username is required!",
                 })}
-                error={errors.username}
+                error={errors?.username?.message}
               />
-
-              <FieldError error={errors.username?.message} />
             </LabelInput>
           )}
 
@@ -140,10 +136,8 @@ export default function Authentication() {
                 {...register("userCredential", {
                   required: "username or email is required!",
                 })}
-                error={errors.userCredential}
+                error={errors?.userCredential?.message}
               />
-
-              <FieldError error={errors.userCredential?.message} />
             </LabelInput>
           )}
 
@@ -162,10 +156,8 @@ export default function Authentication() {
                     message: "Invalid email format",
                   },
                 })}
-                error={errors.email}
+                error={errors?.email?.message}
               />
-
-              <FieldError error={errors.email?.message} />
             </LabelInput>
           )}
 
@@ -201,10 +193,8 @@ export default function Authentication() {
                 },
               })}
               className="pr-10"
-              error={errors.password}
+              error={errors?.password?.message}
             />
-
-            {!isLogin && <FieldError error={errors.password?.message} />}
           </LabelInput>
 
           {error && <p className="text-center text-sm text-red-400">{error}</p>}
@@ -212,11 +202,10 @@ export default function Authentication() {
           {/* Remember Me */}
           {isLogin && (
             <LabelInput id="rememberMe" label="Remember Me?" type="checkbox">
-              <input
+              <CustomCheckbox
                 id="rememberMe"
-                type="checkbox"
                 {...register("rememberMe")}
-                error={errors?.rememberMe}
+                error={errors?.rememberMe?.message}
               />
             </LabelInput>
           )}

@@ -6,7 +6,6 @@ import { ExternalLink, Link } from "lucide-react";
 
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -397,10 +396,8 @@ export default function AddEditSocialPlatform() {
               message: "Platform name must not exceed 50 characters",
             },
           })}
-          error={errors?.name}
+          error={errors?.name?.message}
         />
-
-        <FieldError error={errors.name?.message} />
       </LabelInput>
 
       {/* Logo URL */}
@@ -414,10 +411,8 @@ export default function AddEditSocialPlatform() {
           type="text"
           placeholder="e.g., /images/github.svg"
           {...register("logoUrl")}
-          error={errors?.logoUrl}
+          error={errors?.logoUrl?.message}
         />
-
-        <FieldError error={errors.logoUrl?.message} />
       </LabelInput>
 
       {/* Platform Link */}
@@ -450,10 +445,8 @@ export default function AddEditSocialPlatform() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.link}
+          error={errors?.link?.message}
         />
-
-        <FieldError error={errors.link?.message} />
       </LabelInput>
 
       {/* Sort Order */}
@@ -468,7 +461,7 @@ export default function AddEditSocialPlatform() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder}
+          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -486,10 +479,8 @@ export default function AddEditSocialPlatform() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility}
+          error={errors?.visibility?.message}
         />
-
-        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       <CustomButton

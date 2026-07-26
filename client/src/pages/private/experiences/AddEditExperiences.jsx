@@ -15,13 +15,13 @@ import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
+import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
@@ -274,10 +274,8 @@ export default function AddEditExperiences() {
               message: "Organization name must not exceed 100 characters",
             },
           })}
-          error={errors?.organization}
+          error={errors?.organization?.message}
         />
-
-        <FieldError error={errors.organization?.message} />
       </LabelInput>
 
       {/* Employment Type */}
@@ -298,12 +296,10 @@ export default function AddEditExperiences() {
               options={employmentTypes}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.employmentType}
+              error={errors?.employmentType?.message}
             />
           )}
         />
-
-        <FieldError error={errors.employmentType?.message} />
       </LabelInput>
 
       {/* Organization Size */}
@@ -322,7 +318,7 @@ export default function AddEditExperiences() {
               message: "Organization size must not exceed 50 characters",
             },
           })}
-          error={errors?.organizationSize}
+          error={errors?.organizationSize?.message}
         />
       </LabelInput>
 
@@ -354,7 +350,7 @@ export default function AddEditExperiences() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.organizationWebsite}
+          error={errors?.organizationWebsite?.message}
         />
       </LabelInput>
 
@@ -374,10 +370,8 @@ export default function AddEditExperiences() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description}
+          error={errors?.description?.message}
         />
-
-        <FieldError error={errors.description?.message} />
       </LabelInput>
 
       {/* Tech Stack */}
@@ -396,6 +390,7 @@ export default function AddEditExperiences() {
               options={skillsList}
               value={field.value}
               onChange={field.onChange}
+              error={errors?.techStack?.message}
             />
           )}
         />
@@ -417,7 +412,7 @@ export default function AddEditExperiences() {
               message: "Location must not exceed 100 characters",
             },
           })}
-          error={errors?.location}
+          error={errors?.location?.message}
         />
       </LabelInput>
 
@@ -439,12 +434,10 @@ export default function AddEditExperiences() {
               options={locationTypesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
-              error={errors?.locationType}
+              error={errors?.locationType?.message}
             />
           )}
         />
-
-        <FieldError error={errors.locationType?.message} />
       </LabelInput>
 
       {/* Visibility  */}
@@ -461,10 +454,8 @@ export default function AddEditExperiences() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility}
+          error={errors?.visibility?.message}
         />
-
-        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       {/* Highlights */}
@@ -506,7 +497,7 @@ export default function AddEditExperiences() {
                 {...register(`highlights.${idx}`, {
                   required: "Highlight is required",
                 })}
-                error={errors?.highlights?.[idx]}
+                error={errors?.highlights?.[idx]?.message}
               />
             </div>
 
@@ -560,10 +551,8 @@ export default function AddEditExperiences() {
                 {...register(`positions.${idx}.role`, {
                   required: "Role is required!",
                 })}
-                error={errors?.positions?.[idx]?.role}
+                error={errors?.positions?.[idx]?.role?.message}
               />
-
-              <FieldError error={errors.positions?.[idx]?.role?.message} />
             </LabelInput>
 
             {/* Start Date */}
@@ -580,10 +569,8 @@ export default function AddEditExperiences() {
                 {...register(`positions.${idx}.startDate`, {
                   required: "Start Date is required!",
                 })}
-                error={errors?.positions?.[idx]?.startDate}
+                error={errors?.positions?.[idx]?.startDate?.message}
               />
-
-              <FieldError error={errors.positions?.[idx]?.startDate?.message} />
             </LabelInput>
 
             {/* End Date */}
@@ -597,7 +584,7 @@ export default function AddEditExperiences() {
                 id={`positions-${idx}.endDate`}
                 placeholder="Select Date"
                 {...register(`positions.${idx}.endDate`)}
-                error={errors?.positions?.[idx]?.endDate}
+                error={errors?.positions?.[idx]?.endDate?.message}
               />
             </LabelInput>
 
@@ -608,11 +595,10 @@ export default function AddEditExperiences() {
               colSpan="col-span-9 sm:col-span-4 lg:col-span-5"
               type="checkbox"
             >
-              <input
+              <CustomCheckbox
                 id={`positions-${idx}.isCurrent`}
-                type="checkbox"
                 {...register(`positions.${idx}.isCurrent`)}
-                error={errors?.positions?.[idx]?.isCurrent}
+                error={errors?.positions?.[idx]?.isCurrent?.message}
               />
             </LabelInput>
 

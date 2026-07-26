@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LockKeyholeOpen, Mail } from "lucide-react";
 
-import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -83,10 +82,8 @@ export default function ResetPassword() {
                 },
               })}
               className="pr-10"
-              error={errors.new_password}
+              error={errors?.new_password?.message}
             />
-
-            <FieldError error={errors.new_password?.message} />
           </LabelInput>
 
           {/* Confirm Password */}
@@ -118,10 +115,8 @@ export default function ResetPassword() {
                 },
               })}
               className="pr-10"
-              error={errors.confirm_password}
+              error={errors?.confirm_password?.message}
             />
-
-            <FieldError error={errors.confirm_password?.message} />
           </LabelInput>
 
           {error && <p className="text-center text-sm text-red-400">{error}</p>}
@@ -139,4 +134,3 @@ export default function ResetPassword() {
     </div>
   );
 }
-

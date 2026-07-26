@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LockKeyholeOpen, Mail } from "lucide-react";
 
-import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -76,10 +75,8 @@ export default function ForogtPassword() {
                     message: "Invalid email format",
                   },
                 })}
-                error={errors.email}
+                error={errors?.email?.message}
               />
-
-              <FieldError error={errors.email?.message} />
             </LabelInput>
           )}
 
@@ -94,10 +91,8 @@ export default function ForogtPassword() {
                   minLength: 6,
                   maxLength: 6,
                 })}
-                error={errors.otp}
+                error={errors?.otp?.message}
               />
-
-              <FieldError error={errors.otp?.message} />
             </LabelInput>
           )}
 
@@ -122,4 +117,3 @@ export default function ForogtPassword() {
     </div>
   );
 }
-

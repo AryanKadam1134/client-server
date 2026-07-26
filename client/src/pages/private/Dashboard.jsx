@@ -15,7 +15,6 @@ import {
 
 import UserDetailsSkeleton from "../../components/user_details/UserDetailsSkeleton";
 
-import FieldError from "../../components/ui/FieldError";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -427,10 +426,8 @@ export default function Dashboard() {
               message: "First name must not exceed 50 characters",
             },
           })}
-          error={errors.firstName}
+          error={errors?.firstName?.message}
         />
-
-        <FieldError error={errors.firstName?.message} />
       </LabelInput>
 
       {/* Middle Name */}
@@ -444,7 +441,7 @@ export default function Dashboard() {
           type="text"
           placeholder="Enter middle name (optional)"
           {...register("middleName", {})}
-          error={errors.middleName}
+          error={errors?.middleName?.message}
         />
       </LabelInput>
 
@@ -464,7 +461,7 @@ export default function Dashboard() {
               message: "Last name must not exceed 50 characters",
             },
           })}
-          error={errors.lastName}
+          error={errors?.lastName?.message}
         />
       </LabelInput>
 
@@ -495,10 +492,8 @@ export default function Dashboard() {
                 "Username can only contain letters, numbers, hyphens, and underscores",
             },
           })}
-          error={errors.username}
+          error={errors?.username?.message}
         />
-
-        <FieldError error={errors.username?.message} />
       </LabelInput>
 
       {/* Email */}
@@ -526,10 +521,8 @@ export default function Dashboard() {
             },
           })}
           disabled
-          error={errors.email}
+          error={errors?.email?.message}
         />
-
-        <FieldError error={errors.email?.message} />
       </LabelInput>
 
       {/* Mobile No. */}
@@ -551,10 +544,8 @@ export default function Dashboard() {
               message: "Mobile number must be exactly 10 digits",
             },
           })}
-          error={errors.mobileNo}
+          error={errors?.mobileNo?.message}
         />
-
-        <FieldError error={errors.mobileNo?.message} />
       </LabelInput>
 
       {/* Gender */}
@@ -570,10 +561,8 @@ export default function Dashboard() {
           {...register("gender", {
             required: "Gender is required!",
           })}
-          error={errors.gender}
+          error={errors?.gender?.message}
         />
-
-        <FieldError error={errors.gender?.message} />
       </LabelInput>
 
       <div className="hidden lg:block col-span-6"></div>
@@ -614,10 +603,8 @@ export default function Dashboard() {
               message: "Headline must not exceed 100 characters",
             },
           })}
-          error={errors.headline}
+          error={errors?.headline?.message}
         />
-
-        <FieldError error={errors.headline?.message} />
       </LabelInput>
 
       {/* About */}
@@ -637,10 +624,8 @@ export default function Dashboard() {
               message: "About section must not exceed 1000 characters",
             },
           })}
-          error={errors.about}
+          error={errors?.about?.message}
         />
-
-        <FieldError error={errors.about?.message} />
       </LabelInput>
 
       {/* Resume Link */}
@@ -661,7 +646,7 @@ export default function Dashboard() {
               message: "URL must start with https://",
             },
           })}
-          error={errors.documentUrl}
+          error={errors?.documentUrl?.message}
         />
       </LabelInput>
 
@@ -681,7 +666,7 @@ export default function Dashboard() {
               message: "City name must not exceed 50 characters",
             },
           })}
-          error={errors.location?.city}
+          error={errors?.location?.city?.message}
         />
       </LabelInput>
 
@@ -701,7 +686,7 @@ export default function Dashboard() {
               message: "State name must not exceed 50 characters",
             },
           })}
-          error={errors.location?.state}
+          error={errors?.location?.state?.message}
         />
       </LabelInput>
 
@@ -721,7 +706,7 @@ export default function Dashboard() {
               message: "Country name must not exceed 50 characters",
             },
           })}
-          error={errors.location?.country}
+          error={errors?.location?.country?.message}
         />
       </LabelInput>
 

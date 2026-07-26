@@ -18,12 +18,12 @@ import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
+import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
@@ -259,10 +259,8 @@ export default function AddEditProject() {
               message: "Project name must not exceed 100 characters",
             },
           })}
-          error={errors?.title}
+          error={errors?.title?.message}
         />
-
-        <FieldError error={errors.title?.message} />
       </LabelInput>
 
       {/* Organization */}
@@ -281,6 +279,7 @@ export default function AddEditProject() {
               options={organizationsList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
+              error={errors?.organizationId?.message}
             />
           )}
         />
@@ -314,7 +313,7 @@ export default function AddEditProject() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.liveLink}
+          error={errors?.liveLink?.message}
         />
       </LabelInput>
 
@@ -346,7 +345,7 @@ export default function AddEditProject() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.githubLink}
+          error={errors?.githubLink?.message}
         />
       </LabelInput>
 
@@ -366,10 +365,8 @@ export default function AddEditProject() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description}
+          error={errors?.description?.message}
         />
-
-        <FieldError error={errors.description?.message} />
       </LabelInput>
 
       {/* Tech Stack */}
@@ -388,6 +385,7 @@ export default function AddEditProject() {
               options={skillsList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
+              error={errors?.techStack?.message}
             />
           )}
         />
@@ -409,6 +407,7 @@ export default function AddEditProject() {
               options={projectCategoriesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
+              error={errors?.category?.message}
             />
           )}
         />
@@ -426,11 +425,10 @@ export default function AddEditProject() {
           </p>
         }
       >
-        <input
+        <CustomCheckbox
           id="featured"
-          type="checkbox"
           {...register("featured")}
-          error={errors?.featured}
+          error={errors?.featured?.message}
         />
       </LabelInput>
 
@@ -454,10 +452,8 @@ export default function AddEditProject() {
               return true;
             },
           })}
-          error={errors?.startDate}
+          error={errors?.startDate?.message}
         />
-
-        <FieldError error={errors.startDate?.message} />
       </LabelInput>
 
       {/* End Date */}
@@ -482,10 +478,8 @@ export default function AddEditProject() {
               return true;
             },
           })}
-          error={errors?.endDate}
+          error={errors?.endDate?.message}
         />
-
-        <FieldError error={errors.endDate?.message} />
       </LabelInput>
 
       {/* Present */}
@@ -495,11 +489,10 @@ export default function AddEditProject() {
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
-        <input
+        <CustomCheckbox
           id="isCurrent"
-          type="checkbox"
           {...register("isCurrent")}
-          error={errors?.isCurrent}
+          error={errors?.isCurrent?.message}
         />
       </LabelInput>
 
@@ -515,7 +508,7 @@ export default function AddEditProject() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder}
+          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -533,7 +526,7 @@ export default function AddEditProject() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility}
+          error={errors?.visibility?.message}
         />
       </LabelInput>
 

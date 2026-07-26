@@ -5,7 +5,6 @@ import { Controller, useForm } from "react-hook-form";
 
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -202,10 +201,8 @@ export default function AddEditSkills() {
               message: "Skill name must not exceed 50 characters",
             },
           })}
-          error={errors?.name}
+          error={errors?.name?.message}
         />
-
-        <FieldError error={errors.name?.message} />
       </LabelInput>
 
       {/* Skill Category */}
@@ -225,6 +222,7 @@ export default function AddEditSkills() {
               options={categoriesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
+              error={errors?.categoryId?.message}
             />
           )}
         />
@@ -241,10 +239,8 @@ export default function AddEditSkills() {
           type="text"
           placeholder="/images/react_light.svg"
           {...register("logoUrl")}
-          error={errors?.logoUrl}
+          error={errors?.logoUrl?.message}
         />
-
-        <FieldError error={errors.logoUrl?.message} />
       </LabelInput>
 
       {/* Skill Level */}
@@ -266,12 +262,10 @@ export default function AddEditSkills() {
               options={skillLevels}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.level} // send value to hook form
+              error={errors?.level?.message} // send value to hook form
             />
           )}
         />
-
-        <FieldError error={errors.level?.message} />
       </LabelInput>
 
       {/* Sort Order */}
@@ -286,7 +280,7 @@ export default function AddEditSkills() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder}
+          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -304,7 +298,7 @@ export default function AddEditSkills() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility}
+          error={errors?.visibility?.message}
         />
       </LabelInput>
 

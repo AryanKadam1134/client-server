@@ -8,11 +8,11 @@ import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import ActionButton from "../../../components/ui/ActionButton";
+import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 
 import { educationEndpoints } from "../../../services/educationService";
@@ -201,10 +201,8 @@ export default function AddEditEducation() {
               message: "Institute name must not exceed 100 characters",
             },
           })}
-          error={errors?.instituteName}
+          error={errors?.instituteName?.message}
         />
-
-        <FieldError error={errors.instituteName?.message} />
       </LabelInput>
 
       {/* Qualification */}
@@ -229,10 +227,8 @@ export default function AddEditEducation() {
               message: "Degree must not exceed 100 characters",
             },
           })}
-          error={errors?.qualification}
+          error={errors?.qualification?.message}
         />
-
-        <FieldError error={errors.qualification?.message} />
       </LabelInput>
 
       {/* Description */}
@@ -251,10 +247,8 @@ export default function AddEditEducation() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description}
+          error={errors?.description?.message}
         />
-
-        <FieldError error={errors.description?.message} />
       </LabelInput>
 
       {/* Location */}
@@ -273,7 +267,7 @@ export default function AddEditEducation() {
               message: "Location must not exceed 100 characters",
             },
           })}
-          error={errors?.location}
+          error={errors?.location?.message}
         />
       </LabelInput>
 
@@ -299,10 +293,8 @@ export default function AddEditEducation() {
               message: `Start year cannot be in the future`,
             },
           })}
-          error={errors?.startYear}
+          error={errors?.startYear?.message}
         />
-
-        <FieldError error={errors.startYear?.message} />
       </LabelInput>
 
       {/* End Year */}
@@ -331,10 +323,8 @@ export default function AddEditEducation() {
               return true;
             },
           })}
-          error={errors?.endYear}
+          error={errors?.endYear?.message}
         />
-
-        <FieldError error={errors.endYear?.message} />
       </LabelInput>
 
       {/* Present */}
@@ -344,11 +334,10 @@ export default function AddEditEducation() {
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
       >
-        <input
+        <CustomCheckbox
           id="isCurrent"
-          type="checkbox"
           {...register("isCurrent")}
-          error={errors?.isCurrent}
+          error={errors?.isCurrent?.message}
         />
       </LabelInput>
 
@@ -375,10 +364,8 @@ export default function AddEditEducation() {
               message: "Percentage cannot be more than 100",
             },
           })}
-          error={errors?.percentage}
+          error={errors?.percentage?.message}
         />
-
-        <FieldError error={errors.percentage?.message} />
       </LabelInput>
 
       {/* CGPA */}
@@ -400,10 +387,8 @@ export default function AddEditEducation() {
               message: "CGPA cannot be more than 10",
             },
           })}
-          error={errors?.cgpa}
+          error={errors?.cgpa?.message}
         />
-
-        <FieldError error={errors.cgpa?.message} />
       </LabelInput>
 
       <CustomButton

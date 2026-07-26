@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
@@ -129,10 +128,8 @@ export default function AddEditSkillCategory() {
               message: "Category name must not exceed 50 characters",
             },
           })}
-          error={errors?.name}
+          error={errors?.name?.message}
         />
-
-        <FieldError error={errors.name?.message} />
       </LabelInput>
 
       {/* Category Logo URL */}
@@ -146,10 +143,8 @@ export default function AddEditSkillCategory() {
           type="text"
           placeholder="e.g. /images/frontend.svg"
           {...register("logoUrl")}
-          error={errors?.logoUrl}
+          error={errors?.logoUrl?.message}
         />
-
-        <FieldError error={errors.logoUrl?.message} />
       </LabelInput>
 
       {/* Sort Order */}
@@ -164,7 +159,7 @@ export default function AddEditSkillCategory() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder}
+          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -182,7 +177,7 @@ export default function AddEditSkillCategory() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility}
+          error={errors?.visibility?.message}
         />
       </LabelInput>
 

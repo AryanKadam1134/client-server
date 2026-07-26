@@ -9,12 +9,12 @@ import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import FieldError from "../../../components/ui/FieldError";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
+import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
@@ -226,10 +226,8 @@ export default function AddEditCertificate() {
               message: "Certificate name must not exceed 100 characters",
             },
           })}
-          error={errors?.title}
+          error={errors?.title?.message}
         />
-
-        <FieldError error={errors.title?.message} />
       </LabelInput>
 
       {/* Issued By */}
@@ -254,10 +252,8 @@ export default function AddEditCertificate() {
               message: "Issuer name must not exceed 100 characters",
             },
           })}
-          error={errors?.issuer}
+          error={errors?.issuer?.message}
         />
-
-        <FieldError error={errors.issuer?.message} />
       </LabelInput>
 
       {/* Credential Id */}
@@ -276,7 +272,7 @@ export default function AddEditCertificate() {
               message: "Credential ID must not exceed 50 characters",
             },
           })}
-          error={errors?.credentialId}
+          error={errors?.credentialId?.message}
         />
       </LabelInput>
 
@@ -308,7 +304,7 @@ export default function AddEditCertificate() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.credentialUrl}
+          error={errors?.credentialUrl?.message}
         />
       </LabelInput>
 
@@ -328,10 +324,8 @@ export default function AddEditCertificate() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description}
+          error={errors?.description?.message}
         />
-
-        <FieldError error={errors.description?.message} />
       </LabelInput>
 
       {/* Skills */}
@@ -350,6 +344,7 @@ export default function AddEditCertificate() {
               options={skillsList}
               value={field.value}
               onChange={field.onChange}
+              error={errors?.skills?.message}
             />
           )}
         />
@@ -379,10 +374,8 @@ export default function AddEditCertificate() {
               return true;
             },
           })}
-          error={errors?.issueDate}
+          error={errors?.issueDate?.message}
         />
-
-        <FieldError error={errors.issueDate?.message} />
       </LabelInput>
 
       {/* Expiry Date */}
@@ -407,10 +400,8 @@ export default function AddEditCertificate() {
               return true;
             },
           })}
-          error={errors?.expiryDate}
+          error={errors?.expiryDate?.message}
         />
-
-        <FieldError error={errors.expiryDate?.message} />
       </LabelInput>
 
       {/* Featured */}
@@ -425,11 +416,10 @@ export default function AddEditCertificate() {
           </p>
         }
       >
-        <input
+        <CustomCheckbox
           id="featured"
-          type="checkbox"
           {...register("featured")}
-          error={errors?.featured}
+          error={errors?.featured?.message}
         />
       </LabelInput>
 
@@ -445,7 +435,7 @@ export default function AddEditCertificate() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder}
+          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -463,10 +453,8 @@ export default function AddEditCertificate() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility}
+          error={errors?.visibility?.message}
         />
-
-        <FieldError error={errors.visibility?.message} />
       </LabelInput>
 
       <CustomButton
