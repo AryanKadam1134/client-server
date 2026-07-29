@@ -44,7 +44,6 @@ import ChangePassword from "./pages/private/ChangePassword";
 import PopupWindow from "./components/common/PopupWindow";
 
 import { useAuth } from "./context/auth/useAuth";
-import { usePopup } from "./context/popup/usePopup";
 
 function SessionLoader() {
   return (
@@ -55,11 +54,9 @@ function SessionLoader() {
 }
 
 function PopupLayout() {
-  const { isPopupWindow } = usePopup();
-
   return (
     <>
-      {isPopupWindow && <PopupWindow />}
+      <PopupWindow />
 
       <Outlet />
     </>

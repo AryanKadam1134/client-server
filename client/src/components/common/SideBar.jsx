@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+
 import { NavLink } from "react-router-dom";
 import {
   User,
@@ -14,11 +15,9 @@ import {
   Settings,
 } from "lucide-react";
 
-import { useAuth } from "../../context/auth/useAuth";
-import { useTheme } from "../../context/theme/useTheme";
+import AppLogo from "./AppLogo";
 
-import profiloLogoBlack from "../../assets/profilo_logo_black.png";
-import profiloLogoWhite from "../../assets/profilo_logo_white.png";
+import { useAuth } from "../../context/auth/useAuth";
 
 const menus = [
   { name: "User Details", path: "/details", icon: User },
@@ -60,12 +59,6 @@ function NavItem({ menu, onClick }) {
 
 export default function SideBar({ isOpen, onClose }) {
   const { logout } = useAuth();
-  const { theme } = useTheme();
-
-  const logo = {
-    light: profiloLogoBlack,
-    dark: profiloLogoWhite,
-  };
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
@@ -96,11 +89,7 @@ export default function SideBar({ isOpen, onClose }) {
         {/* Header */}
         <div className="shrink-0 h-16 flex items-center border-b border-light-border-primary dark:border-dark-border-primary">
           <div className="flex items-center gap-2.5">
-            <img
-              src={logo[theme]}
-              alt="Profilo Logo"
-              className="ml-3 size-9 rounded-full"
-            />
+            <AppLogo className="ml-3 size-9" />
 
             <p className="text-nowrap text-md font-medium text-light-text-primary dark:text-dark-text-primary">
               Profilo

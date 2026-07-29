@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { LockKeyholeOpen, Mail } from "lucide-react";
 
+import AppLogo from "../../components/common/AppLogo";
+
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -14,21 +16,12 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 import { authEndpoints } from "../../services/authService";
 
 import { useAuth } from "../../context/auth/useAuth";
-import { useTheme } from "../../context/theme/useTheme";
+
 import { useNotify } from "../../context/notification/useNotify";
 
-import profiloLogoBlack from "../../assets/profilo_logo_black.png";
-import profiloLogoWhite from "../../assets/profilo_logo_white.png";
-
 export default function Authentication() {
-  const { theme } = useTheme();
   const { notify } = useNotify();
   const { error, setError, login, googleAuth } = useAuth();
-
-  const logo = {
-    light: profiloLogoBlack,
-    dark: profiloLogoWhite,
-  };
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -68,11 +61,7 @@ export default function Authentication() {
 
   return (
     <div className="min-h-screen p-6 flex flex-col items-center justify-center gap-10 bg-light-bg-secondary dark:bg-dark-bg-secondary">
-      <img
-        src={logo[theme]}
-        alt="Profilo Logo"
-        className="ml-3 size-12 rounded-full"
-      />
+      <AppLogo className="size-12" />
 
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
         <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">

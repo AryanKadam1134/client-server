@@ -22,6 +22,8 @@ export default function PopupWindow() {
     };
   }, [isPopupWindow]);
 
+  if (!isPopupWindow) return;
+
   return (
     <div className="fixed inset-0 z-100 flex justify-center items-center bg-black/50">
       <div className="relative max-w-[90%] max-h-[95%] bg-light-bg-primary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-2xl flex flex-col overflow-hidden">
