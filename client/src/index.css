@@ -13,20 +13,6 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-/* Smooth transitions for theme switching */
-html {
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-/* EXPANDED: normal left-aligned layout */
-.expanded .nav-item {
-  padding: 9px 10px;
-  gap: 10px;
-  justify-content: flex-start;
-}
-
 /* COLLAPSED: center the icon — zero padding, zero gap */
 .collapsed .nav-item {
   padding: 9px 0;

@@ -6,7 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ConfigProvider } from "antd";
 
 import { AuthProvider } from "./context/auth/AuthProvider.jsx";
-import { PopupProvider } from "./context/popup/PopupProvider.jsx";
+import { ModalProvider } from "./context/modal/ModalProvider.jsx";
 import { ThemeProvider } from "./context/theme/ThemeProvider.jsx";
 import { NotificationsProvider } from "./context/notification/NotificationsProvider.jsx";
 
@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")).render(
   >
     <ThemeProvider>
       <NotificationsProvider>
-        <PopupProvider>
+        <ModalProvider>
           <AuthProvider>
             <GoogleOAuthProvider
               clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
@@ -28,7 +28,7 @@ createRoot(document.getElementById("root")).render(
               <App />
             </GoogleOAuthProvider>
           </AuthProvider>
-        </PopupProvider>
+        </ModalProvider>
       </NotificationsProvider>
     </ThemeProvider>
   </ConfigProvider>,

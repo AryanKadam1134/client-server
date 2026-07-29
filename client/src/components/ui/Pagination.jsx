@@ -1,11 +1,11 @@
 import React from "react";
 
+import { Grid } from "antd";
+const { useBreakpoint } = Grid;
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { usePopup } from "../../context/popup/usePopup";
-
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
-  const { screens } = usePopup();
+  const screens = useBreakpoint();
 
   const maxPageButtons = screens.md ? 10 : screens.sm ? 5 : 3;
 
@@ -102,4 +102,3 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
     </div>
   );
 }
-

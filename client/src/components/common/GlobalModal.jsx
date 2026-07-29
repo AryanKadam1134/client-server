@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 
 import { X } from "lucide-react";
 
-import { usePopup } from "../../context/popup/usePopup";
+import { useModal } from "../../context/modal/useModal";
 
-export default function PopupWindow() {
-  const { isPopupWindow, popupContent, closePopupWindow } = usePopup();
+export default function GlobalModal() {
+  const { isModalOpen, modalContent, closeModal } = useModal();
 
-  const { title, icon, renderContent, className } = popupContent || {};
+  const { title, icon, renderContent, className } = modalContent || {};
 
   useEffect(() => {
-    if (isPopupWindow) {
+    if (isModalOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -20,9 +20,9 @@ export default function PopupWindow() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isPopupWindow]);
+  }, [isModalOpen]);
 
-  if (!isPopupWindow) return;
+  if (!isModalOpen) return;
 
   return (
     <div className="fixed inset-0 z-100 flex justify-center items-center bg-black/50">
@@ -36,7 +36,7 @@ export default function PopupWindow() {
           </div>
 
           <div
-            onClick={closePopupWindow}
+            onClick={closeModal}
             className="p-1 hover:backdrop-brightness-85 rounded-md cursor-pointer"
           >
             <X size={20} strokeWidth={3} className="cursor-pointer" />

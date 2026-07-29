@@ -4,10 +4,10 @@ import { AlertTriangle } from "lucide-react";
 
 import CustomButton from "../ui/CustomButton";
 
-import { usePopup } from "../../context/popup/usePopup";
+import { useModal } from "../../context/modal/useModal";
 
-export default function DeleteUserPopup({ onConfirm, isDeleting }) {
-  const { closePopupWindow } = usePopup();
+export default function DeleteUserModal({ onConfirm, isDeleting }) {
+  const { closeModal } = useModal();
 
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -51,7 +51,7 @@ export default function DeleteUserPopup({ onConfirm, isDeleting }) {
       <div className="flex gap-3 justify-end">
         <CustomButton
           variant="default"
-          onClick={closePopupWindow}
+          onClick={closeModal}
           className="text-sm"
           disabled={isDeleting}
         >

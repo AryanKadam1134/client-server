@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 
-import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
+import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
 import Pagination from "../../../components/ui/Pagination";
@@ -17,12 +17,12 @@ import { skillCategoryEndpoints } from "../../../services/skillCategoryService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { usePopup } from "../../../context/popup/usePopup";
+import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";
 
 export default function SkillCategories() {
   const { notify } = useNotify();
-  const { openPopupWindow, closePopupWindow } = usePopup();
+  const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
 
@@ -60,7 +60,7 @@ export default function SkillCategories() {
       await skillCategoryEndpoints.deleteSkillCategory(categoryId);
 
       fetchSkillCategories();
-      closePopupWindow();
+      closeModal();
       notify.msgSuccess("Category Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete skill category");
@@ -69,11 +69,11 @@ export default function SkillCategories() {
     }
   };
 
-  const deleteSkillCategoryPopup = (_id) => {
-    openPopupWindow(
+  const deleteSkillCategoryModal = (_id) => {
+    openModal(
       <Trash2 strokeWidth={3} />,
       "Delete Skill Category",
-      <DeleteItemPopup func={() => deleteSkillCategory(_id)} />,
+      <DeleteItemModal func={() => deleteSkillCategory(_id)} />,
       "bg-red-500",
     );
   };
@@ -110,7 +110,7 @@ export default function SkillCategories() {
           <ActionButton
             icon={Trash2}
             variant="red"
-            onClick={() => deleteSkillCategoryPopup(_id)}
+            onClick={() => deleteSkillCategoryModal(_id)}
             disabled={deleting}
           />
         </div>,
@@ -141,4 +141,3 @@ export default function SkillCategories() {
     </div>
   );
 }
-

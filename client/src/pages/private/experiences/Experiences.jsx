@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 
-import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
+import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
 import Pagination from "../../../components/ui/Pagination";
@@ -21,12 +21,12 @@ import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 import useLocationTypesList from "../../../hooks/useLocationTypesList";
 
-import { usePopup } from "../../../context/popup/usePopup";
+import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";
 
 export default function Experiences() {
   const { notify } = useNotify();
-  const { openPopupWindow, closePopupWindow } = usePopup();
+  const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
@@ -66,7 +66,7 @@ export default function Experiences() {
       await experienceEndpoints.deleteExperience(experienceId);
 
       fetchExperiences();
-      closePopupWindow();
+      closeModal();
       notify.msgSuccess("Experience Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete experience");
@@ -75,11 +75,11 @@ export default function Experiences() {
     }
   };
 
-  const deleteExperiencePopup = (_id) => {
-    openPopupWindow(
+  const deleteExperienceModal = (_id) => {
+    openModal(
       <Trash2 strokeWidth={3} />,
       "Delete Experience",
-      <DeleteItemPopup func={() => deleteExperience(_id)} />,
+      <DeleteItemModal func={() => deleteExperience(_id)} />,
       "bg-red-500",
     );
   };
@@ -127,7 +127,7 @@ export default function Experiences() {
           <ActionButton
             icon={Trash2}
             variant="red"
-            onClick={() => deleteExperiencePopup(_id)}
+            onClick={() => deleteExperienceModal(_id)}
             disabled={deleting}
           />
         </div>,
@@ -158,4 +158,3 @@ export default function Experiences() {
     </div>
   );
 }
-

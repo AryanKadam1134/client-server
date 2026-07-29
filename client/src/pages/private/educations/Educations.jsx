@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 
-import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
+import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
 import Pagination from "../../../components/ui/Pagination";
@@ -14,12 +14,12 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { educationEndpoints } from "../../../services/educationService";
 
-import { usePopup } from "../../../context/popup/usePopup";
+import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";
 
 export default function Educations() {
   const { notify } = useNotify();
-  const { openPopupWindow, closePopupWindow } = usePopup();
+  const { openModal, closeModal } = useModal();
 
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ export default function Educations() {
       await educationEndpoints.deleteEducation(educationId);
 
       fetchEducations();
-      closePopupWindow();
+      closeModal();
       notify.msgSuccess("Education Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete education");
@@ -64,11 +64,11 @@ export default function Educations() {
     }
   };
 
-  const deleteEducationPopup = (_id) => {
-    openPopupWindow(
+  const deleteEducationModal = (_id) => {
+    openModal(
       <Trash2 strokeWidth={3} />,
       "Delete Education",
-      <DeleteItemPopup func={() => deleteEducation(_id)} />,
+      <DeleteItemModal func={() => deleteEducation(_id)} />,
       "bg-red-500",
     );
   };
@@ -108,7 +108,7 @@ export default function Educations() {
           <ActionButton
             icon={Trash2}
             variant="red"
-            onClick={() => deleteEducationPopup(_id)}
+            onClick={() => deleteEducationModal(_id)}
             disabled={deleting}
           />
         </div>,
@@ -139,4 +139,3 @@ export default function Educations() {
     </div>
   );
 }
-

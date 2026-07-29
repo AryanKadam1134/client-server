@@ -3,18 +3,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertTriangle, LockKeyholeOpen, Trash2 } from "lucide-react";
 
-import DeleteUserPopup from "../../components/settings/DeleteUserPopup";
+import DeleteUserModal from "../../components/settings/DeleteUserModal";
 
 import { userEndpoints } from "../../services/userService";
 
 import { useAuth } from "../../context/auth/useAuth";
-import { usePopup } from "../../context/popup/usePopup";
+import { useModal } from "../../context/modal/useModal";
 import { useNotify } from "../../context/notification/useNotify";
 
 export default function Settings() {
   const { setUser } = useAuth();
   const { notify } = useNotify();
-  const { openPopupWindow, closePopupWindow } = usePopup();
+  const { openModal, closeModal } = useModal();
 
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ export default function Settings() {
     try {
       await userEndpoints.deleteUser();
       setUser(null);
-      closePopupWindow();
+      closeModal();
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete account");
     } finally {
@@ -34,10 +34,10 @@ export default function Settings() {
   };
 
   const openDeleteConfirmation = () => {
-    openPopupWindow(
+    openModal(
       <Trash2 size={24} />,
       "Delete Account",
-      <DeleteUserPopup onConfirm={deleteUser} isDeleting={deleting} />,
+      <DeleteUserModal onConfirm={deleteUser} isDeleting={deleting} />,
       "bg-red-500",
     );
   };

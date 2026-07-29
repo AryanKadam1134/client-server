@@ -1,7 +1,7 @@
 import React from "react";
 import CustomButton from "../ui/CustomButton";
 
-export default function DeleteItemPopup({ func }) {
+export default function DeleteItemModal({ func }) {
   return (
     <div className="flex flex-col gap-5 w-full">
       <div className="text-sm text-light-text-primary dark:text-dark-text-primary">

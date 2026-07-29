@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 
-import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
+import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
 import Pagination from "../../../components/ui/Pagination";
@@ -19,12 +19,12 @@ import { skillEndpoints } from "../../../services/skillService";
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { usePopup } from "../../../context/popup/usePopup";
+import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";
 
 export default function Skills() {
   const { notify } = useNotify();
-  const { openPopupWindow, closePopupWindow } = usePopup();
+  const { openModal, closeModal } = useModal();
 
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
@@ -63,7 +63,7 @@ export default function Skills() {
       await skillEndpoints.deleteSkill(id);
 
       fetchSkills();
-      closePopupWindow();
+      closeModal();
       notify.msgSuccess("Skill Deleted!");
     } catch (error) {
       console.error("Error deleting Skill: ", error);
@@ -73,11 +73,11 @@ export default function Skills() {
     }
   };
 
-  const deleteSkillPopup = (_id) => {
-    openPopupWindow(
+  const deleteSkillModal = (_id) => {
+    openModal(
       <Trash2 strokeWidth={3} />,
       "Delete Skill",
-      <DeleteItemPopup func={() => deleteSkill(_id)} />,
+      <DeleteItemModal func={() => deleteSkill(_id)} />,
       "bg-red-500",
     );
   };
@@ -118,7 +118,7 @@ export default function Skills() {
           <ActionButton
             icon={Trash2}
             variant="red"
-            onClick={() => deleteSkillPopup(_id)}
+            onClick={() => deleteSkillModal(_id)}
             disabled={deleting}
           />
         </div>,
@@ -149,4 +149,3 @@ export default function Skills() {
     </div>
   );
 }
-

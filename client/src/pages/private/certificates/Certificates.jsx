@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, FilePenLine, Plus, Trash2 } from "lucide-react";
 
-import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
+import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
 import Pagination from "../../../components/ui/Pagination";
@@ -17,12 +17,12 @@ import { certificateEndpoints } from "../../../services/certificateService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { usePopup } from "../../../context/popup/usePopup";
+import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";
 
 export default function Certificates() {
   const { notify } = useNotify();
-  const { openPopupWindow, closePopupWindow } = usePopup();
+  const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
 
@@ -60,7 +60,7 @@ export default function Certificates() {
       await certificateEndpoints.deleteCertificate(certificateId);
 
       fetchCertificate();
-      closePopupWindow();
+      closeModal();
       notify.msgSuccess("Certificate Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete certificate");
@@ -69,11 +69,11 @@ export default function Certificates() {
     }
   };
 
-  const deleteCertificatePopup = (_id) => {
-    openPopupWindow(
+  const deleteCertificateModal = (_id) => {
+    openModal(
       <Trash2 strokeWidth={3} />,
       "Delete Certificate",
-      <DeleteItemPopup func={() => deleteCertificate(_id)} />,
+      <DeleteItemModal func={() => deleteCertificate(_id)} />,
       "bg-red-500",
     );
   };
@@ -122,7 +122,7 @@ export default function Certificates() {
           <ActionButton
             icon={Trash2}
             variant="red"
-            onClick={() => deleteCertificatePopup(_id)}
+            onClick={() => deleteCertificateModal(_id)}
             disabled={deleting}
           />
         </div>,
@@ -153,4 +153,3 @@ export default function Certificates() {
     </div>
   );
 }
-

@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 
-import DeleteItemPopup from "../../../components/common/DeleteItemPopup";
+import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
 import Pagination from "../../../components/ui/Pagination";
@@ -17,12 +17,12 @@ import { achievementEndpoints } from "../../../services/achievementService";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
-import { usePopup } from "../../../context/popup/usePopup";
+import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";
 
 export default function Achievements() {
   const { notify } = useNotify();
-  const { openPopupWindow, closePopupWindow } = usePopup();
+  const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
 
@@ -60,7 +60,7 @@ export default function Achievements() {
       await achievementEndpoints.deleteAchievement(achievementId);
 
       fetchAchievements();
-      closePopupWindow();
+      closeModal();
       notify.msgSuccess("Achievement Deleted!");
     } catch (error) {
       notify.msgError(error?.message || "Failed to delete achievement");
@@ -69,11 +69,11 @@ export default function Achievements() {
     }
   };
 
-  const deleteAchievementPopup = (_id) => {
-    openPopupWindow(
+  const deleteAchievementModal = (_id) => {
+    openModal(
       <Trash2 strokeWidth={3} />,
       "Delete Achievement",
-      <DeleteItemPopup func={() => deleteAchievement(_id)} />,
+      <DeleteItemModal func={() => deleteAchievement(_id)} />,
       "bg-red-500",
     );
   };
@@ -124,7 +124,7 @@ export default function Achievements() {
           <ActionButton
             icon={Trash2}
             variant="red"
-            onClick={() => deleteAchievementPopup(_id)}
+            onClick={() => deleteAchievementModal(_id)}
             disabled={deleting}
           />
         </div>,
@@ -155,4 +155,3 @@ export default function Achievements() {
     </div>
   );
 }
-
