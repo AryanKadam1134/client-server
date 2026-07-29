@@ -71,8 +71,8 @@ export default function SocialPlatforms() {
 
   const deletePlatformModal = (_id) => {
     openModal(
-      <Trash2 strokeWidth={3} />,
       "Delete Platform",
+      <Trash2 strokeWidth={3} />,
       <DeleteItemModal func={() => deletePlatform(_id)} />,
       "bg-red-500",
     );

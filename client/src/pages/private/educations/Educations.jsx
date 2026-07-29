@@ -66,8 +66,8 @@ export default function Educations() {
 
   const deleteEducationModal = (_id) => {
     openModal(
-      <Trash2 strokeWidth={3} />,
       "Delete Education",
+      <Trash2 strokeWidth={3} />,
       <DeleteItemModal func={() => deleteEducation(_id)} />,
       "bg-red-500",
     );

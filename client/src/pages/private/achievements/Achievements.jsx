@@ -71,8 +71,8 @@ export default function Achievements() {
 
   const deleteAchievementModal = (_id) => {
     openModal(
-      <Trash2 strokeWidth={3} />,
       "Delete Achievement",
+      <Trash2 strokeWidth={3} />,
       <DeleteItemModal func={() => deleteAchievement(_id)} />,
       "bg-red-500",
     );

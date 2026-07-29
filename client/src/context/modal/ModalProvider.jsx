@@ -5,31 +5,25 @@ import GlobalModal from "../../components/common/GlobalModal";
 import { ModalContext } from "./useModal";
 
 export const ModalProvider = ({ children }) => {
-  // Open & Close Modal
-  const [isModalOpen, setModalOpen] = useState(false);
-
   const [modalContent, setModalContent] = useState({});
 
-  const openModal = (icon, title, content, className) => {
+  const openModal = (title, icon, content, className) => {
     setModalContent({
-      icon: icon,
+      isOpen: true,
       title: title,
+      icon: icon,
       renderContent: content,
       className: className,
     });
-
-    setModalOpen(true);
   };
 
   const closeModal = () => {
-    setModalOpen(false);
-    setModalContent({});
+    setModalContent({ isOpen: false });
   };
 
   return (
     <ModalContext.Provider
       value={{
-        isModalOpen,
         modalContent,
 
         openModal,

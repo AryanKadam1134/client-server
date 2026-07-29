@@ -5,12 +5,12 @@ import { X } from "lucide-react";
 import { useModal } from "../../context/modal/useModal";
 
 export default function GlobalModal() {
-  const { isModalOpen, modalContent, closeModal } = useModal();
+  const { modalContent, closeModal } = useModal();
 
-  const { title, icon, renderContent, className } = modalContent || {};
+  const { isOpen, title, icon, renderContent, className } = modalContent || {};
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -20,9 +20,9 @@ export default function GlobalModal() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isModalOpen]);
+  }, [isOpen]);
 
-  if (!isModalOpen) return;
+  if (!isOpen) return;
 
   return (
     <div className="fixed inset-0 z-100 flex justify-center items-center bg-black/50">

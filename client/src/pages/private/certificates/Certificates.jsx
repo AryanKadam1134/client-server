@@ -71,8 +71,8 @@ export default function Certificates() {
 
   const deleteCertificateModal = (_id) => {
     openModal(
-      <Trash2 strokeWidth={3} />,
       "Delete Certificate",
+      <Trash2 strokeWidth={3} />,
       <DeleteItemModal func={() => deleteCertificate(_id)} />,
       "bg-red-500",
     );

@@ -35,8 +35,8 @@ export default function Settings() {
 
   const openDeleteConfirmation = () => {
     openModal(
-      <Trash2 size={24} />,
       "Delete Account",
+      <Trash2 size={24} />,
       <DeleteUserModal onConfirm={deleteUser} isDeleting={deleting} />,
       "bg-red-500",
     );

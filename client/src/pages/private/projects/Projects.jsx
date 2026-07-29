@@ -73,8 +73,8 @@ export default function Projects() {
 
   const deleteProjectModal = (_id) => {
     openModal(
-      <Trash2 strokeWidth={3} />,
       "Delete Project",
+      <Trash2 strokeWidth={3} />,
       <DeleteItemModal func={() => deleteProject(_id)} />,
       "bg-red-500",
     );

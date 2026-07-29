@@ -75,8 +75,8 @@ export default function Skills() {
 
   const deleteSkillModal = (_id) => {
     openModal(
-      <Trash2 strokeWidth={3} />,
       "Delete Skill",
+      <Trash2 strokeWidth={3} />,
       <DeleteItemModal func={() => deleteSkill(_id)} />,
       "bg-red-500",
     );

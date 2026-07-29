@@ -77,8 +77,8 @@ export default function Experiences() {
 
   const deleteExperienceModal = (_id) => {
     openModal(
-      <Trash2 strokeWidth={3} />,
       "Delete Experience",
+      <Trash2 strokeWidth={3} />,
       <DeleteItemModal func={() => deleteExperience(_id)} />,
       "bg-red-500",
     );
