@@ -10,7 +10,7 @@ import Pagination from "../../../components/ui/Pagination";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomButton from "../../../components/ui/CustomButton";
 
-import { getVisibility } from "../../../utils/getVisibility";
+import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { socialPlatformEndpoints } from "../../../services/socialPlatformService";
@@ -108,7 +108,7 @@ export default function SocialPlatforms() {
           </a>
         ),
         sortOrder === 0 ? "0" : sortOrder,
-        getVisibility(visibilities, visibility),
+        getOptionLabel(visibilities, visibility),
         <div className="flex items-center gap-1">
           <ActionButton
             icon={FilePenLine}

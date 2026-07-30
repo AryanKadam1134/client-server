@@ -10,9 +10,7 @@ import Pagination from "../../../components/ui/Pagination";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomButton from "../../../components/ui/CustomButton";
 
-import { getVisibility } from "../../../utils/getVisibility";
-import { getLocationType } from "../../../utils/getLocationType";
-import { getEmploymentType } from "../../../utils/getEmploymentType";
+import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { experienceEndpoints } from "../../../services/experienceService";
@@ -112,10 +110,10 @@ export default function Experiences() {
       cells: [
         calculateSerialNumber(pagination?.page, index, pagination?.limit),
         organization,
-        getEmploymentType(employmentTypes, employmentType),
+        getOptionLabel(employmentTypes, employmentType),
         location,
-        getLocationType(locationTypesList, locationType),
-        getVisibility(visibilities, visibility),
+        getOptionLabel(locationTypesList, locationType),
+        getOptionLabel(visibilities, visibility),
         <div className="flex items-center gap-1">
           <ActionButton
             icon={FilePenLine}

@@ -10,7 +10,7 @@ import Pagination from "../../../components/ui/Pagination";
 import ActionButton from "../../../components/ui/ActionButton";
 import CustomButton from "../../../components/ui/CustomButton";
 
-import { getVisibility } from "../../../utils/getVisibility";
+import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { achievementEndpoints } from "../../../services/achievementService";
@@ -111,7 +111,7 @@ export default function Achievements() {
           </a>
         ),
         sortOrder === 0 ? "0" : sortOrder,
-        getVisibility(visibilities, visibility),
+        getOptionLabel(visibilities, visibility),
         featured ? "Yes" : "No",
         <div className="flex items-center gap-1">
           <ActionButton

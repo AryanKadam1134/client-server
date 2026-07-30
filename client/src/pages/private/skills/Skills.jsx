@@ -10,8 +10,7 @@ import Pagination from "../../../components/ui/Pagination";
 import CustomButton from "../../../components/ui/CustomButton";
 import ActionButton from "../../../components/ui/ActionButton";
 
-import { getSkillLevel } from "../../../utils/getSkillLevel";
-import { getVisibility } from "../../../utils/getVisibility";
+import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { skillEndpoints } from "../../../services/skillService";
@@ -104,9 +103,9 @@ export default function Skills() {
         calculateSerialNumber(pagination?.page, index, pagination?.limit),
         name,
         category?.name,
-        getSkillLevel(skillLevels, level),
+        getOptionLabel(skillLevels, level),
         sortOrder === 0 ? "0" : sortOrder,
-        getVisibility(visibilities, visibility),
+        getOptionLabel(visibilities, visibility),
         <div className="flex items-center gap-1">
           <ActionButton
             icon={FilePenLine}
