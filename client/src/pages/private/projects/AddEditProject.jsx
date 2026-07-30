@@ -139,13 +139,12 @@ export default function AddEditProject() {
   };
 
   const handleCoverChange = async (idx) => {
-    setValue("coverImageIndex", idx, { shouldDirty: true });
-
     try {
       await projectEndpoints.updateProject(id, {
         coverImageIndex: idx,
       });
 
+      setValue("coverImageIndex", idx, { shouldDirty: true });
       notify.msgSuccess("Cover Image Changed!");
     } catch (err) {
       console.error(err);

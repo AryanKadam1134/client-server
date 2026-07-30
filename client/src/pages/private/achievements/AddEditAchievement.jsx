@@ -127,12 +127,13 @@ export default function AddEditAchievement() {
   };
 
   const handleCoverChange = async (idx) => {
-    setValue("coverImageIndex", idx, { shouldDirty: true });
-
     try {
       await achievementEndpoints.updateAchievement(id, {
         coverImageIndex: idx,
       });
+
+      setValue("coverImageIndex", idx, { shouldDirty: true });
+      notify.msgSuccess("Cover Image Changed!");
     } catch (err) {
       notify.msgError(err?.message || "Failed to update cover image");
     }
