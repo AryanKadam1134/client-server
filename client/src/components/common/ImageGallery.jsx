@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { ChevronLeft, ChevronRight, Image, Loader, Trash2 } from "lucide-react";
 
@@ -35,6 +35,8 @@ export default function ImageGallery({
   deleteImage,
   className = "",
 }) {
+  const [activeImage, setActiveImage] = useState(null);
+
   return (
     <div className={`h-full flex items-end ${className}`}>
       {!images?.length || images?.length <= 0 ? (
@@ -69,9 +71,16 @@ export default function ImageGallery({
               const { public_id, url } = image;
               const isCoverImage = idx === coverImageIndex;
 
+              const isActive = activeImage === public_id;
+
               return (
                 <div
                   key={public_id || idx}
+                  onClick={() =>
+                    setActiveImage((prev) =>
+                      prev === public_id ? null : public_id,
+                    )
+                  }
                   className={`relative group h-[140px] w-auto shrink-0 rounded-md overflow-hidden transition-all ${
                     isCoverImage
                       ? "ring-1 ring-green-500 border-0 shadow-md"
@@ -107,8 +116,19 @@ export default function ImageGallery({
                       title="Set as cover image"
                       variant="green"
                       icon={Image}
-                      onClick={() => handleCoverChange(idx)}
-                      className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCoverChange(idx);
+                      }}
+                      className={`absolute top-2 left-2 
+                        transition-opacity
+                        ${
+                          isActive
+                            ? "opacity-100 pointer-events-auto"
+                            : "opacity-0 pointer-events-none"
+                        }
+                        md:opacity-0 md:pointer-events-none
+                        md:group-hover:opacity-100 md:group-hover:pointer-events-auto`}
                     />
                   )}
 
@@ -118,8 +138,19 @@ export default function ImageGallery({
                     title="Delete image"
                     variant="red"
                     icon={Trash2}
-                    onClick={() => deleteImage(public_id)}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteImage(public_id);
+                    }}
+                    className={`absolute top-2 right-2 
+                      transition-opacity
+                      ${
+                        isActive
+                          ? "opacity-100 pointer-events-auto"
+                          : "opacity-0 pointer-events-none"
+                      }
+                      md:opacity-0 md:pointer-events-none
+                      md:group-hover:opacity-100 md:group-hover:pointer-events-auto`}
                   />
                 </div>
               );

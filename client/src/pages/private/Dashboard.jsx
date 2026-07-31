@@ -32,7 +32,6 @@ import pdfLogo from "../../assets/pdf.svg";
 import defaultProfileImage from "../../assets/profile.png";
 
 function ResumeDropZone({
-  fileInputRef,
   preview,
   resumeOrCv,
   resumeLoading,
@@ -40,6 +39,8 @@ function ResumeDropZone({
   updateResume,
   deleteResume,
 }) {
+  const fileInputRef = useRef(null);
+
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragOver = (e) => {
@@ -167,14 +168,105 @@ function ResumeDropZone({
   );
 }
 
+function ProfilePhotoUploader({
+  previewImage,
+  profileImageUrl,
+  imageLoading,
+  uploadFile,
+  updateProfileImage,
+  deleteProfileImage,
+}) {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const imageInputRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = () => setIsClicked(false);
+
+    if (isClicked) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isClicked]);
+
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsClicked((prev) => !prev);
+      }}
+      className="relative group"
+    >
+      {/* Image */}
+      <img
+        src={previewImage || profileImageUrl || defaultProfileImage}
+        alt="User Profile"
+        className="size-45 rounded-full object-contain border border-light-border-primary dark:border-dark-border-primary"
+      />
+
+      {/* Overlay */}
+      {imageLoading ? (
+        <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
+          <div className="text-white text-sm bg-black/40 p-2 rounded-full">
+            <Loader
+              size={20}
+              className="text-light-text-secondary dark:text-dark-text-secondary animate-spin"
+            />
+          </div>
+        </div>
+      ) : (
+        <div
+          className={`absolute inset-0 rounded-full bg-black/40 ${
+            isClicked
+              ? "opacity-100 backdrop-blur-xs pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          }
+          md:opacity-0 md:pointer-events-none
+          md:group-hover:opacity-100 md:group-hover:backdrop-blur-xs md:group-hover:pointer-events-auto transition-opacity`}
+        >
+          <div className="h-full flex items-center justify-center">
+            <button
+              type="button"
+              className="p-2 text-sm bg-black/40 flex items-center gap-3 rounded-full"
+            >
+              <div
+                onClick={deleteProfileImage}
+                className="p-2 text-red-400 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300 bg-black/50 rounded-full cursor-pointer transition-colors"
+              >
+                <Trash2 size={20} />
+              </div>
+
+              <div
+                onClick={() => imageInputRef.current.click()}
+                className="p-2 text-blue-400 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 bg-black/50 rounded-full cursor-pointer transition-colors"
+              >
+                <SquarePen size={20} />
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        accept="image/*"
+        ref={imageInputRef}
+        className="hidden"
+        onChange={(e) => uploadFile(e, "image", updateProfileImage)}
+      />
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const { setUser } = useAuth();
   const { notify } = useNotify();
 
   const { genders } = useGenders();
-
-  const fileInputRef = useRef(null);
-  const imageInputRef = useRef(null);
 
   const [detailsLoading, setDetailsLoading] = useState(true);
   const [imageLoading, setImageLoading] = useState(false);
@@ -352,56 +444,14 @@ export default function Dashboard() {
     >
       {/* User Image */}
       <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
-        <div className="relative">
-          {/* Image */}
-          <img
-            src={preview?.image || profileImage?.url || defaultProfileImage}
-            alt="User Profile"
-            className="size-45 rounded-full object-contain border border-light-border-primary dark:border-dark-border-primary"
-          />
-
-          {/* Overlay */}
-          {imageLoading ? (
-            <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
-              <div className="text-white text-sm bg-black/40 p-2 rounded-full">
-                <Loader
-                  size={20}
-                  className="text-light-text-secondary dark:text-dark-text-secondary animate-spin"
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 hover:opacity-100 hover:backdrop-blur-xs transition flex items-center justify-center">
-              <button
-                type="button"
-                className="p-2 text-sm text-white bg-black/40 flex items-center gap-3 rounded-full"
-              >
-                <div
-                  onClick={deleteProfileImage}
-                  className="p-2 text-red-400 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300 bg-black/50 rounded-full cursor-pointer transition-colors"
-                >
-                  <Trash2 size={20} />
-                </div>
-
-                <div
-                  onClick={() => imageInputRef.current.click()}
-                  className="p-2 text-blue-400 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 bg-black/50 rounded-full cursor-pointer transition-colors"
-                >
-                  <SquarePen size={20} />
-                </div>
-              </button>
-            </div>
-          )}
-
-          {/* Hidden File Input */}
-          <input
-            type="file"
-            accept="image/*"
-            ref={imageInputRef}
-            className="hidden"
-            onChange={(e) => uploadFile(e, "image", updateProfileImage)}
-          />
-        </div>
+        <ProfilePhotoUploader
+          previewImage={preview?.image}
+          profileImageUrl={profileImage?.url}
+          imageLoading={imageLoading}
+          uploadFile={uploadFile}
+          updateProfileImage={updateProfileImage}
+          deleteProfileImage={deleteProfileImage}
+        />
       </div>
 
       {/* First Name */}
@@ -576,7 +626,6 @@ export default function Dashboard() {
         required
       >
         <ResumeDropZone
-          fileInputRef={fileInputRef}
           preview={preview}
           resumeOrCv={resumeOrCv}
           resumeLoading={resumeLoading}
