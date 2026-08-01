@@ -5,6 +5,8 @@ import {
   deleteUserImage,
   deleteUserResume,
   getUserDetails,
+  getUserImage,
+  getUserResume,
   hasPassowrd,
   updateUserDetails,
   updateUserImage,
@@ -28,11 +30,13 @@ userRouter
 
 userRouter
   .route("/image")
+  .get(getUserImage)
   .patch(upload.single("image"), updateUserImage)
   .delete(deleteUserImage);
 
 userRouter
   .route("/resume")
+  .get(getUserResume)
   .patch(upload.single("resumeOrCv"), updateUserResume)
   .delete(deleteUserResume);
 

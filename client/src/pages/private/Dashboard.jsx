@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
 import {
@@ -13,7 +13,9 @@ import {
   Link,
 } from "lucide-react";
 
-import UserDetailsSkeleton from "../../components/user_details/UserDetailsSkeleton";
+import UploadUserImage from "../../components/user/UploadUserImage";
+import UploadUserResume from "../../components/user/UploadUserResume";
+import UserDetailsSkeleton from "../../components/user/UserDetailsSkeleton";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -28,240 +30,6 @@ import useGenders from "../../hooks/useGenders";
 import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";
 
-import pdfLogo from "../../assets/pdf.svg";
-import defaultProfileImage from "../../assets/profile.png";
-
-function ResumeDropZone({
-  preview,
-  resumeOrCv,
-  resumeLoading,
-  uploadFile,
-  updateResume,
-  deleteResume,
-}) {
-  const fileInputRef = useRef(null);
-
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const file = e.dataTransfer.files[0];
-    if (!file || file.type !== "application/pdf") return;
-
-    // Simulate the same flow as file input
-    const fakeEvent = { target: { files: [file] } };
-    uploadFile(fakeEvent, "resumeOrCv", updateResume);
-  };
-
-  const hasFile = preview?.resumeOrCv || resumeOrCv?.url;
-  const fileName = resumeOrCv?.name || "resume.pdf";
-
-  return (
-    <>
-      <div
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => !resumeLoading && fileInputRef.current.click()}
-        className={`
-          flex-1 min-h-32 flex flex-col items-center justify-center gap-3
-          border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary hover:border-light-border-primary dark:hover:border-dark-border-primary rounded-md cursor-pointer
-          transition-all duration-200 px-4 py-5 text-center
-          ${isDragging && "border-blue-400 dark:border-blue-500 bg-blue-500/10 dark:bg-blue-950/20"}
-          ${!resumeLoading && "hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover"}
-        `}
-      >
-        {resumeLoading ? (
-          <>
-            <Loader
-              size={24}
-              className="text-blue-500 dark:text-blue-400 animate-spin"
-            />
-          </>
-        ) : hasFile ? (
-          <>
-            <div className="flex flex-col items-center gap-1">
-              <img src={pdfLogo} alt="pdf svg" className="size-8" />
-              <p className="text-xs font-medium truncate text-light-text-primary dark:text-dark-text-primary w-full">
-                {fileName}
-              </p>
-            </div>
-
-            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">
-              Click to replace
-            </p>
-          </>
-        ) : (
-          <>
-            <div className="flex flex-col items-center gap-1">
-              <FileText
-                size={24}
-                className="text-light-text-tertiary dark:text-dark-text-tertiary"
-              />
-              <div className="text-light-text-secondary dark:text-dark-text-secondary text-xs font-medium">
-                Drop your PDF here
-                <br />
-                OR
-                <br />
-                Click to browse
-              </div>
-            </div>
-
-            <p className="text-light-text-tertiary dark:text-dark-text-tertiary text-xs">
-              PDF only
-            </p>
-          </>
-        )}
-      </div>
-
-      {/* Preview & Delete Button */}
-      {hasFile && !resumeLoading && (
-        <div className="flex items-center justify-center gap-5">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              deleteResume();
-            }}
-            className="flex items-center justify-center gap-1.5 text-xs text-red-400 hover:text-red-500 transition-colors py-1 cursor-pointer"
-          >
-            <Trash2 size={13} />
-            Delete PDF
-          </button>
-
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(preview?.resumeOrCv || resumeOrCv?.url);
-            }}
-            className="flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-500 transition-colors py-1 cursor-pointer"
-          >
-            <FileText size={13} />
-            Preview PDF
-          </button>
-        </div>
-      )}
-
-      {/* Hidden File Input */}
-      <input
-        id="resumeOrCv"
-        type="file"
-        accept=".pdf"
-        ref={fileInputRef}
-        className="hidden"
-        onChange={(e) => uploadFile(e, "resumeOrCv", updateResume)}
-      />
-    </>
-  );
-}
-
-function ProfilePhotoUploader({
-  previewImage,
-  profileImageUrl,
-  imageLoading,
-  uploadFile,
-  updateProfileImage,
-  deleteProfileImage,
-}) {
-  const [isClicked, setIsClicked] = useState(false);
-
-  const imageInputRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = () => setIsClicked(false);
-
-    if (isClicked) {
-      document.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [isClicked]);
-
-  return (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-        setIsClicked((prev) => !prev);
-      }}
-      className="relative group"
-    >
-      {/* Image */}
-      <img
-        src={previewImage || profileImageUrl || defaultProfileImage}
-        alt="User Profile"
-        className="size-45 rounded-full object-contain border border-light-border-primary dark:border-dark-border-primary"
-      />
-
-      {/* Overlay */}
-      {imageLoading ? (
-        <div className="absolute inset-0 rounded-full bg-black/40 opacity-100 backdrop-blur-xs transition flex items-center justify-center">
-          <div className="text-white text-sm bg-black/40 p-2 rounded-full">
-            <Loader
-              size={20}
-              className="text-light-text-secondary dark:text-dark-text-secondary animate-spin"
-            />
-          </div>
-        </div>
-      ) : (
-        <div
-          className={`absolute inset-0 rounded-full bg-black/40 ${
-            isClicked
-              ? "opacity-100 backdrop-blur-xs pointer-events-auto"
-              : "opacity-0 pointer-events-none"
-          }
-          md:opacity-0 md:pointer-events-none
-          md:group-hover:opacity-100 md:group-hover:backdrop-blur-xs md:group-hover:pointer-events-auto transition-opacity`}
-        >
-          <div className="h-full flex items-center justify-center">
-            <button
-              type="button"
-              className="p-2 text-sm bg-black/40 flex items-center gap-3 rounded-full"
-            >
-              <div
-                onClick={deleteProfileImage}
-                className="p-2 text-red-400 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300 bg-black/50 rounded-full cursor-pointer transition-colors"
-              >
-                <Trash2 size={20} />
-              </div>
-
-              <div
-                onClick={() => imageInputRef.current.click()}
-                className="p-2 text-blue-400 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 bg-black/50 rounded-full cursor-pointer transition-colors"
-              >
-                <SquarePen size={20} />
-              </div>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Hidden File Input */}
-      <input
-        type="file"
-        accept="image/*"
-        ref={imageInputRef}
-        className="hidden"
-        onChange={(e) => uploadFile(e, "image", updateProfileImage)}
-      />
-    </div>
-  );
-}
-
 export default function Dashboard() {
   const { setUser } = useAuth();
   const { notify } = useNotify();
@@ -269,26 +37,16 @@ export default function Dashboard() {
   const { genders } = useGenders();
 
   const [detailsLoading, setDetailsLoading] = useState(true);
-  const [imageLoading, setImageLoading] = useState(false);
-  const [resumeLoading, setResumeLoading] = useState(false);
-
-  const [preview, setPreview] = useState({
-    image: null,
-    resumeOrCv: null,
-  });
 
   const {
     register,
     handleSubmit,
     reset,
-    getValues,
+
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
     mode: "onChange", // 🔥 important
   });
-
-  const profileImage = getValues("image");
-  const resumeOrCv = getValues("resumeOrCv");
 
   const fetchUserDetails = async () => {
     try {
@@ -340,98 +98,15 @@ export default function Dashboard() {
     }
   };
 
-  const uploadFile = (e, field, func) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // ✅ Preview (instant UI feedback)
-    const imageUrl = URL.createObjectURL(file);
-    setPreview((prev) => ({ ...prev, [field]: imageUrl }));
-
-    func(file);
-    e.target.value = "";
-  };
-
-  const updateProfileImage = async (file) => {
-    setImageLoading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      await userEndpoints.updateUserImage(formData);
-
-      fetchUserDetails();
-      notify.msgSuccess("Profile Image Updated!");
-    } catch (error) {
-      console.error("Error updating image:", error);
-      notify.msgError(error?.message || "Failed to update profile image");
-    } finally {
-      setImageLoading(false);
-    }
-  };
-
-  const deleteProfileImage = async () => {
-    setImageLoading(true);
-
-    try {
-      await userEndpoints.deleteUserImage();
-
-      setPreview({});
-      fetchUserDetails();
-      notify.msgSuccess("Profile Image Deleted!");
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      notify.msgError(error?.message || "Failed to delete profile image");
-    } finally {
-      setImageLoading(false);
-    }
-  };
-
-  const updateResume = async (file) => {
-    setResumeLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("resumeOrCv", file);
-
-      await userEndpoints.updateUserResume(formData);
-
-      fetchUserDetails();
-      notify.msgSuccess("Resume Updated!");
-    } catch (error) {
-      console.error("Error updating resume:", error);
-      notify.msgError(error?.message || "Failed to update resume");
-    } finally {
-      setResumeLoading(false);
-    }
-  };
-
-  const deleteResume = async () => {
-    setResumeLoading(true);
-
-    try {
-      await userEndpoints.deleteUserResume();
-
-      setPreview({});
-      fetchUserDetails();
-      notify.msgSuccess("Resume Updated!");
-    } catch (error) {
-      console.error("Error deleting resume:", error);
-      notify.msgError(error?.message || "Failed to delete resume");
-    } finally {
-      setResumeLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchUserDetails();
   }, []);
 
-  useEffect(() => {
-    return () => {
-      if (preview.image) URL.revokeObjectURL(preview.image);
-    };
-  }, [preview.image]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (preview.image) URL.revokeObjectURL(preview.image);
+  //   };
+  // }, [preview.image]);
 
   if (detailsLoading) {
     return <UserDetailsSkeleton />;
@@ -444,14 +119,7 @@ export default function Dashboard() {
     >
       {/* User Image */}
       <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
-        <ProfilePhotoUploader
-          previewImage={preview?.image}
-          profileImageUrl={profileImage?.url}
-          imageLoading={imageLoading}
-          uploadFile={uploadFile}
-          updateProfileImage={updateProfileImage}
-          deleteProfileImage={deleteProfileImage}
-        />
+        <UploadUserImage />
       </div>
 
       {/* First Name */}
@@ -625,14 +293,7 @@ export default function Dashboard() {
         className="order-[98] lg:order-0"
         required
       >
-        <ResumeDropZone
-          preview={preview}
-          resumeOrCv={resumeOrCv}
-          resumeLoading={resumeLoading}
-          uploadFile={uploadFile}
-          updateResume={updateResume}
-          deleteResume={deleteResume}
-        />
+        <UploadUserResume />
       </LabelInput>
 
       {/* Headline */}

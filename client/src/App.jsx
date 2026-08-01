@@ -17,14 +17,14 @@ import ForogtPassword from "./pages/authentication/ForogtPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/private/Dashboard";
 
-import SocialPlatforms from "./pages/private/social_platforms/SocialPlatforms";
-import AddEditSocialPlatform from "./pages/private/social_platforms/AddEditSocialPlatform";
+import SocialPlatforms from "./pages/private/social-platforms/SocialPlatforms";
+import AddEditSocialPlatform from "./pages/private/social-platforms/AddEditSocialPlatform";
 
 import Skills from "./pages/private/skills/Skills";
 import AddEditSkills from "./pages/private/skills/AddEditSkills";
 
-import SkillCategories from "./pages/private/skill_categories/SkillCategories";
-import AddEditSkillCategory from "./pages/private/skill_categories/AddEditSkillCategory";
+import SkillCategories from "./pages/private/skill-categories/SkillCategories";
+import AddEditSkillCategory from "./pages/private/skill-categories/AddEditSkillCategory";
 
 import Projects from "./pages/private/projects/Projects";
 import AddEditProject from "./pages/private/projects/AddEditProject";

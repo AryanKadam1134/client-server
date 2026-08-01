@@ -108,6 +108,32 @@ const getUserDetails = asynchandler(async (req, res) => {
     .json(new ApiRes(200, req.user, "user details fetched successfully!"));
 });
 
+const getUserImage = asynchandler(async (req, res) => {
+  const { image } = req.user || {};
+
+  if (image?.url) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, image, "user image fetched successfully!"));
+  }
+
+  return res.status(200).json(new ApiRes(200, {}, "couldn't find user image!"));
+});
+
+const getUserResume = asynchandler(async (req, res) => {
+  const { resumeOrCv } = req.user || {};
+
+  if (resumeOrCv?.url) {
+    return res
+      .status(200)
+      .json(new ApiRes(200, resumeOrCv, "user resume fetched successfully!"));
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, {}, "couldn't find user resume!"));
+});
+
 const updateUserImage = asynchandler(async (req, res) => {
   const loggedUser = req.user;
 
@@ -341,6 +367,8 @@ export {
   hasPassowrd,
   updateUserDetails,
   getUserDetails,
+  getUserImage,
+  getUserResume,
   updateUserImage,
   updateUserResume,
   deleteUserImage,
