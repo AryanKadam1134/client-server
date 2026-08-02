@@ -6,6 +6,8 @@ export function NotificationsProvider({ children }) {
   // Ant Design Notification
   const [api, contextHolder] = notification.useNotification();
 
+  const [messageApi, messageContextHolder] = antdMessage.useMessage();
+
   const baseConfig = {
     placement: "bottomRight",
     duration: 3,
@@ -57,7 +59,7 @@ export function NotificationsProvider({ children }) {
 
     // Simple messages with optional storage
     msgSuccess: (msg, icon = null, duration = 2) => {
-      antdMessage.open({
+      messageApi.open({
         type: "success",
         content: buildMessageContent(msg, icon),
         duration,
@@ -65,7 +67,7 @@ export function NotificationsProvider({ children }) {
     },
 
     msgError: (msg, icon = null, duration = 2) => {
-      antdMessage.open({
+      messageApi.open({
         type: "error",
         content: buildMessageContent(msg, icon),
         duration,
@@ -73,7 +75,7 @@ export function NotificationsProvider({ children }) {
     },
 
     msgWarning: (msg, icon = null, duration = 2) => {
-      antdMessage.open({
+      messageApi.open({
         type: "warning",
         content: buildMessageContent(msg, icon),
         duration,
@@ -81,7 +83,7 @@ export function NotificationsProvider({ children }) {
     },
 
     msgInfo: (msg, icon = null, duration = 2) => {
-      antdMessage.open({
+      messageApi.open({
         type: "info",
         content: buildMessageContent(msg, icon),
         duration,
@@ -92,6 +94,7 @@ export function NotificationsProvider({ children }) {
   return (
     <NotificationContext.Provider value={{ notify }}>
       {contextHolder}
+      {messageContextHolder}
       {children}
     </NotificationContext.Provider>
   );
