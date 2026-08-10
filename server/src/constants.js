@@ -67,8 +67,6 @@ const refreshTokenOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ 7 days
 };
 
-const DB_NAME = "portfolio_backend";
-
 export {
   SOCIAL_PLATFORMS,
   SKILL_LEVEL,
@@ -77,7 +75,7 @@ export {
   EMPLOYMENT_TYPE,
   LOCATION_TYPE,
   VISIBILITY,
-  DB_NAME,
+  isProduction,
   options,
   accessTokenOptions,
   refreshTokenOptions,
