@@ -7,16 +7,20 @@ const port = process.env.PORT || 3000;
 
 connectDB()
   .then((res) => {
-    console.log("MongoDB is connected successfully!", res.connection.host);
+    const info = res.connection;
 
-    app.listen(port, () => {
-      console.log(`Server is listening on port: ${port}`);
-    });
+    console.log("✅ MongoDB is connected successfully!");
+    console.log(`👾 Host: ${info.host}`);
 
     app.on("error", (error) => {
-      console.error("Error listening to server: ", error);
+      console.error("❌ Server error: ", error);
+    });
+
+    app.listen(port, () => {
+      console.log(`🤖 Server is listening on port: ${port}`);
     });
   })
   .catch((error) => {
-    console.error("MongoDB connection failed!\n", error);
+    console.error("❌ MongoDB connection failed!");
+    console.error(error);
   });
