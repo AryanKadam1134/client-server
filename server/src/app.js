@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/api/health", (req, res) => {
+app.get("/api/health", publicCors, (req, res) => {
   res.status(200).send("OK");
 });
 
