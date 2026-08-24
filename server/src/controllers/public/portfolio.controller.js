@@ -14,6 +14,10 @@ import { Achievement } from "../../models/achievement.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import { SocialPlatform } from "../../models/socialPlatform.model.js";
 
+const healthCheck = async (req, res) => {
+  return res.status(200).json(new ApiRes(200, {}, "OK"));
+};
+
 const getProfileSummary = asynchandler(async (req, res) => {
   const commonQuery = { owner: req.user?._id };
 
@@ -413,6 +417,7 @@ const getAchievements = asynchandler(async (req, res) => {
 });
 
 export {
+  healthCheck,
   getProfileSummary,
   getUserByUsername,
   getUserSocialPlatforms,

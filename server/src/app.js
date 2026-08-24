@@ -30,6 +30,8 @@ import educationRouter from "./routes/private/education.routes.js";
 import certificateRoutes from "./routes/private/certificate.routes.js";
 import achievementRouter from "./routes/private/achievement.routes.js";
 
+import { healthCheck } from "./controllers/public/portfolio.controller.js";
+
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -37,9 +39,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/api/health", publicCors, (req, res) => {
-  res.status(200).send("OK");
-});
+app.get("/api/health", publicCors, healthCheck);
 
 app.use("/api/admin", privateCors);
 
