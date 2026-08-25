@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
-import {
-  Loader,
-  SquarePen,
-  FileText,
-  Trash2,
-  FilePenLine,
-  Edit,
-  Mail,
-  Phone,
-  Link,
-} from "lucide-react";
+import { Mail, Phone, Link } from "lucide-react";
 
 import UploadUserImage from "../../components/user/UploadUserImage";
 import UploadUserResume from "../../components/user/UploadUserResume";
@@ -42,7 +32,6 @@ export default function Dashboard() {
     register,
     handleSubmit,
     reset,
-
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
     mode: "onChange", // 🔥 important
@@ -101,12 +90,6 @@ export default function Dashboard() {
   useEffect(() => {
     fetchUserDetails();
   }, []);
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (preview.image) URL.revokeObjectURL(preview.image);
-  //   };
-  // }, [preview.image]);
 
   if (detailsLoading) {
     return <UserDetailsSkeleton />;

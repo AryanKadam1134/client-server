@@ -32,13 +32,6 @@ import achievementRouter from "./routes/private/achievement.routes.js";
 
 import { healthCheck } from "./controllers/public/portfolio.controller.js";
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Portfolio SaaS API Running",
-  });
-});
-
 app.get("/api/health", publicCors, healthCheck);
 
 app.use("/api/admin", privateCors);
