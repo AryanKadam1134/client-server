@@ -362,7 +362,7 @@ export default function AddEditExperiences() {
       >
         <CustomTextArea
           id="description"
-          type="text"
+          rows={6}
           placeholder="Describe your role, responsibilities, and key achievements..."
           {...register("description", {
             maxLength: {

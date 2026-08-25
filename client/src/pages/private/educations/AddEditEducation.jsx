@@ -239,7 +239,7 @@ export default function AddEditEducation() {
       >
         <CustomTextArea
           id="description"
-          type="text"
+          rows={6}
           placeholder="Describe your education, coursework, achievements..."
           {...register("description", {
             maxLength: {

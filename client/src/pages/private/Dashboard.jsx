@@ -304,9 +304,8 @@ export default function Dashboard() {
       >
         <CustomTextArea
           id="headline"
-          type="textarea"
+          rows={6}
           placeholder="e.g., Full Stack Developer | React & Node.js Expert"
-          className="h-full min-h-37.5"
           {...register("headline", {
             maxLength: {
               value: 100,
@@ -325,9 +324,8 @@ export default function Dashboard() {
       >
         <CustomTextArea
           id="about"
-          type="textarea"
+          rows={6}
           placeholder="Tell us about yourself, your experience, and what you're passionate about..."
-          className="h-full min-h-37.5"
           {...register("about", {
             maxLength: {
               value: 1000,

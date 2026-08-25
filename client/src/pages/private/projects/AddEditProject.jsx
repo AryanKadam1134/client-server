@@ -356,7 +356,7 @@ export default function AddEditProject() {
       >
         <CustomTextArea
           id="description"
-          type="text"
+          rows={6}
           placeholder="Describe your project, its goals, and key features..."
           {...register("description", {
             maxLength: {

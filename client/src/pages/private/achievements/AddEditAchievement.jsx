@@ -333,7 +333,7 @@ export default function AddEditAchievement() {
       >
         <CustomTextArea
           id="description"
-          type="text"
+          rows={6}
           placeholder="Describe your achievement and why it matters..."
           {...register("description", {
             maxLength: {
