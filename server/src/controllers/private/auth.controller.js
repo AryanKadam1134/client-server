@@ -41,44 +41,54 @@ const generateAccessAndRefreshToken = async (userId, req) => {
     // console.log("accessToken: ", accessToken);
     // console.log("refreshToken: ", refreshToken);
 
-    let rememberMe;
-
     // add new session
     const existingSessionIndex = user.sessions.findIndex(
       (s) => s.deviceId === deviceId,
     );
 
-    if (existingSessionIndex !== -1) {
-      // ✅ Preserve existing value
-      rememberMe = user.sessions[existingSessionIndex].rememberMe;
-    } else {
-      // ✅ Only take from login request
-      rememberMe = req.body?.rememberMe ?? false;
-    }
-
     // ✅ CASE 1: Device already exists → UPDATE session
     if (existingSessionIndex !== -1) {
       const session = user.sessions[existingSessionIndex];
       session.refreshToken = refreshToken;
-      session.rememberMe = rememberMe;
       session.userAgent = req.headers["user-agent"];
       session.ip = req.ip;
       session.createdAt = new Date();
     }
-
     // ✅ CASE 2: New device
     else {
-      if (user.sessions.length >= 5) {
-        throw new ApiError(429, "Maximum devices limit reached (5)");
-      }
+      // ✅ Only take from login request
+      const rememberMe = req.body?.rememberMe ?? false;
 
-      user.sessions.push({
-        deviceId,
-        refreshToken,
-        rememberMe,
-        userAgent: req.headers["user-agent"],
-        ip: req.ip,
-      });
+      if (user.sessions?.length < 5) {
+        user.sessions.push({
+          deviceId,
+          refreshToken,
+          rememberMe,
+          userAgent: req.headers["user-agent"],
+          ip: req.ip,
+          createdAt: new Date(),
+        });
+      }
+      // 5 sessions → try to replace a non-remembered session
+      else {
+        const replaceableSessionIndex = user.sessions.findIndex(
+          (session) => session?.rememberMe === false,
+        );
+
+        // All 5 sessions are remembered → reject
+        if (replaceableSessionIndex === -1) {
+          throw new ApiError(429, "Maximum devices limit reached (5)");
+        }
+
+        user.sessions[replaceableSessionIndex] = {
+          deviceId: deviceId,
+          refreshToken: refreshToken,
+          rememberMe: rememberMe,
+          userAgent: req.headers["user-agent"],
+          ip: req.ip,
+          createdAt: new Date(),
+        };
+      }
     }
 
     await user.save({ validateBeforeSave: false });
