@@ -25,7 +25,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const shooterEmail = process.env.SHOOTER_EMAIL;
 
-const generateAccessAndRefreshToken = asynchandler(async (userId, req) => {
+const generateAccessAndRefreshToken = async (userId, req) => {
   if (!userId) return;
 
   const deviceId = req.headers["x-device-id"];
@@ -34,56 +34,61 @@ const generateAccessAndRefreshToken = asynchandler(async (userId, req) => {
     throw new ApiError(400, "Device ID missing");
   }
 
-  const user = await User.findById(userId);
-  const accessToken = user.generateAccessToken();
-  const refreshToken = user.generateRefreshToken();
-  // console.log("accessToken: ", accessToken);
-  // console.log("refreshToken: ", refreshToken);
+  try {
+    const user = await User.findById(userId);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+    // console.log("accessToken: ", accessToken);
+    // console.log("refreshToken: ", refreshToken);
 
-  let rememberMe;
+    let rememberMe;
 
-  // add new session
-  const existingSessionIndex = user.sessions.findIndex(
-    (s) => s.deviceId === deviceId,
-  );
+    // add new session
+    const existingSessionIndex = user.sessions.findIndex(
+      (s) => s.deviceId === deviceId,
+    );
 
-  if (existingSessionIndex !== -1) {
-    // ✅ Preserve existing value
-    rememberMe = user.sessions[existingSessionIndex].rememberMe;
-  } else {
-    // ✅ Only take from login request
-    rememberMe = req.body?.rememberMe ?? false;
-  }
-
-  // ✅ CASE 1: Device already exists → UPDATE session
-  if (existingSessionIndex !== -1) {
-    const session = user.sessions[existingSessionIndex];
-    session.refreshToken = refreshToken;
-    session.rememberMe = rememberMe;
-    session.userAgent = req.headers["user-agent"];
-    session.ip = req.ip;
-    session.createdAt = new Date();
-  }
-
-  // ✅ CASE 2: New device
-  else {
-    if (user.sessions.length >= 5) {
-      throw new ApiError(429, "Maximum devices limit reached (5)");
+    if (existingSessionIndex !== -1) {
+      // ✅ Preserve existing value
+      rememberMe = user.sessions[existingSessionIndex].rememberMe;
+    } else {
+      // ✅ Only take from login request
+      rememberMe = req.body?.rememberMe ?? false;
     }
 
-    user.sessions.push({
-      deviceId,
-      refreshToken,
-      rememberMe,
-      userAgent: req.headers["user-agent"],
-      ip: req.ip,
-    });
+    // ✅ CASE 1: Device already exists → UPDATE session
+    if (existingSessionIndex !== -1) {
+      const session = user.sessions[existingSessionIndex];
+      session.refreshToken = refreshToken;
+      session.rememberMe = rememberMe;
+      session.userAgent = req.headers["user-agent"];
+      session.ip = req.ip;
+      session.createdAt = new Date();
+    }
+
+    // ✅ CASE 2: New device
+    else {
+      if (user.sessions.length >= 5) {
+        throw new ApiError(429, "Maximum devices limit reached (5)");
+      }
+
+      user.sessions.push({
+        deviceId,
+        refreshToken,
+        rememberMe,
+        userAgent: req.headers["user-agent"],
+        ip: req.ip,
+      });
+    }
+
+    await user.save({ validateBeforeSave: false });
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    console.error("Error Generating Access or Refresh Token: ", error);
+    throw new ApiError(error?.statusCode, error?.message);
   }
-
-  await user.save({ validateBeforeSave: false });
-
-  return { accessToken, refreshToken };
-});
+};
 
 const googleAuth = asynchandler(async (req, res) => {
   const { credential, rememberMe } = req.body;
