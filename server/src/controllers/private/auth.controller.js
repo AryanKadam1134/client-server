@@ -34,6 +34,10 @@ const generateAccessAndRefreshToken = async (userId, req) => {
     throw new ApiError(400, "Device ID missing");
   }
 
+  const userAgent = req.headers["user-agent"];
+  const ip = req.ip;
+  const createdAt = new Date();
+
   try {
     const user = await User.findById(userId);
     const accessToken = user.generateAccessToken();
@@ -41,37 +45,38 @@ const generateAccessAndRefreshToken = async (userId, req) => {
     // console.log("accessToken: ", accessToken);
     // console.log("refreshToken: ", refreshToken);
 
+    const sessions = user?.sessions ?? [];
+
     // add new session
-    const existingSessionIndex = user.sessions.findIndex(
+    const existingSessionIndex = sessions.findIndex(
       (s) => s.deviceId === deviceId,
     );
 
     // ✅ CASE 1: Device already exists → UPDATE session
     if (existingSessionIndex !== -1) {
-      const session = user.sessions[existingSessionIndex];
+      const session = sessions[existingSessionIndex];
       session.refreshToken = refreshToken;
-      session.userAgent = req.headers["user-agent"];
-      session.ip = req.ip;
-      session.createdAt = new Date();
+      session.userAgent = userAgent;
+      session.ip = ip;
+      session.createdAt = createdAt;
     }
     // ✅ CASE 2: New device
     else {
-      // ✅ Only take from login request
-      const rememberMe = req.body?.rememberMe ?? false;
+      const newSession = {
+        deviceId,
+        refreshToken,
+        rememberMe: req.body?.rememberMe ?? false,
+        userAgent,
+        ip,
+        createdAt,
+      };
 
-      if (user.sessions?.length < 5) {
-        user.sessions.push({
-          deviceId,
-          refreshToken,
-          rememberMe,
-          userAgent: req.headers["user-agent"],
-          ip: req.ip,
-          createdAt: new Date(),
-        });
+      if (sessions?.length < 5) {
+        sessions.push(newSession);
       }
       // 5 sessions → try to replace a non-remembered session
       else {
-        const replaceableSessionIndex = user.sessions.findIndex(
+        const replaceableSessionIndex = sessions.findIndex(
           (session) => session?.rememberMe === false,
         );
 
@@ -80,17 +85,11 @@ const generateAccessAndRefreshToken = async (userId, req) => {
           throw new ApiError(429, "Maximum devices limit reached (5)");
         }
 
-        user.sessions[replaceableSessionIndex] = {
-          deviceId: deviceId,
-          refreshToken: refreshToken,
-          rememberMe: rememberMe,
-          userAgent: req.headers["user-agent"],
-          ip: req.ip,
-          createdAt: new Date(),
-        };
+        sessions[replaceableSessionIndex] = newSession;
       }
     }
 
+    user.sessions = sessions;
     await user.save({ validateBeforeSave: false });
 
     return { accessToken, refreshToken };
